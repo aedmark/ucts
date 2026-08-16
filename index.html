@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unresolved Childhood Trauma Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Space Mono', monospace;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+            user-select: none;
+        }
+
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.4;
+        }
+
+        .glitch-hover:hover {
+            animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+            background-color: #2a2a2a;
+        }
+
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-2deg); }
+            40% { transform: skew(2deg); }
+            60% { transform: skew(-1deg); }
+            80% { transform: skew(1deg); }
+            100% { transform: skew(0deg); }
+        }
+
+        .stat-bar-container {
+            width: 100%;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            height: 1.5rem;
+            position: relative;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
+
+        .log-container {
+            scrollbar-width: thin;
+            scrollbar-color: #444 #1a1a1a;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="crt-overlay"></div>
+
+    <main class="w-full max-w-3xl bg-[#111] border border-gray-800 shadow-2xl relative z-10 flex flex-col h-[90vh] sm:h-[80vh]">
+        
+        <!-- Header -->
+        <header class="p-4 border-b border-gray-800 bg-black flex justify-between items-center">
+            <h1 class="text-sm md:text-base font-bold uppercase tracking-widest text-red-500">U.C.T. Simulator v1.0</h1>
+            <div class="text-xs text-gray-500">Objective: Survive 10 Turns</div>
+            <div id="turn-counter" class="text-sm font-bold">Turn: 1/10</div>
+        </header>
+
+        <!-- Stats Panel -->
+        <section class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-gray-800 bg-[#0d0d0d]">
+            
+            <!-- Repression -->
+            <div>
+                <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
+                    <span class="text-red-400">Repression Level</span>
+                    <span id="val-repression">0%</span>
+                </div>
+                <div class="stat-bar-container">
+                    <div id="bar-repression" class="stat-bar-fill bg-red-600" style="width: 20%;"></div>
+                </div>
+                <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 100%, you explode.</p>
+            </div>
+
+            <!-- Social Mask -->
+            <div>
+                <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
+                    <span class="text-blue-400">Social Mask</span>
+                    <span id="val-mask">100%</span>
+                </div>
+                <div class="stat-bar-container">
+                    <div id="bar-mask" class="stat-bar-fill bg-blue-600" style="width: 100%;"></div>
+                </div>
+                <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 0%, you are exiled.</p>
+            </div>
+
+            <!-- Inner Child -->
+            <div>
+                <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
+                    <span class="text-pink-400">Inner Child</span>
+                    <span id="val-child">50%</span>
+                </div>
+                <div class="stat-bar-container">
+                    <div id="bar-child" class="stat-bar-fill bg-pink-600" style="width: 50%;"></div>
+                </div>
+                <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 0%, total collapse.</p>
+            </div>
+        </section>
+
+        <!-- Main Gameplay Area -->
+        <section class="flex-grow flex flex-col p-6 overflow-hidden">
+            
+            <!-- Event Description -->
+            <div id="event-display" class="flex-grow flex flex-col justify-center items-center text-center px-4 mb-6">
+                <h2 class="text-lg md:text-xl font-bold mb-4 text-white uppercase tracking-wider">Loading Trigger...</h2>
+                <p class="text-sm md:text-base text-gray-400 max-w-lg leading-relaxed">Please wait while your nervous system calibrates to a perceived threat.</p>
+            </div>
+
+            <!-- Choices -->
+            <div id="choices-container" class="grid grid-cols-1 gap-3 w-full max-w-xl mx-auto">
+                <!-- Buttons injected via JS -->
+            </div>
+        </section>
+
+        <!-- Game Over / End Screen (Hidden by default) -->
+        <div id="end-screen" class="hidden absolute inset-0 bg-black flex flex-col items-center justify-center z-20 p-8 text-center">
+            <h2 id="end-title" class="text-3xl font-bold text-red-500 mb-4 uppercase tracking-widest">Catastrophic Failure</h2>
+            <p id="end-desc" class="text-gray-300 mb-8 max-w-md">Your psychological defenses have collapsed.</p>
+            <button onclick="startGame()" class="px-6 py-3 border border-white text-white uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Restart Therapy</button>
+        </div>
+
+        <!-- Action Log -->
+        <footer class="h-24 md:h-32 border-t border-gray-800 bg-black p-3 overflow-y-auto log-container text-xs text-gray-500 font-mono" id="action-log">
+            <div>> System initialized. Awaiting traumatic stimuli.</div>
+        </footer>
+
+    </main>
+
+    <script>
+        // Core State
+        let state = {
+            repression: 20,
+            mask: 100,
+            child: 50,
+            turn: 1,
+            maxTurns: 10,
+            isGameOver: false
+        };
+
+        // DOM Elements
+        const elRepressionBar = document.getElementById('bar-repression');
+        const elRepressionVal = document.getElementById('val-repression');
+        const elMaskBar = document.getElementById('bar-mask');
+        const elMaskVal = document.getElementById('val-mask');
+        const elChildBar = document.getElementById('bar-child');
+        const elChildVal = document.getElementById('val-child');
+        
+        const elEventDisplay = document.getElementById('event-display');
+        const elChoicesContainer = document.getElementById('choices-container');
+        const elTurnCounter = document.getElementById('turn-counter');
+        const elActionLog = document.getElementById('action-log');
+        
+        const elEndScreen = document.getElementById('end-screen');
+        const elEndTitle = document.getElementById('end-title');
+        const elEndDesc = document.getElementById('end-desc');
+
+        const events = [
+            {
+                title: "The Typo",
+                desc: "You sent an email to your boss with a minor typo. Your brain immediately interprets this as a fatal error that will result in destitution.",
+                choices: [
+                    { text: "Send a frantic 3-paragraph apology.", effects: { mask: 10, child: -15, rep: -5 }, log: "You debased yourself for a misplaced comma." },
+                    { text: "Stare at the wall and dissociate for 20 minutes.", effects: { mask: 0, child: -5, rep: 20 }, log: "You fled your physical body. The typo remains." },
+                    { text: "Tell yourself 'it's just a typo' while sweating profusely.", effects: { mask: -5, child: 10, rep: 10 }, log: "You attempted self-soothing. It was highly unconvincing." }
+                ]
+            },
+            {
+                title: "The Sigh",
+                desc: "Your partner sighs audibly in the other room. You have absolutely zero context for why.",
+                choices: [
+                    { text: "Assume it's your fault and quietly clean the kitchen.", effects: { mask: 15, child: -20, rep: 10 }, log: "You traded self-worth for perceived safety." },
+                    { text: "Ask aggressively, 'IS SOMETHING WRONG?!'", effects: { mask: -25, child: 5, rep: -15 }, log: "You struck first to avoid being struck. Classic." },
+                    { text: "Put on noise-canceling headphones.", effects: { mask: -10, child: 0, rep: 25 }, log: "Avoidance achieved. The tension is stored in your jaw." }
+                ]
+            },
+            {
+                title: "The Grocery Store Aisle",
+                desc: "Someone is standing exactly in front of the specific brand of oat milk you need. They are taking a very long time.",
+                choices: [
+                    { text: "Pretend to look at regular milk until they leave.", effects: { mask: 10, child: -10, rep: 15 }, log: "You sacrificed your time to avoid taking up space." },
+                    { text: "Say 'Excuse me' using a voice three octaves higher than normal.", effects: { mask: 5, child: -5, rep: 5 }, log: "You utilized the Customer Service Fawning Voice." },
+                    { text: "Abandon the oat milk. You didn't deserve it anyway.", effects: { mask: 0, child: -25, rep: 10 }, log: "You punished yourself for a stranger's existence." }
+                ]
+            },
+            {
+                title: "The Unread Notification",
+                desc: "A friend replied 'K.' to a vulnerable paragraph you sent them.",
+                choices: [
+                    { text: "Mentally draft a completely new friend group.", effects: { mask: -15, child: -15, rep: 20 }, log: "You burned the bridge in your mind." },
+                    { text: "Send 4 memes immediately to lighten the mood.", effects: { mask: 15, child: -20, rep: 5 }, log: "You performed as the Jester to avoid abandonment." },
+                    { text: "Throw your phone into a soft pile of laundry.", effects: { mask: 0, child: 10, rep: 10 }, log: "You successfully removed the object of your pain." }
+                ]
+            },
+            {
+                title: "The Compliment",
+                desc: "A coworker tells you that you did a 'really great job' on the presentation. It sounds sincere.",
+                choices: [
+                    { text: "Deflect immediately and credit the team.", effects: { mask: 15, child: -10, rep: 5 }, log: "You physically swatted away the affection." },
+                    { text: "Assume they are setting you up for a massive failure later.", effects: { mask: -5, child: -15, rep: 15 }, log: "You chose paranoia over pride." },
+                    { text: "Say 'Thank you' and let the discomfort burn your throat.", effects: { mask: -10, child: 15, rep: -10 }, log: "You accepted love. It hurt incredibly bad." }
+                ]
+            },
+            {
+                title: "The Closed Door",
+                desc: "You walk past a conference room where two managers are talking. They look at you and the door slowly closes.",
+                choices: [
+                    { text: "Begin packing up your desk mentally.", effects: { mask: 0, child: -20, rep: 15 }, log: "You braced for the worst-case scenario." },
+                    { text: "Work at 300% capacity for the next four hours.", effects: { mask: 20, child: -25, rep: 10 }, log: "You overcompensated through labor. Capitalism wins." },
+                    { text: "Remind yourself you are an adult and this is fine.", effects: { mask: 5, child: 5, rep: 10 }, log: "You tried logic. Your amygdala is ignoring it." }
+                ]
+            },
+            {
+                title: "The Nostalgic Smell",
+                desc: "You catch a whiff of a specific cleaning product that smells exactly like your childhood home.",
+                choices: [
+                    { text: "Hold your breath until you pass out.", effects: { mask: 0, child: -5, rep: 30 }, log: "You physically rejected the memory." },
+                    { text: "Cry silently in a bathroom stall.", effects: { mask: -10, child: 20, rep: -20 }, log: "You processed an emotion. Minus points to social mask." },
+                    { text: "Make a dark, self-deprecating joke to a coworker.", effects: { mask: -15, child: -10, rep: 5 }, log: "You weaponized the trauma for comedy." }
+                ]
+            }
+        ];
+
+        function logAction(msg) {
+            const entry = document.createElement('div');
+            entry.textContent = `> Turn ${state.turn}: ${msg}`;
+            elActionLog.appendChild(entry);
+            elActionLog.scrollTop = elActionLog.scrollHeight;
+        }
+
+        function updateUI() {
+            // Constrain values
+            state.repression = Math.max(0, Math.min(100, state.repression));
+            state.mask = Math.max(0, Math.min(100, state.mask));
+            state.child = Math.max(0, Math.min(100, state.child));
+
+            // Update Bars
+            elRepressionBar.style.width = `${state.repression}%`;
+            elRepressionVal.textContent = `${state.repression}%`;
+            
+            // Color shifts based on danger zones
+            if(state.repression > 80) elRepressionBar.className = "stat-bar-fill bg-red-500 animate-pulse";
+            else elRepressionBar.className = "stat-bar-fill bg-red-700";
+
+            elMaskBar.style.width = `${state.mask}%`;
+            elMaskVal.textContent = `${state.mask}%`;
+            if(state.mask < 30) elMaskBar.className = "stat-bar-fill bg-blue-400 animate-pulse";
+            else elMaskBar.className = "stat-bar-fill bg-blue-700";
+
+            elChildBar.style.width = `${state.child}%`;
+            elChildVal.textContent = `${state.child}%`;
+            if(state.child < 30) elChildBar.className = "stat-bar-fill bg-pink-400 animate-pulse";
+            else elChildBar.className = "stat-bar-fill bg-pink-700";
+
+            elTurnCounter.textContent = `Turn: ${state.turn}/${state.maxTurns}`;
+        }
+
+        function checkGameEnd() {
+            if (state.repression >= 100) {
+                endGame("Panic Attack", "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet.");
+                return true;
+            }
+            if (state.mask <= 0) {
+                endGame("Social Exile", "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free.");
+                return true;
+            }
+            if (state.child <= 0) {
+                endGame("Total Disassociation", "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing.");
+                return true;
+            }
+            if (state.turn > state.maxTurns) {
+                endGame("You Survived", "You made it to the end of the day. Nothing is resolved, but you get to sleep for 6 hours and do it again tomorrow.", true);
+                return true;
+            }
+            return false;
+        }
+
+        function endGame(title, desc, win = false) {
+            state.isGameOver = true;
+            elEndScreen.classList.remove('hidden');
+            elEndTitle.textContent = title;
+            elEndTitle.className = win ? "text-3xl font-bold text-green-500 mb-4 uppercase tracking-widest" : "text-3xl font-bold text-red-500 mb-4 uppercase tracking-widest";
+            elEndDesc.textContent = desc;
+        }
+
+        function handleChoice(effects, logMsg) {
+            if(state.isGameOver) return;
+
+            state.repression += effects.rep || 0;
+            state.mask += effects.mask || 0;
+            state.child += effects.child || 0;
+            
+            logAction(logMsg);
+            
+            state.turn++;
+            updateUI();
+
+            if (!checkGameEnd()) {
+                loadRandomEvent();
+            }
+        }
+
+        function loadRandomEvent() {
+            // Pick a random event, but try not to repeat the exact same one back to back
+            const evt = events[Math.floor(Math.random() * events.length)];
+            
+            elEventDisplay.innerHTML = `
+                <h2 class="text-xl md:text-2xl font-bold mb-4 text-white uppercase tracking-wider">${evt.title}</h2>
+                <p class="text-sm md:text-base text-gray-400 max-w-lg leading-relaxed border-l-4 border-gray-600 pl-4 text-left italic">"${evt.desc}"</p>
+            `;
+
+            elChoicesContainer.innerHTML = '';
+            
+            evt.choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = "glitch-hover w-full text-left p-4 border border-gray-700 bg-[#161616] text-gray-300 text-sm hover:text-white hover:border-gray-500 transition-colors duration-200 flex flex-col gap-1";
+                
+                // Show transparent hints of what it does
+                let hints = [];
+                if(choice.effects.rep > 0) hints.push("↑ Repression");
+                if(choice.effects.rep < 0) hints.push("↓ Repression");
+                if(choice.effects.mask > 0) hints.push("↑ Mask");
+                if(choice.effects.mask < 0) hints.push("↓ Mask");
+                if(choice.effects.child > 0) hints.push("↑ Inner Child");
+                if(choice.effects.child < 0) hints.push("↓ Inner Child");
+
+                btn.innerHTML = `
+                    <span>${choice.text}</span>
+                    <span class="text-[10px] text-gray-600 uppercase tracking-widest font-bold mt-1">${hints.join(' | ')}</span>
+                `;
+                
+                btn.onclick = () => handleChoice(choice.effects, choice.log);
+                elChoicesContainer.appendChild(btn);
+            });
+        }
+
+        function startGame() {
+            state = {
+                repression: 20,
+                mask: 100,
+                child: 50,
+                turn: 1,
+                maxTurns: 10,
+                isGameOver: false
+            };
+            elEndScreen.classList.add('hidden');
+            elActionLog.innerHTML = '<div>> Therapy session restarted. Commencing psychological baseline.</div>';
+            updateUI();
+            loadRandomEvent();
+        }
+
+        // Boot
+        window.onload = startGame;
+
+    </script>
+</body>
+</html>

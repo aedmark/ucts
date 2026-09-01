@@ -23,8 +23,7 @@
         <!-- Mode Switcher -->
         <nav class="flex border-b border-gray-800 bg-black text-xs uppercase tracking-widest">
             <button id="tab-sim" onclick="setMode('sim')" class="flex-1 py-2 border-r border-gray-800 text-white bg-[#1a1a1a]">Simulation</button>
-            <button id="tab-field" onclick="setMode('field')" class="flex-1 py-2 border-r border-gray-800 text-gray-500 hover:text-gray-300 transition-colors">Field Log</button>
-            <a href="editor.html" class="flex-1 py-2 text-center text-gray-500 hover:text-gray-300 transition-colors">Editor ↗</a>
+            <button id="tab-field" onclick="setMode('field')" class="flex-1 py-2 text-gray-500 hover:text-gray-300 transition-colors">Field Log</button>
         </nav>
 
         <!-- SIM VIEW -->
@@ -77,7 +76,7 @@
             </section>
 
             <!-- Main Gameplay Area -->
-            <section class="flex-grow flex flex-col p-6 overflow-hidden">
+            <section class="flex-grow flex flex-col p-6 overflow-y-auto log-container">
 
                 <!-- Event Description -->
                 <div id="event-display" class="flex-grow flex flex-col justify-center items-center text-center px-4 mb-6">

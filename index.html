@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
-        
+
         body {
             font-family: 'Space Mono', monospace;
             background-color: #0a0a0a;
@@ -59,86 +59,167 @@
             scrollbar-width: thin;
             scrollbar-color: #444 #1a1a1a;
         }
+
+        .glitch-choice {
+            border-style: dashed !important;
+            border-color: #a855f7 !important;
+            color: #d8b4fe !important;
+        }
+        .glitch-choice:hover {
+            background-color: #2a1a33 !important;
+            border-color: #d8b4fe !important;
+        }
+
+        .mechanism-badge {
+            border: 1px solid #444;
+            padding: 2px 8px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #999;
+            white-space: nowrap;
+        }
+
+        @keyframes flash-in {
+            0% { opacity: 0; transform: translateY(-4px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .mechanism-badge.fresh {
+            animation: flash-in 0.4s ease-out;
+            color: #d8b4fe;
+            border-color: #a855f7;
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
     <div class="crt-overlay"></div>
 
     <main class="w-full max-w-3xl bg-[#111] border border-gray-800 shadow-2xl relative z-10 flex flex-col h-[90vh] sm:h-[80vh]">
-        
+
         <!-- Header -->
-        <header class="p-4 border-b border-gray-800 bg-black flex justify-between items-center">
-            <h1 class="text-sm md:text-base font-bold uppercase tracking-widest text-red-500">U.C.T. Simulator v1.0</h1>
-            <div class="text-xs text-gray-500">Objective: Survive 10 Turns</div>
+        <header class="p-4 border-b border-gray-800 bg-black flex justify-between items-center gap-2">
+            <h1 id="game-title" class="text-sm md:text-base font-bold uppercase tracking-widest text-red-500">U.C.T. Simulator v2.0</h1>
+            <div id="objective-text" class="text-xs text-gray-500">Objective: Survive 10 Turns</div>
+            <button id="ng-plus-btn" onclick="startGame(true)" class="hidden text-[10px] uppercase tracking-widest border border-purple-700 text-purple-300 px-2 py-1 hover:bg-purple-950 transition-colors">Extended Therapy ▶</button>
             <div id="turn-counter" class="text-sm font-bold">Turn: 1/10</div>
         </header>
 
-        <!-- Stats Panel -->
-        <section class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-gray-800 bg-[#0d0d0d]">
-            
-            <!-- Repression -->
-            <div>
-                <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
-                    <span class="text-red-400">Repression Level</span>
-                    <span id="val-repression">0%</span>
+        <!-- Mode Switcher -->
+        <nav class="flex border-b border-gray-800 bg-black text-xs uppercase tracking-widest">
+            <button id="tab-sim" onclick="setMode('sim')" class="flex-1 py-2 border-r border-gray-800 text-white bg-[#1a1a1a]">Simulation</button>
+            <button id="tab-field" onclick="setMode('field')" class="flex-1 py-2 text-gray-500 hover:text-gray-300 transition-colors">Field Log</button>
+        </nav>
+
+        <!-- SIM VIEW -->
+        <div id="sim-view" class="flex flex-col flex-grow overflow-hidden">
+
+            <!-- Stats Panel -->
+            <section class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-gray-800 bg-[#0d0d0d]">
+
+                <!-- Repression -->
+                <div>
+                    <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
+                        <span class="text-red-400">Repression Level</span>
+                        <span id="val-repression">0%</span>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div id="bar-repression" class="stat-bar-fill bg-red-600" style="width: 20%;"></div>
+                    </div>
+                    <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 100%, you explode.</p>
                 </div>
-                <div class="stat-bar-container">
-                    <div id="bar-repression" class="stat-bar-fill bg-red-600" style="width: 20%;"></div>
+
+                <!-- Social Mask -->
+                <div>
+                    <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
+                        <span class="text-blue-400">Social Mask</span>
+                        <span id="val-mask">100%</span>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div id="bar-mask" class="stat-bar-fill bg-blue-600" style="width: 100%;"></div>
+                    </div>
+                    <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 0%, you are exiled.</p>
                 </div>
-                <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 100%, you explode.</p>
+
+                <!-- Inner Child -->
+                <div>
+                    <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
+                        <span class="text-pink-400">Inner Child</span>
+                        <span id="val-child">50%</span>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div id="bar-child" class="stat-bar-fill bg-pink-600" style="width: 50%;"></div>
+                    </div>
+                    <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 0%, total collapse.</p>
+                </div>
+            </section>
+
+            <!-- Coping Mechanisms Panel -->
+            <section id="mechanisms-panel" class="hidden px-6 py-2 border-b border-gray-800 bg-[#0d0d0d] flex flex-wrap gap-2 items-center">
+                <span class="text-[10px] uppercase tracking-widest text-gray-600">Coping Mechanisms Acquired:</span>
+                <div id="mechanisms-list" class="flex flex-wrap gap-2"></div>
+            </section>
+
+            <!-- Main Gameplay Area -->
+            <section class="flex-grow flex flex-col p-6 overflow-hidden">
+
+                <!-- Event Description -->
+                <div id="event-display" class="flex-grow flex flex-col justify-center items-center text-center px-4 mb-6">
+                    <h2 class="text-lg md:text-xl font-bold mb-4 text-white uppercase tracking-wider">Loading Trigger...</h2>
+                    <p class="text-sm md:text-base text-gray-400 max-w-lg leading-relaxed">Please wait while your nervous system calibrates to a perceived threat.</p>
+                </div>
+
+                <!-- Choices -->
+                <div id="choices-container" class="grid grid-cols-1 gap-3 w-full max-w-xl mx-auto">
+                    <!-- Buttons injected via JS -->
+                </div>
+            </section>
+
+            <!-- Action Log -->
+            <footer class="h-24 md:h-32 border-t border-gray-800 bg-black p-3 overflow-y-auto log-container text-xs text-gray-500 font-mono" id="action-log">
+                <div>> System initialized. Awaiting traumatic stimuli.</div>
+            </footer>
+        </div>
+
+        <!-- FIELD LOG VIEW -->
+        <div id="field-view" class="hidden flex flex-col flex-grow overflow-hidden">
+
+            <div class="px-6 py-3 border-b border-gray-800 bg-[#0d0d0d]">
+                <p class="text-[11px] text-gray-500 leading-relaxed">This log stays in your browser. Nothing is sent anywhere, ever. This is a self-tracking tool, not therapy — if you're in crisis, contact a crisis line or a licensed professional.</p>
             </div>
 
-            <!-- Social Mask -->
-            <div>
-                <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
-                    <span class="text-blue-400">Social Mask</span>
-                    <span id="val-mask">100%</span>
-                </div>
-                <div class="stat-bar-container">
-                    <div id="bar-mask" class="stat-bar-fill bg-blue-600" style="width: 100%;"></div>
-                </div>
-                <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 0%, you are exiled.</p>
+            <div class="px-6 py-4 border-b border-gray-800 flex flex-col gap-3">
+                <label class="text-xs uppercase tracking-widest text-gray-500">What actually happened?</label>
+                <textarea id="field-note" rows="3" class="bg-[#161616] border border-gray-700 text-gray-200 text-sm p-3 resize-none focus:outline-none focus:border-gray-500" placeholder="Describe a real moment. This is for you, not a grade."></textarea>
+
+                <div class="flex flex-wrap gap-2" id="field-tag-picker"></div>
+                <div class="flex flex-wrap gap-2" id="field-zone-picker"></div>
+
+                <button id="field-submit-btn" onclick="submitFieldEntry()" class="self-start px-4 py-2 border border-gray-500 text-gray-300 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Log It</button>
             </div>
 
-            <!-- Inner Child -->
-            <div>
-                <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
-                    <span class="text-pink-400">Inner Child</span>
-                    <span id="val-child">50%</span>
-                </div>
-                <div class="stat-bar-container">
-                    <div id="bar-child" class="stat-bar-fill bg-pink-600" style="width: 50%;"></div>
-                </div>
-                <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 0%, total collapse.</p>
-            </div>
-        </section>
-
-        <!-- Main Gameplay Area -->
-        <section class="flex-grow flex flex-col p-6 overflow-hidden">
-            
-            <!-- Event Description -->
-            <div id="event-display" class="flex-grow flex flex-col justify-center items-center text-center px-4 mb-6">
-                <h2 class="text-lg md:text-xl font-bold mb-4 text-white uppercase tracking-wider">Loading Trigger...</h2>
-                <p class="text-sm md:text-base text-gray-400 max-w-lg leading-relaxed">Please wait while your nervous system calibrates to a perceived threat.</p>
+            <div class="px-6 py-4 border-b border-gray-800 bg-[#0d0d0d]">
+                <div class="text-xs uppercase tracking-widest text-gray-500 mb-2">Pattern, Last 7 Days</div>
+                <div id="field-pattern-bars" class="flex flex-col gap-1.5"></div>
+                <p id="field-reading" class="text-xs text-gray-400 mt-3 italic"></p>
             </div>
 
-            <!-- Choices -->
-            <div id="choices-container" class="grid grid-cols-1 gap-3 w-full max-w-xl mx-auto">
-                <!-- Buttons injected via JS -->
+            <div class="flex-grow overflow-y-auto log-container p-4 flex flex-col gap-2" id="field-entries"></div>
+
+            <div class="p-3 border-t border-gray-800 flex justify-end gap-2">
+                <button id="field-export-btn" onclick="exportFieldLog()" class="text-[10px] uppercase tracking-widest text-gray-500 border border-gray-700 px-3 py-1 hover:text-white hover:border-gray-500 transition-colors">Export Log</button>
+                <button id="field-clear-btn" onclick="clearFieldLog()" class="text-[10px] uppercase tracking-widest text-red-700 border border-red-900 px-3 py-1 hover:text-red-400 hover:border-red-500 transition-colors">Clear Log</button>
             </div>
-        </section>
+        </div>
 
         <!-- Game Over / End Screen (Hidden by default) -->
         <div id="end-screen" class="hidden absolute inset-0 bg-black flex flex-col items-center justify-center z-20 p-8 text-center">
             <h2 id="end-title" class="text-3xl font-bold text-red-500 mb-4 uppercase tracking-widest">Catastrophic Failure</h2>
             <p id="end-desc" class="text-gray-300 mb-8 max-w-md">Your psychological defenses have collapsed.</p>
-            <button onclick="startGame()" class="px-6 py-3 border border-white text-white uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Restart Therapy</button>
+            <div class="flex gap-3">
+                <button onclick="startGame(state.hardMode)" class="px-6 py-3 border border-white text-white uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Restart Therapy</button>
+                <button id="end-ngplus-btn" onclick="startGame(true)" class="hidden px-6 py-3 border border-purple-700 text-purple-300 uppercase tracking-widest hover:bg-purple-950 transition-colors">Extended Therapy ▶</button>
+            </div>
         </div>
-
-        <!-- Action Log -->
-        <footer class="h-24 md:h-32 border-t border-gray-800 bg-black p-3 overflow-y-auto log-container text-xs text-gray-500 font-mono" id="action-log">
-            <div>> System initialized. Awaiting traumatic stimuli.</div>
-        </footer>
 
     </main>
 
@@ -153,6 +234,66 @@
             isGameOver: false
         };
 
+        // Trauma-response tags: fawn, flight, fight, freeze, secure.
+        // Lean on one response three times and it calcifies into a permanent mechanism.
+        const MECHANISMS = {
+            fawn:   { name: "The Approval Loop", unlocked: false, count: 0, mod: { rep: 0,  mask: 3,  child: -5 } },
+            flight: { name: "The Exit Strategy", unlocked: false, count: 0, mod: { rep: -5, mask: -3, child: 0  } },
+            fight:  { name: "Hair-Trigger",      unlocked: false, count: 0, mod: { rep: -5, mask: -8, child: 0  } },
+            freeze: { name: "The Void",          unlocked: false, count: 0, mod: { rep: 8,  mask: 0,  child: -5 } },
+            secure: { name: "Earned Security",   unlocked: false, count: 0, mod: { rep: -5, mask: 0,  child: 5  } }
+        };
+        const UNLOCK_THRESHOLD = 3;
+
+        const GLITCH_CHANCE = 0.15;
+        const GLITCH_LOGS = [
+            "Jester seized the wheel. Nobody consented to this outcome.",
+            "You did something. The Lattice does not know what.",
+            "A random event occurred inside a game about control. Fitting.",
+            "The Anomaly Injector fired. Efficiency wept quietly.",
+            "You rolled the dice on your own nervous system."
+        ];
+
+        // The zone most likely to press on your worst stat.
+        const ZONE_STAT_MAP = { WORK: "repression", SOCIAL: "mask", HOME: "child", SELF: "child" };
+        const WEAK_ZONE_WEIGHT = 2.5;
+        let lastEventTitle = null;
+
+        // New Game+: unlocked permanently on your first survival. Same events, everything hits harder, for longer.
+        const NG_PLUS_KEY = 'uct_extended_unlocked';
+        const HARD_MODE_TURNS = 20;
+        const HARD_MODE_MULTIPLIER = 1.25;
+
+        // localStorage throws in some embedding contexts (e.g. data: URLs, locked-down previews).
+        // The unlock is a nice-to-have, not load-bearing, so it fails quiet rather than breaking the win screen.
+        function isNgPlusUnlocked() {
+            try { return localStorage.getItem(NG_PLUS_KEY) === '1'; } catch (e) { return false; }
+        }
+        function unlockNgPlus() {
+            try { localStorage.setItem(NG_PLUS_KEY, '1'); } catch (e) { /* storage unavailable, unlock just won't persist */ }
+        }
+
+        // --- FIELD LOG ---
+        // A real, persistent log of the user's own moments, using the same fawn/flight/fight/freeze/secure
+        // vocabulary as the simulation, but kept deliberately separate: no scoring, no satire, no game-over.
+        const ZONES = ["WORK", "HOME", "SOCIAL", "SELF"];
+        const FIELD_LOG_KEY = 'uct_field_log_v1';
+        let selectedFieldTag = null;
+        let selectedFieldZone = null;
+        let fieldLogCache = null; // in-memory fallback so the log still works this session even if storage throws
+
+        function loadFieldLog() {
+            if (fieldLogCache) return fieldLogCache;
+            try { fieldLogCache = JSON.parse(localStorage.getItem(FIELD_LOG_KEY)) || []; }
+            catch (e) { fieldLogCache = []; }
+            return fieldLogCache;
+        }
+        function saveFieldLog(entries) {
+            fieldLogCache = entries;
+            try { localStorage.setItem(FIELD_LOG_KEY, JSON.stringify(entries)); }
+            catch (e) { /* storage unavailable, entries persist for this session only */ }
+        }
+
         // DOM Elements
         const elRepressionBar = document.getElementById('bar-repression');
         const elRepressionVal = document.getElementById('val-repression');
@@ -160,78 +301,242 @@
         const elMaskVal = document.getElementById('val-mask');
         const elChildBar = document.getElementById('bar-child');
         const elChildVal = document.getElementById('val-child');
-        
+
         const elEventDisplay = document.getElementById('event-display');
         const elChoicesContainer = document.getElementById('choices-container');
         const elTurnCounter = document.getElementById('turn-counter');
         const elActionLog = document.getElementById('action-log');
-        
+
+        const elMechanismsPanel = document.getElementById('mechanisms-panel');
+        const elMechanismsList = document.getElementById('mechanisms-list');
+
         const elEndScreen = document.getElementById('end-screen');
         const elEndTitle = document.getElementById('end-title');
         const elEndDesc = document.getElementById('end-desc');
+        const elEndNgPlusBtn = document.getElementById('end-ngplus-btn');
+
+        const elGameTitle = document.getElementById('game-title');
+        const elObjectiveText = document.getElementById('objective-text');
+        const elNgPlusBtn = document.getElementById('ng-plus-btn');
+
+        const elTabSim = document.getElementById('tab-sim');
+        const elTabField = document.getElementById('tab-field');
+        const elSimView = document.getElementById('sim-view');
+        const elFieldView = document.getElementById('field-view');
+
+        const elFieldNote = document.getElementById('field-note');
+        const elFieldTagPicker = document.getElementById('field-tag-picker');
+        const elFieldZonePicker = document.getElementById('field-zone-picker');
+        const elFieldPatternBars = document.getElementById('field-pattern-bars');
+        const elFieldReading = document.getElementById('field-reading');
+        const elFieldEntries = document.getElementById('field-entries');
 
         const events = [
+            // --- WORK ---
             {
+                zone: "WORK",
                 title: "The Typo",
                 desc: "You sent an email to your boss with a minor typo. Your brain immediately interprets this as a fatal error that will result in destitution.",
                 choices: [
-                    { text: "Send a frantic 3-paragraph apology.", effects: { mask: 10, child: -15, rep: -5 }, log: "You debased yourself for a misplaced comma." },
-                    { text: "Stare at the wall and dissociate for 20 minutes.", effects: { mask: 0, child: -5, rep: 20 }, log: "You fled your physical body. The typo remains." },
-                    { text: "Tell yourself 'it's just a typo' while sweating profusely.", effects: { mask: -5, child: 10, rep: 10 }, log: "You attempted self-soothing. It was highly unconvincing." }
+                    { text: "Send a frantic 3-paragraph apology.", tag: "fawn", effects: { mask: 10, child: -15, rep: -5 }, log: "You debased yourself for a misplaced comma." },
+                    { text: "Stare at the wall and dissociate for 20 minutes.", tag: "freeze", effects: { mask: 0, child: -5, rep: 20 }, log: "You fled your physical body. The typo remains." },
+                    { text: "Tell yourself 'it's just a typo' while sweating profusely.", tag: "secure", effects: { mask: -5, child: 10, rep: 10 }, log: "You attempted self-soothing. It was highly unconvincing." }
                 ]
             },
             {
-                title: "The Sigh",
-                desc: "Your partner sighs audibly in the other room. You have absolutely zero context for why.",
-                choices: [
-                    { text: "Assume it's your fault and quietly clean the kitchen.", effects: { mask: 15, child: -20, rep: 10 }, log: "You traded self-worth for perceived safety." },
-                    { text: "Ask aggressively, 'IS SOMETHING WRONG?!'", effects: { mask: -25, child: 5, rep: -15 }, log: "You struck first to avoid being struck. Classic." },
-                    { text: "Put on noise-canceling headphones.", effects: { mask: -10, child: 0, rep: 25 }, log: "Avoidance achieved. The tension is stored in your jaw." }
-                ]
-            },
-            {
-                title: "The Grocery Store Aisle",
-                desc: "Someone is standing exactly in front of the specific brand of oat milk you need. They are taking a very long time.",
-                choices: [
-                    { text: "Pretend to look at regular milk until they leave.", effects: { mask: 10, child: -10, rep: 15 }, log: "You sacrificed your time to avoid taking up space." },
-                    { text: "Say 'Excuse me' using a voice three octaves higher than normal.", effects: { mask: 5, child: -5, rep: 5 }, log: "You utilized the Customer Service Fawning Voice." },
-                    { text: "Abandon the oat milk. You didn't deserve it anyway.", effects: { mask: 0, child: -25, rep: 10 }, log: "You punished yourself for a stranger's existence." }
-                ]
-            },
-            {
-                title: "The Unread Notification",
-                desc: "A friend replied 'K.' to a vulnerable paragraph you sent them.",
-                choices: [
-                    { text: "Mentally draft a completely new friend group.", effects: { mask: -15, child: -15, rep: 20 }, log: "You burned the bridge in your mind." },
-                    { text: "Send 4 memes immediately to lighten the mood.", effects: { mask: 15, child: -20, rep: 5 }, log: "You performed as the Jester to avoid abandonment." },
-                    { text: "Throw your phone into a soft pile of laundry.", effects: { mask: 0, child: 10, rep: 10 }, log: "You successfully removed the object of your pain." }
-                ]
-            },
-            {
+                zone: "WORK",
                 title: "The Compliment",
                 desc: "A coworker tells you that you did a 'really great job' on the presentation. It sounds sincere.",
                 choices: [
-                    { text: "Deflect immediately and credit the team.", effects: { mask: 15, child: -10, rep: 5 }, log: "You physically swatted away the affection." },
-                    { text: "Assume they are setting you up for a massive failure later.", effects: { mask: -5, child: -15, rep: 15 }, log: "You chose paranoia over pride." },
-                    { text: "Say 'Thank you' and let the discomfort burn your throat.", effects: { mask: -10, child: 15, rep: -10 }, log: "You accepted love. It hurt incredibly bad." }
+                    { text: "Deflect immediately and credit the team.", tag: "fawn", effects: { mask: 15, child: -10, rep: 5 }, log: "You physically swatted away the affection." },
+                    { text: "Assume they are setting you up for a massive failure later.", tag: "freeze", effects: { mask: -5, child: -15, rep: 15 }, log: "You chose paranoia over pride." },
+                    { text: "Say 'Thank you' and let the discomfort burn your throat.", tag: "secure", effects: { mask: -10, child: 15, rep: -10 }, log: "You accepted love. It hurt incredibly bad." }
                 ]
             },
             {
+                zone: "WORK",
                 title: "The Closed Door",
                 desc: "You walk past a conference room where two managers are talking. They look at you and the door slowly closes.",
                 choices: [
-                    { text: "Begin packing up your desk mentally.", effects: { mask: 0, child: -20, rep: 15 }, log: "You braced for the worst-case scenario." },
-                    { text: "Work at 300% capacity for the next four hours.", effects: { mask: 20, child: -25, rep: 10 }, log: "You overcompensated through labor. Capitalism wins." },
-                    { text: "Remind yourself you are an adult and this is fine.", effects: { mask: 5, child: 5, rep: 10 }, log: "You tried logic. Your amygdala is ignoring it." }
+                    { text: "Begin packing up your desk mentally.", tag: "freeze", effects: { mask: 0, child: -20, rep: 15 }, log: "You braced for the worst-case scenario." },
+                    { text: "Work at 300% capacity for the next four hours.", tag: "fawn", effects: { mask: 20, child: -25, rep: 10 }, log: "You overcompensated through labor. Capitalism wins." },
+                    { text: "Remind yourself you are an adult and this is fine.", tag: "secure", effects: { mask: 5, child: 5, rep: 10 }, log: "You tried logic. Your amygdala is ignoring it." }
                 ]
             },
             {
+                zone: "WORK",
+                title: "The Reply-All",
+                desc: "You meant to reply privately with a joke about the meeting length. You did not reply privately.",
+                choices: [
+                    { text: "Immediately close your laptop and consider a new identity.", tag: "flight", effects: { mask: -20, child: -10, rep: 20 }, log: "You attempted to physically escape the timeline." },
+                    { text: "Send a follow-up message that says 'ignore that lol'.", tag: "fawn", effects: { mask: 5, child: -10, rep: 5 }, log: "You tried to laugh-track your way out of consequences." },
+                    { text: "Own it. Reply-all again: 'No notes retracted.'", tag: "fight", effects: { mask: -15, child: 15, rep: -10 }, log: "You chose chaos over shame. Bold." }
+                ]
+            },
+            {
+                zone: "WORK",
+                title: "The Calendar Invite",
+                desc: "'Quick Chat' with your manager. No agenda. Fifteen minutes from now.",
+                choices: [
+                    { text: "Spend the fifteen minutes drafting a resignation letter you won't send.", tag: "freeze", effects: { rep: 25, mask: 0, child: -15 }, log: "You pre-grieved a job you still have." },
+                    { text: "Ask a coworker if they've heard anything. They haven't.", tag: "fawn", effects: { mask: 5, child: -5, rep: 10 }, log: "You outsourced your anxiety to someone equally unequipped." },
+                    { text: "Walk in assuming it's fine. It's about the parking lot.", tag: "secure", effects: { mask: 0, child: 10, rep: -15 }, log: "It was never about you. Rude, but freeing." }
+                ]
+            },
+            {
+                zone: "WORK",
+                title: "The Slack Read Receipt",
+                desc: "Seen 3:12 PM. It is now 6:47 PM. No reply.",
+                choices: [
+                    { text: "Send a second message: 'no worries just following up!'", tag: "fawn", effects: { mask: 10, child: -15, rep: 5 }, log: "You apologized for existing in their inbox." },
+                    { text: "Close Slack and refuse to open it until tomorrow.", tag: "flight", effects: { mask: -5, child: 0, rep: 15 }, log: "Out of sight, technically not out of mind." },
+                    { text: "Assume you've been quietly reassigned in their mind.", tag: "freeze", effects: { rep: 20, mask: 0, child: -10 }, log: "You promoted a theory to a fact with zero evidence." }
+                ]
+            },
+
+            // --- HOME ---
+            {
+                zone: "HOME",
+                title: "The Sigh",
+                desc: "Your partner sighs audibly in the other room. You have absolutely zero context for why.",
+                choices: [
+                    { text: "Assume it's your fault and quietly clean the kitchen.", tag: "fawn", effects: { mask: 15, child: -20, rep: 10 }, log: "You traded self-worth for perceived safety." },
+                    { text: "Ask aggressively, 'IS SOMETHING WRONG?!'", tag: "fight", effects: { mask: -25, child: 5, rep: -15 }, log: "You struck first to avoid being struck. Classic." },
+                    { text: "Put on noise-canceling headphones.", tag: "flight", effects: { mask: -10, child: 0, rep: 25 }, log: "Avoidance achieved. The tension is stored in your jaw." }
+                ]
+            },
+            {
+                zone: "HOME",
+                title: "The Dishes in the Sink",
+                desc: "Your partner says 'hey, whenever you get a chance' about the dishes. Their tone was completely neutral.",
+                choices: [
+                    { text: "Do the dishes at 11 PM, narrating your resentment internally.", tag: "fawn", effects: { mask: 10, child: -15, rep: 15 }, log: "You complied loudly, in your head only." },
+                    { text: "Say 'I was GOING to' with more heat than the sentence needed.", tag: "fight", effects: { mask: -15, child: 5, rep: -10 }, log: "The dishes were never the real defendant." },
+                    { text: "Leave the room to 'find something' for four minutes.", tag: "flight", effects: { mask: -5, child: -5, rep: 10 }, log: "A tactical retreat from a sink." }
+                ]
+            },
+            {
+                zone: "HOME",
+                title: "The Family Group Chat",
+                desc: "Your aunt just brought up something from Thanksgiving 2019. Nobody asked.",
+                choices: [
+                    { text: "Mute the chat and pretend your phone is broken.", tag: "flight", effects: { mask: -5, child: 0, rep: 10 }, log: "You unplugged from the family server." },
+                    { text: "Draft a measured correction, then delete it three times.", tag: "freeze", effects: { rep: 20, mask: 5, child: -10 }, log: "You drafted diplomacy and shipped silence." },
+                    { text: "Send a single laughing emoji and nothing else.", tag: "fawn", effects: { mask: 10, child: -10, rep: 5 }, log: "You de-escalated with punctuation." }
+                ]
+            },
+            {
+                zone: "HOME",
+                title: "The Silent Car Ride",
+                desc: "Twenty minutes home. Nobody has said anything since you left. You are replaying the entire evening.",
+                choices: [
+                    { text: "Turn the radio up to fill the space.", tag: "flight", effects: { mask: 0, child: -5, rep: 10 }, log: "You outsourced the silence to a pop song." },
+                    { text: "Ask 'you okay?' four separate times.", tag: "fawn", effects: { mask: 5, child: -10, rep: 5 }, log: "You checked the temperature of a room that was fine." },
+                    { text: "Sit in it. Actually just sit in it.", tag: "secure", effects: { mask: 0, child: 10, rep: -15 }, log: "Twenty minutes of quiet did not, in fact, kill you." }
+                ]
+            },
+
+            // --- SOCIAL ---
+            {
+                zone: "SOCIAL",
+                title: "The Grocery Store Aisle",
+                desc: "Someone is standing exactly in front of the specific brand of oat milk you need. They are taking a very long time.",
+                choices: [
+                    { text: "Pretend to look at regular milk until they leave.", tag: "flight", effects: { mask: 10, child: -10, rep: 15 }, log: "You sacrificed your time to avoid taking up space." },
+                    { text: "Say 'Excuse me' using a voice three octaves higher than normal.", tag: "fawn", effects: { mask: 5, child: -5, rep: 5 }, log: "You utilized the Customer Service Fawning Voice." },
+                    { text: "Abandon the oat milk. You didn't deserve it anyway.", tag: "freeze", effects: { mask: 0, child: -25, rep: 10 }, log: "You punished yourself for a stranger's existence." }
+                ]
+            },
+            {
+                zone: "SOCIAL",
+                title: "The Unread Notification",
+                desc: "A friend replied 'K.' to a vulnerable paragraph you sent them.",
+                choices: [
+                    { text: "Mentally draft a completely new friend group.", tag: "fight", effects: { mask: -15, child: -15, rep: 20 }, log: "You burned the bridge in your mind." },
+                    { text: "Send 4 memes immediately to lighten the mood.", tag: "fawn", effects: { mask: 15, child: -20, rep: 5 }, log: "You performed as the Jester to avoid abandonment." },
+                    { text: "Throw your phone into a soft pile of laundry.", tag: "flight", effects: { mask: 0, child: 10, rep: 10 }, log: "You successfully removed the object of your pain." }
+                ]
+            },
+            {
+                zone: "SOCIAL",
+                title: "The Uneven Text Energy",
+                desc: "Your friend's reply is just 'oh nice' where it used to be three exclamation points.",
+                choices: [
+                    { text: "Reread every message you've sent them for the last month.", tag: "freeze", effects: { rep: 20, child: -10, mask: 0 }, log: "You audited a friendship for crimes that don't exist." },
+                    { text: "Match their energy exactly, one for one.", tag: "fight", effects: { mask: -10, child: 0, rep: 5 }, log: "Mutually assured emotional disengagement." },
+                    { text: "Text them something low-stakes and let it go.", tag: "secure", effects: { rep: -10, mask: 5, child: 5 }, log: "You extended trust without an audit." }
+                ]
+            },
+            {
+                zone: "SOCIAL",
+                title: "The Group Photo",
+                desc: "You've been tagged. The angle is unkind. Twelve people have already liked it.",
+                choices: [
+                    { text: "Untag yourself and message the poster to take it down.", tag: "fight", effects: { mask: -10, child: 5, rep: -5 }, log: "You defended your own image. Feels illegal, isn't." },
+                    { text: "Leave it up and never look at that post again.", tag: "flight", effects: { mask: 0, child: -10, rep: 10 }, log: "You conceded the internet round." },
+                    { text: "Zoom in and catalog every flaw for later.", tag: "freeze", effects: { rep: 20, child: -20, mask: 0 }, log: "You built a case file against your own face." }
+                ]
+            },
+            {
+                zone: "SOCIAL",
+                title: "The Small Talk Void",
+                desc: "Stuck in an elevator with a coworker for four floors. Neither of you has said anything for eleven seconds.",
+                choices: [
+                    { text: "Comment on the elevator's slowness like it's breaking news.", tag: "fawn", effects: { mask: 10, child: -5, rep: 0 }, log: "You filled the void with the safest possible noise." },
+                    { text: "Stare at the floor numbers with religious intensity.", tag: "freeze", effects: { rep: 15, mask: -5, child: 0 }, log: "You willed the doors open through sheer discomfort." },
+                    { text: "Let the silence be silence.", tag: "secure", effects: { rep: -5, mask: 0, child: 5 }, log: "Eleven seconds of quiet did not, in fact, kill you." }
+                ]
+            },
+
+            // --- SELF ---
+            {
+                zone: "SELF",
                 title: "The Nostalgic Smell",
                 desc: "You catch a whiff of a specific cleaning product that smells exactly like your childhood home.",
                 choices: [
-                    { text: "Hold your breath until you pass out.", effects: { mask: 0, child: -5, rep: 30 }, log: "You physically rejected the memory." },
-                    { text: "Cry silently in a bathroom stall.", effects: { mask: -10, child: 20, rep: -20 }, log: "You processed an emotion. Minus points to social mask." },
-                    { text: "Make a dark, self-deprecating joke to a coworker.", effects: { mask: -15, child: -10, rep: 5 }, log: "You weaponized the trauma for comedy." }
+                    { text: "Hold your breath until you pass out.", tag: "flight", effects: { mask: 0, child: -5, rep: 30 }, log: "You physically rejected the memory." },
+                    { text: "Cry silently in a bathroom stall.", tag: "secure", effects: { mask: -10, child: 20, rep: -20 }, log: "You processed an emotion. Minus points to social mask." },
+                    { text: "Make a dark, self-deprecating joke to a coworker.", tag: "fight", effects: { mask: -15, child: -10, rep: 5 }, log: "You weaponized the trauma for comedy." }
+                ]
+            },
+            {
+                zone: "SELF",
+                title: "The Mirror",
+                desc: "You catch your reflection in a dark window and don't recognize yourself for a full second.",
+                choices: [
+                    { text: "Immediately look away and think about anything else.", tag: "flight", effects: { mask: 0, child: -10, rep: 15 }, log: "You declined an invitation from your own face." },
+                    { text: "Stare longer, looking for evidence of who you used to be.", tag: "freeze", effects: { rep: 15, child: -15, mask: 0 }, log: "You interrogated a witness who can't testify." },
+                    { text: "Say something kind to it, out loud, even though it's weird.", tag: "secure", effects: { rep: -15, child: 15, mask: -5 }, log: "You addressed yourself like a person worth addressing." }
+                ]
+            },
+            {
+                zone: "SELF",
+                title: "The Old Journal Entry",
+                desc: "You find something you wrote at nineteen. It is more honest than anything you've said out loud this year.",
+                choices: [
+                    { text: "Close it immediately and never mention this happened.", tag: "flight", effects: { mask: 0, child: -10, rep: 10 }, log: "You returned the evidence to its tomb." },
+                    { text: "Feel a specific, targeted contempt for who you used to be.", tag: "fight", effects: { mask: 0, child: -20, rep: 5 }, log: "You picked a fight with a nineteen-year-old and lost." },
+                    { text: "Let it be true. You used to know something you forgot.", tag: "secure", effects: { rep: -10, child: 20, mask: -5 }, log: "You let an old truth back into the room." }
+                ]
+            },
+            {
+                zone: "SELF",
+                title: "The 3 AM Wake-Up",
+                desc: "No reason. No noise. Just awake, and your brain has already opened seventeen tabs of decade-old conversations.",
+                choices: [
+                    { text: "Start drafting an apology text you'll delete by morning.", tag: "fawn", effects: { mask: 5, child: -15, rep: 10 }, log: "You litigated a conversation the other person forgot happened." },
+                    { text: "Get up and reorganize something small and physical.", tag: "flight", effects: { mask: 0, child: 0, rep: 10 }, log: "You redirected 3 AM into a drawer." },
+                    { text: "Name it: this is just cortisol, not prophecy.", tag: "secure", effects: { rep: -15, child: 10, mask: 0 }, log: "You out-argued your own nervous system, briefly." }
+                ]
+            },
+            {
+                zone: "SELF",
+                title: "The Empty Sunday",
+                desc: "Nothing is scheduled. Nobody needs anything from you. This is, somehow, the hardest part of the week.",
+                choices: [
+                    { text: "Invent an urgent task to feel useful again.", tag: "fawn", effects: { mask: 5, child: -10, rep: 10 }, log: "You manufactured a purpose to avoid the quiet." },
+                    { text: "Scroll until the day disappears without you in it.", tag: "flight", effects: { mask: 0, child: -15, rep: 5 }, log: "You outsourced eight hours to a feed." },
+                    { text: "Sit with the unscheduled hour and let it be boring.", tag: "secure", effects: { rep: -10, child: 15, mask: 0 }, log: "You survived free time without earning it first." }
                 ]
             }
         ];
@@ -243,6 +548,44 @@
             elActionLog.scrollTop = elActionLog.scrollHeight;
         }
 
+        function applyMechanismModifiers(tag, effects) {
+            const mech = MECHANISMS[tag];
+            const e = { rep: effects.rep || 0, mask: effects.mask || 0, child: effects.child || 0 };
+            if (!mech || !mech.unlocked) return e;
+            e.rep += mech.mod.rep;
+            e.mask += mech.mod.mask;
+            e.child += mech.mod.child;
+            return e;
+        }
+
+        function trackMechanism(tag) {
+            const mech = MECHANISMS[tag];
+            if (!mech || mech.unlocked) return;
+            mech.count++;
+            if (mech.count >= UNLOCK_THRESHOLD) {
+                mech.unlocked = true;
+                logAction(`COPING MECHANISM ACQUIRED: "${mech.name}." This will not be undone.`);
+                renderMechanisms(true);
+            }
+        }
+
+        function renderMechanisms(hasFresh) {
+            const unlocked = Object.values(MECHANISMS).filter(m => m.unlocked);
+            if (unlocked.length === 0) {
+                elMechanismsPanel.classList.add('hidden');
+                return;
+            }
+            elMechanismsPanel.classList.remove('hidden');
+            elMechanismsList.innerHTML = '';
+            unlocked.forEach((m, i) => {
+                const badge = document.createElement('span');
+                const isNewest = hasFresh && i === unlocked.length - 1;
+                badge.className = "mechanism-badge" + (isNewest ? " fresh" : "");
+                badge.textContent = m.name;
+                elMechanismsList.appendChild(badge);
+            });
+        }
+
         function updateUI() {
             // Constrain values
             state.repression = Math.max(0, Math.min(100, state.repression));
@@ -252,7 +595,7 @@
             // Update Bars
             elRepressionBar.style.width = `${state.repression}%`;
             elRepressionVal.textContent = `${state.repression}%`;
-            
+
             // Color shifts based on danger zones
             if(state.repression > 80) elRepressionBar.className = "stat-bar-fill bg-red-500 animate-pulse";
             else elRepressionBar.className = "stat-bar-fill bg-red-700";
@@ -270,6 +613,34 @@
             elTurnCounter.textContent = `Turn: ${state.turn}/${state.maxTurns}`;
         }
 
+        function getSurvivalEnding() {
+            const { repression: rep, mask, child } = state;
+            let title, desc;
+
+            if (rep >= 70) {
+                title = "The Powder Keg";
+                desc = "You didn't explode. You just got very, very good at ticking.";
+            } else if (mask >= 85 && child <= 25) {
+                title = "The Performer";
+                desc = "Nobody has seen the real you in years, including you.";
+            } else if (child >= 75 && mask <= 40) {
+                title = "Radically Undone";
+                desc = "You stopped hiding. It cost you a few rooms. You kept yourself.";
+            } else if (rep <= 30 && mask >= 40 && mask <= 70 && child >= 40 && child <= 70) {
+                title = "Fragile Equilibrium";
+                desc = "Nothing is fixed. Nothing is on fire. This might be what okay feels like.";
+            } else {
+                title = "Functional Enough";
+                desc = "You made it to tomorrow. That's the whole job today.";
+            }
+
+            const unlocked = Object.values(MECHANISMS).filter(m => m.unlocked).map(m => m.name);
+            if (unlocked.length) {
+                desc += ` Coping mechanisms acquired: ${unlocked.join(', ')}.`;
+            }
+            return { title, desc };
+        }
+
         function checkGameEnd() {
             if (state.repression >= 100) {
                 endGame("Panic Attack", "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet.");
@@ -284,7 +655,9 @@
                 return true;
             }
             if (state.turn > state.maxTurns) {
-                endGame("You Survived", "You made it to the end of the day. Nothing is resolved, but you get to sleep for 6 hours and do it again tomorrow.", true);
+                if (!state.hardMode) unlockNgPlus();
+                const ending = getSurvivalEnding();
+                endGame(ending.title, ending.desc, true);
                 return true;
             }
             return false;
@@ -296,17 +669,28 @@
             elEndTitle.textContent = title;
             elEndTitle.className = win ? "text-3xl font-bold text-green-500 mb-4 uppercase tracking-widest" : "text-3xl font-bold text-red-500 mb-4 uppercase tracking-widest";
             elEndDesc.textContent = desc;
+            elEndNgPlusBtn.classList.toggle('hidden', state.hardMode || !isNgPlusUnlocked());
         }
 
-        function handleChoice(effects, logMsg) {
+        function handleChoice(rawEffects, logMsg, tag) {
             if(state.isGameOver) return;
+
+            let effects = tag ? applyMechanismModifiers(tag, rawEffects) : rawEffects;
+            if (state.hardMode) {
+                effects = {
+                    rep: Math.round((effects.rep || 0) * HARD_MODE_MULTIPLIER),
+                    mask: Math.round((effects.mask || 0) * HARD_MODE_MULTIPLIER),
+                    child: Math.round((effects.child || 0) * HARD_MODE_MULTIPLIER)
+                };
+            }
 
             state.repression += effects.rep || 0;
             state.mask += effects.mask || 0;
             state.child += effects.child || 0;
-            
+
             logAction(logMsg);
-            
+            if (tag) trackMechanism(tag);
+
             state.turn++;
             updateUI();
 
@@ -315,21 +699,55 @@
             }
         }
 
+        function handleGlitchChoice() {
+            if(state.isGameOver) return;
+            const effects = {
+                rep: Math.floor(Math.random() * 51) - 25,
+                mask: Math.floor(Math.random() * 51) - 25,
+                child: Math.floor(Math.random() * 51) - 25
+            };
+            const log = GLITCH_LOGS[Math.floor(Math.random() * GLITCH_LOGS.length)];
+            handleChoice(effects, log, null);
+        }
+
+        function pickWeightedEvent() {
+            // The zone tied to your most endangered stat gets weighted heavier.
+            // The nervous system doesn't serve you a random curriculum; it serves you the one it's worried about.
+            const danger = {
+                repression: state.repression / 100,
+                mask: (100 - state.mask) / 100,
+                child: (100 - state.child) / 100
+            };
+            const worstStat = Object.keys(danger).reduce((a, b) => danger[b] > danger[a] ? b : a);
+
+            const pool = events.filter(e => e.title !== lastEventTitle);
+            const weights = pool.map(e => ZONE_STAT_MAP[e.zone] === worstStat ? WEAK_ZONE_WEIGHT : 1);
+            const total = weights.reduce((a, b) => a + b, 0);
+
+            let r = Math.random() * total;
+            for (let i = 0; i < pool.length; i++) {
+                r -= weights[i];
+                if (r <= 0) return pool[i];
+            }
+            return pool[pool.length - 1];
+        }
+
         function loadRandomEvent() {
-            // Pick a random event, but try not to repeat the exact same one back to back
-            const evt = events[Math.floor(Math.random() * events.length)];
-            
+            const evt = pickWeightedEvent();
+            lastEventTitle = evt.title;
+
             elEventDisplay.innerHTML = `
+                <div class="text-[10px] text-gray-600 uppercase tracking-[0.3em] mb-2">[ ${evt.zone} ]</div>
                 <h2 class="text-xl md:text-2xl font-bold mb-4 text-white uppercase tracking-wider">${evt.title}</h2>
                 <p class="text-sm md:text-base text-gray-400 max-w-lg leading-relaxed border-l-4 border-gray-600 pl-4 text-left italic">"${evt.desc}"</p>
             `;
 
             elChoicesContainer.innerHTML = '';
-            
+
             evt.choices.forEach(choice => {
                 const btn = document.createElement('button');
                 btn.className = "glitch-hover w-full text-left p-4 border border-gray-700 bg-[#161616] text-gray-300 text-sm hover:text-white hover:border-gray-500 transition-colors duration-200 flex flex-col gap-1";
-                
+
                 // Show transparent hints of what it does
                 let hints = [];
                 if(choice.effects.rep > 0) hints.push("↑ Repression");
@@ -343,29 +761,236 @@
                     <span>${choice.text}</span>
                     <span class="text-[10px] text-gray-600 uppercase tracking-widest font-bold mt-1">${hints.join(' | ')}</span>
                 `;
-                
-                btn.onclick = () => handleChoice(choice.effects, choice.log);
+
+                btn.onclick = () => handleChoice(choice.effects, choice.log, choice.tag);
                 elChoicesContainer.appendChild(btn);
+            });
+
+            // Card Shuffle: rare fourth option, effects randomized at click time
+            if (Math.random() < GLITCH_CHANCE) {
+                const glitchBtn = document.createElement('button');
+                glitchBtn.className = "glitch-hover glitch-choice w-full text-left p-4 border bg-[#161616] text-sm transition-colors duration-200 flex flex-col gap-1";
+                glitchBtn.innerHTML = `
+                    <span>??? Do something you can't predict.</span>
+                    <span class="text-[10px] uppercase tracking-widest font-bold mt-1">OUTCOME UNKNOWN</span>
+                `;
+                glitchBtn.onclick = handleGlitchChoice;
+                elChoicesContainer.appendChild(glitchBtn);
+            }
+        }
+
+        function setMode(mode) {
+            const isSim = mode === 'sim';
+            elSimView.classList.toggle('hidden', !isSim);
+            elFieldView.classList.toggle('hidden', isSim);
+
+            elTabSim.classList.toggle('bg-[#1a1a1a]', isSim);
+            elTabSim.classList.toggle('text-white', isSim);
+            elTabSim.classList.toggle('text-gray-500', !isSim);
+            elTabField.classList.toggle('bg-[#1a1a1a]', !isSim);
+            elTabField.classList.toggle('text-white', !isSim);
+            elTabField.classList.toggle('text-gray-500', isSim);
+
+            if (!isSim) {
+                renderFieldEntries();
+                renderPattern();
+            }
+        }
+
+        function renderFieldPickers() {
+            elFieldTagPicker.innerHTML = '';
+            Object.keys(MECHANISMS).forEach(tag => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.dataset.tag = tag;
+                btn.textContent = tag;
+                btn.className = "px-3 py-1 text-[10px] uppercase tracking-widest border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 transition-colors";
+                btn.onclick = () => {
+                    selectedFieldTag = tag;
+                    [...elFieldTagPicker.children].forEach(b => {
+                        const active = b.dataset.tag === tag;
+                        b.classList.toggle('border-purple-500', active);
+                        b.classList.toggle('text-purple-300', active);
+                    });
+                };
+                elFieldTagPicker.appendChild(btn);
+            });
+
+            elFieldZonePicker.innerHTML = '';
+            ZONES.forEach(zone => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.dataset.zone = zone;
+                btn.textContent = zone;
+                btn.className = "px-3 py-1 text-[10px] uppercase tracking-widest border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 transition-colors";
+                btn.onclick = () => {
+                    selectedFieldZone = (selectedFieldZone === zone) ? null : zone;
+                    [...elFieldZonePicker.children].forEach(b => {
+                        const active = b.dataset.zone === selectedFieldZone;
+                        b.classList.toggle('border-blue-500', active);
+                        b.classList.toggle('text-blue-300', active);
+                    });
+                };
+                elFieldZonePicker.appendChild(btn);
             });
         }
 
-        function startGame() {
+        function submitFieldEntry() {
+            const note = elFieldNote.value.trim();
+            if (!note || !selectedFieldTag) {
+                elFieldReading.textContent = !note
+                    ? "Write down what actually happened first."
+                    : "Pick the response that fits closest. None of them are wrong.";
+                return;
+            }
+
+            const entries = loadFieldLog();
+            entries.push({
+                id: Date.now() + Math.random().toString(36).slice(2),
+                date: new Date().toISOString(),
+                tag: selectedFieldTag,
+                zone: selectedFieldZone,
+                note
+            });
+            saveFieldLog(entries);
+
+            elFieldNote.value = '';
+            selectedFieldTag = null;
+            selectedFieldZone = null;
+            renderFieldPickers();
+            renderFieldEntries();
+            renderPattern();
+        }
+
+        function renderFieldEntries() {
+            const entries = loadFieldLog().slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+            elFieldEntries.innerHTML = '';
+
+            if (entries.length === 0) {
+                elFieldEntries.innerHTML = '<p class="text-xs text-gray-600 italic">No entries yet. The blank page is doing a lot of the work here.</p>';
+                return;
+            }
+
+            entries.forEach(entry => {
+                const row = document.createElement('div');
+                row.className = "border border-gray-800 bg-[#161616] p-3 text-xs";
+                const when = new Date(entry.date).toLocaleString(undefined, {
+                    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+                });
+                row.innerHTML = `
+                    <div class="flex justify-between items-center mb-1 text-[10px] uppercase tracking-widest text-gray-500">
+                        <span>${when}</span>
+                        <span>${entry.tag}${entry.zone ? ' · ' + entry.zone : ''}</span>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed"></p>
+                `;
+                row.querySelector('p').textContent = entry.note;
+                elFieldEntries.appendChild(row);
+            });
+        }
+
+        function computeTagCounts(entries) {
+            const counts = { fawn: 0, flight: 0, fight: 0, freeze: 0, secure: 0 };
+            entries.forEach(e => { if (counts.hasOwnProperty(e.tag)) counts[e.tag]++; });
+            return counts;
+        }
+
+        function renderPattern() {
+            const all = loadFieldLog();
+            const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+            let windowEntries = all.filter(e => new Date(e.date).getTime() >= sevenDaysAgo);
+            let windowLabel = "last 7 days";
+            if (windowEntries.length === 0 && all.length > 0) {
+                windowEntries = all;
+                windowLabel = "all time";
+            }
+
+            const counts = computeTagCounts(windowEntries);
+            const max = Math.max(1, ...Object.values(counts));
+
+            elFieldPatternBars.innerHTML = '';
+            Object.entries(counts).forEach(([tag, count]) => {
+                const row = document.createElement('div');
+                row.className = "flex items-center gap-2";
+                row.innerHTML = `
+                    <span class="w-14 text-[10px] uppercase tracking-widest text-gray-500">${tag}</span>
+                    <div class="stat-bar-container flex-grow h-3">
+                        <div class="stat-bar-fill bg-gray-500" style="width: ${(count / max) * 100}%;"></div>
+                    </div>
+                    <span class="w-4 text-[10px] text-gray-500 text-right">${count}</span>
+                `;
+                elFieldPatternBars.appendChild(row);
+            });
+
+            if (all.length === 0) {
+                elFieldReading.textContent = "Nothing logged yet.";
+                return;
+            }
+            const dominant = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+            if (dominant[1] === 0) {
+                elFieldReading.textContent = `No pattern yet in the ${windowLabel}.`;
+                return;
+            }
+            elFieldReading.textContent = `Most common response in the ${windowLabel}: ${dominant[0]} (${MECHANISMS[dominant[0]].name}), ${dominant[1]} of ${windowEntries.length} ${windowEntries.length === 1 ? 'entry' : 'entries'}.`;
+        }
+
+        function exportFieldLog() {
+            const entries = loadFieldLog().slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+            if (entries.length === 0) return;
+
+            const lines = entries.map(e =>
+                `[${new Date(e.date).toLocaleString()}] ${e.tag}${e.zone ? ' / ' + e.zone : ''}\n${e.note}\n`
+            );
+            const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `field-log-${new Date().toISOString().slice(0, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function clearFieldLog() {
+            if (loadFieldLog().length === 0) return;
+            if (!window.confirm("Delete your entire field log? This can't be undone.")) return;
+            saveFieldLog([]);
+            renderFieldEntries();
+            renderPattern();
+        }
+
+        function startGame(hard = false) {
             state = {
                 repression: 20,
                 mask: 100,
                 child: 50,
                 turn: 1,
-                maxTurns: 10,
-                isGameOver: false
+                maxTurns: hard ? HARD_MODE_TURNS : 10,
+                isGameOver: false,
+                hardMode: hard
             };
+            Object.values(MECHANISMS).forEach(m => { m.unlocked = false; m.count = 0; });
+            lastEventTitle = null;
             elEndScreen.classList.add('hidden');
-            elActionLog.innerHTML = '<div>> Therapy session restarted. Commencing psychological baseline.</div>';
+
+            elGameTitle.textContent = hard ? "U.C.T. Simulator :: EXTENDED THERAPY" : "U.C.T. Simulator v2.0";
+            elObjectiveText.textContent = `Objective: Survive ${state.maxTurns} Turns`;
+            elNgPlusBtn.classList.toggle('hidden', hard || !isNgPlusUnlocked());
+
+            elActionLog.innerHTML = hard
+                ? '<div>> Extended session initiated. Your nervous system has been here before.</div>'
+                : '<div>> Therapy session restarted. Commencing psychological baseline.</div>';
+            renderMechanisms(false);
             updateUI();
             loadRandomEvent();
         }
 
         // Boot
-        window.onload = startGame;
+        window.onload = () => {
+            renderFieldPickers();
+            startGame(false);
+        };
 
     </script>
 </body>

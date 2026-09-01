@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+body {
+    font-family: 'Space Mono', monospace;
+    background-color: #0a0a0a;
+    color: #e5e5e5;
+    user-select: none;
+}
+
+.crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.4;
+}
+
+.glitch-hover:hover {
+    animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+    background-color: #2a2a2a;
+}
+
+@keyframes glitch-skew {
+    0% { transform: skew(0deg); }
+    20% { transform: skew(-2deg); }
+    40% { transform: skew(2deg); }
+    60% { transform: skew(-1deg); }
+    80% { transform: skew(1deg); }
+    100% { transform: skew(0deg); }
+}
+
+.stat-bar-container {
+    width: 100%;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    height: 1.5rem;
+    position: relative;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.log-container {
+    scrollbar-width: thin;
+    scrollbar-color: #444 #1a1a1a;
+}
+
+.glitch-choice {
+    border-style: dashed !important;
+    border-color: #a855f7 !important;
+    color: #d8b4fe !important;
+}
+.glitch-choice:hover {
+    background-color: #2a1a33 !important;
+    border-color: #d8b4fe !important;
+}
+
+.mechanism-badge {
+    border: 1px solid #444;
+    padding: 2px 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #999;
+    white-space: nowrap;
+}
+
+@keyframes flash-in {
+    0% { opacity: 0; transform: translateY(-4px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+.mechanism-badge.fresh {
+    animation: flash-in 0.4s ease-out;
+    color: #d8b4fe;
+    border-color: #a855f7;
+}

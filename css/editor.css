@@ -1,0 +1,73 @@
+.editor-input {
+    background-color: #161616;
+    border: 1px solid #3f3f3f;
+    color: #e5e5e5;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.5rem;
+    width: 100%;
+}
+.editor-input:focus {
+    outline: none;
+    border-color: #737373;
+}
+.editor-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #737373;
+    display: block;
+    margin-bottom: 2px;
+}
+.editor-btn {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid #3f3f3f;
+    color: #a3a3a3;
+    padding: 4px 10px;
+    transition: color 0.15s, border-color 0.15s;
+    background: transparent;
+    white-space: nowrap;
+}
+.editor-btn:hover:not(:disabled) {
+    color: #fff;
+    border-color: #737373;
+}
+.editor-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+.editor-btn-danger {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid #7f1d1d;
+    color: #b91c1c;
+    padding: 4px 10px;
+    transition: color 0.15s, border-color 0.15s;
+    background: transparent;
+    white-space: nowrap;
+}
+.editor-btn-danger:hover:not(:disabled) {
+    color: #f87171;
+    border-color: #ef4444;
+}
+.editor-btn-danger:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+.editor-section {
+    border: 1px solid #262626;
+    background-color: #0d0d0d;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.editor-card {
+    border: 1px solid #262626;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}

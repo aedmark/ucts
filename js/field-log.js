@@ -1,0 +1,205 @@
+// ============================================================
+// FIELD LOG — real, persistent journaling using the same tag vocabulary
+// as the simulation. index.html only. Depends on content.js.
+// ============================================================
+const FIELD_LOG_KEY = 'uct_field_log_v1';
+let selectedFieldTag = null;
+let selectedFieldZone = null;
+let fieldLogCache = null;
+
+function loadFieldLog() {
+    if (fieldLogCache) return fieldLogCache;
+    try { fieldLogCache = JSON.parse(localStorage.getItem(FIELD_LOG_KEY)) || []; }
+    catch (e) { fieldLogCache = []; }
+    return fieldLogCache;
+}
+function saveFieldLog(entries) {
+    fieldLogCache = entries;
+    try { localStorage.setItem(FIELD_LOG_KEY, JSON.stringify(entries)); }
+    catch (e) { /* storage unavailable, entries persist for this session only */ }
+}
+
+// DOM Elements
+const elFieldNote = document.getElementById('field-note');
+const elFieldTagPicker = document.getElementById('field-tag-picker');
+const elFieldZonePicker = document.getElementById('field-zone-picker');
+const elFieldPatternBars = document.getElementById('field-pattern-bars');
+const elFieldReading = document.getElementById('field-reading');
+const elFieldEntries = document.getElementById('field-entries');
+
+function renderFieldPickers() {
+    const content = getContent();
+
+    elFieldTagPicker.innerHTML = '';
+    Object.keys(content.mechanisms).forEach(tag => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.tag = tag;
+        btn.textContent = tag;
+        btn.className = "px-3 py-1 text-[10px] uppercase tracking-widest border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 transition-colors";
+        btn.onclick = () => {
+            selectedFieldTag = tag;
+            [...elFieldTagPicker.children].forEach(b => {
+                const active = b.dataset.tag === tag;
+                b.classList.toggle('border-purple-500', active);
+                b.classList.toggle('text-purple-300', active);
+            });
+        };
+        elFieldTagPicker.appendChild(btn);
+    });
+
+    elFieldZonePicker.innerHTML = '';
+    content.zones.map(z => z.key).forEach(zone => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.zone = zone;
+        btn.textContent = zone;
+        btn.className = "px-3 py-1 text-[10px] uppercase tracking-widest border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 transition-colors";
+        btn.onclick = () => {
+            selectedFieldZone = (selectedFieldZone === zone) ? null : zone;
+            [...elFieldZonePicker.children].forEach(b => {
+                const active = b.dataset.zone === selectedFieldZone;
+                b.classList.toggle('border-blue-500', active);
+                b.classList.toggle('text-blue-300', active);
+            });
+        };
+        elFieldZonePicker.appendChild(btn);
+    });
+}
+
+function submitFieldEntry() {
+    const note = elFieldNote.value.trim();
+    if (!note || !selectedFieldTag) {
+        elFieldReading.textContent = !note
+            ? "Write down what actually happened first."
+            : "Pick the response that fits closest. None of them are wrong.";
+        return;
+    }
+
+    const entries = loadFieldLog();
+    entries.push({
+        id: Date.now() + Math.random().toString(36).slice(2),
+        date: new Date().toISOString(),
+        tag: selectedFieldTag,
+        zone: selectedFieldZone,
+        note
+    });
+    saveFieldLog(entries);
+
+    elFieldNote.value = '';
+    selectedFieldTag = null;
+    selectedFieldZone = null;
+    renderFieldPickers();
+    renderFieldEntries();
+    renderPattern();
+}
+
+function renderFieldEntries() {
+    const entries = loadFieldLog().slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+    elFieldEntries.innerHTML = '';
+
+    if (entries.length === 0) {
+        const empty = document.createElement('p');
+        empty.className = "text-xs text-gray-600 italic";
+        empty.textContent = "No entries yet. The blank page is doing a lot of the work here.";
+        elFieldEntries.appendChild(empty);
+        return;
+    }
+
+    entries.forEach(entry => {
+        const row = document.createElement('div');
+        row.className = "border border-gray-800 bg-[#161616] p-3 text-xs";
+
+        const headRow = document.createElement('div');
+        headRow.className = "flex justify-between items-center mb-1 text-[10px] uppercase tracking-widest text-gray-500";
+        const when = document.createElement('span');
+        when.textContent = new Date(entry.date).toLocaleString(undefined, {
+            month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+        });
+        const tagZone = document.createElement('span');
+        tagZone.textContent = entry.tag + (entry.zone ? ' · ' + entry.zone : '');
+        headRow.appendChild(when);
+        headRow.appendChild(tagZone);
+
+        const noteP = document.createElement('p');
+        noteP.className = "text-gray-300 leading-relaxed";
+        noteP.textContent = entry.note;
+
+        row.appendChild(headRow);
+        row.appendChild(noteP);
+        elFieldEntries.appendChild(row);
+    });
+}
+
+function computeTagCounts(entries) {
+    const counts = { fawn: 0, flight: 0, fight: 0, freeze: 0, secure: 0 };
+    entries.forEach(e => { if (counts.hasOwnProperty(e.tag)) counts[e.tag]++; });
+    return counts;
+}
+
+function renderPattern() {
+    const content = getContent();
+    const all = loadFieldLog();
+    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    let windowEntries = all.filter(e => new Date(e.date).getTime() >= sevenDaysAgo);
+    let windowLabel = "last 7 days";
+    if (windowEntries.length === 0 && all.length > 0) {
+        windowEntries = all;
+        windowLabel = "all time";
+    }
+
+    const counts = computeTagCounts(windowEntries);
+    const max = Math.max(1, ...Object.values(counts));
+
+    elFieldPatternBars.innerHTML = '';
+    Object.entries(counts).forEach(([tag, count]) => {
+        const row = document.createElement('div');
+        row.className = "flex items-center gap-2";
+        row.innerHTML = `
+            <span class="w-14 text-[10px] uppercase tracking-widest text-gray-500">${tag}</span>
+            <div class="stat-bar-container flex-grow h-3">
+                <div class="stat-bar-fill bg-gray-500" style="width: ${(count / max) * 100}%;"></div>
+            </div>
+            <span class="w-4 text-[10px] text-gray-500 text-right">${count}</span>
+        `;
+        elFieldPatternBars.appendChild(row);
+    });
+
+    if (all.length === 0) {
+        elFieldReading.textContent = "Nothing logged yet.";
+        return;
+    }
+    const dominant = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+    if (dominant[1] === 0) {
+        elFieldReading.textContent = `No pattern yet in the ${windowLabel}.`;
+        return;
+    }
+    const mechName = content.mechanisms[dominant[0]] ? content.mechanisms[dominant[0]].name : dominant[0];
+    elFieldReading.textContent = `Most common response in the ${windowLabel}: ${dominant[0]} (${mechName}), ${dominant[1]} of ${windowEntries.length} ${windowEntries.length === 1 ? 'entry' : 'entries'}.`;
+}
+
+function exportFieldLog() {
+    const entries = loadFieldLog().slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+    if (entries.length === 0) return;
+
+    const lines = entries.map(e =>
+        `[${new Date(e.date).toLocaleString()}] ${e.tag}${e.zone ? ' / ' + e.zone : ''}\n${e.note}\n`
+    );
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `field-log-${new Date().toISOString().slice(0, 10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function clearFieldLog() {
+    if (loadFieldLog().length === 0) return;
+    if (!window.confirm("Delete your entire field log? This can't be undone.")) return;
+    saveFieldLog([]);
+    renderFieldEntries();
+    renderPattern();
+}

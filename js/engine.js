@@ -120,7 +120,7 @@ function updateUI() {
     elChildVal.textContent = `${state.child}%`;
     elChildBar.className = state.child < 30 ? "stat-bar-fill bg-pink-400 animate-pulse" : "stat-bar-fill bg-pink-700";
 
-    elTurnCounter.textContent = `Turn: ${state.turn}/${state.maxTurns}`;
+    elTurnCounter.textContent = `Turn: ${Math.min(state.turn, state.maxTurns)}/${state.maxTurns}`;
 }
 
 function evalCondition(cond, stats) {

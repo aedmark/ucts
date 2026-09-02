@@ -6,6 +6,11 @@ const elTabSim = document.getElementById('tab-sim');
 const elTabField = document.getElementById('tab-field');
 const elSimView = document.getElementById('sim-view');
 const elFieldView = document.getElementById('field-view');
+const elHelpScreen = document.getElementById('help-screen');
+
+function toggleHelp(show) {
+    elHelpScreen.classList.toggle('hidden', !show);
+}
 
 function setMode(mode) {
     const views = { sim: elSimView, field: elFieldView };

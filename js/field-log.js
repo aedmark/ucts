@@ -19,6 +19,13 @@ function saveFieldLog(entries) {
     catch (e) { /* storage unavailable, entries persist for this session only */ }
 }
 
+function deleteFieldEntry(id) {
+    if (!window.confirm("Delete this entry? This can't be undone.")) return;
+    saveFieldLog(loadFieldLog().filter(e => e.id !== id));
+    renderFieldEntries();
+    renderPattern();
+}
+
 // DOM Elements
 const elFieldNote = document.getElementById('field-note');
 const elFieldTagPicker = document.getElementById('field-tag-picker');
@@ -111,15 +118,25 @@ function renderFieldEntries() {
         row.className = "border border-gray-800 bg-[#161616] p-3 text-xs";
 
         const headRow = document.createElement('div');
-        headRow.className = "flex justify-between items-center mb-1 text-[10px] uppercase tracking-widest text-gray-500";
+        headRow.className = "flex justify-between items-center gap-2 mb-1 text-[10px] uppercase tracking-widest text-gray-500";
         const when = document.createElement('span');
         when.textContent = new Date(entry.date).toLocaleString(undefined, {
             month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
         });
         const tagZone = document.createElement('span');
         tagZone.textContent = entry.tag + (entry.zone ? ' · ' + entry.zone : '');
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.textContent = '\u00d7';
+        delBtn.title = 'Delete this entry';
+        delBtn.className = "text-gray-700 hover:text-red-400 transition-colors px-1 leading-none";
+        delBtn.onclick = () => deleteFieldEntry(entry.id);
+        const rightGroup = document.createElement('span');
+        rightGroup.className = "flex items-center gap-2";
+        rightGroup.appendChild(tagZone);
+        rightGroup.appendChild(delBtn);
         headRow.appendChild(when);
-        headRow.appendChild(tagZone);
+        headRow.appendChild(rightGroup);
 
         const noteP = document.createElement('p');
         noteP.className = "text-gray-300 leading-relaxed";
@@ -169,13 +186,35 @@ function renderPattern() {
         elFieldReading.textContent = "Nothing logged yet.";
         return;
     }
-    const dominant = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
-    if (dominant[1] === 0) {
+
+    const topCount = Math.max(...Object.values(counts));
+    if (topCount === 0) {
         elFieldReading.textContent = `No pattern yet in the ${windowLabel}.`;
         return;
     }
-    const mechName = content.mechanisms[dominant[0]] ? content.mechanisms[dominant[0]].name : dominant[0];
-    elFieldReading.textContent = `Most common response in the ${windowLabel}: ${dominant[0]} (${mechName}), ${dominant[1]} of ${windowEntries.length} ${windowEntries.length === 1 ? 'entry' : 'entries'}.`;
+
+    // A tie on count used to get broken silently by object key order (fawn always
+    // beat flight, no matter what actually happened). Break it on something real
+    // instead: whichever tied response showed up most recently in the window. If
+    // it's still a genuine tie, say so rather than pretending one response won.
+    const mostRecentTimestamp = tag => {
+        const hits = windowEntries.filter(e => e.tag === tag);
+        return hits.length ? Math.max(...hits.map(e => new Date(e.date).getTime())) : -Infinity;
+    };
+    const contenders = Object.keys(counts)
+        .filter(tag => counts[tag] === topCount)
+        .sort((a, b) => mostRecentTimestamp(b) - mostRecentTimestamp(a));
+
+    const dominantTag = contenders[0];
+    const mechName = content.mechanisms[dominantTag] ? content.mechanisms[dominantTag].name : dominantTag;
+    let reading = `Most common response in the ${windowLabel}: ${dominantTag} (${mechName}), ${topCount} of ${windowEntries.length} ${windowEntries.length === 1 ? 'entry' : 'entries'}.`;
+
+    if (contenders.length > 1) {
+        const otherNames = contenders.slice(1).map(t => content.mechanisms[t] ? content.mechanisms[t].name : t);
+        reading += ` Tied at ${topCount} with ${otherNames.join(', ')} \u2014 ${dominantTag} takes it for showing up most recently.`;
+    }
+
+    elFieldReading.textContent = reading;
 }
 
 function exportFieldLog() {

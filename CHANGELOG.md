@@ -2,6 +2,23 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.2.0] - 2026-09-02
+
+### Added
+- **8 new events, 2 per zone** (28 total, up from 20): The Autocorrect Betrayal and The Performance Review Buzzword (Work); The Left-On-Read Text and The Different Voice on the Phone (Home); The Friend Who Remembers Everything and The RSVP You Regret (Social); The Unfinished Thing and The Accidental Self-Compliment (Self). Written through the QUEST mod chip's Room/Inventory framing \u2014 each scenario as a small, specific obstacle rather than a mood \u2014 while staying inside the existing schema and voice. Validated against `isValidContentPack`; no duplicate titles.
+
+## [4.1.0] - 2026-09-02
+
+### Added
+- **A help panel (the "?" next to the title).** Explains the three stats, the turn loop, that a fourth unhinted option shows up sometimes, and what Extended Therapy is — without naming the five response tags or how Coping Mechanisms work mechanically. That stays something you find out by playing, on purpose.
+- **Per-entry Field Log deletion.** Each logged entry now has a delete control next to its timestamp. The `id` generated for every entry since the Field Log shipped in 2.0.0 was previously write-only — nothing ever read it back. It does now.
+
+### Changed
+- **Field Log pattern reading no longer breaks ties silently.** `renderPattern()` used to sort tag counts and take the first result, which meant an exact tie was always resolved by object key order (`fawn` before `flight` before `fight`...), regardless of what you'd actually logged. Ties are now broken by recency — whichever response showed up most recently in the window wins — and if it's still a genuine tie, the reading says so by name instead of picking one silently.
+
+### Fixed
+- **Turn counter could briefly read past `maxTurns`** (e.g. `Turn: 11/10`) in the instant between the final choice resolving and the end screen covering it. Currently invisible in practice (`#end-screen` is opaque and fully covers the play area), but the counter now clamps to `maxTurns` at the display site itself, so it's correct independent of whatever the end-screen's CSS happens to be doing.
+
 ## [4.0.0] - 2026-09-01
 
 ### Changed

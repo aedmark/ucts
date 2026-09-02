@@ -262,6 +262,86 @@ const DEFAULT_CONTENT = {
                 { text: "Scroll until the day disappears without you in it.", tag: "flight", effects: { mask: 0, child: -15, rep: 5 }, log: "You outsourced eight hours to a feed." },
                 { text: "Sit with the unscheduled hour and let it be boring.", tag: "secure", effects: { rep: -10, child: 15, mask: 0 }, log: "You survived free time without earning it first." }
             ]
+        },
+
+        // --- WORK (expansion) ---
+        {
+            zone: "WORK", title: "The Autocorrect Betrayal",
+            desc: "You meant to type something professional. Autocorrect had other plans. It has already been sent.",
+            choices: [
+                { text: "Send six frantic follow-ups explaining what you meant.", tag: "fawn", effects: { mask: 10, child: -15, rep: -5 }, log: "You buried the joke under a small avalanche of context." },
+                { text: "Screenshot it, close the laptop, stare at the wall.", tag: "freeze", effects: { mask: 0, child: -10, rep: 20 }, log: "You archived the evidence and fled the scene." },
+                { text: "Let the typo be funny. It's kind of funny.", tag: "secure", effects: { mask: -5, child: 10, rep: -10 }, log: "You allowed yourself to be a person who makes typos." }
+            ]
+        },
+        {
+            zone: "WORK", title: "The Performance Review Buzzword",
+            desc: "Your manager says 'let's discuss your growth areas' in a tone that reveals absolutely nothing.",
+            choices: [
+                { text: "Mentally draft your resignation before the meeting even starts.", tag: "freeze", effects: { rep: 25, mask: 0, child: -10 }, log: "You pre-grieved a career you still have." },
+                { text: "Walk in and ask directly what 'growth areas' means, specifically.", tag: "fight", effects: { mask: -10, child: 10, rep: -15 }, log: "You demanded the noun behind the euphemism." },
+                { text: "Prepare a mental defense file of every accomplishment from the last three years.", tag: "fawn", effects: { mask: 10, child: -10, rep: 10 }, log: "You built a case for a trial nobody scheduled." }
+            ]
+        },
+
+        // --- HOME (expansion) ---
+        {
+            zone: "HOME", title: "The Left-On-Read Text",
+            desc: "You sent a long message to a parent, explaining how you actually feel. Marked read. Nothing since.",
+            choices: [
+                { text: "Open your messages to literally anyone else and get absorbed in something safer.", tag: "flight", effects: { mask: 0, child: -10, rep: 15 }, log: "You changed the channel on your own heart." },
+                { text: "Reread your message eleven times, hunting for the sentence that broke it.", tag: "freeze", effects: { rep: 20, mask: 0, child: -15 }, log: "You performed an autopsy on a conversation that isn't dead yet." },
+                { text: "Send nothing else. Let the silence belong to them, not you.", tag: "secure", effects: { rep: -10, mask: 0, child: 10 }, log: "You stopped auditing a door that isn't yours to open." }
+            ]
+        },
+        {
+            zone: "HOME", title: "The Different Voice on the Phone",
+            desc: "Your parent picks up sounding smaller than you remember. You don't know why yet.",
+            choices: [
+                { text: "Immediately go bright and cheerful to lift the mood before you've even asked what's wrong.", tag: "fawn", effects: { mask: 15, child: -15, rep: 5 }, log: "You showed up as sunshine before you knew what kind of day it was." },
+                { text: "Ask, flatly, exactly what's going on. No preamble.", tag: "fight", effects: { mask: -10, child: 5, rep: -5 }, log: "You skipped the small talk. It cost you nothing you needed." },
+                { text: "Say 'oh, okay' and let the conversation drift somewhere safer.", tag: "freeze", effects: { rep: 15, mask: 0, child: -10 }, log: "You let a real question evaporate into weather talk." }
+            ]
+        },
+
+        // --- SOCIAL (expansion) ---
+        {
+            zone: "SOCIAL", title: "The Friend Who Remembers Everything",
+            desc: "Someone brings up a specific thing you said, off-hand, eight months ago. You have no memory of saying it.",
+            choices: [
+                { text: "Panic-scan your own memory for context you don't have.", tag: "freeze", effects: { rep: 15, mask: -5, child: 0 }, log: "You audited a version of yourself with no paper trail." },
+                { text: "Agree enthusiastically, like you absolutely remember.", tag: "fawn", effects: { mask: 10, child: -10, rep: 5 }, log: "You co-signed a memory that isn't yours." },
+                { text: "Say 'I don't actually remember that, tell me more,' and mean it.", tag: "secure", effects: { rep: -10, mask: -5, child: 10 }, log: "You let not-knowing be an ordinary, survivable thing." }
+            ]
+        },
+        {
+            zone: "SOCIAL", title: "The RSVP You Regret",
+            desc: "You said yes to something two weeks ago. It's tonight. Every fiber of you wants to cancel.",
+            choices: [
+                { text: "Draft a vague excuse about not feeling well.", tag: "flight", effects: { mask: -5, child: -5, rep: 10 }, log: "You built an exit out of half a lie." },
+                { text: "Text 'actually can't make it' with zero elaboration and hit send.", tag: "fight", effects: { mask: -15, child: 10, rep: -10 }, log: "You chose a bare truth over a padded one." },
+                { text: "Go anyway. Perform enthusiasm you do not currently possess.", tag: "fawn", effects: { mask: 15, child: -20, rep: 10 }, log: "You showed up as the version of you that RSVPs on time." }
+            ]
+        },
+
+        // --- SELF (expansion) ---
+        {
+            zone: "SELF", title: "The Unfinished Thing",
+            desc: "A project, a hobby, a draft you were once genuinely excited about sits untouched in a folder you avoid opening.",
+            choices: [
+                { text: "Open the folder, look at it, close it again without touching anything.", tag: "freeze", effects: { rep: 15, mask: 0, child: -15 }, log: "You visited the grave without bringing flowers or a shovel." },
+                { text: "Start something new and shinier instead.", tag: "flight", effects: { mask: 0, child: -5, rep: 10 }, log: "You outran the old excitement with a fresh one." },
+                { text: "Open it. Change one small thing. Close it again.", tag: "secure", effects: { rep: -15, mask: -5, child: 15 }, log: "You proved the thing wasn't actually dead, just resting." }
+            ]
+        },
+        {
+            zone: "SELF", title: "The Accidental Self-Compliment",
+            desc: "You catch yourself thinking something kind about your own work, unprompted, and immediately feel weird about it.",
+            choices: [
+                { text: "Correct yourself internally: find the flaw, restore the natural order.", tag: "fight", effects: { mask: 0, child: -15, rep: 5 }, log: "You disqualified the thought before it could get comfortable." },
+                { text: "Change the subject in your own head immediately.", tag: "flight", effects: { mask: 0, child: -5, rep: 10 }, log: "You fled a compliment like it was a fire alarm." },
+                { text: "Let the thought stand. Don't correct it. Just let it be true for a second.", tag: "secure", effects: { rep: -15, mask: -5, child: 20 }, log: "You let something kind about yourself survive contact with your own scrutiny." }
+            ]
         }
     ]
 };

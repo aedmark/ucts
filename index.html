@@ -14,7 +14,10 @@
 
         <!-- Header -->
         <header class="p-4 border-b border-gray-800 bg-black flex justify-between items-center gap-2">
-            <h1 id="game-title" class="text-sm md:text-base font-bold uppercase tracking-widest text-red-500">U.C.T. Simulator v2.0</h1>
+            <div class="flex items-center gap-2">
+                <h1 id="game-title" class="text-sm md:text-base font-bold uppercase tracking-widest text-red-500">U.C.T. Simulator v2.0</h1>
+                <button id="help-btn" onclick="toggleHelp(true)" title="How this works" aria-label="How this works" class="w-5 h-5 flex items-center justify-center text-[10px] font-bold border border-gray-700 text-gray-500 rounded-full hover:text-white hover:border-gray-500 transition-colors">?</button>
+            </div>
             <div id="objective-text" class="text-xs text-gray-500">Objective: Survive 10 Turns</div>
             <button id="ng-plus-btn" onclick="startGame(true)" class="hidden text-[10px] uppercase tracking-widest border border-purple-700 text-purple-300 px-2 py-1 hover:bg-purple-950 transition-colors">Extended Therapy ▶</button>
             <div id="turn-counter" class="text-sm font-bold">Turn: 1/10</div>
@@ -125,6 +128,20 @@
                 <button id="field-export-btn" onclick="exportFieldLog()" class="text-[10px] uppercase tracking-widest text-gray-500 border border-gray-700 px-3 py-1 hover:text-white hover:border-gray-500 transition-colors">Export Log</button>
                 <button id="field-clear-btn" onclick="clearFieldLog()" class="text-[10px] uppercase tracking-widest text-red-700 border border-red-900 px-3 py-1 hover:text-red-400 hover:border-red-500 transition-colors">Clear Log</button>
             </div>
+        </div>
+
+        <!-- Help / About Overlay (Hidden by default) -->
+        <div id="help-screen" class="hidden absolute inset-0 bg-black flex flex-col items-center justify-center z-30 p-8 text-center overflow-y-auto">
+            <h2 class="text-xl font-bold text-white mb-4 uppercase tracking-widest">How This Works</h2>
+            <div class="text-gray-400 text-sm leading-relaxed max-w-md text-left flex flex-col gap-3">
+                <p>You're navigating a short, cumulative bad day. Three stats track how you're holding up &mdash; watch the bars up top; each one's caption explains what happens if it runs out.</p>
+                <p>Each turn presents a scenario with a few responses. Pick one. Your stats move &mdash; not always the way you'd expect &mdash; and the day continues. Survive the full run and you'll get an ending built from wherever your stats landed.</p>
+                <p>Every so often, a fourth option shows up with no hint attached. That one's a real gamble.</p>
+                <p>Survive once, and a harder mode &mdash; Extended Therapy &mdash; unlocks permanently: more turns, bigger swings, no mercy.</p>
+                <p>The <span class="text-gray-300">Field Log</span> tab is a separate, real one &mdash; for tracking actual moments in your actual life, not the fictional ones. It has its own note explaining what it is and isn't.</p>
+                <p class="text-gray-600 italic">Everything else, you'll have to find out by playing.</p>
+            </div>
+            <button onclick="toggleHelp(false)" class="mt-8 px-6 py-2 border border-gray-600 text-gray-300 uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-colors">Close</button>
         </div>
 
         <!-- Game Over / End Screen (Hidden by default) -->

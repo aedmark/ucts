@@ -1,5 +1,7 @@
 # Writing Your Own Content
 
+New here? [README.md](README.md) explains what the game actually does — the stats, the zones, how coping mechanisms unlock, how endings resolve — from a player's side. This doc assumes you already know that and want to change it.
+
 The simulator's events, response types, zones, and endings exist in a single data structure called a **content pack**, and [editor.html](editor.html) is the tool for writing one without touching JavaScript. This doc explains what each part of a pack does and walks through writing new content with it.
 
 If you'd rather hand-edit the underlying JSON in a text editor, skip to [Editing the raw JSON instead](#editing-the-raw-json-instead) — the schema is the same either way.

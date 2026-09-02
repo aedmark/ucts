@@ -43,13 +43,12 @@ function renderFieldPickers() {
         btn.type = 'button';
         btn.dataset.tag = tag;
         btn.textContent = tag;
-        btn.className = "px-3 py-1 text-[10px] uppercase tracking-widest border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 transition-colors";
+        btn.className = "field-picker-btn tag";
         btn.onclick = () => {
             selectedFieldTag = tag;
             [...elFieldTagPicker.children].forEach(b => {
                 const active = b.dataset.tag === tag;
-                b.classList.toggle('border-purple-500', active);
-                b.classList.toggle('text-purple-300', active);
+                b.classList.toggle('active', active);
             });
         };
         elFieldTagPicker.appendChild(btn);
@@ -61,13 +60,12 @@ function renderFieldPickers() {
         btn.type = 'button';
         btn.dataset.zone = zone;
         btn.textContent = zone;
-        btn.className = "px-3 py-1 text-[10px] uppercase tracking-widest border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 transition-colors";
+        btn.className = "field-picker-btn zone";
         btn.onclick = () => {
             selectedFieldZone = (selectedFieldZone === zone) ? null : zone;
             [...elFieldZonePicker.children].forEach(b => {
                 const active = b.dataset.zone === selectedFieldZone;
-                b.classList.toggle('border-blue-500', active);
-                b.classList.toggle('text-blue-300', active);
+                b.classList.toggle('active', active);
             });
         };
         elFieldZonePicker.appendChild(btn);
@@ -107,7 +105,7 @@ function renderFieldEntries() {
 
     if (entries.length === 0) {
         const empty = document.createElement('p');
-        empty.className = "text-xs text-gray-600 italic";
+        empty.className = "field-entries-empty";
         empty.textContent = "No entries yet. The blank page is doing a lot of the work here.";
         elFieldEntries.appendChild(empty);
         return;
@@ -115,10 +113,10 @@ function renderFieldEntries() {
 
     entries.forEach(entry => {
         const row = document.createElement('div');
-        row.className = "border border-gray-800 bg-[#161616] p-3 text-xs";
+        row.className = "field-entry";
 
         const headRow = document.createElement('div');
-        headRow.className = "flex justify-between items-center gap-2 mb-1 text-[10px] uppercase tracking-widest text-gray-500";
+        headRow.className = "field-entry-head";
         const when = document.createElement('span');
         when.textContent = new Date(entry.date).toLocaleString(undefined, {
             month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
@@ -129,17 +127,17 @@ function renderFieldEntries() {
         delBtn.type = 'button';
         delBtn.textContent = '\u00d7';
         delBtn.title = 'Delete this entry';
-        delBtn.className = "text-gray-700 hover:text-red-400 transition-colors px-1 leading-none";
+        delBtn.className = "field-entry-delete";
         delBtn.onclick = () => deleteFieldEntry(entry.id);
         const rightGroup = document.createElement('span');
-        rightGroup.className = "flex items-center gap-2";
+        rightGroup.className = "row";
         rightGroup.appendChild(tagZone);
         rightGroup.appendChild(delBtn);
         headRow.appendChild(when);
         headRow.appendChild(rightGroup);
 
         const noteP = document.createElement('p');
-        noteP.className = "text-gray-300 leading-relaxed";
+        noteP.className = "field-entry-note";
         noteP.textContent = entry.note;
 
         row.appendChild(headRow);
@@ -171,13 +169,13 @@ function renderPattern() {
     elFieldPatternBars.innerHTML = '';
     Object.entries(counts).forEach(([tag, count]) => {
         const row = document.createElement('div');
-        row.className = "flex items-center gap-2";
+        row.className = "field-pattern-row";
         row.innerHTML = `
-            <span class="w-14 text-[10px] uppercase tracking-widest text-gray-500">${tag}</span>
-            <div class="stat-bar-container flex-grow h-3">
-                <div class="stat-bar-fill bg-gray-500" style="width: ${(count / max) * 100}%;"></div>
+            <span class="field-pattern-tag">${tag}</span>
+            <div class="stat-bar-container field-pattern-track">
+                <div class="stat-bar-fill gray" style="width: ${(count / max) * 100}%;"></div>
             </div>
-            <span class="w-4 text-[10px] text-gray-500 text-right">${count}</span>
+            <span class="field-pattern-count">${count}</span>
         `;
         elFieldPatternBars.appendChild(row);
     });

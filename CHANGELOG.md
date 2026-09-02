@@ -2,6 +2,33 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.6.0] - 2026-09-02
+
+### Changed
+- **Contrast pass across both pages.** Several of the "quiet" text tiers introduced during the Tailwind removal — zone tags, captions, hints, timestamps, form labels, fine print, the Field Log's delete control, and both pages' danger-button text — measured below WCAG AA's 4.5:1 minimum against every dark background actually in use here (as low as 1.7:1 for the delete × and the danger buttons' resting red, worse than the CRT overlay makes any of this look in a screenshot). `#6b7280`, `#4b5563`, `#374151`-as-text, and `.editor-label`'s `#737373` are consolidated into `#9ca3af`, which measured 6.9–8.3:1 across `#000`/`#0a0a0a`/`#111`/`#0d0d0d`/`#161616`/`#1a1a1a`. Danger-button text (`Clear Log`, `Reset to Default`) moves from `#b91c1c` (2.7–3.3:1, failing even the large-text bar) to `#f87171` (6.3–7.6:1), which was already this app's hover-state red, so the palette didn't grow. Borders, backgrounds, and every already-legible tier (`#9ca3af`, `#d1d5db`, `#e5e7eb`, the stat colors) are untouched — this is a fix for the specific tiers that were actually failing, not a general brightening.
+
+## [4.5.0] - 2026-09-02
+
+### Fixed
+- **Events could repeat within a single playthrough.** `pickWeightedEvent()` only ever excluded the *immediately previous* event from the draw pool, so nothing stopped the same event from resurfacing later in the same 10-turn run — just not back-to-back. The engine now tracks every event title already shown this playthrough and draws only from what's left, falling back to "anything but the last one shown" only once the whole pool is exhausted (relevant on a longer Extended Therapy run, where the fixed pack's events can run out before the turns do). Verified with 500 simulated 10-turn runs (zero repeats) and a 40-turn stress run past the pool size (zero back-to-back repeats once it starts reusing).
+
+## [4.4.0] - 2026-09-02
+
+### Changed
+- **Tailwind is gone.** The CDN play-script (`<script src="https://cdn.tailwindcss.com">`) is removed from both `index.html` and `editor.html`, and every utility-class string — in the static markup and in the class strings `engine.js`, `field-log.js`, and `editor.js` build at runtime — is replaced with hand-authored, semantically named CSS in `css/style.css` and `css/editor.css`. The project's own pitch is "nothing leaves your browser, no build step"; a third-party CDN script silently pulling a full utility framework at runtime on every load never fit that, and doesn't now. Visual output is unchanged — the new CSS was written against Tailwind's actual palette values and breakpoints to match pixel-for-pixel, verified with a headless-browser pass across mobile and desktop viewports on both pages.
+- `main.js`'s tab switching, `field-log.js`'s tag/zone picker state, and `engine.js`'s stat-bar/end-screen/glitch-button styling now toggle single semantic classes (`.active`, `.red-hot`/`.red-dim`, `.overlay-heading.win`/`.loss`, `.choice-btn.glitch`) instead of juggling three-to-five Tailwind classes per state change.
+- Caught one real inconsistency along the way: the Inner Child bar's resting color was one shade off between the static markup (`pink-600`) and the engine's own dynamic update (`pink-700`). Standardized on `pink-700`, matching what the engine was already doing during play.
+
+## [4.3.0] - 2026-09-02
+
+### Changed
+- **Mobile pass on `index.html`.** Every `md:`-gated text size was invisible on a phone \u2014 essentially all phones fall under Tailwind's 768px `md:` breakpoint, so text was permanently stuck at its smallest defined size regardless of screen. Base sizes are bumped across the board (stat labels, event text, choice buttons, Field Log) instead of relying on a breakpoint that never fired on the device most people are actually using. Fixed the same problem in the JS-templated event/choice markup in `engine.js`, which had its own hardcoded sizes the static HTML changes didn't reach.
+- **Padding tightened on small screens.** Fixed `p-6`/`p-8` blocks (stats panel, gameplay area, help/end overlays) now scale down below the `sm:` breakpoint instead of eating the same fixed margin on a 375px screen as a desktop window.
+- Header now wraps instead of squeezing; the "Objective: Survive N Turns" label hides below `sm:` since the turn counter already covers it and screen space is scarcer there.
+- End screen's two buttons stack vertically on narrow screens instead of competing for width.
+- `#field-note`'s textarea is `text-base` now instead of `text-sm` \u2014 iOS Safari auto-zooms the viewport on focusing any input under 16px, which was firing every time someone opened the Field Log to write an entry.
+- `.mechanism-badge` bumped from a fixed 10px to 11px with slightly more padding.
+
 ## [4.2.0] - 2026-09-02
 
 ### Added

@@ -4,153 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unresolved Childhood Trauma Simulator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body>
     <div class="crt-overlay"></div>
 
-    <main class="w-full max-w-3xl bg-[#111] border border-gray-800 shadow-2xl relative z-10 flex flex-col h-[90vh] sm:h-[80vh]">
+    <main class="app">
 
         <!-- Header -->
-        <header class="p-4 border-b border-gray-800 bg-black flex justify-between items-center gap-2">
-            <div class="flex items-center gap-2">
-                <h1 id="game-title" class="text-sm md:text-base font-bold uppercase tracking-widest text-red-500">U.C.T. Simulator v2.0</h1>
-                <button id="help-btn" onclick="toggleHelp(true)" title="How this works" aria-label="How this works" class="w-5 h-5 flex items-center justify-center text-[10px] font-bold border border-gray-700 text-gray-500 rounded-full hover:text-white hover:border-gray-500 transition-colors">?</button>
+        <header class="app-header">
+            <div class="row">
+                <h1 id="game-title" class="app-title">U.C.T. Simulator v2.0</h1>
+                <button id="help-btn" onclick="toggleHelp(true)" title="How this works" aria-label="How this works" class="icon-btn">?</button>
             </div>
-            <div id="objective-text" class="text-xs text-gray-500">Objective: Survive 10 Turns</div>
-            <button id="ng-plus-btn" onclick="startGame(true)" class="hidden text-[10px] uppercase tracking-widest border border-purple-700 text-purple-300 px-2 py-1 hover:bg-purple-950 transition-colors">Extended Therapy ▶</button>
-            <div id="turn-counter" class="text-sm font-bold">Turn: 1/10</div>
+            <div id="objective-text" class="objective">Objective: Survive 10 Turns</div>
+            <button id="ng-plus-btn" onclick="startGame(true)" class="hidden ngplus-btn">Extended Therapy ▶</button>
+            <div id="turn-counter" class="turn-counter">Turn: 1/10</div>
         </header>
 
         <!-- Mode Switcher -->
-        <nav class="flex border-b border-gray-800 bg-black text-xs uppercase tracking-widest">
-            <button id="tab-sim" onclick="setMode('sim')" class="flex-1 py-2 border-r border-gray-800 text-white bg-[#1a1a1a]">Simulation</button>
-            <button id="tab-field" onclick="setMode('field')" class="flex-1 py-2 text-gray-500 hover:text-gray-300 transition-colors">Field Log</button>
+        <nav class="tabs">
+            <button id="tab-sim" onclick="setMode('sim')" class="tab active">Simulation</button>
+            <button id="tab-field" onclick="setMode('field')" class="tab">Field Log</button>
         </nav>
 
         <!-- SIM VIEW -->
-        <div id="sim-view" class="flex flex-col flex-grow overflow-hidden">
+        <div id="sim-view" class="sim-view">
 
             <!-- Stats Panel -->
-            <section class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-gray-800 bg-[#0d0d0d]">
+            <section class="stats-panel">
 
                 <!-- Repression -->
                 <div>
-                    <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
-                        <span class="text-red-400">Repression Level</span>
+                    <div class="stat-label-row repression">
+                        <span>Repression Level</span>
                         <span id="val-repression">0%</span>
                     </div>
                     <div class="stat-bar-container">
-                        <div id="bar-repression" class="stat-bar-fill bg-red-600" style="width: 20%;"></div>
+                        <div id="bar-repression" class="stat-bar-fill red-dim" style="width: 20%;"></div>
                     </div>
-                    <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 100%, you explode.</p>
+                    <p class="stat-caption">If it hits 100%, you explode.</p>
                 </div>
 
                 <!-- Social Mask -->
                 <div>
-                    <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
-                        <span class="text-blue-400">Social Mask</span>
+                    <div class="stat-label-row mask">
+                        <span>Social Mask</span>
                         <span id="val-mask">100%</span>
                     </div>
                     <div class="stat-bar-container">
-                        <div id="bar-mask" class="stat-bar-fill bg-blue-600" style="width: 100%;"></div>
+                        <div id="bar-mask" class="stat-bar-fill blue-dim" style="width: 100%;"></div>
                     </div>
-                    <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 0%, you are exiled.</p>
+                    <p class="stat-caption">If it hits 0%, you are exiled.</p>
                 </div>
 
                 <!-- Inner Child -->
                 <div>
-                    <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
-                        <span class="text-pink-400">Inner Child</span>
+                    <div class="stat-label-row child">
+                        <span>Inner Child</span>
                         <span id="val-child">50%</span>
                     </div>
                     <div class="stat-bar-container">
-                        <div id="bar-child" class="stat-bar-fill bg-pink-600" style="width: 50%;"></div>
+                        <div id="bar-child" class="stat-bar-fill pink-dim" style="width: 50%;"></div>
                     </div>
-                    <p class="text-[10px] text-gray-500 mt-1 text-center">If it hits 0%, total collapse.</p>
+                    <p class="stat-caption">If it hits 0%, total collapse.</p>
                 </div>
             </section>
 
             <!-- Coping Mechanisms Panel -->
-            <section id="mechanisms-panel" class="hidden px-6 py-2 border-b border-gray-800 bg-[#0d0d0d] flex flex-wrap gap-2 items-center">
-                <span class="text-[10px] uppercase tracking-widest text-gray-600">Coping Mechanisms Acquired:</span>
-                <div id="mechanisms-list" class="flex flex-wrap gap-2"></div>
+            <section id="mechanisms-panel" class="hidden mechanisms-panel">
+                <span class="mechanisms-label">Coping Mechanisms Acquired:</span>
+                <div id="mechanisms-list" class="row-wrap"></div>
             </section>
 
             <!-- Main Gameplay Area -->
-            <section class="flex-grow flex flex-col p-6 overflow-y-auto log-container">
+            <section class="gameplay">
 
                 <!-- Event Description -->
-                <div id="event-display" class="flex-grow flex flex-col justify-center items-center text-center px-4 mb-6">
-                    <h2 class="text-lg md:text-xl font-bold mb-4 text-white uppercase tracking-wider">Loading Trigger...</h2>
-                    <p class="text-sm md:text-base text-gray-400 max-w-lg leading-relaxed">Please wait while your nervous system calibrates to a perceived threat.</p>
+                <div id="event-display" class="event-display">
+                    <h2 class="event-title">Loading Trigger...</h2>
+                    <p class="event-desc">Please wait while your nervous system calibrates to a perceived threat.</p>
                 </div>
 
                 <!-- Choices -->
-                <div id="choices-container" class="grid grid-cols-1 gap-3 w-full max-w-xl mx-auto">
+                <div id="choices-container" class="choices">
                     <!-- Buttons injected via JS -->
                 </div>
             </section>
 
             <!-- Action Log -->
-            <footer class="h-24 md:h-32 border-t border-gray-800 bg-black p-3 overflow-y-auto log-container text-xs text-gray-500 font-mono" id="action-log">
+            <footer class="action-log" id="action-log">
                 <div>> System initialized. Awaiting traumatic stimuli.</div>
             </footer>
         </div>
 
         <!-- FIELD LOG VIEW -->
-        <div id="field-view" class="hidden flex flex-col flex-grow overflow-hidden">
+        <div id="field-view" class="hidden field-view">
 
-            <div class="px-6 py-3 border-b border-gray-800 bg-[#0d0d0d]">
-                <p class="text-[11px] text-gray-500 leading-relaxed">This log stays in your browser. Nothing is sent anywhere, ever. This is a self-tracking tool, not therapy — if you're in crisis, contact a crisis line or a licensed professional.</p>
+            <div class="field-disclaimer">
+                <p>This log stays in your browser. Nothing is sent anywhere, ever. This is a self-tracking tool, not therapy — if you're in crisis, contact a crisis line or a licensed professional.</p>
             </div>
 
-            <div class="px-6 py-4 border-b border-gray-800 flex flex-col gap-3">
-                <label class="text-xs uppercase tracking-widest text-gray-500">What actually happened?</label>
-                <textarea id="field-note" rows="3" class="bg-[#161616] border border-gray-700 text-gray-200 text-sm p-3 resize-none focus:outline-none focus:border-gray-500" placeholder="Describe a real moment. This is for you, not a grade."></textarea>
+            <div class="field-form">
+                <label>What actually happened?</label>
+                <textarea id="field-note" rows="3" class="field-note" placeholder="Describe a real moment. This is for you, not a grade."></textarea>
 
-                <div class="flex flex-wrap gap-2" id="field-tag-picker"></div>
-                <div class="flex flex-wrap gap-2" id="field-zone-picker"></div>
+                <div class="row-wrap" id="field-tag-picker"></div>
+                <div class="row-wrap" id="field-zone-picker"></div>
 
-                <button id="field-submit-btn" onclick="submitFieldEntry()" class="self-start px-4 py-2 border border-gray-500 text-gray-300 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Log It</button>
+                <button id="field-submit-btn" onclick="submitFieldEntry()" class="field-submit-btn">Log It</button>
             </div>
 
-            <div class="px-6 py-4 border-b border-gray-800 bg-[#0d0d0d]">
-                <div class="text-xs uppercase tracking-widest text-gray-500 mb-2">Pattern, Last 7 Days</div>
-                <div id="field-pattern-bars" class="flex flex-col gap-1.5"></div>
-                <p id="field-reading" class="text-xs text-gray-400 mt-3 italic"></p>
+            <div class="field-pattern">
+                <div class="field-pattern-heading">Pattern, Last 7 Days</div>
+                <div id="field-pattern-bars" class="field-pattern-bars"></div>
+                <p id="field-reading" class="field-reading"></p>
             </div>
 
-            <div class="flex-grow overflow-y-auto log-container p-4 flex flex-col gap-2" id="field-entries"></div>
+            <div class="field-entries" id="field-entries"></div>
 
-            <div class="p-3 border-t border-gray-800 flex justify-end gap-2">
-                <button id="field-export-btn" onclick="exportFieldLog()" class="text-[10px] uppercase tracking-widest text-gray-500 border border-gray-700 px-3 py-1 hover:text-white hover:border-gray-500 transition-colors">Export Log</button>
-                <button id="field-clear-btn" onclick="clearFieldLog()" class="text-[10px] uppercase tracking-widest text-red-700 border border-red-900 px-3 py-1 hover:text-red-400 hover:border-red-500 transition-colors">Clear Log</button>
+            <div class="field-actions">
+                <button id="field-export-btn" onclick="exportFieldLog()" class="field-action-btn">Export Log</button>
+                <button id="field-clear-btn" onclick="clearFieldLog()" class="field-action-btn danger">Clear Log</button>
             </div>
         </div>
 
         <!-- Help / About Overlay (Hidden by default) -->
-        <div id="help-screen" class="hidden absolute inset-0 bg-black flex flex-col items-center justify-center z-30 p-8 text-center overflow-y-auto">
-            <h2 class="text-xl font-bold text-white mb-4 uppercase tracking-widest">How This Works</h2>
-            <div class="text-gray-400 text-sm leading-relaxed max-w-md text-left flex flex-col gap-3">
+        <div id="help-screen" class="hidden overlay overlay-help">
+            <h2 class="overlay-heading">How This Works</h2>
+            <div class="overlay-body">
                 <p>You're navigating a short, cumulative bad day. Three stats track how you're holding up &mdash; watch the bars up top; each one's caption explains what happens if it runs out.</p>
                 <p>Each turn presents a scenario with a few responses. Pick one. Your stats move &mdash; not always the way you'd expect &mdash; and the day continues. Survive the full run and you'll get an ending built from wherever your stats landed.</p>
                 <p>Every so often, a fourth option shows up with no hint attached. That one's a real gamble.</p>
                 <p>Survive once, and a harder mode &mdash; Extended Therapy &mdash; unlocks permanently: more turns, bigger swings, no mercy.</p>
-                <p>The <span class="text-gray-300">Field Log</span> tab is a separate, real one &mdash; for tracking actual moments in your actual life, not the fictional ones. It has its own note explaining what it is and isn't.</p>
-                <p class="text-gray-600 italic">Everything else, you'll have to find out by playing.</p>
+                <p>The <span class="accent">Field Log</span> tab is a separate, real one &mdash; for tracking actual moments in your actual life, not the fictional ones. It has its own note explaining what it is and isn't.</p>
+                <p class="fine-print">Everything else, you'll have to find out by playing.</p>
             </div>
-            <button onclick="toggleHelp(false)" class="mt-8 px-6 py-2 border border-gray-600 text-gray-300 uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-colors">Close</button>
+            <button onclick="toggleHelp(false)" class="overlay-close-btn">Close</button>
         </div>
 
         <!-- Game Over / End Screen (Hidden by default) -->
-        <div id="end-screen" class="hidden absolute inset-0 bg-black flex flex-col items-center justify-center z-20 p-8 text-center">
-            <h2 id="end-title" class="text-3xl font-bold text-red-500 mb-4 uppercase tracking-widest">Catastrophic Failure</h2>
-            <p id="end-desc" class="text-gray-300 mb-8 max-w-md">Your psychological defenses have collapsed.</p>
-            <div class="flex gap-3">
-                <button onclick="startGame(state.hardMode)" class="px-6 py-3 border border-white text-white uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Restart Therapy</button>
-                <button id="end-ngplus-btn" onclick="startGame(true)" class="hidden px-6 py-3 border border-purple-700 text-purple-300 uppercase tracking-widest hover:bg-purple-950 transition-colors">Extended Therapy ▶</button>
+        <div id="end-screen" class="hidden overlay overlay-end">
+            <h2 id="end-title" class="overlay-heading end loss">Catastrophic Failure</h2>
+            <p id="end-desc" class="end-desc">Your psychological defenses have collapsed.</p>
+            <div class="overlay-actions">
+                <button onclick="startGame(state.hardMode)" class="end-btn">Restart Therapy</button>
+                <button id="end-ngplus-btn" onclick="startGame(true)" class="hidden end-btn ngplus">Extended Therapy ▶</button>
             </div>
         </div>
 

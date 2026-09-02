@@ -4,40 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>U.C.T. Content Editor</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/editor.css">
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body>
     <div class="crt-overlay"></div>
 
-    <main class="w-full max-w-3xl bg-[#111] border border-gray-800 shadow-2xl relative z-10 flex flex-col h-[90vh] sm:h-[80vh]">
+    <main class="app editor-shell">
 
         <!-- Header -->
-        <header class="p-4 border-b border-gray-800 bg-black flex justify-between items-center gap-2">
-            <h1 class="text-sm md:text-base font-bold uppercase tracking-widest text-purple-400">U.C.T. Content Editor</h1>
-            <a href="index.html" class="text-[10px] uppercase tracking-widest border border-gray-700 text-gray-400 px-2 py-1 hover:text-white hover:border-gray-500 transition-colors">◀ Back to Simulator</a>
+        <header class="editor-header">
+            <h1 class="editor-title">U.C.T. Content Editor</h1>
+            <a href="index.html" class="editor-back-link">◀ Back to Simulator</a>
         </header>
 
         <!-- Toolbar -->
-        <div class="px-6 py-3 border-b border-gray-800 bg-[#0d0d0d] flex flex-wrap items-start justify-between gap-3">
+        <div class="editor-toolbar">
             <div>
-                <p class="text-[11px] text-gray-500">Changes save to this browser only.</p>
-                <p id="editor-status" class="text-[10px] text-purple-300 mt-1 min-h-[1em]"></p>
+                <p class="editor-toolbar-note">Changes save to this browser only.</p>
+                <p id="editor-status" class="editor-status-text"></p>
             </div>
-            <div class="flex flex-wrap gap-2 items-center">
-                <a id="play-pack-link" href="index.html" class="hidden text-[10px] uppercase tracking-widest border border-green-700 text-green-400 px-3 py-1 hover:bg-green-950 transition-colors">▶ Play This Pack</a>
+            <div class="editor-toolbar-actions">
+                <a id="play-pack-link" href="index.html" class="hidden editor-play-link">▶ Play This Pack</a>
                 <button onclick="document.getElementById('editor-import-input').click()" class="editor-btn">Import Pack</button>
                 <input type="file" id="editor-import-input" accept="application/json" class="hidden" onchange="handleImportFile(event)">
                 <button onclick="exportContentPack()" class="editor-btn">Export Pack</button>
                 <button onclick="discardEditorDraft()" class="editor-btn">Discard Draft</button>
                 <button onclick="resetContentPack()" class="editor-btn-danger">Reset to Default</button>
-                <button onclick="saveContentDraft()" class="px-3 py-1 text-[10px] uppercase tracking-widest border border-white text-white hover:bg-white hover:text-black transition-colors">Save All Changes</button>
+                <button onclick="saveContentDraft()" class="editor-save-btn">Save All Changes</button>
             </div>
         </div>
 
         <!-- Editor Body -->
-        <div id="editor-body" class="flex-grow overflow-y-auto p-4 flex flex-col gap-4"></div>
+        <div id="editor-body" class="editor-body"></div>
 
     </main>
 

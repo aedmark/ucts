@@ -34,12 +34,12 @@ function buildConfigSection() {
     const wrap = document.createElement('div');
     wrap.className = "editor-section";
     const title = document.createElement('h3');
-    title.className = "text-xs uppercase tracking-widest text-white";
+    title.className = "editor-section-title";
     title.textContent = "Config";
     wrap.appendChild(title);
 
     const grid = document.createElement('div');
-    grid.className = "grid grid-cols-2 md:grid-cols-3 gap-3";
+    grid.className = "editor-grid-config";
     wrap.appendChild(grid);
 
     const cfg = editorDraft.config;
@@ -72,20 +72,20 @@ function buildZonesSection() {
     const wrap = document.createElement('div');
     wrap.className = "editor-section";
     const title = document.createElement('h3');
-    title.className = "text-xs uppercase tracking-widest text-white";
+    title.className = "editor-section-title";
     title.textContent = "Zones";
     wrap.appendChild(title);
     const note = document.createElement('p');
-    note.className = "text-[10px] text-gray-600";
+    note.className = "editor-note";
     note.textContent = "Stat Bias controls which zone gets weighted heavier when that stat is in danger.";
     wrap.appendChild(note);
 
     editorDraft.zones.forEach((zone, idx) => {
         const row = document.createElement('div');
-        row.className = "flex items-center gap-2";
+        row.className = "editor-row";
 
         const keySpan = document.createElement('span');
-        keySpan.className = "text-xs text-gray-300 w-24 uppercase tracking-widest";
+        keySpan.className = "editor-zone-key";
         keySpan.textContent = zone.key;
 
         const select = document.createElement('select');
@@ -118,7 +118,7 @@ function buildZonesSection() {
     });
 
     const addRow = document.createElement('div');
-    addRow.className = "flex items-center gap-2 mt-1";
+    addRow.className = "editor-row mt";
     const keyInput = document.createElement('input');
     keyInput.placeholder = "NEW ZONE KEY";
     keyInput.className = "editor-input";
@@ -153,11 +153,11 @@ function buildMechanismsSection() {
     const wrap = document.createElement('div');
     wrap.className = "editor-section";
     const title = document.createElement('h3');
-    title.className = "text-xs uppercase tracking-widest text-white";
+    title.className = "editor-section-title";
     title.textContent = "Coping Mechanisms";
     wrap.appendChild(title);
     const note = document.createElement('p');
-    note.className = "text-[10px] text-gray-600";
+    note.className = "editor-note";
     note.textContent = "The five response identities (fawn/flight/fight/freeze/secure) are fixed — the engine and the Field Log both depend on them. Rename their display name and retune what they do once unlocked.";
     wrap.appendChild(note);
 
@@ -166,9 +166,9 @@ function buildMechanismsSection() {
         row.className = "editor-card";
 
         const head = document.createElement('div');
-        head.className = "flex items-center gap-2";
+        head.className = "editor-row";
         const tagLabel = document.createElement('span');
-        tagLabel.className = "text-[10px] uppercase tracking-widest text-gray-500 w-16 flex-shrink-0";
+        tagLabel.className = "editor-tag-label";
         tagLabel.textContent = tag;
         const nameInput = document.createElement('input');
         nameInput.className = "editor-input";
@@ -179,7 +179,7 @@ function buildMechanismsSection() {
         row.appendChild(head);
 
         const modGrid = document.createElement('div');
-        modGrid.className = "grid grid-cols-3 gap-2";
+        modGrid.className = "editor-grid-mods";
         ["rep", "mask", "child"].forEach(k => {
             const input = document.createElement('input');
             input.type = 'number';
@@ -200,11 +200,11 @@ function buildEndingsSection() {
     const wrap = document.createElement('div');
     wrap.className = "editor-section";
     const title = document.createElement('h3');
-    title.className = "text-xs uppercase tracking-widest text-white";
+    title.className = "editor-section-title";
     title.textContent = "Survival Endings";
     wrap.appendChild(title);
     const note = document.createElement('p');
-    note.className = "text-[10px] text-gray-600";
+    note.className = "editor-note";
     note.textContent = "Evaluated top to bottom. First ending whose conditions all match wins. An ending with no conditions always matches — keep one at the bottom as a fallback.";
     wrap.appendChild(note);
 
@@ -213,7 +213,7 @@ function buildEndingsSection() {
         card.className = "editor-card";
 
         const headRow = document.createElement('div');
-        headRow.className = "flex items-center gap-2";
+        headRow.className = "editor-row";
         const titleInput = document.createElement('input');
         titleInput.className = "editor-input";
         titleInput.value = ending.title;
@@ -257,10 +257,10 @@ function buildEndingsSection() {
         card.appendChild(descArea);
 
         const condWrap = document.createElement('div');
-        condWrap.className = "flex flex-col gap-1";
+        condWrap.className = "editor-col";
         (ending.conditions || []).forEach((cond, cIdx) => {
             const condRow = document.createElement('div');
-            condRow.className = "flex items-center gap-2";
+            condRow.className = "editor-row";
 
             const statSelect = document.createElement('select');
             statSelect.className = "editor-input";
@@ -333,7 +333,7 @@ function buildEventsSection() {
     const wrap = document.createElement('div');
     wrap.className = "editor-section";
     const title = document.createElement('h3');
-    title.className = "text-xs uppercase tracking-widest text-white";
+    title.className = "editor-section-title";
     title.textContent = `Events (${editorDraft.events.length})`;
     wrap.appendChild(title);
 
@@ -366,7 +366,7 @@ function buildEventCard(evt, idx) {
     card.className = "editor-card";
 
     const headRow = document.createElement('div');
-    headRow.className = "flex items-center gap-2";
+    headRow.className = "editor-row";
 
     const zoneSelect = document.createElement('select');
     zoneSelect.className = "editor-input";
@@ -406,7 +406,7 @@ function buildEventCard(evt, idx) {
     card.appendChild(descArea);
 
     const choicesWrap = document.createElement('div');
-    choicesWrap.className = "flex flex-col gap-2 pl-3 border-l border-gray-800";
+    choicesWrap.className = "editor-choices-wrap";
     evt.choices.forEach((choice, cIdx) => {
         choicesWrap.appendChild(buildChoiceRow(evt, choice, cIdx));
     });
@@ -429,7 +429,7 @@ function buildEventCard(evt, idx) {
 function buildChoiceRow(evt, choice, cIdx) {
     choice.effects = choice.effects || { rep: 0, mask: 0, child: 0 };
     const row = document.createElement('div');
-    row.className = "flex flex-col gap-1 border border-gray-800 p-2";
+    row.className = "editor-choice-row";
 
     const textInput = document.createElement('input');
     textInput.className = "editor-input";
@@ -439,7 +439,7 @@ function buildChoiceRow(evt, choice, cIdx) {
     row.appendChild(textInput);
 
     const metaRow = document.createElement('div');
-    metaRow.className = "grid grid-cols-2 md:grid-cols-6 gap-2 items-end";
+    metaRow.className = "editor-meta-row";
 
     const tagSelect = document.createElement('select');
     tagSelect.className = "editor-input";

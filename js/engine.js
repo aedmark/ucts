@@ -8,6 +8,7 @@ let state = {
 };
 let mechanismState = {}; // tag -> { unlocked, count }
 let lastEventTitle = null;
+let seenEventTitles = new Set();
 
 // New Game+: unlocked permanently on your first survival.
 const NG_PLUS_KEY = 'uct_extended_unlocked';
@@ -110,15 +111,15 @@ function updateUI() {
 
     elRepressionBar.style.width = `${state.repression}%`;
     elRepressionVal.textContent = `${state.repression}%`;
-    elRepressionBar.className = state.repression > 80 ? "stat-bar-fill bg-red-500 animate-pulse" : "stat-bar-fill bg-red-700";
+    elRepressionBar.className = state.repression > 80 ? "stat-bar-fill red-hot" : "stat-bar-fill red-dim";
 
     elMaskBar.style.width = `${state.mask}%`;
     elMaskVal.textContent = `${state.mask}%`;
-    elMaskBar.className = state.mask < 30 ? "stat-bar-fill bg-blue-400 animate-pulse" : "stat-bar-fill bg-blue-700";
+    elMaskBar.className = state.mask < 30 ? "stat-bar-fill blue-hot" : "stat-bar-fill blue-dim";
 
     elChildBar.style.width = `${state.child}%`;
     elChildVal.textContent = `${state.child}%`;
-    elChildBar.className = state.child < 30 ? "stat-bar-fill bg-pink-400 animate-pulse" : "stat-bar-fill bg-pink-700";
+    elChildBar.className = state.child < 30 ? "stat-bar-fill pink-hot" : "stat-bar-fill pink-dim";
 
     elTurnCounter.textContent = `Turn: ${Math.min(state.turn, state.maxTurns)}/${state.maxTurns}`;
 }
@@ -178,7 +179,7 @@ function endGame(title, desc, win = false) {
     state.isGameOver = true;
     elEndScreen.classList.remove('hidden');
     elEndTitle.textContent = title;
-    elEndTitle.className = win ? "text-3xl font-bold text-green-500 mb-4 uppercase tracking-widest" : "text-3xl font-bold text-red-500 mb-4 uppercase tracking-widest";
+    elEndTitle.className = "overlay-heading end " + (win ? "win" : "loss");
     elEndDesc.textContent = desc;
     elEndNgPlusBtn.classList.toggle('hidden', state.hardMode || !isNgPlusUnlocked());
 }
@@ -234,7 +235,8 @@ function pickWeightedEvent() {
     };
     const worstStat = Object.keys(danger).reduce((a, b) => danger[b] > danger[a] ? b : a);
 
-    let pool = content.events.filter(e => e.title !== lastEventTitle);
+    let pool = content.events.filter(e => !seenEventTitles.has(e.title));
+    if (pool.length === 0) pool = content.events.filter(e => e.title !== lastEventTitle);
     if (pool.length === 0) pool = content.events;
 
     const weights = pool.map(e => {
@@ -255,11 +257,12 @@ function loadRandomEvent() {
     const content = getContent();
     const evt = pickWeightedEvent();
     lastEventTitle = evt.title;
+    seenEventTitles.add(evt.title);
 
     elEventDisplay.innerHTML = `
-        <div class="text-[10px] text-gray-600 uppercase tracking-[0.3em] mb-2" id="event-zone-tag"></div>
-        <h2 class="text-xl md:text-2xl font-bold mb-4 text-white uppercase tracking-wider" id="event-title-el"></h2>
-        <p class="text-sm md:text-base text-gray-400 max-w-lg leading-relaxed border-l-4 border-gray-600 pl-4 text-left italic" id="event-desc-el"></p>
+        <div class="event-zone-tag" id="event-zone-tag"></div>
+        <h2 class="event-title" id="event-title-el"></h2>
+        <p class="event-desc live" id="event-desc-el"></p>
     `;
     document.getElementById('event-zone-tag').textContent = `[ ${evt.zone} ]`;
     document.getElementById('event-title-el').textContent = evt.title;
@@ -270,7 +273,7 @@ function loadRandomEvent() {
     (evt.choices || []).forEach(choice => {
         const fx = choice.effects || {};
         const btn = document.createElement('button');
-        btn.className = "glitch-hover w-full text-left p-4 border border-gray-700 bg-[#161616] text-gray-300 text-sm hover:text-white hover:border-gray-500 transition-colors duration-200 flex flex-col gap-1";
+        btn.className = "choice-btn";
 
         let hints = [];
         if (fx.rep > 0) hints.push("↑ Repression");
@@ -283,7 +286,7 @@ function loadRandomEvent() {
         const textSpan = document.createElement('span');
         textSpan.textContent = choice.text || "...";
         const hintSpan = document.createElement('span');
-        hintSpan.className = "text-[10px] text-gray-600 uppercase tracking-widest font-bold mt-1";
+        hintSpan.className = "choice-hint";
         hintSpan.textContent = hints.join(' | ');
         btn.appendChild(textSpan);
         btn.appendChild(hintSpan);
@@ -294,10 +297,10 @@ function loadRandomEvent() {
 
     if (Math.random() < content.config.glitchChance) {
         const glitchBtn = document.createElement('button');
-        glitchBtn.className = "glitch-hover glitch-choice w-full text-left p-4 border bg-[#161616] text-sm transition-colors duration-200 flex flex-col gap-1";
+        glitchBtn.className = "choice-btn glitch";
         glitchBtn.innerHTML = `
             <span>??? Do something you can't predict.</span>
-            <span class="text-[10px] uppercase tracking-widest font-bold mt-1">OUTCOME UNKNOWN</span>
+            <span class="choice-hint">OUTCOME UNKNOWN</span>
         `;
         glitchBtn.onclick = handleGlitchChoice;
         elChoicesContainer.appendChild(glitchBtn);
@@ -318,6 +321,7 @@ function startGame(hard = false) {
     };
     resetMechanismState();
     lastEventTitle = null;
+    seenEventTitles = new Set();
     elEndScreen.classList.add('hidden');
 
     elGameTitle.textContent = hard ? "U.C.T. Simulator :: EXTENDED THERAPY" : "U.C.T. Simulator v2.0";

@@ -1,0 +1,130 @@
+# Writing Your Own Content
+
+The simulator's events, response types, zones, and endings exist in a single data structure called a **content pack**, and [editor.html](editor.html) is the tool for writing one without touching JavaScript. This doc explains what each part of a pack does and walks through writing new content with it.
+
+If you'd rather hand-edit the underlying JSON in a text editor, skip to [Editing the raw JSON instead](#editing-the-raw-json-instead) — the schema is the same either way.
+
+## How a pack gets from the editor into the game
+
+`editor.html` and `index.html` are separate pages that don't share memory — they only share `localStorage`. When you click **Save All Changes** in the editor, it writes your whole pack to `localStorage` under one key and shows a **▶ Play This Pack** link. `index.html` doesn't know or care that you were just editing — it just reads whatever pack is currently saved, every time it loads. So the loop is: edit → Save → open (or reload) the simulator → you're playing your version.
+
+Nothing ever leaves your browser. There's no server, no account, no sync.
+
+A saved pack **fully replaces** the built-in default — it's not a diff. That's why the editor always shows every event, not just the ones you've touched: whatever's in the editor when you hit Save is the entire game from then on.
+
+## Opening the editor
+
+Open `editor.html` directly (it isn't linked from the game anymore — that link was for early testing only). Whatever you had saved last time is still there; if you've never saved anything, it starts from the built-in default content so you're editing existing material rather than a blank page.
+
+## The five sections
+
+### Config
+
+Global numbers that shape the whole run, not any one event:
+
+| Field | What it does |
+|---|---|
+| Starting Repression / Mask / Inner Child | Your three stats at turn 1. Same defaults every restart. |
+| Base Max Turns | How many turns until a standard run ends in a survival ending. |
+| Extended Therapy Turns | Turn count for the harder mode unlocked after your first survival. |
+| Extended Therapy Multiplier | Every stat swing (including mechanism mods) is multiplied by this in Extended Therapy. `1.25` means 25% harder in both directions. |
+| Mechanism Unlock Threshold | How many times you have to pick the *same* response type before it "locks in" as a coping mechanism. Default `3`. |
+| Glitch Chance (0-1) | Odds, each turn, of a bonus fourth choice with fully random effects. `0.15` = 15%. |
+| Weak Zone Weight | How much more likely an event is to be picked when its zone matches your worst stat. `2.5` means 2.5x the normal odds. `1` would turn this off entirely (pure random selection). |
+
+### Zones
+
+A zone is just a category — `WORK`, `HOME`, `SOCIAL`, `SELF` by default — with one property that matters mechanically: **Stat Bias**. It says which of the three stats that zone is "about." The game uses this to lean the random event selection toward whatever's currently your most dangerous stat — if your Repression is climbing, `WORK`-zone events (biased toward repression) start showing up more often, because that's a reasonable proxy for "the thing your nervous system is currently worried about."
+
+You can add a zone anytime; you can't remove one that's still used by an event (reassign or delete those events first).
+
+### Coping Mechanisms
+
+The five response identities — `fawn`, `flight`, `fight`, `freeze`, `secure` — are the one part of the system you can't rename or add to. Every choice in every event is tagged with one of these five, and the Field Log's own tagging depends on that exact set existing. What *is* yours to change: each one's **display name** (what shows up in the "Coping Mechanisms Acquired" badge and in ending text) and its **mod** — the passive effect that kicks in on every future choice of that type, once unlocked.
+
+Here's the mechanic in full: every time you pick a choice tagged, say, `fawn`, a per-playthrough counter for `fawn` goes up. Hit the Mechanism Unlock Threshold (default 3) and `fawn` becomes permanently unlocked for the rest of that run. From then on, every `fawn`-tagged choice you pick also applies `fawn`'s mod on top of its own written-in effects. The defaults are built so that leaning on an avoidant/defensive response makes it *quietly worse over time* (e.g. `freeze`'s default mod is `{rep: 8, mask: 0, child: -5}` — more repression buildup, more cost to your inner child, every single time), while leaning on `secure` makes it *quietly better* (`{rep: -5, mask: 0, child: 5}` — extra relief, extra healing). That asymmetry is what makes repeatedly picking the "easy" option a real cost, and what makes the plain, undramatic option worth choosing on purpose.
+
+If you retune the mods, that asymmetry is the thing to preserve or deliberately break — a mechanism whose mod helps rather than compounds a cost stops meaning anything as a mechanic.
+
+One caveat: the Field Log's own tag picker (in `index.html`) shows the raw identity — `fawn`, `flight`, etc. — not your renamed display name. Renaming only changes what shows up inside the simulation itself (badges, ending text).
+
+### Survival Endings
+
+These decide what a player sees if they make it to the end of a run without losing. They're evaluated **top to bottom**, and the first ending whose conditions are *all* true wins — so put your most specific endings first and your catch-all last. An ending with **no conditions at all** always matches, which is what makes it a fallback. Keep exactly one of those at the very bottom.
+
+A condition is `stat` (repression / mask / child) + `op` (`>=`, `<=`, `>`, `<`, `==`) + `value`. An ending can have several conditions — they're all ANDed together.
+
+Don't restate "you unlocked these coping mechanisms" in your `desc` text — the game already appends that list automatically to whatever description you write, if the player unlocked any.
+
+### Events
+
+This is the actual content — the scenarios players click through. Each event has:
+- **Zone** — which category it belongs to (must be one of your defined zones).
+- **Title** and **Description** — the trigger and its setup text.
+- **2 to 5 choices** — see below.
+
+Each choice has:
+- **Text** — the button label the player sees and clicks.
+- **Response** — which of the five mechanism tags this choice represents.
+- **Rep / Mask / Child** — the raw stat effect (can be positive, negative, or zero on each). These are *hidden magnitudes* — the player only ever sees an ↑ or ↓ arrow per stat, never the number, so the exact value is entirely your call as the author.
+- **Log line** — what appears in the action log footer when this choice is picked, e.g. *"You debased yourself for a misplaced comma."*
+
+## Walkthrough: writing one event start to finish
+
+1. Scroll to **Events**, click **+ Add Event**. A blank card appears with two starter choices.
+2. Set **Zone** to whichever category fits (or add a new zone first, if you want a new category — e.g. a `SCHOOL` zone biased toward `mask`).
+3. Write the **Title** (short, a few words — it's shown as a section header) and **Description** (the actual scenario, in second person, present or recent-past tense to match the existing voice).
+4. For each choice: write the button text, pick a response tag that honestly matches what the choice represents (a boundary-setting choice is probably `secure` or `fight`, not `fawn`), set the three effect numbers, and write a log line that reads naturally after "`> Turn N:`".
+5. Use **+ Add Choice** / **Remove** to land between 2 and 5 choices. Three is the sweet spot used throughout the default content — enough for a real branch, not so many the player is reading a menu.
+6. Click **Save All Changes**, then **▶ Play This Pack** to see it in the actual game. Your new event enters the same random rotation as everything else immediately.
+
+For calibration, existing choice effects mostly land in the ±5 to ±20 range per stat, with a few intentional outliers up to ±30 for higher-stakes events. Numbers that large everywhere flatten the game into noise; keep most choices modest and save the big swings for the events that should feel like a big swing.
+
+## Save / Export / Import / Reset
+
+- **Save All Changes** — writes your edits to `localStorage`. Nothing is live until you do this; you can navigate away and your unsaved edits are gone (there's no autosave by design, so a half-finished edit can't accidentally overwrite a working pack).
+- **Export Pack** — downloads your current draft (saved or not) as a `.json` file. Use this to back up your work outside the browser, or to hand a pack to someone else.
+- **Import Pack** — loads a `.json` file into the editor as a draft for review. It does **not** save automatically — check it over, then hit Save All Changes yourself. A file that's missing required fields is rejected with an error rather than silently breaking anything.
+- **Discard Draft** — throws away unsaved changes and reloads whatever's currently saved.
+- **Reset to Default** — deletes your custom pack entirely and reverts to the built-in content. Asks for confirmation first; there's no undo after that.
+
+## Editing the raw JSON instead
+
+Export a pack to see the exact shape. The top level is:
+
+```json
+{
+  "config": { "startingStats": { "repression": 20, "mask": 100, "child": 50 }, "maxTurns": 10, "hardModeTurns": 20, "hardModeMultiplier": 1.25, "unlockThreshold": 3, "glitchChance": 0.15, "weakZoneWeight": 2.5 },
+  "zones": [ { "key": "WORK", "statBias": "repression" } ],
+  "mechanisms": {
+    "fawn":   { "name": "The Approval Loop", "mod": { "rep": 0,  "mask": 3,  "child": -5 } },
+    "flight": { "name": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } },
+    "fight":  { "name": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } },
+    "freeze": { "name": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } },
+    "secure": { "name": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } }
+  },
+  "glitchLogs": [ "A line shown when the random glitch choice fires." ],
+  "endings": [
+    { "title": "...", "desc": "...", "conditions": [ { "stat": "repression", "op": ">=", "value": 70 } ] }
+  ],
+  "events": [
+    {
+      "zone": "WORK",
+      "title": "The Typo",
+      "desc": "...",
+      "choices": [
+        { "text": "...", "tag": "fawn", "effects": { "rep": -5, "mask": 10, "child": -15 }, "log": "..." }
+      ]
+    }
+  ]
+}
+```
+
+Requirements the importer actually checks: `config` is an object; `zones` is a non-empty array; `mechanisms` has all five keys (`fawn`/`flight`/`fight`/`freeze`/`secure`) present; `glitchLogs` is an array; `endings` is a non-empty array; `events` is a non-empty array. It doesn't deep-validate every field inside each event or choice, so a malformed individual event won't necessarily be caught at import — it'll just render oddly (missing text shows as `...`, missing effects default to `0`). When in doubt, edit through the UI, which can't produce a malformed shape in the first place.
+
+## Design notes
+
+- **Second person, present or just-past tense.** Every existing event is written as something that just happened *to the player* — not a hypothetical, not addressed to a character.
+- **The comedy is in the specificity, not the punchline.** "Someone is standing exactly in front of the specific brand of oat milk you need" does more work than a generic "you're waiting in line and it's annoying."
+- **A choice's tag should be honest, not convenient.** If a choice reads as clearly avoidant, tag it `flight` or `freeze` even if you'd rather it read as `secure` — the mechanism system depends on tags meaning what they say, and mistagging quietly breaks the pattern-tracking that makes coping mechanisms feel earned.
+- **Every event doesn't need a `secure` option**, but most should have one. It's the only response type whose unlock is a reward rather than a cost, and it's the throughline that makes the whole system feel like it's tracking something real rather than just spending points.

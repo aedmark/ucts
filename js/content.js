@@ -56,7 +56,7 @@ const DEFAULT_CONTENT = {
         },
         {
             title: "Radically Undone",
-            desc: "You stopped hiding. It cost you a few rooms. You kept yourself.",
+            desc: "You stopped hiding. It cost you more than you expected, but you kept yourself.",
             conditions: [{ stat: "child", op: ">=", value: 75 }, { stat: "mask", op: "<=", value: 40 }]
         },
         {
@@ -70,7 +70,7 @@ const DEFAULT_CONTENT = {
         },
         {
             title: "Functional Enough",
-            desc: "You made it to tomorrow. That's the whole job today.",
+            desc: "You made it to tomorrow. That's the whole job.",
             conditions: []
         }
     ],

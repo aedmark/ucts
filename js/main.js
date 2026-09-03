@@ -18,9 +18,7 @@ function setMode(mode) {
 
     Object.keys(views).forEach(key => {
         views[key].classList.toggle('hidden', key !== mode);
-        tabs[key].classList.toggle('bg-[#1a1a1a]', key === mode);
-        tabs[key].classList.toggle('text-white', key === mode);
-        tabs[key].classList.toggle('text-gray-500', key !== mode);
+        tabs[key].classList.toggle('active', key === mode);
     });
 
     if (mode === 'field') {

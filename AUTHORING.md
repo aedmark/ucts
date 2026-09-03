@@ -16,7 +16,7 @@ A saved pack **fully replaces** the built-in default — it's not a diff. That's
 
 ## Opening the editor
 
-Open `editor.html` directly (it isn't linked from the game anymore — that link was for early testing only). Whatever you had saved last time is still there; if you've never saved anything, it starts from the built-in default content so you're editing existing material rather than a blank page.
+Open `editor.html` directly, or follow the "Content Editor" link in the simulator's footer. Whatever you had saved last time is still there; if you've never saved anything, it starts from the built-in default content so you're editing existing material rather than a blank page.
 
 ## The six sections
 

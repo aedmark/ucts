@@ -7,6 +7,23 @@ const elPlayPackLink = document.getElementById('play-pack-link');
 
 let editorDraft = null;
 
+// Which top-level section is showing. Editing used to dump all six sections
+// into one long scroll — with 100+ events that became unusable, so now only
+// the active tab renders.
+let activeEditorTab = 'config';
+// Which zone groups are expanded in the Events tab, remembered across
+// re-renders (rebuilding the DOM each render would otherwise reset them).
+let openEventZones = new Set();
+
+const EDITOR_TABS = [
+    { key: 'config', label: () => 'Config' },
+    { key: 'zones', label: () => 'Zones' },
+    { key: 'mechanisms', label: () => 'Mechanisms' },
+    { key: 'failureEndings', label: () => 'Failure Endings' },
+    { key: 'endings', label: () => 'Survival Endings' },
+    { key: 'events', label: () => `Events (${editorDraft.events.length})` }
+];
+
 function ensureEditorDraft() {
     if (!editorDraft) editorDraft = deepClone(getContent());
 }
@@ -21,14 +38,39 @@ function labeledWrap(labelText, el) {
     return box;
 }
 
+function buildEditorTabsBar() {
+    const nav = document.createElement('nav');
+    nav.id = "editor-tabs";
+    nav.className = "tabs";
+    EDITOR_TABS.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = "tab" + (activeEditorTab === t.key ? " active" : "");
+        btn.textContent = t.label();
+        btn.onclick = () => { activeEditorTab = t.key; renderEditor(); };
+        nav.appendChild(btn);
+    });
+    return nav;
+}
+
 function renderEditor() {
     elEditorBody.innerHTML = '';
-    elEditorBody.appendChild(buildConfigSection());
-    elEditorBody.appendChild(buildZonesSection());
-    elEditorBody.appendChild(buildMechanismsSection());
-    elEditorBody.appendChild(buildFailureEndingsSection());
-    elEditorBody.appendChild(buildEndingsSection());
-    elEditorBody.appendChild(buildEventsSection());
+    elEditorBody.appendChild(buildEditorTabsBar());
+
+    // Function declarations below are hoisted, so referencing them here — before
+    // their own definitions appear later in the file — is safe.
+    const sectionBuilders = {
+        config: buildConfigSection,
+        zones: buildZonesSection,
+        mechanisms: buildMechanismsSection,
+        failureEndings: buildFailureEndingsSection,
+        endings: buildEndingsSection,
+        events: buildEventsSection
+    };
+    const content = document.createElement('div');
+    content.className = "editor-tab-content";
+    const builder = sectionBuilders[activeEditorTab] || buildConfigSection;
+    content.appendChild(builder());
+    elEditorBody.appendChild(content);
 }
 
 function buildConfigSection() {
@@ -409,6 +451,45 @@ function buildEndingsSection() {
     return wrap;
 }
 
+function newBlankEvent(zoneKey) {
+    return {
+        zone: zoneKey,
+        title: "New Event",
+        desc: "Describe the trigger.",
+        choices: [
+            { text: "First response.", tag: "fawn", effects: { rep: 0, mask: 0, child: 0 }, log: "Logged reaction." },
+            { text: "Second response.", tag: "secure", effects: { rep: 0, mask: 0, child: 0 }, log: "Logged reaction." }
+        ]
+    };
+}
+
+function buildEventZoneGroup(zoneKey, zoneEntries, statBias) {
+    const details = document.createElement('details');
+    details.className = "editor-zone-group";
+    if (statBias) details.classList.add("bias-" + statBias);
+    details.open = openEventZones.has(zoneKey);
+    details.addEventListener('toggle', () => {
+        if (details.open) openEventZones.add(zoneKey); else openEventZones.delete(zoneKey);
+    });
+
+    const summary = document.createElement('summary');
+    summary.className = "editor-zone-summary";
+    summary.textContent = `${zoneKey} (${zoneEntries.length})`;
+    details.appendChild(summary);
+
+    const cardsWrap = document.createElement('div');
+    cardsWrap.className = "editor-zone-cards";
+    details.appendChild(cardsWrap);
+
+    const cardEntries = zoneEntries.map(({ evt, idx }) => {
+        const card = buildEventCard(evt, idx);
+        cardsWrap.appendChild(card);
+        return { card, evt };
+    });
+
+    return { zoneKey, details, cardEntries };
+}
+
 function buildEventsSection() {
     const wrap = document.createElement('div');
     wrap.className = "editor-section";
@@ -416,27 +497,79 @@ function buildEventsSection() {
     title.className = "editor-section-title";
     title.textContent = `Events (${editorDraft.events.length})`;
     wrap.appendChild(title);
+    const note = document.createElement('p');
+    note.className = "editor-note";
+    note.textContent = "Grouped by zone, collapsed by default. Filter by title to jump straight to one.";
+    wrap.appendChild(note);
 
-    editorDraft.events.forEach((evt, idx) => {
-        wrap.appendChild(buildEventCard(evt, idx));
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.className = "editor-input";
+    searchInput.placeholder = "Filter by title...";
+    wrap.appendChild(searchInput);
+
+    const groupsWrap = document.createElement('div');
+    groupsWrap.className = "editor-col";
+    wrap.appendChild(groupsWrap);
+
+    const usedIndices = new Set();
+    const zoneGroups = editorDraft.zones.map(zone => {
+        const zoneEntries = editorDraft.events
+            .map((evt, idx) => ({ evt, idx }))
+            .filter(x => x.evt.zone === zone.key);
+        zoneEntries.forEach(x => usedIndices.add(x.idx));
+
+        const group = buildEventZoneGroup(zone.key, zoneEntries, zone.statBias);
+
+        const addBtn = document.createElement('button');
+        addBtn.textContent = `+ Add Event to ${zone.key}`;
+        addBtn.className = "editor-btn self-start";
+        addBtn.onclick = () => {
+            editorDraft.events.push(newBlankEvent(zone.key));
+            openEventZones.add(zone.key);
+            renderEditor();
+        };
+        group.details.appendChild(addBtn);
+
+        groupsWrap.appendChild(group.details);
+        return group;
     });
 
-    const addBtn = document.createElement('button');
-    addBtn.textContent = "+ Add Event";
-    addBtn.className = "editor-btn self-start";
-    addBtn.onclick = () => {
-        editorDraft.events.push({
-            zone: editorDraft.zones[0] ? editorDraft.zones[0].key : "SELF",
-            title: "New Event",
-            desc: "Describe the trigger.",
-            choices: [
-                { text: "First response.", tag: "fawn", effects: { rep: 0, mask: 0, child: 0 }, log: "Logged reaction." },
-                { text: "Second response.", tag: "secure", effects: { rep: 0, mask: 0, child: 0 }, log: "Logged reaction." }
-            ]
+    // A zone can go stale (renamed/deleted while events still reference the
+    // old key, e.g. from a hand-edited import) — surface those instead of
+    // letting them silently vanish from the grouped view.
+    const orphaned = editorDraft.events
+        .map((evt, idx) => ({ evt, idx }))
+        .filter(x => !usedIndices.has(x.idx));
+    if (orphaned.length) {
+        const orphanNote = document.createElement('p');
+        orphanNote.className = "editor-note";
+        orphanNote.textContent = "These reference a zone that no longer exists — reassign them below.";
+        const group = buildEventZoneGroup("UNASSIGNED", orphaned, null);
+        group.details.classList.add("bias-unassigned");
+        group.details.insertBefore(orphanNote, group.details.children[1]);
+        groupsWrap.appendChild(group.details);
+        zoneGroups.push(group);
+    }
+
+    // Search never touches the <details> `open` property directly — doing so
+    // fires the same 'toggle' event a real click does, which would stomp
+    // openEventZones with the search's own open/close state the moment you
+    // typed anything. Visibility during a search is driven entirely by the
+    // .force-open class + inline display instead, so a group's genuine
+    // user-set expanded/collapsed state survives clearing the search.
+    searchInput.oninput = () => {
+        const q = searchInput.value.trim().toLowerCase();
+        zoneGroups.forEach(g => {
+            let anyMatch = false;
+            g.cardEntries.forEach(({ card, evt }) => {
+                const matches = !q || evt.title.toLowerCase().includes(q);
+                card.style.display = matches ? '' : 'none';
+                if (matches) anyMatch = true;
+            });
+            g.details.classList.toggle('force-open', !!q && anyMatch);
         });
-        renderEditor();
     };
-    wrap.appendChild(addBtn);
 
     return wrap;
 }

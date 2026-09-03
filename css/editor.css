@@ -1,70 +1,84 @@
 .editor-input {
-    background-color: #161616;
-    border: 1px solid #3f3f3f;
-    color: #e5e5e5;
+    background-color: var(--screen);
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    color: var(--led-teal);
     font-size: 0.75rem;
-    padding: 0.4rem 0.5rem;
+    padding: 0.45rem 0.55rem;
     width: 100%;
 }
 .editor-input:focus {
     outline: none;
-    border-color: #737373;
+    border-color: var(--key-teal);
 }
 .editor-label {
-    font-size: 10px;
+    font-family: var(--font-display);
+    font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #9ca3af;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
     display: block;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 .editor-btn {
-    font-size: 10px;
+    font-family: var(--font-display);
+    font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border: 1px solid #3f3f3f;
-    color: #a3a3a3;
-    padding: 4px 10px;
-    transition: color 0.15s, border-color 0.15s;
-    background: transparent;
+    letter-spacing: 0.03em;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--key-cream);
+    color: var(--ink);
+    padding: 6px 10px;
+    box-shadow: 0 3px 0 var(--ink);
+    transition: transform 0.08s, box-shadow 0.08s;
     white-space: nowrap;
 }
 .editor-btn:hover:not(:disabled) {
-    color: #fff;
-    border-color: #737373;
+    transform: translateY(1px);
+    box-shadow: 0 2px 0 var(--ink);
 }
 .editor-btn:disabled {
-    opacity: 0.35;
+    opacity: 0.4;
     cursor: not-allowed;
+    box-shadow: none;
 }
 .editor-btn-danger {
-    font-size: 10px;
+    font-family: var(--font-display);
+    font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border: 1px solid #7f1d1d;
-    color: #f87171;
-    padding: 4px 10px;
-    transition: color 0.15s, border-color 0.15s;
-    background: transparent;
+    letter-spacing: 0.03em;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--key-red);
+    color: var(--key-cream);
+    padding: 6px 10px;
+    box-shadow: 0 3px 0 var(--ink);
+    transition: transform 0.08s, box-shadow 0.08s;
     white-space: nowrap;
 }
 .editor-btn-danger:hover:not(:disabled) {
-    border-color: #ef4444;
+    transform: translateY(1px);
+    box-shadow: 0 2px 0 var(--ink);
 }
 .editor-btn-danger:disabled {
-    opacity: 0.35;
+    opacity: 0.4;
     cursor: not-allowed;
+    box-shadow: none;
 }
 .editor-section {
-    border: 1px solid #262626;
-    background-color: #0d0d0d;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    background-color: var(--case);
     padding: 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 .editor-card {
-    border: 1px solid #262626;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background-color: var(--key-cream);
     padding: 0.75rem;
     display: flex;
     flex-direction: column;
@@ -76,14 +90,15 @@
    that were built by editor.js. Hand-authored, Tailwind removed.
    ============================================================ */
 .editor-section-title {
-    font-size: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #fff;
+    letter-spacing: 0.03em;
+    color: var(--key-red);
 }
 .editor-note {
     font-size: 10px;
-    color: #9ca3af;
+    color: var(--ink-soft);
 }
 .editor-row {
     display: flex;
@@ -94,11 +109,12 @@
     margin-top: 0.25rem;
 }
 .editor-zone-key {
-    font-size: 0.75rem;
-    color: #d1d5db;
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    color: var(--ink);
     width: 6rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
 }
 .editor-grid-config {
     display: grid;
@@ -114,11 +130,12 @@
     gap: 0.5rem;
 }
 .editor-tag-label {
-    font-size: 10px;
+    font-family: var(--font-display);
+    font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #9ca3af;
-    width: 4rem;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+    width: 4.5rem;
     flex-shrink: 0;
 }
 .editor-col {
@@ -134,13 +151,15 @@
     flex-direction: column;
     gap: 0.5rem;
     padding-left: 0.75rem;
-    border-left: 1px solid #1f2937;
+    border-left: 3px solid var(--case-shadow);
 }
 .editor-choice-row {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    border: 1px solid #1f2937;
+    border: 2px solid var(--case-shadow);
+    border-radius: 6px;
+    background: var(--case);
     padding: 0.5rem;
 }
 .editor-meta-row {
@@ -161,38 +180,42 @@
 }
 .editor-header {
     padding: 1rem;
-    border-bottom: 1px solid #1f2937;
-    background: #000;
+    border-bottom: 3px solid var(--ink);
+    background: var(--case-deep);
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
 }
 .editor-title {
-    font-size: 0.875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #c084fc;
-}
-@media (min-width: 768px) { .editor-title { font-size: 1rem; } }
-.editor-back-link {
-    font-size: 10px;
+    font-family: var(--font-display);
+    font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border: 1px solid #374151;
-    color: #9ca3af;
-    padding: 4px 8px;
-    transition: color 0.15s, border-color 0.15s;
+    color: var(--key-violet);
+}
+@media (min-width: 768px) { .editor-title { font-size: 0.8rem; } }
+.editor-back-link {
+    font-family: var(--font-display);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--key-cream);
+    color: var(--ink);
+    padding: 5px 8px;
+    box-shadow: 0 3px 0 var(--ink);
+    transition: transform 0.08s, box-shadow 0.08s;
 }
 .editor-back-link:hover {
-    color: #fff;
-    border-color: #6b7280;
+    transform: translateY(1px);
+    box-shadow: 0 2px 0 var(--ink);
 }
 .editor-toolbar {
-    padding: 0.75rem 1.5rem;
-    border-bottom: 1px solid #1f2937;
-    background: #0d0d0d;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 3px solid var(--ink);
+    background: var(--case);
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -201,11 +224,11 @@
 }
 .editor-toolbar-note {
     font-size: 11px;
-    color: #9ca3af;
+    color: var(--ink-soft);
 }
 .editor-status-text {
     font-size: 10px;
-    color: #d8b4fe;
+    color: var(--key-violet);
     margin-top: 0.25rem;
     min-height: 1em;
 }
@@ -216,34 +239,44 @@
     align-items: center;
 }
 .editor-play-link {
-    font-size: 10px;
+    font-family: var(--font-display);
+    font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border: 1px solid #15803d;
-    color: #4ade80;
-    padding: 4px 12px;
-    transition: background-color 0.15s;
+    letter-spacing: 0.03em;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--key-teal);
+    color: var(--key-cream);
+    padding: 6px 12px;
+    box-shadow: 0 3px 0 var(--ink);
+    transition: transform 0.08s, box-shadow 0.08s;
 }
 .editor-play-link:hover {
-    background-color: #052e16;
+    transform: translateY(1px);
+    box-shadow: 0 2px 0 var(--ink);
 }
 .editor-save-btn {
-    padding: 4px 12px;
-    font-size: 10px;
+    padding: 6px 12px;
+    font-family: var(--font-display);
+    font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border: 1px solid #fff;
-    color: #fff;
-    transition: background-color 0.15s, color 0.15s;
+    letter-spacing: 0.03em;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--ink);
+    color: var(--key-cream);
+    box-shadow: 0 3px 0 var(--case-shadow);
+    transition: transform 0.08s, box-shadow 0.08s;
 }
 .editor-save-btn:hover {
-    background-color: #fff;
-    color: #000;
+    transform: translateY(1px);
+    box-shadow: 0 2px 0 var(--case-shadow);
 }
 .editor-body {
     flex-grow: 1;
     overflow-y: auto;
     padding: 1rem;
+    background: var(--case-deep);
     display: flex;
     flex-direction: column;
     gap: 1rem;

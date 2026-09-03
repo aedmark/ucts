@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unresolved Childhood Trauma Simulator</title>
+    <title>Unresolved Childhood Trauma Sim</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -15,7 +15,7 @@
         <!-- Header -->
         <header class="p-4 border-b border-gray-800 bg-black flex justify-between items-center gap-2">
             <div class="flex items-center gap-2">
-                <h1 id="game-title" class="text-sm md:text-base font-bold uppercase tracking-widest text-red-500">U.C.T. Simulator v2.0</h1>
+                <h1 id="game-title" class="text-sm md:text-base font-bold uppercase tracking-widest text-red-500">Unresolved Childhood Trauma Sim</h1>
                 <button id="help-btn" onclick="toggleHelp(true)" title="How this works" aria-label="How this works" class="w-5 h-5 flex items-center justify-center text-[10px] font-bold border border-gray-700 text-gray-500 rounded-full hover:text-white hover:border-gray-500 transition-colors">?</button>
             </div>
             <div id="objective-text" class="text-xs text-gray-500">Objective: Survive 10 Turns</div>
@@ -38,7 +38,7 @@
                 <!-- Repression -->
                 <div>
                     <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
-                        <span class="text-red-400">Repression Level</span>
+                        <span class="text-red-400" id="label-repression">Repression Level</span>
                         <span id="val-repression">0%</span>
                     </div>
                     <div class="stat-bar-container">
@@ -50,7 +50,7 @@
                 <!-- Social Mask -->
                 <div>
                     <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
-                        <span class="text-blue-400">Social Mask</span>
+                        <span class="text-blue-400" id="label-mask">Social Mask</span>
                         <span id="val-mask">100%</span>
                     </div>
                     <div class="stat-bar-container">
@@ -62,7 +62,7 @@
                 <!-- Inner Child -->
                 <div>
                     <div class="flex justify-between text-xs mb-1 uppercase tracking-wide">
-                        <span class="text-pink-400">Inner Child</span>
+                        <span class="text-pink-400" id="label-child">Inner Child</span>
                         <span id="val-child">50%</span>
                     </div>
                     <div class="stat-bar-container">
@@ -95,7 +95,7 @@
 
             <!-- Action Log -->
             <footer class="h-24 md:h-32 border-t border-gray-800 bg-black p-3 overflow-y-auto log-container text-xs text-gray-500 font-mono" id="action-log">
-                <div>> System initialized. Awaiting traumatic stimuli.</div>
+                <div>> System initialized. Awaiting trauma.</div>
             </footer>
         </div>
 
@@ -103,7 +103,7 @@
         <div id="field-view" class="hidden flex flex-col flex-grow overflow-hidden">
 
             <div class="px-6 py-3 border-b border-gray-800 bg-[#0d0d0d]">
-                <p class="text-[11px] text-gray-500 leading-relaxed">This log stays in your browser. Nothing is sent anywhere, ever. This is a self-tracking tool, not therapy — if you're in crisis, contact a crisis line or a licensed professional.</p>
+                <p class="text-[11px] text-gray-500 leading-relaxed">This log stays in your browser. Nothing is sent anywhere, ever. Please use this as a self-tracking tool, not a therapy replacement!</p>
             </div>
 
             <div class="px-6 py-4 border-b border-gray-800 flex flex-col gap-3">

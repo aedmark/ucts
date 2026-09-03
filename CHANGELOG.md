@@ -2,6 +2,18 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.3.0] - 2026-09-03
+
+### Added
+- **Configurable stat bar names** (`config.statLabels`). The stats panel headings and the ↑/↓ choice hints ("↑ Repression", "↓ Mask") were literal strings in `index.html` and `engine.js`; they now read from the pack, with a new "Bar Display Names" row in the editor's Config section. Renaming a bar is cosmetic only — the underlying `repression`/`mask`/`child` keys, and everything wired to them (zone bias, ending conditions, mechanism mods), are unchanged. Optional field; a pack saved before this existed falls back to the original label text.
+- **Configurable failure endings** (`failureEndings`). "Panic Attack", "Social Exile", and "Total Disassociation" — the title and description shown when a stat crosses its loss threshold — were hardcoded in `engine.js`, unlike survival endings, which have always been pack data. A heavily reskinned pack could reach the end of a run and still show unrelated default flavor text on a loss, which is also statistically the *most common* outcome for many packs. Each of the three now has an editable title/desc in a new "Failure Endings" section in the editor, between Coping Mechanisms and Survival Endings. Optional field, same backward-compatible fallback as above.
+
+### Fixed
+- **Editor event cards were unusable on narrow screens.** The title input shared one row with the zone dropdown and the Remove Event button, both fixed-width, so on mobile the title field was squeezed down to a sliver. The title now sits full-width on its own row above the zone/remove row.
+
+### Changed
+- `AUTHORING.md` documents both new fields (a "Failure Endings" section alongside "Survival Endings", a new Config table row for the bar names) and notes two things this pass surfaced while reviewing a user-submitted content pack: failure endings are worth writing deliberately since they often outnumber every survival ending combined, and a broad, low-specificity condition placed early in the Survival Endings list can silently starve narrower ones placed after it.
+
 ## [4.2.0] - 2026-09-02
 
 ### Added

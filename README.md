@@ -20,6 +20,8 @@ You start with three stats and a turn limit. Each turn, an event fires — a sho
 | **Social Mask** | 100% | 0% (*Social Exile*) |
 | **Inner Child** | 50% | 0% (*Total Disassociation*) |
 
+The names above — the bar labels and the three failure endings — are the built-in defaults; both are content-pack data, so a custom pack can rename the bars and rewrite what a loss says without touching what's actually being tracked underneath.
+
 Survive every turn without any of the three failing, and you get a **Survival Ending** instead — one of five, chosen by evaluating your final stat shape against a list of conditions, top to bottom, first match wins. There's always a no-conditions catch-all at the bottom, so a run always ends in *something*.
 
 ## The Five Responses
@@ -50,7 +52,7 @@ This one matters enough to say plainly, in the app and here: **this is a self-tr
 
 ## Writing Your Own Content
 
-Every event, ending, zone, and numeric knob in the game lives in one exportable/importable JSON structure called a content pack. [`editor.html`](editor.html) is a full visual editor for it — no code required — and [`AUTHORING.md`](AUTHORING.md) is the complete guide: what each field does, a start-to-finish walkthrough of writing a new event, the raw JSON schema if you'd rather hand-edit, and the design notes that keep new content feeling like it belongs next to everything already there.
+Every event, ending (survival *and* failure), zone, stat bar name, and numeric knob in the game lives in one exportable/importable JSON structure called a content pack. [`editor.html`](editor.html) is a full visual editor for it — no code required — and [`AUTHORING.md`](AUTHORING.md) is the complete guide: what each field does, a start-to-finish walkthrough of writing a new event, the raw JSON schema if you'd rather hand-edit, and the design notes that keep new content feeling like it belongs next to everything already there.
 
 ## Version History
 

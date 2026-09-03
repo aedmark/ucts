@@ -6,6 +6,10 @@
 const DEFAULT_CONTENT = {
     config: {
         startingStats: { repression: 20, mask: 100, child: 50 },
+        // Display names for the three stat bars. Purely cosmetic — used in the
+        // stats panel and in the ↑/↓ choice hints. The underlying keys
+        // (repression/mask/child) are fixed and unrelated to these labels.
+        statLabels: { repression: "Repression Level", mask: "Social Mask", child: "Inner Child" },
         maxTurns: 10,
         hardModeTurns: 20,
         hardModeMultiplier: 1.25,
@@ -40,6 +44,16 @@ const DEFAULT_CONTENT = {
         "The Anomaly Injector fired. Efficiency wept quietly.",
         "You rolled the dice on your own nervous system."
     ],
+
+    // The three ways to lose a run — hitting the hardcoded threshold on one stat
+    // (repression >= 100, mask <= 0, child <= 0). Unlike survival endings these
+    // aren't picked by conditions; each stat has exactly one, shown the instant
+    // it crosses its threshold.
+    failureEndings: {
+        repression: { title: "Panic Attack", desc: "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet." },
+        mask: { title: "Social Exile", desc: "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free." },
+        child: { title: "Total Disassociation", desc: "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing." }
+    },
 
     // Evaluated top to bottom. First ending whose conditions all match wins.
     // An ending with no conditions always matches — keep one at the bottom as a fallback.

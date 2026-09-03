@@ -26,6 +26,7 @@ function renderEditor() {
     elEditorBody.appendChild(buildConfigSection());
     elEditorBody.appendChild(buildZonesSection());
     elEditorBody.appendChild(buildMechanismsSection());
+    elEditorBody.appendChild(buildFailureEndingsSection());
     elEditorBody.appendChild(buildEndingsSection());
     elEditorBody.appendChild(buildEventsSection());
 }
@@ -63,6 +64,30 @@ function buildConfigSection() {
         input.className = "editor-input";
         input.oninput = () => { const v = parseFloat(input.value); if (!isNaN(v)) f.set(v); };
         grid.appendChild(labeledWrap(f.label, input));
+    });
+
+    if (!cfg.statLabels) cfg.statLabels = { repression: "Repression Level", mask: "Social Mask", child: "Inner Child" };
+    const labelNote = document.createElement('p');
+    labelNote.className = "text-[10px] text-gray-600";
+    labelNote.textContent = "Bar Display Names — shown on the stats panel and in choice hints. Doesn't change how repression/mask/child work.";
+    wrap.appendChild(labelNote);
+
+    const labelGrid = document.createElement('div');
+    labelGrid.className = "grid grid-cols-1 md:grid-cols-3 gap-3";
+    wrap.appendChild(labelGrid);
+
+    const labelFields = [
+        { label: "Repression Bar Name", get: () => cfg.statLabels.repression, set: v => cfg.statLabels.repression = v },
+        { label: "Mask Bar Name", get: () => cfg.statLabels.mask, set: v => cfg.statLabels.mask = v },
+        { label: "Inner Child Bar Name", get: () => cfg.statLabels.child, set: v => cfg.statLabels.child = v }
+    ];
+    labelFields.forEach(f => {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = f.get();
+        input.className = "editor-input";
+        input.oninput = () => { f.set(input.value); };
+        labelGrid.appendChild(labeledWrap(f.label, input));
     });
 
     return wrap;
@@ -191,6 +216,61 @@ function buildMechanismsSection() {
         row.appendChild(modGrid);
 
         wrap.appendChild(row);
+    });
+
+    return wrap;
+}
+
+function buildFailureEndingsSection() {
+    const wrap = document.createElement('div');
+    wrap.className = "editor-section";
+    const title = document.createElement('h3');
+    title.className = "text-xs uppercase tracking-widest text-white";
+    title.textContent = "Failure Endings";
+    wrap.appendChild(title);
+    const note = document.createElement('p');
+    note.className = "text-[10px] text-gray-600";
+    note.textContent = "Shown the instant a stat crosses its loss threshold (repression ≥ 100, mask ≤ 0, child ≤ 0). One per stat, fixed — unlike Survival Endings below, there's no condition list to write.";
+    wrap.appendChild(note);
+
+    if (!editorDraft.failureEndings) {
+        editorDraft.failureEndings = {
+            repression: { title: "Panic Attack", desc: "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet." },
+            mask: { title: "Social Exile", desc: "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free." },
+            child: { title: "Total Disassociation", desc: "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing." }
+        };
+    }
+
+    [
+        { key: "repression", trigger: "Repression ≥ 100" },
+        { key: "mask", trigger: "Mask ≤ 0" },
+        { key: "child", trigger: "Inner Child ≤ 0" }
+    ].forEach(({ key, trigger }) => {
+        const fe = editorDraft.failureEndings[key];
+        const card = document.createElement('div');
+        card.className = "editor-card";
+
+        const head = document.createElement('div');
+        head.className = "flex items-center gap-2";
+        const triggerLabel = document.createElement('span');
+        triggerLabel.className = "text-[10px] uppercase tracking-widest text-gray-500 w-32 flex-shrink-0";
+        triggerLabel.textContent = trigger;
+        const titleInput = document.createElement('input');
+        titleInput.className = "editor-input";
+        titleInput.value = fe.title;
+        titleInput.oninput = () => { fe.title = titleInput.value; };
+        head.appendChild(triggerLabel);
+        head.appendChild(titleInput);
+        card.appendChild(head);
+
+        const descArea = document.createElement('textarea');
+        descArea.rows = 2;
+        descArea.className = "editor-input";
+        descArea.value = fe.desc;
+        descArea.oninput = () => { fe.desc = descArea.value; };
+        card.appendChild(descArea);
+
+        wrap.appendChild(card);
     });
 
     return wrap;
@@ -365,8 +445,14 @@ function buildEventCard(evt, idx) {
     const card = document.createElement('div');
     card.className = "editor-card";
 
-    const headRow = document.createElement('div');
-    headRow.className = "flex items-center gap-2";
+    const titleInput = document.createElement('input');
+    titleInput.className = "editor-input";
+    titleInput.value = evt.title;
+    titleInput.oninput = () => { evt.title = titleInput.value; };
+    card.appendChild(titleInput);
+
+    const metaRow = document.createElement('div');
+    metaRow.className = "flex items-center gap-2";
 
     const zoneSelect = document.createElement('select');
     zoneSelect.className = "editor-input";
@@ -379,11 +465,6 @@ function buildEventCard(evt, idx) {
     });
     zoneSelect.onchange = () => { evt.zone = zoneSelect.value; };
 
-    const titleInput = document.createElement('input');
-    titleInput.className = "editor-input";
-    titleInput.value = evt.title;
-    titleInput.oninput = () => { evt.title = titleInput.value; };
-
     const delBtn = document.createElement('button');
     delBtn.textContent = "Remove Event";
     delBtn.className = "editor-btn-danger";
@@ -393,10 +474,9 @@ function buildEventCard(evt, idx) {
         renderEditor();
     };
 
-    headRow.appendChild(zoneSelect);
-    headRow.appendChild(titleInput);
-    headRow.appendChild(delBtn);
-    card.appendChild(headRow);
+    metaRow.appendChild(zoneSelect);
+    metaRow.appendChild(delBtn);
+    card.appendChild(metaRow);
 
     const descArea = document.createElement('textarea');
     descArea.rows = 2;

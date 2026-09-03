@@ -18,7 +18,7 @@ A saved pack **fully replaces** the built-in default — it's not a diff. That's
 
 Open `editor.html` directly (it isn't linked from the game anymore — that link was for early testing only). Whatever you had saved last time is still there; if you've never saved anything, it starts from the built-in default content so you're editing existing material rather than a blank page.
 
-## The five sections
+## The six sections
 
 ### Config
 
@@ -33,6 +33,7 @@ Global numbers that shape the whole run, not any one event:
 | Mechanism Unlock Threshold | How many times you have to pick the *same* response type before it "locks in" as a coping mechanism. Default `3`. |
 | Glitch Chance (0-1) | Odds, each turn, of a bonus fourth choice with fully random effects. `0.15` = 15%. |
 | Weak Zone Weight | How much more likely an event is to be picked when its zone matches your worst stat. `2.5` means 2.5x the normal odds. `1` would turn this off entirely (pure random selection). |
+| Repression / Mask / Inner Child Bar Name | What the stats panel and the ↑/↓ choice hints call each stat. Purely cosmetic — the underlying `repression`/`mask`/`child` keys used everywhere else (zone bias, ending conditions, mechanism mods) don't change, so renaming a bar doesn't rewire what it tracks. |
 
 ### Zones
 
@@ -50,6 +51,12 @@ If you retune the mods, that asymmetry is the thing to preserve or deliberately 
 
 One caveat: the Field Log's own tag picker (in `index.html`) shows the raw identity — `fawn`, `flight`, etc. — not your renamed display name. Renaming only changes what shows up inside the simulation itself (badges, ending text).
 
+### Failure Endings
+
+These are the three ways to *lose* — repression hitting 100%, mask hitting 0%, or inner child hitting 0%. Unlike survival endings, there's no condition list: each stat has exactly one, and it fires the instant that stat crosses its threshold, whichever turn that happens to be. Each has a **title** and a **desc**, same as a survival ending.
+
+These are easy to forget about because they're not "endings" in the same list as the rest, but statistically they're often the *most common* outcome, especially in a pack that pushes stats hard — so if your event effects skew heavy in one direction, more players will see one of these three than any survival ending you wrote. Give them the same voice as the rest of your pack; leaving them at the defaults means a reskinned pack still ends with unrelated flavor text on most losses.
+
 ### Survival Endings
 
 These decide what a player sees if they make it to the end of a run without losing. They're evaluated **top to bottom**, and the first ending whose conditions are *all* true wins — so put your most specific endings first and your catch-all last. An ending with **no conditions at all** always matches, which is what makes it a fallback. Keep exactly one of those at the very bottom.
@@ -57,6 +64,8 @@ These decide what a player sees if they make it to the end of a run without losi
 A condition is `stat` (repression / mask / child) + `op` (`>=`, `<=`, `>`, `<`, `==`) + `value`. An ending can have several conditions — they're all ANDed together.
 
 Don't restate "you unlocked these coping mechanisms" in your `desc` text — the game already appends that list automatically to whatever description you write, if the player unlocked any.
+
+A broad, easily-satisfied condition placed early (e.g. a single `repression >= 70`) will out-compete narrower, more specific endings placed after it, since evaluation stops at the first match — if your richer endings never seem to show up, check whether something earlier in the list is catching runs that were meant to reach them.
 
 ### Events
 
@@ -96,7 +105,7 @@ Export a pack to see the exact shape. The top level is:
 
 ```json
 {
-  "config": { "startingStats": { "repression": 20, "mask": 100, "child": 50 }, "maxTurns": 10, "hardModeTurns": 20, "hardModeMultiplier": 1.25, "unlockThreshold": 3, "glitchChance": 0.15, "weakZoneWeight": 2.5 },
+  "config": { "startingStats": { "repression": 20, "mask": 100, "child": 50 }, "statLabels": { "repression": "Repression Level", "mask": "Social Mask", "child": "Inner Child" }, "maxTurns": 10, "hardModeTurns": 20, "hardModeMultiplier": 1.25, "unlockThreshold": 3, "glitchChance": 0.15, "weakZoneWeight": 2.5 },
   "zones": [ { "key": "WORK", "statBias": "repression" } ],
   "mechanisms": {
     "fawn":   { "name": "The Approval Loop", "mod": { "rep": 0,  "mask": 3,  "child": -5 } },
@@ -106,6 +115,11 @@ Export a pack to see the exact shape. The top level is:
     "secure": { "name": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } }
   },
   "glitchLogs": [ "A line shown when the random glitch choice fires." ],
+  "failureEndings": {
+    "repression": { "title": "Panic Attack", "desc": "Shown when repression hits 100." },
+    "mask": { "title": "Social Exile", "desc": "Shown when mask hits 0." },
+    "child": { "title": "Total Disassociation", "desc": "Shown when child hits 0." }
+  },
   "endings": [
     { "title": "...", "desc": "...", "conditions": [ { "stat": "repression", "op": ">=", "value": 70 } ] }
   ],
@@ -123,6 +137,8 @@ Export a pack to see the exact shape. The top level is:
 ```
 
 Requirements the importer actually checks: `config` is an object; `zones` is a non-empty array; `mechanisms` has all five keys (`fawn`/`flight`/`fight`/`freeze`/`secure`) present; `glitchLogs` is an array; `endings` is a non-empty array; `events` is a non-empty array. It doesn't deep-validate every field inside each event or choice, so a malformed individual event won't necessarily be caught at import — it'll just render oddly (missing text shows as `...`, missing effects default to `0`). When in doubt, edit through the UI, which can't produce a malformed shape in the first place.
+
+`failureEndings` and `config.statLabels` are both optional — a pack from before these existed imports fine and just falls back to the built-in defaults for whichever it's missing.
 
 ## Design notes
 

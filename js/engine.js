@@ -21,10 +21,32 @@ function unlockNgPlus() {
 // DOM Elements
 const elRepressionBar = document.getElementById('bar-repression');
 const elRepressionVal = document.getElementById('val-repression');
+const elRepressionLabel = document.getElementById('label-repression');
 const elMaskBar = document.getElementById('bar-mask');
 const elMaskVal = document.getElementById('val-mask');
+const elMaskLabel = document.getElementById('label-mask');
 const elChildBar = document.getElementById('bar-child');
 const elChildVal = document.getElementById('val-child');
+const elChildLabel = document.getElementById('label-child');
+
+const DEFAULT_STAT_LABELS = { repression: "Repression Level", mask: "Social Mask", child: "Inner Child" };
+function statLabels() {
+    return Object.assign({}, DEFAULT_STAT_LABELS, getContent().config.statLabels || {});
+}
+
+const DEFAULT_FAILURE_ENDINGS = {
+    repression: { title: "Panic Attack", desc: "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet." },
+    mask: { title: "Social Exile", desc: "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free." },
+    child: { title: "Total Disassociation", desc: "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing." }
+};
+function failureEndings() {
+    const custom = getContent().failureEndings || {};
+    return {
+        repression: Object.assign({}, DEFAULT_FAILURE_ENDINGS.repression, custom.repression),
+        mask: Object.assign({}, DEFAULT_FAILURE_ENDINGS.mask, custom.mask),
+        child: Object.assign({}, DEFAULT_FAILURE_ENDINGS.child, custom.child)
+    };
+}
 
 const elEventDisplay = document.getElementById('event-display');
 const elChoicesContainer = document.getElementById('choices-container');
@@ -153,16 +175,17 @@ function getSurvivalEnding() {
 }
 
 function checkGameEnd() {
+    const fe = failureEndings();
     if (state.repression >= 100) {
-        endGame("Panic Attack", "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet.");
+        endGame(fe.repression.title, fe.repression.desc);
         return true;
     }
     if (state.mask <= 0) {
-        endGame("Social Exile", "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free.");
+        endGame(fe.mask.title, fe.mask.desc);
         return true;
     }
     if (state.child <= 0) {
-        endGame("Total Disassociation", "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing.");
+        endGame(fe.child.title, fe.child.desc);
         return true;
     }
     if (state.turn > state.maxTurns) {
@@ -272,13 +295,14 @@ function loadRandomEvent() {
         const btn = document.createElement('button');
         btn.className = "glitch-hover w-full text-left p-4 border border-gray-700 bg-[#161616] text-gray-300 text-sm hover:text-white hover:border-gray-500 transition-colors duration-200 flex flex-col gap-1";
 
+        const labels = statLabels();
         let hints = [];
-        if (fx.rep > 0) hints.push("↑ Repression");
-        if (fx.rep < 0) hints.push("↓ Repression");
-        if (fx.mask > 0) hints.push("↑ Mask");
-        if (fx.mask < 0) hints.push("↓ Mask");
-        if (fx.child > 0) hints.push("↑ Inner Child");
-        if (fx.child < 0) hints.push("↓ Inner Child");
+        if (fx.rep > 0) hints.push(`↑ ${labels.repression}`);
+        if (fx.rep < 0) hints.push(`↓ ${labels.repression}`);
+        if (fx.mask > 0) hints.push(`↑ ${labels.mask}`);
+        if (fx.mask < 0) hints.push(`↓ ${labels.mask}`);
+        if (fx.child > 0) hints.push(`↑ ${labels.child}`);
+        if (fx.child < 0) hints.push(`↓ ${labels.child}`);
 
         const textSpan = document.createElement('span');
         textSpan.textContent = choice.text || "...";
@@ -319,6 +343,11 @@ function startGame(hard = false) {
     resetMechanismState();
     lastEventTitle = null;
     elEndScreen.classList.add('hidden');
+
+    const labels = statLabels();
+    elRepressionLabel.textContent = labels.repression;
+    elMaskLabel.textContent = labels.mask;
+    elChildLabel.textContent = labels.child;
 
     elGameTitle.textContent = hard ? "U.C.T. Simulator :: EXTENDED THERAPY" : "U.C.T. Simulator v2.0";
     elObjectiveText.textContent = `Objective: Survive ${state.maxTurns} Turns`;

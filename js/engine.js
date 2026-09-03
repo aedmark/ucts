@@ -353,7 +353,7 @@ function startGame(hard = false) {
     elMaskLabel.textContent = labels.mask;
     elChildLabel.textContent = labels.child;
 
-    elGameTitle.textContent = hard ? "U.C.T. Simulator :: EXTENDED THERAPY" : "U.C.T. Simulator v2.0";
+    elGameTitle.textContent = hard ? "U.C.T.S :: EXTENDED THERAPY" : "U.C.T.S";
     elObjectiveText.textContent = `Objective: Survive ${state.maxTurns} Turns`;
     elNgPlusBtn.classList.toggle('hidden', hard || !isNgPlusUnlocked());
 

@@ -43,6 +43,9 @@
     cursor: not-allowed;
     box-shadow: none;
 }
+.editor-toolbar-actions .editor-btn:nth-of-type(1) { background: var(--key-teal); color: var(--key-cream); }
+.editor-toolbar-actions .editor-btn:nth-of-type(2) { background: var(--key-amber); color: var(--key-cream); }
+.editor-toolbar-actions .editor-btn:nth-of-type(3) { background: var(--key-violet); color: var(--key-cream); }
 .editor-btn-danger {
     font-family: var(--font-display);
     font-size: 9px;
@@ -193,6 +196,7 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--key-violet);
+    margin-left: 1.4rem;
 }
 @media (min-width: 768px) { .editor-title { font-size: 0.8rem; } }
 .editor-back-link {
@@ -263,14 +267,14 @@
     letter-spacing: 0.03em;
     border: 2px solid var(--ink);
     border-radius: 6px;
-    background: var(--ink);
+    background: #3f9142;
     color: var(--key-cream);
-    box-shadow: 0 3px 0 var(--case-shadow);
+    box-shadow: 0 3px 0 var(--ink);
     transition: transform 0.08s, box-shadow 0.08s;
 }
 .editor-save-btn:hover {
     transform: translateY(1px);
-    box-shadow: 0 2px 0 var(--case-shadow);
+    box-shadow: 0 2px 0 var(--ink);
 }
 .editor-body {
     flex-grow: 1;

@@ -6,7 +6,13 @@ html, body { height: 100%; }
 body {
     margin: 0;
     font-family: 'Space Mono', 'Courier New', monospace;
-    background-color: #14100c;
+    background-color: #3a2410;
+    background-image:
+        repeating-linear-gradient(91deg, rgba(0,0,0,0.14) 0px, rgba(0,0,0,0.14) 1px, transparent 1px, transparent 7px),
+        repeating-linear-gradient(89deg, rgba(255,214,170,0.05) 0px, rgba(255,214,170,0.05) 2px, transparent 2px, transparent 23px),
+        repeating-linear-gradient(90deg, rgba(0,0,0,0.08) 0px, transparent 3px, transparent 41px, rgba(0,0,0,0.08) 44px),
+        radial-gradient(ellipse at 50% 15%, rgba(150,102,58,0.3), transparent 65%),
+        linear-gradient(160deg, #4d3018 0%, #2c1a0c 100%);
     color: var(--ink);
     user-select: none;
     min-height: 100vh;
@@ -95,23 +101,24 @@ a { color: inherit; text-decoration: none; }
 .app::before {
     content: "";
     position: absolute;
-    top: -3px;
-    left: -3px;
-    width: 40px;
-    height: 40px;
+    top: -8px;
+    left: -68px;
+    width: 190px;
+    height: 38px;
+    transform: rotate(-45deg);
+    transform-origin: center;
     z-index: 40;
     pointer-events: none;
     background: repeating-linear-gradient(
-        -45deg,
-        #e3543f 0 5px,
-        #eda123 5px 10px,
-        #f0d048 10px 15px,
-        #2f9e8f 15px 20px,
-        #4a72c9 20px 25px
+        90deg,
+        #e3543f 0 15px,
+        #eda123 15px 30px,
+        #f0d048 30px 45px,
+        #2f9e8f 45px 60px,
+        #4a72c9 60px 75px
     );
-    clip-path: polygon(0 0, 100% 0, 0 100%);
-    border-top-left-radius: 15px;
-    opacity: 0.9;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    opacity: 0.95;
 }
 @media (min-width: 640px) {
     body { padding: 1rem; }
@@ -132,7 +139,7 @@ a { color: inherit; text-decoration: none; }
     gap: 0.5rem;
 }
 @media (min-width: 640px) { .app-header { padding: 1rem 1.25rem; } }
-.app-header > .row:first-child { margin-left: 0.6rem; }
+.app-header > .row:first-child { margin-left: 1.4rem; }
 
 .app-title {
     font-family: var(--font-display);
@@ -154,7 +161,7 @@ a { color: inherit; text-decoration: none; }
     font-family: var(--font-display);
     font-size: 0.65rem;
     border: 2px solid var(--ink);
-    background: var(--key-cream);
+    background: var(--key-amber);
     color: var(--ink);
     border-radius: 999px;
     box-shadow: 0 3px 0 var(--ink);
@@ -226,6 +233,8 @@ a { color: inherit; text-decoration: none; }
     background: var(--ink);
     transform: translateY(0);
 }
+#tab-sim.active { background: var(--key-red); }
+#tab-field.active { background: var(--key-violet); }
 
 /* ============================================================
    SIM VIEW
@@ -451,17 +460,19 @@ a { color: inherit; text-decoration: none; }
 .choice-btn.glitch:hover { background-color: #fff; box-shadow: 0 3px 0 var(--key-violet); }
 
 .action-log {
-    height: 7rem;
+    max-height: 4.5rem;
+    height: auto;
     border-top: 3px solid var(--ink);
     background: var(--screen);
-    padding: 0.75rem;
+    padding: 0.6rem 0.75rem;
     overflow-y: auto;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
     color: var(--led-amber);
     text-shadow: 0 0 4px rgba(255,177,0,0.4);
     font-family: 'Space Mono', monospace;
 }
-@media (min-width: 640px) { .action-log { height: 8rem; } }
+@media (min-width: 640px) { .action-log { max-height: 5.25rem; } }
 .action-log, .field-entries { scrollbar-width: thin; scrollbar-color: var(--case-shadow) var(--case-deep); }
 
 /* ============================================================
@@ -530,8 +541,13 @@ a { color: inherit; text-decoration: none; }
     border-radius: 999px;
     background: var(--key-cream);
     color: var(--ink);
-    transition: transform 0.08s, background-color 0.15s;
+    transition: transform 0.08s, background-color 0.15s, color 0.15s;
 }
+.field-picker-btn:nth-child(5n+1) { border-color: var(--key-red); }
+.field-picker-btn:nth-child(5n+2) { border-color: var(--key-amber); }
+.field-picker-btn:nth-child(5n+3) { border-color: var(--key-teal); }
+.field-picker-btn:nth-child(5n+4) { border-color: var(--key-violet); }
+.field-picker-btn:nth-child(5n+5) { border-color: #4a72c9; }
 .field-picker-btn:hover { background: #fff; }
 .field-picker-btn.active.tag { background: var(--key-violet); color: var(--key-cream); }
 .field-picker-btn.active.zone { background: var(--key-teal); color: var(--key-cream); }
@@ -607,8 +623,8 @@ a { color: inherit; text-decoration: none; }
     font-size: 0.55rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    color: var(--ink);
-    background: var(--key-cream);
+    color: var(--key-cream);
+    background: var(--key-amber);
     border: 2px solid var(--ink);
     border-radius: 6px;
     padding: 0.45rem 0.75rem;
@@ -667,17 +683,17 @@ a { color: inherit; text-decoration: none; }
 .overlay-close-btn {
     margin-top: 2rem;
     padding: 0.6rem 1.75rem;
-    border: 3px solid var(--key-cream);
+    border: 3px solid var(--key-amber);
     border-radius: 8px;
     background: transparent;
-    color: var(--key-cream);
+    color: var(--key-amber);
     font-family: var(--font-display);
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     transition: background-color 0.15s, color 0.15s;
 }
-.overlay-close-btn:hover { background-color: var(--key-cream); color: var(--screen); }
+.overlay-close-btn:hover { background-color: var(--key-amber); color: var(--screen); }
 
 .end-desc { font-size: 1rem; color: var(--led-teal); margin-bottom: 2rem; max-width: 28rem; }
 
@@ -690,16 +706,16 @@ a { color: inherit; text-decoration: none; }
 
 .end-btn {
     padding: 0.75rem 1.5rem;
-    border: 3px solid var(--key-cream);
+    border: 3px solid var(--key-teal);
     border-radius: 8px;
     background: transparent;
-    color: var(--key-cream);
+    color: var(--key-teal);
     font-family: var(--font-display);
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     transition: background-color 0.15s, color 0.15s;
 }
-.end-btn:hover { background-color: var(--key-cream); color: var(--screen); }
+.end-btn:hover { background-color: var(--key-teal); color: var(--screen); }
 .end-btn.ngplus { border-color: var(--key-violet); color: var(--key-violet); }
 .end-btn.ngplus:hover { background-color: var(--key-violet); color: var(--key-cream); }

@@ -196,7 +196,7 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--key-violet);
-    margin-left: 1.4rem;
+    margin-left: 2.5rem;
 }
 @media (min-width: 768px) { .editor-title { font-size: 0.8rem; } }
 .editor-back-link {

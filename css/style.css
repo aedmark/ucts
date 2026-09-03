@@ -48,6 +48,13 @@ a { color: inherit; text-decoration: none; }
     --led-teal: #2fe0c4;
     --led-teal-dim: #0e6e5e;
 
+    /* Same three hues, darkened for text sitting on the cream case
+       instead of the dark screen — the bright LED tones read fine
+       glowing on --screen but wash out against --case. */
+    --label-red: #a5281a;
+    --label-amber: #7a4f00;
+    --label-teal: #0a5a4c;
+
     --key-red: #e3543f;
     --key-amber: #eda123;
     --key-teal: #2f9e8f;
@@ -139,7 +146,7 @@ a { color: inherit; text-decoration: none; }
     gap: 0.5rem;
 }
 @media (min-width: 640px) { .app-header { padding: 1rem 1.25rem; } }
-.app-header > .row:first-child { margin-left: 1.4rem; }
+.app-header > .row:first-child { margin-left: 2.5rem; }
 
 .app-title {
     font-family: var(--font-display);
@@ -262,9 +269,9 @@ a { color: inherit; text-decoration: none; }
     letter-spacing: 0.02em;
     color: var(--ink);
 }
-.stat-label-row.repression span:first-child { color: var(--led-red); text-shadow: 0 0 6px rgba(255,82,64,0.5); }
-.stat-label-row.mask span:first-child { color: var(--led-amber); text-shadow: 0 0 6px rgba(255,177,0,0.5); }
-.stat-label-row.child span:first-child { color: var(--led-teal); text-shadow: 0 0 6px rgba(47,224,196,0.5); }
+.stat-label-row.repression span:first-child { color: var(--label-red); }
+.stat-label-row.mask span:first-child { color: var(--label-amber); }
+.stat-label-row.child span:first-child { color: var(--label-teal); }
 
 .stat-bar-container {
     width: 100%;

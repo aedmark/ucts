@@ -33,7 +33,7 @@ Global numbers that shape the whole run, not any one event:
 | Mechanism Unlock Threshold | How many times you have to pick the *same* response type before it "locks in" as a coping mechanism. Default `3`. |
 | Glitch Chance (0-1) | Odds, each turn, of a bonus fourth choice with fully random effects. `0.15` = 15%. |
 | Weak Zone Weight | How much more likely an event is to be picked when its zone matches your worst stat. `2.5` means 2.5x the normal odds. `1` would turn this off entirely (pure random selection). |
-| Repression / Mask / Inner Child Bar Name | What the stats panel and the ↑/↓ choice hints call each stat. Purely cosmetic — the underlying `repression`/`mask`/`child` keys used everywhere else (zone bias, ending conditions, mechanism mods) don't change, so renaming a bar doesn't rewire what it tracks. |
+| Repression / Mask / Inner Child Bar Name | What the stats panel calls each stat. Purely cosmetic — the underlying `repression`/`mask`/`child` keys used everywhere else (zone bias, ending conditions, mechanism mods) don't change, so renaming a bar doesn't rewire what it tracks. |
 
 ### Zones
 
@@ -77,7 +77,7 @@ This is the actual content — the scenarios players click through. Each event h
 Each choice has:
 - **Text** — the button label the player sees and clicks.
 - **Response** — which of the five mechanism tags this choice represents.
-- **Rep / Mask / Child** — the raw stat effect (can be positive, negative, or zero on each). These are *hidden magnitudes* — the player only ever sees an ↑ or ↓ arrow per stat, never the number, so the exact value is entirely your call as the author.
+- **Rep / Mask / Child** — the raw stat effect (can be positive, negative, or zero on each). These are *entirely hidden* — the player sees no arrow, no number, no direction of any kind before picking, only the button text and whatever the log line says afterward. The exact value, and how honestly the button text foreshadows it, is entirely your call as the author.
 - **Log line** — what appears in the action log footer when this choice is picked, e.g. *"You debased yourself for a misplaced comma."*
 
 ## Walkthrough: writing one event start to finish

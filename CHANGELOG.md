@@ -2,6 +2,12 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.8.0] - 2026-09-04
+
+### Changed
+- **Choice buttons no longer show a stat-direction hint.** Every choice used to carry a small "↑ Repression | ↓ Mask"-style line under the button text — a hidden magnitude, but a telegraphed direction. That's gone: picking a choice is now a genuine surprise, with only the button's own text (and, after the fact, the log line and the bars themselves) to go on. Also dropped the glitch choice's now-redundant "OUTCOME UNKNOWN" label, since that's true of every choice now, not just that one — it's still the only one whose effects are randomized fresh each time rather than authored.
+- `README.md` and `AUTHORING.md` updated to match — both used to describe the ↑/↓ hint as part of how the game works, which is no longer true.
+
 ## [4.7.0] - 2026-09-03
 
 ### Added

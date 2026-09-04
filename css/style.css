@@ -449,14 +449,6 @@ a { color: inherit; text-decoration: none; }
 .choice-btn:nth-child(4n+2):hover { box-shadow: 0 3px 0 var(--key-teal); }
 .choice-btn:nth-child(4n+3):hover { box-shadow: 0 3px 0 var(--key-amber); }
 .choice-btn:nth-child(4n+4):hover { box-shadow: 0 3px 0 var(--key-violet); }
-.choice-hint {
-    font-family: var(--font-display);
-    font-size: 0.55rem;
-    color: var(--ink-soft);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    margin-top: 0.25rem;
-}
 .choice-btn.glitch {
     border-style: dashed;
     border-color: var(--key-violet);

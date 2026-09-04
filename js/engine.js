@@ -293,27 +293,17 @@ function loadRandomEvent() {
 
     elChoicesContainer.innerHTML = '';
 
+    // No stat-direction hint on the button — the whole point now is that you
+    // don't know what a choice does until you've picked it and watched the
+    // bars move.
     (evt.choices || []).forEach(choice => {
         const fx = choice.effects || {};
         const btn = document.createElement('button');
         btn.className = "choice-btn";
 
-        const labels = statLabels();
-        let hints = [];
-        if (fx.rep > 0) hints.push(`↑ ${labels.repression}`);
-        if (fx.rep < 0) hints.push(`↓ ${labels.repression}`);
-        if (fx.mask > 0) hints.push(`↑ ${labels.mask}`);
-        if (fx.mask < 0) hints.push(`↓ ${labels.mask}`);
-        if (fx.child > 0) hints.push(`↑ ${labels.child}`);
-        if (fx.child < 0) hints.push(`↓ ${labels.child}`);
-
         const textSpan = document.createElement('span');
         textSpan.textContent = choice.text || "...";
-        const hintSpan = document.createElement('span');
-        hintSpan.className = "choice-hint";
-        hintSpan.textContent = hints.join(' | ');
         btn.appendChild(textSpan);
-        btn.appendChild(hintSpan);
 
         btn.onclick = () => handleChoice(fx, choice.log, choice.tag || null);
         elChoicesContainer.appendChild(btn);
@@ -322,10 +312,7 @@ function loadRandomEvent() {
     if (Math.random() < content.config.glitchChance) {
         const glitchBtn = document.createElement('button');
         glitchBtn.className = "choice-btn glitch";
-        glitchBtn.innerHTML = `
-            <span>??? Do something you can't predict.</span>
-            <span class="choice-hint">OUTCOME UNKNOWN</span>
-        `;
+        glitchBtn.innerHTML = `<span>??? Do something you can't predict.</span>`;
         glitchBtn.onclick = handleGlitchChoice;
         elChoicesContainer.appendChild(glitchBtn);
     }

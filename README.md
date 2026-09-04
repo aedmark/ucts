@@ -10,7 +10,7 @@ Open `index.html`. That's the whole install. It works the same as a local `file:
 
 ## The Loop
 
-You start with three stats and a turn limit. Each turn, an event fires — a short scenario — and you pick one of two to five responses. Each response nudges the three stats up or down by an amount you don't see (you only ever get an ↑ or ↓ hint per stat, never the number), and writes a line to the action log. Do this until you either bottom out a stat or survive to the turn limit.
+You start with three stats and a turn limit. Each turn, an event fires — a short scenario — and you pick one of two to five responses. Each response nudges the three stats up or down by an amount you never see — no hint, no preview, just the button text — and writes a line to the action log once you've committed to it. Do this until you either bottom out a stat or survive to the turn limit.
 
 ## The Three Stats
 
@@ -26,7 +26,7 @@ Survive every turn without any of the three failing, and you get a **Survival En
 
 ## The Five Responses
 
-Every choice you click is secretly tagged as one of five trauma responses — `fawn`, `flight`, `fight`, `freeze`, `secure`. You never see the tag while picking; you just see the button text and the stat hints.
+Every choice you click is secretly tagged as one of five trauma responses — `fawn`, `flight`, `fight`, `freeze`, `secure`. You never see the tag while picking, and you never see what it does to your stats either — you just see the button text, and find out the rest by watching the bars move after you've already chosen.
 
 Lean on the same response three times in one run and it permanently unlocks as a **Coping Mechanism**. From then on, every choice of that type also carries a passive modifier stacked on top of its own written-in effect, for the rest of the run. Four of the five compound something you probably don't want more of — `freeze`'s default modifier, for instance, is more Repression buildup and more cost to your Inner Child, every single time you freeze again. The fifth, `secure`, compounds something you do want: less Repression, more Inner Child, every time.
 
@@ -38,7 +38,7 @@ Every event belongs to a zone — `WORK`, `HOME`, `SOCIAL`, `SELF` by default �
 
 ## The Glitch
 
-Each turn carries a small chance (15% by default) of a fourth, unlabeled choice with fully randomized effects — no hint, no tag, no telegraphed outcome. It's the one moment per run where the game stops pretending you're in control of the outcome, only of whether you take the bet.
+Each turn carries a small chance (15% by default) of a fourth, unlabeled choice. Every choice's effects are already hidden from you — the glitch's are hidden from the game too: fully randomized on the spot, untagged, and never repeated the same way twice. It's the one moment per run where nobody, including whoever wrote the content pack, knows what's about to happen.
 
 ## Extended Therapy
 

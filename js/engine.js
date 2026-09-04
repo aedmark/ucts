@@ -207,11 +207,39 @@ function endGame(title, desc, win = false) {
     elEndNgPlusBtn.classList.toggle('hidden', state.hardMode || !isNgPlusUnlocked());
 }
 
+// A stat's raw effect can be a plain number (legacy — an implicit relative
+// delta, the only format that's ever existed) or, as of the Add/Subtract/Set
+// expansion, { op: "add"|"subtract"|"set", value }. Either way this resolves
+// to a plain relative delta before anything else (mechanism mods, hard-mode
+// scaling) touches it, so nothing downstream needs to know the difference.
+// No existing content uses the object form — this only exists so future
+// choices can opt in.
+function resolveStatEffect(raw, currentValue) {
+    if (raw == null) return 0;
+    if (typeof raw === 'number') return raw;
+    if (typeof raw === 'object') {
+        const v = raw.value || 0;
+        if (raw.op === 'add') return v;
+        if (raw.op === 'subtract') return -v;
+        if (raw.op === 'set') return v - currentValue;
+    }
+    return 0;
+}
+function resolveEffects(rawEffects) {
+    rawEffects = rawEffects || {};
+    return {
+        rep: resolveStatEffect(rawEffects.rep, state.repression),
+        mask: resolveStatEffect(rawEffects.mask, state.mask),
+        child: resolveStatEffect(rawEffects.child, state.child)
+    };
+}
+
 function handleChoice(rawEffects, logMsg, tag) {
     if (state.isGameOver) return;
     const content = getContent();
 
-    let effects = tag ? applyMechanismModifiers(tag, rawEffects || {}) : (rawEffects || {});
+    const resolvedEffects = resolveEffects(rawEffects);
+    let effects = tag ? applyMechanismModifiers(tag, resolvedEffects) : resolvedEffects;
     if (state.hardMode) {
         const mult = content.config.hardModeMultiplier;
         effects = {

@@ -132,6 +132,28 @@ function buildConfigSection() {
         labelGrid.appendChild(labeledWrap(f.label, input));
     });
 
+    if (!cfg.splash) cfg.splash = { title: "", intro: "" };
+    const splashNote = document.createElement('p');
+    splashNote.className = "editor-note";
+    splashNote.textContent = "Splash Screen — shown once before the run starts. Leave blank to fall back to the game's own title and a generic prompt.";
+    wrap.appendChild(splashNote);
+
+    const splashTitleInput = document.createElement('input');
+    splashTitleInput.type = 'text';
+    splashTitleInput.className = "editor-input";
+    splashTitleInput.placeholder = "Splash title";
+    splashTitleInput.value = cfg.splash.title;
+    splashTitleInput.oninput = () => { cfg.splash.title = splashTitleInput.value; };
+    wrap.appendChild(splashTitleInput);
+
+    const splashIntroArea = document.createElement('textarea');
+    splashIntroArea.rows = 3;
+    splashIntroArea.className = "editor-input";
+    splashIntroArea.placeholder = "Splash intro text — a blank line starts a new paragraph";
+    splashIntroArea.value = cfg.splash.intro;
+    splashIntroArea.oninput = () => { cfg.splash.intro = splashIntroArea.value; };
+    wrap.appendChild(splashIntroArea);
+
     return wrap;
 }
 
@@ -697,12 +719,7 @@ function buildChoiceRow(evt, choice, cIdx) {
     metaRow.appendChild(labeledWrap("Response", tagSelect));
 
     ["rep", "mask", "child"].forEach(k => {
-        const input = document.createElement('input');
-        input.type = 'number';
-        input.className = "editor-input";
-        input.value = choice.effects[k] || 0;
-        input.oninput = () => { const v = parseFloat(input.value); choice.effects[k] = isNaN(v) ? 0 : v; };
-        metaRow.appendChild(labeledWrap(k, input));
+        metaRow.appendChild(buildStatEffectControl(choice, k));
     });
 
     const removeChoiceBtn = document.createElement('button');
@@ -726,6 +743,72 @@ function buildChoiceRow(evt, choice, cIdx) {
     row.appendChild(logInput);
 
     return row;
+}
+
+const STAT_EFFECT_MODES = [
+    { value: "legacy", label: "±" },
+    { value: "add", label: "+" },
+    { value: "subtract", label: "−" },
+    { value: "set", label: "=" }
+];
+
+// A choice's per-stat effect is either a plain signed number (legacy — every
+// existing choice in every existing pack) or { op, value }, added so authors
+// who'd rather pick "Subtract 15" than type "-15" can opt in per stat. The
+// "±" mode is the plain-number legacy input, unchanged from before this
+// existed; switching to +/-/= converts that one stat's effect in place.
+function buildStatEffectControl(choice, statKey) {
+    const box = document.createElement('div');
+    const label = document.createElement('label');
+    label.className = "editor-label";
+    label.textContent = statKey;
+    box.appendChild(label);
+
+    const row = document.createElement('div');
+    row.className = "editor-stat-effect-row";
+
+    const raw = choice.effects[statKey];
+    const isOpMode = raw !== null && typeof raw === 'object';
+    const currentMode = isOpMode ? raw.op : 'legacy';
+
+    const modeSelect = document.createElement('select');
+    modeSelect.className = "editor-input editor-stat-op-select";
+    modeSelect.title = "± is a plain relative number, as before. + / − add or subtract a magnitude. = sets the stat to an exact value.";
+    STAT_EFFECT_MODES.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.value; opt.textContent = m.label;
+        if (m.value === currentMode) opt.selected = true;
+        modeSelect.appendChild(opt);
+    });
+
+    const valueInput = document.createElement('input');
+    valueInput.type = 'number';
+    valueInput.className = "editor-input";
+    valueInput.value = isOpMode ? (raw.value || 0) : (raw || 0);
+
+    modeSelect.onchange = () => {
+        const mode = modeSelect.value;
+        const cur = choice.effects[statKey];
+        if (mode === 'legacy') {
+            choice.effects[statKey] = (cur !== null && typeof cur === 'object') ? (cur.value || 0) : 0;
+        } else {
+            const magnitude = (cur !== null && typeof cur === 'object') ? (cur.value || 0) : Math.abs(cur || 0);
+            choice.effects[statKey] = { op: mode, value: magnitude };
+        }
+        renderEditor();
+    };
+    valueInput.oninput = () => {
+        const v = parseFloat(valueInput.value);
+        const clean = isNaN(v) ? 0 : v;
+        const cur = choice.effects[statKey];
+        if (cur !== null && typeof cur === 'object') cur.value = clean;
+        else choice.effects[statKey] = clean;
+    };
+
+    row.appendChild(modeSelect);
+    row.appendChild(valueInput);
+    box.appendChild(row);
+    return box;
 }
 
 function logEditorStatus(msg) {

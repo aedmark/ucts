@@ -2,6 +2,12 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.10.0] - 2026-09-04
+
+### Added
+- **Splash / title screen.** Shown once, before the first turn, covering the app until the player clicks Start — `config.splash: { title, intro }` in the content pack, editable from the editor's Config tab. Falls back to the game's own title and a generic prompt if a pack doesn't define one (or predates the field), so nothing regresses for existing packs. Only shows on the very first load — restarting a run, hitting a failure ending, or unlocking Extended Therapy doesn't bring it back.
+- **Add/Subtract/Set effect inputs**, as an alternative to typing a signed number for a choice's stat effect. Each of a choice's three stat effects can now be a plain number (unchanged — every existing event still uses this) or `{ op: "add"|"subtract"|"set", value }`: Add/Subtract apply a magnitude in that direction, Set pins the stat to an exact 0–100 value regardless of what it currently is. All three resolve to an ordinary relative delta before mechanism mods or Extended Therapy's multiplier ever see it, so nothing downstream changed. The editor has a small `±`/`+`/`−`/`=` selector next to each stat input; switching modes converts just that one stat in place. This is additive only — no existing content was touched or needs to be.
+
 ## [4.9.0] - 2026-09-04
 
 ### Added

@@ -10,6 +10,13 @@ const DEFAULT_CONTENT = {
         // stats panel and in the ↑/↓ choice hints. The underlying keys
         // (repression/mask/child) are fixed and unrelated to these labels.
         statLabels: {repression: "Repression Level", mask: "Social Mask", child: "Inner Child"},
+        // Shown once, on first load, before the run starts. Optional — a pack
+        // missing this (or with blank title/intro) falls back to the game's
+        // own title and a generic prompt instead of skipping the screen.
+        splash: {
+            title: "U.C.T. Simulator",
+            intro: "Three stats. Ten turns. Every choice you click is quietly one of five ways people cope with a bad day — you won't know which, or what it costs, until it's already happened.\n\nPress Start when you're ready to find out."
+        },
         maxTurns: 10,
         hardModeTurns: 20,
         hardModeMultiplier: 1.25,

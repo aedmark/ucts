@@ -34,6 +34,7 @@ Global numbers that shape the whole run, not any one event:
 | Glitch Chance (0-1) | Odds, each turn, of a bonus fourth choice with fully random effects. `0.15` = 15%. |
 | Weak Zone Weight | How much more likely an event is to be picked when its zone matches your worst stat. `2.5` means 2.5x the normal odds. `1` would turn this off entirely (pure random selection). |
 | Repression / Mask / Inner Child Bar Name | What the stats panel calls each stat. Purely cosmetic — the underlying `repression`/`mask`/`child` keys used everywhere else (zone bias, ending conditions, mechanism mods) don't change, so renaming a bar doesn't rewire what it tracks. |
+| Splash Title / Splash Intro | Shown once, before the first turn, covering the whole app until the player clicks Start. Leave either blank and it falls back to the game's own title and a generic prompt rather than showing nothing. A blank line in the intro starts a new paragraph. Only shown on first load — restarting a run or unlocking Extended Therapy doesn't bring it back. |
 
 ### Zones
 
@@ -79,6 +80,8 @@ Each choice has:
 - **Text** — the button label the player sees and clicks.
 - **Response** — which of the five mechanism tags this choice represents.
 - **Rep / Mask / Child** — the raw stat effect (can be positive, negative, or zero on each). These are *entirely hidden* — the player sees no arrow, no number, no direction of any kind before picking, only the button text and whatever the log line says afterward. The exact value, and how honestly the button text foreshadows it, is entirely your call as the author.
+
+  Each stat's effect can be entered two ways, picked via the small mode selector (`±` / `+` / `−` / `=`) next to each number: a **plain signed number** (the default, and the only format every existing event uses — a relative delta, same as always), or one of three named operations if you'd rather not type a minus sign: **Add** a magnitude, **Subtract** a magnitude, or **Set** the stat to an exact value (0–100) regardless of what it currently is. All four resolve to the same kind of relative nudge under the hood — mechanism mods and Extended Therapy's multiplier stack on top exactly the same way either way. This is purely an authoring convenience for new choices; nothing about existing content needs to change or gets touched by it.
 - **Log line** — what appears in the action log footer when this choice is picked, e.g. *"You debased yourself for a misplaced comma."*
 
 ### The Wildcard
@@ -112,7 +115,7 @@ Export a pack to see the exact shape. The top level is:
 
 ```json
 {
-  "config": { "startingStats": { "repression": 20, "mask": 100, "child": 50 }, "statLabels": { "repression": "Repression Level", "mask": "Social Mask", "child": "Inner Child" }, "maxTurns": 10, "hardModeTurns": 20, "hardModeMultiplier": 1.25, "unlockThreshold": 3, "glitchChance": 0.15, "weakZoneWeight": 2.5 },
+  "config": { "startingStats": { "repression": 20, "mask": 100, "child": 50 }, "statLabels": { "repression": "Repression Level", "mask": "Social Mask", "child": "Inner Child" }, "splash": { "title": "U.C.T. Simulator", "intro": "Shown once before the run starts.\n\nBlank lines start new paragraphs." }, "maxTurns": 10, "hardModeTurns": 20, "hardModeMultiplier": 1.25, "unlockThreshold": 3, "glitchChance": 0.15, "weakZoneWeight": 2.5 },
   "zones": [ { "key": "WORK", "statBias": "repression" } ],
   "mechanisms": {
     "fawn":   { "name": "The Approval Loop", "mod": { "rep": 0,  "mask": 3,  "child": -5 } },
@@ -136,7 +139,8 @@ Export a pack to see the exact shape. The top level is:
       "title": "The Typo",
       "desc": "...",
       "choices": [
-        { "text": "...", "tag": "fawn", "effects": { "rep": -5, "mask": 10, "child": -15 }, "log": "..." }
+        { "text": "...", "tag": "fawn", "effects": { "rep": -5, "mask": 10, "child": -15 }, "log": "..." },
+        { "text": "An effect written with the Add/Subtract/Set expansion instead — same result as { \"rep\": -20 }.", "tag": "secure", "effects": { "rep": { "op": "subtract", "value": 20 }, "mask": { "op": "set", "value": 50 }, "child": 5 }, "log": "..." }
       ],
       "glitch": { "text": "The wildcard's button text.", "log": "What the action log says when it fires." }
     }
@@ -146,7 +150,7 @@ Export a pack to see the exact shape. The top level is:
 
 Requirements the importer actually checks: `config` is an object; `zones` is a non-empty array; `mechanisms` has all five keys (`fawn`/`flight`/`fight`/`freeze`/`secure`) present; `glitchLogs` is an array; `endings` is a non-empty array; `events` is a non-empty array. It doesn't deep-validate every field inside each event or choice, so a malformed individual event won't necessarily be caught at import — it'll just render oddly (missing text shows as `...`, missing effects default to `0`). When in doubt, edit through the UI, which can't produce a malformed shape in the first place.
 
-`failureEndings`, `config.statLabels`, and each event's `glitch` are all optional — a pack from before these existed imports fine and just falls back to the built-in defaults (or the pack-wide `glitchLogs` pool, for `glitch`) for whichever it's missing.
+`failureEndings`, `config.statLabels`, `config.splash`, and each event's `glitch` are all optional — a pack from before these existed imports fine and just falls back to the built-in defaults (or the pack-wide `glitchLogs` pool, for `glitch`) for whichever it's missing. The `{ "op", "value" }` form for a choice's per-stat effect is likewise optional on a per-stat basis — a plain number works everywhere it always has.
 
 ## Design notes
 

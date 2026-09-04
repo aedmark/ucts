@@ -161,6 +161,13 @@
             </div>
         </div>
 
+        <!-- Splash / Title Screen (shown via JS on first load, per-pack customizable) -->
+        <div id="splash-screen" class="hidden overlay overlay-splash">
+            <h2 id="splash-title" class="overlay-heading"></h2>
+            <div id="splash-intro" class="overlay-body"></div>
+            <button id="splash-start-btn" onclick="dismissSplash()" class="end-btn">Start</button>
+        </div>
+
     </main>
 
     <script src="js/content.js"></script>

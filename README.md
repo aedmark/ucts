@@ -8,6 +8,8 @@ Nothing about this leaves your browser. No server, no account, no analytics, no 
 
 Open `index.html`. That's the whole install. It works the same as a local `file://` file or hosted as static files anywhere (Neocities, GitHub Pages, wherever) — there's no server-side anything to set up.
 
+A title screen shows once before the first turn — its text is pack data too, so a custom content pack can replace it with its own name and a proper introduction instead of the default.
+
 ## The Loop
 
 You start with three stats and a turn limit. Each turn, an event fires — a short scenario — and you pick one of two to five responses. Each response nudges the three stats up or down by an amount you never see — no hint, no preview, just the button text — and writes a line to the action log once you've committed to it. Do this until you either bottom out a stat or survive to the turn limit.

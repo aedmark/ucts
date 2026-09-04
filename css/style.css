@@ -657,6 +657,7 @@ a { color: inherit; text-decoration: none; }
 @media (min-width: 640px) { .overlay { padding: 2rem; } }
 .overlay-help { z-index: 30; }
 .overlay-end { z-index: 20; }
+.overlay-splash { z-index: 40; }
 
 .overlay-heading {
     font-family: var(--font-display);

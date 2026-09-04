@@ -73,12 +73,19 @@ This is the actual content — the scenarios players click through. Each event h
 - **Zone** — which category it belongs to (must be one of your defined zones).
 - **Title** and **Description** — the trigger and its setup text.
 - **2 to 5 choices** — see below.
+- **Wildcard** (optional) — the event's own version of the 15%-chance fourth choice. See below.
 
 Each choice has:
 - **Text** — the button label the player sees and clicks.
 - **Response** — which of the five mechanism tags this choice represents.
 - **Rep / Mask / Child** — the raw stat effect (can be positive, negative, or zero on each). These are *entirely hidden* — the player sees no arrow, no number, no direction of any kind before picking, only the button text and whatever the log line says afterward. The exact value, and how honestly the button text foreshadows it, is entirely your call as the author.
 - **Log line** — what appears in the action log footer when this choice is picked, e.g. *"You debased yourself for a misplaced comma."*
+
+### The Wildcard
+
+Every event carries its own version of the random fourth choice (the glitch), rather than sharing one generic "??? Do something you can't predict" button across the whole pack. It's two fields — **Button Text** and **Log Line** — and both are optional per event: leave either blank and it falls back to the generic button text or a random line from the pack-wide `glitchLogs` pool, so a pack written before this existed (or a new event you haven't gotten to yet) still works.
+
+The wildcard should read differently from the event's other three choices — those are the grounded, specific-but-plausible options; the wildcard is where the simulation stops pretending to be realistic and gets deliberately unhinged. Its effects are still fully random every time regardless of what the button says (the text doesn't telegraph the outcome any more than the other choices do), so write it for the joke, not as a fourth balanced option.
 
 ## Walkthrough: writing one event start to finish
 
@@ -114,7 +121,7 @@ Export a pack to see the exact shape. The top level is:
     "freeze": { "name": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } },
     "secure": { "name": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } }
   },
-  "glitchLogs": [ "A line shown when the random glitch choice fires." ],
+  "glitchLogs": [ "A fallback line for the wildcard choice, used when an event doesn't define its own." ],
   "failureEndings": {
     "repression": { "title": "Panic Attack", "desc": "Shown when repression hits 100." },
     "mask": { "title": "Social Exile", "desc": "Shown when mask hits 0." },
@@ -130,7 +137,8 @@ Export a pack to see the exact shape. The top level is:
       "desc": "...",
       "choices": [
         { "text": "...", "tag": "fawn", "effects": { "rep": -5, "mask": 10, "child": -15 }, "log": "..." }
-      ]
+      ],
+      "glitch": { "text": "The wildcard's button text.", "log": "What the action log says when it fires." }
     }
   ]
 }
@@ -138,7 +146,7 @@ Export a pack to see the exact shape. The top level is:
 
 Requirements the importer actually checks: `config` is an object; `zones` is a non-empty array; `mechanisms` has all five keys (`fawn`/`flight`/`fight`/`freeze`/`secure`) present; `glitchLogs` is an array; `endings` is a non-empty array; `events` is a non-empty array. It doesn't deep-validate every field inside each event or choice, so a malformed individual event won't necessarily be caught at import — it'll just render oddly (missing text shows as `...`, missing effects default to `0`). When in doubt, edit through the UI, which can't produce a malformed shape in the first place.
 
-`failureEndings` and `config.statLabels` are both optional — a pack from before these existed imports fine and just falls back to the built-in defaults for whichever it's missing.
+`failureEndings`, `config.statLabels`, and each event's `glitch` are all optional — a pack from before these existed imports fine and just falls back to the built-in defaults (or the pack-wide `glitchLogs` pool, for `glitch`) for whichever it's missing.
 
 ## Design notes
 

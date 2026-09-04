@@ -459,7 +459,8 @@ function newBlankEvent(zoneKey) {
         choices: [
             { text: "First response.", tag: "fawn", effects: { rep: 0, mask: 0, child: 0 }, log: "Logged reaction." },
             { text: "Second response.", tag: "secure", effects: { rep: 0, mask: 0, child: 0 }, log: "Logged reaction." }
-        ]
+        ],
+        glitch: { text: "", log: "" }
     };
 }
 
@@ -636,7 +637,37 @@ function buildEventCard(evt, idx) {
     };
     card.appendChild(addChoiceBtn);
 
+    card.appendChild(buildEventGlitchRow(evt));
+
     return card;
+}
+
+function buildEventGlitchRow(evt) {
+    if (!evt.glitch) evt.glitch = { text: "", log: "" };
+
+    const wrap = document.createElement('div');
+    wrap.className = "editor-glitch-row";
+
+    const label = document.createElement('div');
+    label.className = "editor-tag-label";
+    label.textContent = "Wildcard (15% chance, untagged, random effects)";
+    wrap.appendChild(label);
+
+    const textInput = document.createElement('input');
+    textInput.className = "editor-input";
+    textInput.placeholder = "Button text — leave blank for the generic default";
+    textInput.value = evt.glitch.text;
+    textInput.oninput = () => { evt.glitch.text = textInput.value; };
+    wrap.appendChild(textInput);
+
+    const logInput = document.createElement('input');
+    logInput.className = "editor-input";
+    logInput.placeholder = "Action log line — leave blank to pull from the pack's shared pool";
+    logInput.value = evt.glitch.log;
+    logInput.oninput = () => { evt.glitch.log = logInput.value; };
+    wrap.appendChild(logInput);
+
+    return wrap;
 }
 
 function buildChoiceRow(evt, choice, cIdx) {

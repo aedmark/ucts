@@ -358,3 +358,16 @@ details.force-open > .editor-zone-cards { display: flex !important; }
 .editor-zone-group > .editor-btn {
     margin: 0 0.75rem 0.75rem;
 }
+.editor-glitch-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.6rem;
+    border: 2px dashed var(--key-violet);
+    border-radius: 6px;
+    background: var(--case-deep);
+}
+.editor-glitch-row .editor-tag-label {
+    width: auto;
+    color: var(--key-violet);
+}

@@ -38,7 +38,7 @@ Every event belongs to a zone — `WORK`, `HOME`, `SOCIAL`, `SELF` by default �
 
 ## The Glitch
 
-Each turn carries a small chance (15% by default) of a fourth, unlabeled choice. Every choice's effects are already hidden from you — the glitch's are hidden from the game too: fully randomized on the spot, untagged, and never repeated the same way twice. It's the one moment per run where nobody, including whoever wrote the content pack, knows what's about to happen.
+Each turn carries a small chance (15% by default) of a fourth choice — a wildcard, written per event so it actually reacts to what's happening rather than reading like a system message. Every choice's effects are already hidden from you; the glitch's are hidden from the game too: fully randomized on the spot, untagged, and never repeated the same way twice. It's the one moment per run where nobody, including whoever wrote the content pack, knows what's about to happen.
 
 ## Extended Therapy
 

@@ -236,7 +236,7 @@ function handleChoice(rawEffects, logMsg, tag) {
     }
 }
 
-function handleGlitchChoice() {
+function handleGlitchChoice(evt) {
     if (state.isGameOver) return;
     const content = getContent();
     const effects = {
@@ -244,8 +244,16 @@ function handleGlitchChoice() {
         mask: Math.floor(Math.random() * 51) - 25,
         child: Math.floor(Math.random() * 51) - 25
     };
-    const logs = content.glitchLogs.length ? content.glitchLogs : ["Something happened."];
-    const log = logs[Math.floor(Math.random() * logs.length)];
+    // Each event can write its own wildcard log line; packs saved before
+    // that existed (or an event nobody's gotten to yet) fall back to the
+    // pack-wide pool.
+    let log;
+    if (evt && evt.glitch && evt.glitch.log) {
+        log = evt.glitch.log;
+    } else {
+        const logs = content.glitchLogs.length ? content.glitchLogs : ["Something happened."];
+        log = logs[Math.floor(Math.random() * logs.length)];
+    }
     handleChoice(effects, log, null);
 }
 
@@ -312,8 +320,12 @@ function loadRandomEvent() {
     if (Math.random() < content.config.glitchChance) {
         const glitchBtn = document.createElement('button');
         glitchBtn.className = "choice-btn glitch";
-        glitchBtn.innerHTML = `<span>??? Do something you can't predict.</span>`;
-        glitchBtn.onclick = handleGlitchChoice;
+        const glitchTextSpan = document.createElement('span');
+        // Built with textContent, not innerHTML — evt.glitch.text can come
+        // from an imported pack, same as choice text elsewhere.
+        glitchTextSpan.textContent = (evt.glitch && evt.glitch.text) || "??? Do something you can't predict.";
+        glitchBtn.appendChild(glitchTextSpan);
+        glitchBtn.onclick = () => handleGlitchChoice(evt);
         elChoicesContainer.appendChild(glitchBtn);
     }
 }

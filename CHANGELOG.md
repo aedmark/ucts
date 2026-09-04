@@ -2,6 +2,12 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.9.0] - 2026-09-04
+
+### Added
+- **Every event now has its own wildcard.** The random fourth choice used to share one generic button ("??? Do something you can't predict.") and a pack-wide pool of five generic log lines across all 100 events — flat, and easy to miss the point of picking it. Each event now optionally defines its own `glitch: { text, log }`, written to react to that specific scenario rather than reading like a system message. All 100 shipped events got one. The editor has a new dashed-border "Wildcard" field on every event card for it.
+- The `glitch` field is optional and per-event — a pack saved before this existed, or a newly added event nobody's written one for yet, falls back to the generic button text and the pack's `glitchLogs` pool exactly as before. The mechanic itself is unchanged: still a 15%-default chance, still fully randomized effects, still untagged (doesn't count toward coping mechanism unlocks).
+
 ## [4.8.0] - 2026-09-04
 
 ### Changed

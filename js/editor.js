@@ -746,18 +746,28 @@ function buildChoiceRow(evt, choice, cIdx) {
 }
 
 const STAT_EFFECT_MODES = [
-    { value: "legacy", label: "±" },
     { value: "add", label: "+" },
     { value: "subtract", label: "−" },
     { value: "set", label: "=" }
 ];
 
-// A choice's per-stat effect is either a plain signed number (legacy — every
-// existing choice in every existing pack) or { op, value }, added so authors
-// who'd rather pick "Subtract 15" than type "-15" can opt in per stat. The
-// "±" mode is the plain-number legacy input, unchanged from before this
-// existed; switching to +/-/= converts that one stat's effect in place.
+// A choice's per-stat effect is always { op, value } here — Add/Subtract a
+// magnitude, or Set an exact 0-100 value. The built-in pack was migrated to
+// this shape rather than living alongside it, so the editor never needs to
+// show two different kinds of control for "old" vs "new" choices. A plain
+// signed number is still accepted at the engine/import level (an older
+// exported pack, or hand-edited JSON) — encountering one here just
+// normalizes it in place the instant this card renders, losslessly, so the
+// dropdown always reflects a real selection instead of defaulting to
+// whichever option happens to be first.
 function buildStatEffectControl(choice, statKey) {
+    const current = choice.effects[statKey];
+    if (current === null || typeof current !== 'object') {
+        const v = current || 0;
+        choice.effects[statKey] = { op: v < 0 ? "subtract" : "add", value: Math.abs(v) };
+    }
+    const raw = choice.effects[statKey];
+
     const box = document.createElement('div');
     const label = document.createElement('label');
     label.className = "editor-label";
@@ -767,42 +777,24 @@ function buildStatEffectControl(choice, statKey) {
     const row = document.createElement('div');
     row.className = "editor-stat-effect-row";
 
-    const raw = choice.effects[statKey];
-    const isOpMode = raw !== null && typeof raw === 'object';
-    const currentMode = isOpMode ? raw.op : 'legacy';
-
     const modeSelect = document.createElement('select');
     modeSelect.className = "editor-input editor-stat-op-select";
-    modeSelect.title = "± is a plain relative number, as before. + / − add or subtract a magnitude. = sets the stat to an exact value.";
+    modeSelect.title = "+ / − add or subtract a magnitude. = sets the stat to an exact value.";
     STAT_EFFECT_MODES.forEach(m => {
         const opt = document.createElement('option');
         opt.value = m.value; opt.textContent = m.label;
-        if (m.value === currentMode) opt.selected = true;
+        if (m.value === raw.op) opt.selected = true;
         modeSelect.appendChild(opt);
     });
+    modeSelect.onchange = () => { raw.op = modeSelect.value; };
 
     const valueInput = document.createElement('input');
     valueInput.type = 'number';
     valueInput.className = "editor-input";
-    valueInput.value = isOpMode ? (raw.value || 0) : (raw || 0);
-
-    modeSelect.onchange = () => {
-        const mode = modeSelect.value;
-        const cur = choice.effects[statKey];
-        if (mode === 'legacy') {
-            choice.effects[statKey] = (cur !== null && typeof cur === 'object') ? (cur.value || 0) : 0;
-        } else {
-            const magnitude = (cur !== null && typeof cur === 'object') ? (cur.value || 0) : Math.abs(cur || 0);
-            choice.effects[statKey] = { op: mode, value: magnitude };
-        }
-        renderEditor();
-    };
+    valueInput.value = raw.value || 0;
     valueInput.oninput = () => {
         const v = parseFloat(valueInput.value);
-        const clean = isNaN(v) ? 0 : v;
-        const cur = choice.effects[statKey];
-        if (cur !== null && typeof cur === 'object') cur.value = clean;
-        else choice.effects[statKey] = clean;
+        raw.value = isNaN(v) ? 0 : v;
     };
 
     row.appendChild(modeSelect);

@@ -81,7 +81,9 @@ Each choice has:
 - **Response** — which of the five mechanism tags this choice represents.
 - **Rep / Mask / Child** — the raw stat effect (can be positive, negative, or zero on each). These are *entirely hidden* — the player sees no arrow, no number, no direction of any kind before picking, only the button text and whatever the log line says afterward. The exact value, and how honestly the button text foreshadows it, is entirely your call as the author.
 
-  Each stat's effect can be entered two ways, picked via the small mode selector (`±` / `+` / `−` / `=`) next to each number: a **plain signed number** (the default, and the only format every existing event uses — a relative delta, same as always), or one of three named operations if you'd rather not type a minus sign: **Add** a magnitude, **Subtract** a magnitude, or **Set** the stat to an exact value (0–100) regardless of what it currently is. All four resolve to the same kind of relative nudge under the hood — mechanism mods and Extended Therapy's multiplier stack on top exactly the same way either way. This is purely an authoring convenience for new choices; nothing about existing content needs to change or gets touched by it.
+  Each stat's effect is one of three named operations, picked via the small mode selector (`+` / `−` / `=`) next to each number: **Add** a magnitude, **Subtract** a magnitude, or **Set** the stat to an exact value (0–100) regardless of what it currently is. All three resolve to the same kind of relative nudge under the hood — mechanism mods and Extended Therapy's multiplier stack on top exactly the same way regardless of which one wrote the base effect. This is the only form the editor writes or displays; every built-in event uses it.
+
+  A plain signed number (e.g. `-15`) is still accepted wherever a pack gets loaded — hand-edited JSON, or a pack exported before this existed — so nothing breaks on import. The editor just normalizes it into Add/Subtract the instant that choice's card renders, so you'll never see a stray fourth "legacy" mode sitting next to the other three.
 - **Log line** — what appears in the action log footer when this choice is picked, e.g. *"You debased yourself for a misplaced comma."*
 
 ### The Wildcard
@@ -139,8 +141,8 @@ Export a pack to see the exact shape. The top level is:
       "title": "The Typo",
       "desc": "...",
       "choices": [
-        { "text": "...", "tag": "fawn", "effects": { "rep": -5, "mask": 10, "child": -15 }, "log": "..." },
-        { "text": "An effect written with the Add/Subtract/Set expansion instead — same result as { \"rep\": -20 }.", "tag": "secure", "effects": { "rep": { "op": "subtract", "value": 20 }, "mask": { "op": "set", "value": 50 }, "child": 5 }, "log": "..." }
+        { "text": "...", "tag": "fawn", "effects": { "rep": { "op": "subtract", "value": 5 }, "mask": { "op": "add", "value": 10 }, "child": { "op": "subtract", "value": 15 } }, "log": "..." },
+        { "text": "A plain number still works too — same result as { \"op\": \"subtract\", \"value\": 20 } — for hand-edited JSON or a pack exported before this existed.", "tag": "secure", "effects": { "rep": -20, "mask": { "op": "set", "value": 50 }, "child": 5 }, "log": "..." }
       ],
       "glitch": { "text": "The wildcard's button text.", "log": "What the action log says when it fires." }
     }
@@ -150,7 +152,7 @@ Export a pack to see the exact shape. The top level is:
 
 Requirements the importer actually checks: `config` is an object; `zones` is a non-empty array; `mechanisms` has all five keys (`fawn`/`flight`/`fight`/`freeze`/`secure`) present; `glitchLogs` is an array; `endings` is a non-empty array; `events` is a non-empty array. It doesn't deep-validate every field inside each event or choice, so a malformed individual event won't necessarily be caught at import — it'll just render oddly (missing text shows as `...`, missing effects default to `0`). When in doubt, edit through the UI, which can't produce a malformed shape in the first place.
 
-`failureEndings`, `config.statLabels`, `config.splash`, and each event's `glitch` are all optional — a pack from before these existed imports fine and just falls back to the built-in defaults (or the pack-wide `glitchLogs` pool, for `glitch`) for whichever it's missing. The `{ "op", "value" }` form for a choice's per-stat effect is likewise optional on a per-stat basis — a plain number works everywhere it always has.
+`failureEndings`, `config.statLabels`, `config.splash`, and each event's `glitch` are all optional — a pack from before these existed imports fine and just falls back to the built-in defaults (or the pack-wide `glitchLogs` pool, for `glitch`) for whichever it's missing. A plain number is likewise still accepted for any choice's per-stat effect — the editor writes and displays the `{ "op", "value" }` form exclusively now, but importing an older pack that still uses plain numbers works fine; that choice's numbers just get normalized into Add/Subtract the moment its card is opened in the editor.
 
 ## Design notes
 

@@ -2,6 +2,12 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.11.0] - 2026-09-04
+
+### Changed
+- **Retired the "±" legacy mode from the effect-input selector.** Having a fourth option that meant "none of the other three, just a plain signed number" sitting next to Add/Subtract/Set was more confusing than it was worth, especially once it was the *only* thing distinguishing old choices from new ones. All 900 stat effects (100 events × 3 choices × 3 stats) in the built-in pack were migrated from plain numbers to `{ op, value }` — mechanically verified lossless first: every resolved delta checked bit-for-bit identical to the original numbers before the switch, nothing else in any event touched. The editor now only ever shows `+` / `−` / `=`.
+- Plain numbers are still accepted wherever a pack gets loaded (hand-edited JSON, or anything exported before this change) — the editor just normalizes one into Add/Subtract the instant that choice's card renders, so an older pack opens cleanly without ever surfacing the retired mode.
+
 ## [4.10.0] - 2026-09-04
 
 ### Added

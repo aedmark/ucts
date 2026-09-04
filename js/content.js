@@ -558,7 +558,7 @@ const DEFAULT_CONTENT = {
         },
         {
             zone: "WORK", title: "The Open Door Policy",
-            desc: "Your manager says 'my door is always open' during a meeting where the door has, notably, never once been open.",
+            desc: "Your manager says 'my door is always open' during a meeting. Their door has, notably, never once been open.",
             choices: [
                 {
                     text: "File it away as one more thing you won't actually bring up.",
@@ -576,12 +576,12 @@ const DEFAULT_CONTENT = {
                     text: "Test it. Walk over and knock.",
                     tag: "fight",
                     effects: {mask: -5, child: 10, rep: -5},
-                    log: "You checked the claim against the evidence."
+                    log: "You checked the claim against the evidence. You get lunch together and have a good time."
                 }
             ]
         },
         {
-            zone: "WORK", title: "The LinkedIn Congratulations",
+            zone: "WORK", title: "The LinkedIn Congrats",
             desc: "A peer from two roles ago just posted 'excited to announce' a title you quietly wanted for yourself.",
             choices: [
                 {
@@ -600,7 +600,7 @@ const DEFAULT_CONTENT = {
                     text: "Feel the envy, don't perform past it, close the app anyway.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "You let a small ugly feeling exist without narrating it to anyone."
+                    log: "You let a small ugly feeling exist without narrating it to anyone or destroying you."
                 }
             ]
         },
@@ -618,19 +618,19 @@ const DEFAULT_CONTENT = {
                     text: "Ask, politely but directly, if you can jump in for one page.",
                     tag: "fight",
                     effects: {mask: -5, child: 10, rep: -5},
-                    log: "You asked for the small thing you actually needed."
+                    log: "You asked for the small thing you actually needed. You got it without any dirty looks."
                 },
                 {
                     text: "Wait it out and tell yourself it's fine, it's fine, it's fine.",
                     tag: "fawn",
                     effects: {mask: 5, child: -10, rep: 10},
-                    log: "You narrated calm you weren't experiencing."
+                    log: "You narrated a calm you weren't actually experiencing, accomplishing nothing."
                 }
             ]
         },
         {
             zone: "WORK", title: "The Badge Scan Fail",
-            desc: "Your badge doesn't scan. Three times. There's a line building behind you now.",
+            desc: "Your badge doesn't scan. Three times in a row. There's a line building behind you now.",
             choices: [
                 {
                     text: "Apologize to everyone behind you individually.",
@@ -639,7 +639,7 @@ const DEFAULT_CONTENT = {
                     log: "You issued apologies for a malfunctioning badge reader."
                 },
                 {
-                    text: "Freeze up completely, badge in hand, brain empty.",
+                    text: "Freeze up completely, badge in hand, brain empty except for the intense panic that you've been fired.",
                     tag: "freeze",
                     effects: {rep: 15, mask: 0, child: -10},
                     log: "The door and your nervous system both stopped responding."
@@ -734,7 +734,7 @@ const DEFAULT_CONTENT = {
                     text: "Assume it's your fault and quietly clean the kitchen.",
                     tag: "fawn",
                     effects: {mask: 15, child: -20, rep: 10},
-                    log: "You traded self-worth for perceived safety."
+                    log: "You traded self-worth for perceived safety and clean dishes."
                 },
                 {
                     text: "Ask aggressively, 'IS SOMETHING WRONG?!'",
@@ -755,10 +755,10 @@ const DEFAULT_CONTENT = {
             desc: "Your partner says 'hey, whenever you get a chance' about the dishes. Their tone was completely neutral.",
             choices: [
                 {
-                    text: "Do the dishes at 11 PM, narrating your resentment internally.",
+                    text: "Do the dishes at 11 PM, narrating your resentment internally while sighing externally, and heavily.",
                     tag: "fawn",
                     effects: {mask: 10, child: -15, rep: 15},
-                    log: "You complied loudly, in your head only."
+                    log: "You complied loudly. Nobody is impressed."
                 },
                 {
                     text: "Say 'I was GOING to' with more heat than the sentence needed.",
@@ -767,7 +767,7 @@ const DEFAULT_CONTENT = {
                     log: "The dishes were never the real defendant."
                 },
                 {
-                    text: "Leave the room to 'find something' for four minutes.",
+                    text: "Leave the room to 'find something' for four minutes. Flee state.",
                     tag: "flight",
                     effects: {mask: -5, child: -5, rep: 10},
                     log: "A tactical retreat from a sink."
@@ -812,7 +812,7 @@ const DEFAULT_CONTENT = {
                     text: "Ask 'you okay?' four separate times.",
                     tag: "fawn",
                     effects: {mask: 5, child: -10, rep: 5},
-                    log: "You checked the temperature of a room that was fine."
+                    log: "You checked the temperature of a room that was comfortable, not cold."
                 },
                 {
                     text: "Sit in it. Actually just sit in it.",
@@ -822,252 +822,6 @@ const DEFAULT_CONTENT = {
                 }
             ]
         },
-
-        // --- SOCIAL ---
-        {
-            zone: "SOCIAL", title: "The Grocery Store Aisle",
-            desc: "Someone is standing exactly in front of the specific brand of oat milk you need. They are taking a very long time.",
-            choices: [
-                {
-                    text: "Pretend to look at regular milk until they leave.",
-                    tag: "flight",
-                    effects: {mask: 10, child: -10, rep: 15},
-                    log: "You sacrificed your time to avoid taking up space."
-                },
-                {
-                    text: "Say 'Excuse me' using a voice three octaves higher than normal.",
-                    tag: "fawn",
-                    effects: {mask: 5, child: -5, rep: 5},
-                    log: "You utilized the Customer Service Fawning Voice."
-                },
-                {
-                    text: "Abandon the oat milk. You didn't deserve it anyway.",
-                    tag: "freeze",
-                    effects: {mask: 0, child: -25, rep: 10},
-                    log: "You punished yourself for a stranger's existence."
-                }
-            ]
-        },
-        {
-            zone: "SOCIAL", title: "The Unread Notification",
-            desc: "A friend replied 'K.' to a vulnerable paragraph you sent them.",
-            choices: [
-                {
-                    text: "Mentally draft a completely new friend group.",
-                    tag: "fight",
-                    effects: {mask: -15, child: -15, rep: 20},
-                    log: "You burned the bridge in your mind."
-                },
-                {
-                    text: "Send 4 memes immediately to lighten the mood.",
-                    tag: "fawn",
-                    effects: {mask: 15, child: -20, rep: 5},
-                    log: "You performed as the Jester to avoid abandonment."
-                },
-                {
-                    text: "Throw your phone into a soft pile of laundry.",
-                    tag: "flight",
-                    effects: {mask: 0, child: 10, rep: 10},
-                    log: "You successfully removed the object of your pain."
-                }
-            ]
-        },
-        {
-            zone: "SOCIAL", title: "The Uneven Text Energy",
-            desc: "Your friend's reply is just 'oh nice' where it used to be three exclamation points.",
-            choices: [
-                {
-                    text: "Reread every message you've sent them for the last month.",
-                    tag: "freeze",
-                    effects: {rep: 20, child: -10, mask: 0},
-                    log: "You audited a friendship for crimes that don't exist."
-                },
-                {
-                    text: "Match their energy exactly, one for one.",
-                    tag: "fight",
-                    effects: {mask: -10, child: 0, rep: 5},
-                    log: "Mutually assured emotional disengagement."
-                },
-                {
-                    text: "Text them something low-stakes and let it go.",
-                    tag: "secure",
-                    effects: {rep: -10, mask: 5, child: 5},
-                    log: "You extended trust without an audit."
-                }
-            ]
-        },
-        {
-            zone: "SOCIAL", title: "The Group Photo",
-            desc: "You've been tagged. The angle is unkind. Twelve people have already liked it.",
-            choices: [
-                {
-                    text: "Untag yourself and message the poster to take it down.",
-                    tag: "fight",
-                    effects: {mask: -10, child: 5, rep: -5},
-                    log: "You defended your own image. Feels illegal, isn't."
-                },
-                {
-                    text: "Leave it up and never look at that post again.",
-                    tag: "flight",
-                    effects: {mask: 0, child: -10, rep: 10},
-                    log: "You conceded the internet round."
-                },
-                {
-                    text: "Zoom in and catalog every flaw for later.",
-                    tag: "freeze",
-                    effects: {rep: 20, child: -20, mask: 0},
-                    log: "You built a case file against your own face."
-                }
-            ]
-        },
-        {
-            zone: "SOCIAL", title: "The Small Talk Void",
-            desc: "Stuck in an elevator with a coworker for four floors. Neither of you has said anything for eleven seconds.",
-            choices: [
-                {
-                    text: "Comment on the elevator's slowness like it's breaking news.",
-                    tag: "fawn",
-                    effects: {mask: 10, child: -5, rep: 0},
-                    log: "You filled the void with the safest possible noise."
-                },
-                {
-                    text: "Stare at the floor numbers with religious intensity.",
-                    tag: "freeze",
-                    effects: {rep: 15, mask: -5, child: 0},
-                    log: "You willed the doors open through sheer discomfort."
-                },
-                {
-                    text: "Let the silence be silence.",
-                    tag: "secure",
-                    effects: {rep: -5, mask: 0, child: 5},
-                    log: "Eleven seconds of quiet did not, in fact, kill you."
-                }
-            ]
-        },
-
-        // --- SELF ---
-        {
-            zone: "SELF", title: "The Nostalgic Smell",
-            desc: "You catch a whiff of a specific cleaning product that smells exactly like your childhood home.",
-            choices: [
-                {
-                    text: "Hold your breath until you pass out.",
-                    tag: "flight",
-                    effects: {mask: 0, child: -5, rep: 30},
-                    log: "You physically rejected the memory."
-                },
-                {
-                    text: "Cry silently in a bathroom stall.",
-                    tag: "secure",
-                    effects: {mask: -10, child: 20, rep: -20},
-                    log: "You processed an emotion. Minus points to social mask."
-                },
-                {
-                    text: "Make a dark, self-deprecating joke to a coworker.",
-                    tag: "fight",
-                    effects: {mask: -15, child: -10, rep: 5},
-                    log: "You weaponized the trauma for comedy."
-                }
-            ]
-        },
-        {
-            zone: "SELF", title: "The Mirror",
-            desc: "You catch your reflection in a dark window and don't recognize yourself for a full second.",
-            choices: [
-                {
-                    text: "Immediately look away and think about anything else.",
-                    tag: "flight",
-                    effects: {mask: 0, child: -10, rep: 15},
-                    log: "You declined an invitation from your own face."
-                },
-                {
-                    text: "Stare longer, looking for evidence of who you used to be.",
-                    tag: "freeze",
-                    effects: {rep: 15, child: -15, mask: 0},
-                    log: "You interrogated a witness who can't testify."
-                },
-                {
-                    text: "Say something kind to it, out loud, even though it's weird.",
-                    tag: "secure",
-                    effects: {rep: -15, child: 15, mask: -5},
-                    log: "You addressed yourself like a person worth addressing."
-                }
-            ]
-        },
-        {
-            zone: "SELF", title: "The Old Journal Entry",
-            desc: "You find something you wrote at nineteen. It is more honest than anything you've said out loud this year.",
-            choices: [
-                {
-                    text: "Close it immediately and never mention this happened.",
-                    tag: "flight",
-                    effects: {mask: 0, child: -10, rep: 10},
-                    log: "You returned the evidence to its tomb."
-                },
-                {
-                    text: "Feel a specific, targeted contempt for who you used to be.",
-                    tag: "fight",
-                    effects: {mask: 0, child: -20, rep: 5},
-                    log: "You picked a fight with a nineteen-year-old and lost."
-                },
-                {
-                    text: "Let it be true. You used to know something you forgot.",
-                    tag: "secure",
-                    effects: {rep: -10, child: 20, mask: -5},
-                    log: "You let an old truth back into the room."
-                }
-            ]
-        },
-        {
-            zone: "SELF", title: "The 3 AM Wake-Up",
-            desc: "No reason. No noise. Just awake, and your brain has already opened seventeen tabs of decade-old conversations.",
-            choices: [
-                {
-                    text: "Start drafting an apology text you'll delete by morning.",
-                    tag: "fawn",
-                    effects: {mask: 5, child: -15, rep: 10},
-                    log: "You litigated a conversation the other person forgot happened."
-                },
-                {
-                    text: "Get up and reorganize something small and physical.",
-                    tag: "flight",
-                    effects: {mask: 0, child: 0, rep: 10},
-                    log: "You redirected 3 AM into a drawer."
-                },
-                {
-                    text: "Name it: this is just cortisol, not prophecy.",
-                    tag: "secure",
-                    effects: {rep: -15, child: 10, mask: 0},
-                    log: "You out-argued your own nervous system, briefly."
-                }
-            ]
-        },
-        {
-            zone: "SELF", title: "The Empty Sunday",
-            desc: "Nothing is scheduled. Nobody needs anything from you. This is, somehow, the hardest part of the week.",
-            choices: [
-                {
-                    text: "Invent an urgent task to feel useful again.",
-                    tag: "fawn",
-                    effects: {mask: 5, child: -10, rep: 10},
-                    log: "You manufactured a purpose to avoid the quiet."
-                },
-                {
-                    text: "Scroll until the day disappears without you in it.",
-                    tag: "flight",
-                    effects: {mask: 0, child: -15, rep: 5},
-                    log: "You outsourced eight hours to a feed."
-                },
-                {
-                    text: "Sit with the unscheduled hour and let it be boring.",
-                    tag: "secure",
-                    effects: {rep: -10, child: 15, mask: 0},
-                    log: "You survived free time without earning it first."
-                }
-            ]
-        },
-
-        // --- HOME (expansion) ---
         {
             zone: "HOME", title: "The Left-On-Read Text",
             desc: "You sent a long message to a parent, explaining how you actually feel. Marked read. Nothing since.",
@@ -1088,7 +842,7 @@ const DEFAULT_CONTENT = {
                     text: "Send nothing else. Let the silence belong to them, not you.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "You stopped auditing a door that isn't yours to open."
+                    log: "You stopped staring at a doorknob that isn't yours to turn."
                 }
             ]
         },
@@ -1116,108 +870,6 @@ const DEFAULT_CONTENT = {
                 }
             ]
         },
-
-        // --- SOCIAL (expansion) ---
-        {
-            zone: "SOCIAL", title: "The Friend Who Remembers Everything",
-            desc: "Someone brings up a specific thing you said, off-hand, eight months ago. You have no memory of saying it.",
-            choices: [
-                {
-                    text: "Panic-scan your own memory for context you don't have.",
-                    tag: "freeze",
-                    effects: {rep: 15, mask: -5, child: 0},
-                    log: "You audited a version of yourself with no paper trail."
-                },
-                {
-                    text: "Agree enthusiastically, like you absolutely remember.",
-                    tag: "fawn",
-                    effects: {mask: 10, child: -10, rep: 5},
-                    log: "You co-signed a memory that isn't yours."
-                },
-                {
-                    text: "Say 'I don't actually remember that, tell me more,' and mean it.",
-                    tag: "secure",
-                    effects: {rep: -10, mask: -5, child: 10},
-                    log: "You let not-knowing be an ordinary, survivable thing."
-                }
-            ]
-        },
-        {
-            zone: "SOCIAL", title: "The RSVP You Regret",
-            desc: "You said yes to something two weeks ago. It's tonight. Every fiber of you wants to cancel.",
-            choices: [
-                {
-                    text: "Draft a vague excuse about not feeling well.",
-                    tag: "flight",
-                    effects: {mask: -5, child: -5, rep: 10},
-                    log: "You built an exit out of half a lie."
-                },
-                {
-                    text: "Text 'actually can't make it' with zero elaboration and hit send.",
-                    tag: "fight",
-                    effects: {mask: -15, child: 10, rep: -10},
-                    log: "You chose a bare truth over a padded one."
-                },
-                {
-                    text: "Go anyway. Perform enthusiasm you do not currently possess.",
-                    tag: "fawn",
-                    effects: {mask: 15, child: -20, rep: 10},
-                    log: "You showed up as the version of you that RSVPs on time."
-                }
-            ]
-        },
-
-        // --- SELF (expansion) ---
-        {
-            zone: "SELF", title: "The Unfinished Thing",
-            desc: "A project, a hobby, a draft you were once genuinely excited about sits untouched in a folder you avoid opening.",
-            choices: [
-                {
-                    text: "Open the folder, look at it, close it again without touching anything.",
-                    tag: "freeze",
-                    effects: {rep: 15, mask: 0, child: -15},
-                    log: "You visited the grave without bringing flowers or a shovel."
-                },
-                {
-                    text: "Start something new and shinier instead.",
-                    tag: "flight",
-                    effects: {mask: 0, child: -5, rep: 10},
-                    log: "You outran the old excitement with a fresh one."
-                },
-                {
-                    text: "Open it. Change one small thing. Close it again.",
-                    tag: "secure",
-                    effects: {rep: -15, mask: -5, child: 15},
-                    log: "You proved the thing wasn't actually dead, just resting."
-                }
-            ]
-        },
-        {
-            zone: "SELF", title: "The Accidental Self-Compliment",
-            desc: "You catch yourself thinking something kind about your own work, unprompted, and immediately feel weird about it.",
-            choices: [
-                {
-                    text: "Correct yourself internally: find the flaw, restore the natural order.",
-                    tag: "fight",
-                    effects: {mask: 0, child: -15, rep: 5},
-                    log: "You disqualified the thought before it could get comfortable."
-                },
-                {
-                    text: "Change the subject in your own head immediately.",
-                    tag: "flight",
-                    effects: {mask: 0, child: -5, rep: 10},
-                    log: "You fled a compliment like it was a fire alarm."
-                },
-                {
-                    text: "Let the thought stand. Don't correct it. Just let it be true for a second.",
-                    tag: "secure",
-                    effects: {rep: -15, mask: -5, child: 20},
-                    log: "You let something kind about yourself survive contact with your own scrutiny."
-                }
-            ]
-        },
-
-        // --- HOME (batch 2) ---
         {
             zone: "HOME", title: "The Leftover They Didn't Eat",
             desc: "You made extra on purpose, left a note. It's still in the fridge, exactly where you left it.",
@@ -1235,10 +887,10 @@ const DEFAULT_CONTENT = {
                     log: "The food and the feeling both went untouched."
                 },
                 {
-                    text: "Ask, simply, if they saw the note.",
+                    text: "Ask, simply, if they want any leftovers before you eat the rest.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "A question, asked plainly, is not an accusation."
+                    log: "A question, asked plainly, is not an accusation. Plus, you get dinner."
                 }
             ]
         },
@@ -1259,7 +911,7 @@ const DEFAULT_CONTENT = {
                     log: "You apologized before you knew the charge."
                 },
                 {
-                    text: "Knock. Ask if now's an okay time to talk.",
+                    text: "Knock. Ask if everything is okay.",
                     tag: "secure",
                     effects: {rep: -10, mask: -5, child: 10},
                     log: "You offered an opening instead of an assumption."
@@ -1301,16 +953,16 @@ const DEFAULT_CONTENT = {
                     log: "You overcorrected to outrun one sticky note."
                 },
                 {
-                    text: "Leave a post-it back, slightly too pointed.",
+                    text: "Leave a post-it back, on a clean dish and slightly too pointed.",
                     tag: "fight",
                     effects: {mask: -10, child: 5, rep: -5},
-                    log: "You returned the passive-aggression with interest."
+                    log: "You returned the passive-aggression with interest. That'll show 'em."
                 },
                 {
                     text: "Just talk to your roommate about it, out loud, later.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "You used your words instead of a sticky note war."
+                    log: "You used your words instead of a sticky note war. You both get pizza later and use paper plates."
                 }
             ]
         },
@@ -1319,19 +971,19 @@ const DEFAULT_CONTENT = {
             desc: "You can hear your neighbors arguing again, muffled but unmistakable, through a wall that was not built for privacy.",
             choices: [
                 {
-                    text: "Turn up the TV and pretend you can't hear it.",
-                    tag: "freeze",
-                    effects: {rep: 15, mask: 0, child: -10},
+                    text: "Turn up the TV as loud as you can and hope they can heart it.",
+                    tag: "fight",
+                    effects: {rep: -5, mask: -5, child: 10},
                     log: "You drowned out a sound you couldn't control."
                 },
                 {
-                    text: "Consider, seriously, banging on the wall.",
-                    tag: "fight",
-                    effects: {mask: -10, child: 5, rep: 0},
+                    text: "Consider, seriously, banging on the wall. Do nothing instead.",
+                    tag: "freeze",
+                    effects: {mask: 5, child: -5, rep: -5},
                     log: "You almost inserted yourself into a fight that isn't yours."
                 },
                 {
-                    text: "Put on headphones and let it be someone else's evening.",
+                    text: "Put on headphones and let it be someone else's problem.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
                     log: "Not every wall's noise is yours to carry."
@@ -1352,13 +1004,13 @@ const DEFAULT_CONTENT = {
                     text: "Say nothing and quietly recalculate your whole week's meals.",
                     tag: "freeze",
                     effects: {rep: 15, mask: 0, child: -10},
-                    log: "One missing item rearranged your entire plan, silently."
+                    log: "One missing item rearranged your entire life, silently."
                 },
                 {
                     text: "Decide it's fine, you didn't really need it anyway.",
                     tag: "fawn",
                     effects: {mask: 5, child: -10, rep: 5},
-                    log: "You talked yourself out of a want that was real."
+                    log: "You talked yourself out of a want that was real, and into being a doormat."
                 }
             ]
         },
@@ -1370,19 +1022,19 @@ const DEFAULT_CONTENT = {
                     text: "Sit in the same room in total silence, waiting for more.",
                     tag: "freeze",
                     effects: {rep: 15, mask: 0, child: -10},
-                    log: "You waited for a door that wasn't going to open tonight."
+                    log: "You waited for a door that wasn't going to open, anyway."
                 },
                 {
                     text: "Fill the silence with details about your own day, unprompted.",
                     tag: "fawn",
                     effects: {mask: 10, child: -10, rep: 5},
-                    log: "You performed conversation for both of you."
+                    log: "You performed the conversation for the both of you."
                 },
                 {
                     text: "Let 'fine' be enough for now. Try again later.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "Not every silence needs to be filled immediately."
+                    log: "Not every silence needs to be filled immediately or be analyzed."
                 }
             ]
         },
@@ -1394,25 +1046,25 @@ const DEFAULT_CONTENT = {
                     text: "Set it where you want it and leave a note explaining why.",
                     tag: "fight",
                     effects: {mask: -5, child: 10, rep: -5},
-                    log: "You made your preference visible instead of silent."
+                    log: "You made your preference visible instead of silent. The note lasted 2 hours before it went missing."
                 },
                 {
-                    text: "Just wear a sweater and say nothing, forever, probably.",
+                    text: "Just wear a sweater and say nothing, forever. Probably.",
                     tag: "freeze",
                     effects: {rep: 15, mask: 0, child: -10},
-                    log: "You adapted to avoid a two-minute conversation."
+                    log: "You sacrificed your physical comfort to avoid a two-minute conversation."
                 },
                 {
                     text: "Leave it wherever they last set it, every time.",
                     tag: "fawn",
                     effects: {mask: 5, child: -10, rep: 5},
-                    log: "You disappeared your own comfort to keep the peace."
+                    log: "You denied yourself a temperature change just to keep the peace."
                 }
             ]
         },
         {
             zone: "HOME", title: "The Borrowed Thing, Not Returned",
-            desc: "You lent it three weeks ago. You need it now. Asking for it back feels, somehow, enormous.",
+            desc: "You lent it three weeks ago. You need it now. Asking for it back feels, somehow, enormously selfish.",
             choices: [
                 {
                     text: "Buy a replacement instead of asking for it back.",
@@ -1430,7 +1082,7 @@ const DEFAULT_CONTENT = {
                     text: "Ask for it back plainly. It's yours.",
                     tag: "secure",
                     effects: {rep: -10, mask: -5, child: 10},
-                    log: "A direct ask did not, in fact, end the friendship."
+                    log: "This did not, in fact, end the friendship. They bought you dinner to thank you, instead."
                 }
             ]
         },
@@ -1478,7 +1130,7 @@ const DEFAULT_CONTENT = {
                     text: "Listen to the voicemail first. Then decide.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "Information turned out to be less scary than the dread."
+                    log: "Information turned out to be less scary than the dread. Have fun at Disney World!"
                 }
             ]
         },
@@ -1544,13 +1196,13 @@ const DEFAULT_CONTENT = {
                     text: "Make the recipe tonight. Let it mean whatever it means.",
                     tag: "secure",
                     effects: {rep: -15, mask: 0, child: 15},
-                    log: "You let an ordinary Tuesday hold an old, specific grief."
+                    log: "You let an ordinary moment hold an old, specific grief."
                 },
                 {
                     text: "Get frustrated at how much a card can do to you.",
                     tag: "fight",
                     effects: {mask: -5, child: -5, rep: 5},
-                    log: "You argued with your own feelings and, predictably, lost."
+                    log: "You argued with your own feelings and lost. Now you're sad, hungry, and the drawer is still dirty."
                 }
             ]
         },
@@ -1568,13 +1220,13 @@ const DEFAULT_CONTENT = {
                     text: "Accept your fate and mentally leave the table early.",
                     tag: "freeze",
                     effects: {rep: 15, mask: 0, child: -10},
-                    log: "You were present in body only, and only barely."
+                    log: "You were present in body only, and only barely. Nobody noticed."
                 },
                 {
-                    text: "Ask, lightly, to be moved this year.",
-                    tag: "fight",
+                    text: "Re-assign yourself to the kids table and enjoy yourself.",
+                    tag: "secure",
                     effects: {mask: -5, child: 10, rep: -5},
-                    log: "You asked for the small accommodation instead of enduring it silently."
+                    log: "You provided your own accommodation and now your nephews think you're cool."
                 }
             ]
         },
@@ -1595,10 +1247,10 @@ const DEFAULT_CONTENT = {
                     log: "You covered the worry with a smile at 2 AM."
                 },
                 {
-                    text: "Ask, simply, in the morning, if everything's okay.",
+                    text: "Ask in the morning if everything's okay.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "You waited for daylight and asked a plain question."
+                    log: "You waited for daylight and asked a plain question. They just lost track of time."
                 }
             ]
         },
@@ -1651,16 +1303,184 @@ const DEFAULT_CONTENT = {
             ]
         },
 
-        // --- SOCIAL (batch 2) ---
+        // --- SOCIAL ---
         {
-            zone: "SOCIAL", title: "The Table For One",
+            zone: "SOCIAL", title: "The Grocery Store Aisle",
+            desc: "Someone is standing exactly in front of the specific brand of oat milk you need. They are taking a very long time.",
+            choices: [
+                {
+                    text: "Pretend to look at regular milk until they leave.",
+                    tag: "freeze",
+                    effects: {mask: 10, child: -10, rep: 15},
+                    log: "You sacrificed your time and dignity to avoid taking up space."
+                },
+                {
+                    text: "Say 'Excuse me' using a voice three octaves higher than normal.",
+                    tag: "fawn",
+                    effects: {mask: 5, child: -5, rep: 5},
+                    log: "You utilized the Customer Service Voice. It was effective."
+                },
+                {
+                    text: "Abandon the oat milk. You didn't deserve it anyway.",
+                    tag: "flight",
+                    effects: {mask: 5, child: -10, rep: 15},
+                    log: "You punished yourself for a stranger's existence."
+                }
+            ]
+        },
+        {
+            zone: "SOCIAL", title: "The Unread Notification",
+            desc: "A friend replied 'K.' to a vulnerable paragraph you sent them.",
+            choices: [
+                {
+                    text: "Start searching for a completely new friend group.",
+                    tag: "fight",
+                    effects: {mask: -15, child: -15, rep: 20},
+                    log: "You burned the bridge in your mind before there was even a threat to identify."
+                },
+                {
+                    text: "Send 4 memes immediately to lighten the mood.",
+                    tag: "fawn",
+                    effects: {mask: 10, child: -10, rep: 10},
+                    log: "You performed as the Jester to avoid abandonment. They didn't react. You internalize it deeply."
+                },
+                {
+                    text: "Throw your phone into a soft pile of laundry.",
+                    tag: "flight",
+                    effects: {mask: 0, child: 10, rep: 10},
+                    log: "You successfully removed the object of your pain. Until you get up again."
+                }
+            ]
+        },
+        {
+            zone: "SOCIAL", title: "The Uneven Text Energy",
+            desc: "Your friend's reply is just 'oh nice' where it used to be three exclamation points.",
+            choices: [
+                {
+                    text: "Reread every message you've sent them for the last month.",
+                    tag: "freeze",
+                    effects: {rep: 20, child: -10, mask: 0},
+                    log: "You audited a friendship for crimes that don't exist."
+                },
+                {
+                    text: "Match their energy exactly, one for one.",
+                    tag: "fight",
+                    effects: {mask: -10, child: 0, rep: 5},
+                    log: "Mutually assured emotional disengagement."
+                },
+                {
+                    text: "Text them something low-stakes and let it go.",
+                    tag: "secure",
+                    effects: {rep: -10, mask: 5, child: 5},
+                    log: "You extended trust without an audit."
+                }
+            ]
+        },
+        {
+            zone: "SOCIAL", title: "The Group Photo",
+            desc: "You've been tagged. The angle is unkind. Twelve people have already liked it.",
+            choices: [
+                {
+                    text: "Untag yourself and message the poster to take it down.",
+                    tag: "fight",
+                    effects: {mask: -10, child: 5, rep: -5},
+                    log: "You defended your own image. Feels illegal, but it isn't."
+                },
+                {
+                    text: "Leave it up and never look at that post again.",
+                    tag: "flight",
+                    effects: {mask: 0, child: -10, rep: 10},
+                    log: "You conceded to the internet, this round."
+                },
+                {
+                    text: "Zoom in and catalog every flaw for later.",
+                    tag: "freeze",
+                    effects: {rep: 20, child: -20, mask: 0},
+                    log: "You built a case against your own face. You won... but also... lost?"
+                }
+            ]
+        },
+        {
+            zone: "SOCIAL", title: "The Small Talk Void",
+            desc: "Stuck in an elevator with a coworker for four floors. Neither of you has said anything for eleven seconds.",
+            choices: [
+                {
+                    text: "Comment on the elevator's slowness like it's breaking news.",
+                    tag: "fawn",
+                    effects: {mask: 10, child: -5, rep: 0},
+                    log: "You filled the void with the safest possible noise. You and your coworker like you less, now."
+                },
+                {
+                    text: "Stare at the floor numbers with religious intensity.",
+                    tag: "freeze",
+                    effects: {rep: 15, mask: -5, child: 0},
+                    log: "You willed the doors open through sheer discomfort."
+                },
+                {
+                    text: "Let the silence be silence.",
+                    tag: "secure",
+                    effects: {rep: -5, mask: 0, child: 5},
+                    log: "Eleven seconds of quiet did not erase you from this earth."
+                }
+            ]
+        },
+        {
+            zone: "SOCIAL", title: "The Friend Who Remembers Everything",
+            desc: "Someone brings up a specific thing you said, off-hand, eight months ago. You have no memory of saying it.",
+            choices: [
+                {
+                    text: "Panic-scan your own memory for context you don't have.",
+                    tag: "freeze",
+                    effects: {rep: 15, mask: -5, child: 0},
+                    log: "You audited a version of yourself with no paper trail and came up empty handed."
+                },
+                {
+                    text: "Agree enthusiastically, like you absolutely remember.",
+                    tag: "fawn",
+                    effects: {mask: 10, child: -10, rep: 5},
+                    log: "You co-signed a memory that isn't yours."
+                },
+                {
+                    text: "Say 'I don't actually remember that, tell me more,' and mean it.",
+                    tag: "secure",
+                    effects: {rep: -10, mask: -5, child: 10},
+                    log: "You let not-knowing be an ordinary, survivable thing. Because it is."
+                }
+            ]
+        },
+        {
+            zone: "SOCIAL", title: "The RSVP You Regret",
+            desc: "You said yes to something two weeks ago. It's tonight. Every fiber of you wants to cancel.",
+            choices: [
+                {
+                    text: "Draft a vague excuse about not feeling well.",
+                    tag: "flight",
+                    effects: {mask: -5, child: -5, rep: 10},
+                    log: "You built an exit out of half a lie. Nobody believes you."
+                },
+                {
+                    text: "Text 'actually can't make it' with zero elaboration and hit send.",
+                    tag: "fight",
+                    effects: {mask: -15, child: 10, rep: -10},
+                    log: "You chose a white lie over a padded truth. You spend the night regretting it."
+                },
+                {
+                    text: "Go anyway. Perform enthusiasm you do not currently possess.",
+                    tag: "fawn",
+                    effects: {mask: 15, child: -20, rep: 10},
+                    log: "You showed up as the version of you that RSVPs on time. You have fun, anyway."
+                }
+            ]
+        },
+        {
+            zone: "SOCIAL", title: "The Table for One",
             desc: "You get to the restaurant first. You sit alone at a table for four, aware of exactly how alone you look.",
             choices: [
                 {
                     text: "Stare at your phone intensely so you look busy, not waiting.",
                     tag: "freeze",
                     effects: {rep: 15, mask: 0, child: -10},
-                    log: "You performed occupation to avoid looking like you were waiting."
+                    log: "You performed occupation to avoid looking like a 'loser.'"
                 },
                 {
                     text: "Apologize to the host for taking up a table for four.",
@@ -1672,12 +1492,12 @@ const DEFAULT_CONTENT = {
                     text: "Sit there. Look around. Let it be fine.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "Being visibly alone turned out not to be an emergency."
+                    log: "Being visibly alone turned out fine; you got fresh breadsticks and didn't have to share any."
                 }
             ]
         },
         {
-            zone: "SOCIAL", title: "The Best Man Speech You Weren't Asked To Give",
+            zone: "SOCIAL", title: "The Best Man Speech You Weren't Asked to Give",
             desc: "You've known the groom for a decade. Someone he met two years ago is giving the speech instead.",
             choices: [
                 {
@@ -1726,7 +1546,7 @@ const DEFAULT_CONTENT = {
         },
         {
             zone: "SOCIAL", title: "The Birthday They Forgot",
-            desc: "It's 8 PM. No text, no call, nothing. You know they're busy. You also know that.",
+            desc: "It's 8 PM. No text, no call, nothing. You know they're busy. You also know that nobody is THAT busy...",
             choices: [
                 {
                     text: "Refresh your phone every few minutes without admitting why.",
@@ -1738,18 +1558,18 @@ const DEFAULT_CONTENT = {
                     text: "Post something upbeat so nobody suspects you noticed.",
                     tag: "fawn",
                     effects: {mask: 10, child: -15, rep: 5},
-                    log: "You broadcast fine to cover a very unfine feeling."
+                    log: "You broadcast 'fine' to cover a very 'not fine' feeling."
                 },
                 {
                     text: "Let yourself be a little sad about it. That's allowed.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "You didn't need to perform okay to actually get there eventually."
+                    log: "You didn't need to perform that you were okay, you arrived there naturally."
                 }
             ]
         },
         {
-            zone: "SOCIAL", title: "The Ex At The Party",
+            zone: "SOCIAL", title: "The Ex at the Party",
             desc: "You didn't know they'd be here. They just walked in, laughing at something, not looking your way yet.",
             choices: [
                 {
@@ -1759,40 +1579,40 @@ const DEFAULT_CONTENT = {
                     log: "You mapped an escape route instead of a plan."
                 },
                 {
-                    text: "Go say hi first, overly warm, before they can find you.",
+                    text: "Go say 'hi' first, overly warm, before they can find you.",
                     tag: "fawn",
                     effects: {mask: 15, child: -15, rep: 5},
-                    log: "You got there first so you could control how it went."
+                    log: "You got there first so you could control the narrative. They still make you feel powerless."
                 },
                 {
-                    text: "Stay where you are. Say hi if it happens naturally.",
+                    text: "Stay where you are. Say 'hi' if it happens naturally.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "You didn't need to manage the whole room to survive one party."
+                    log: "You didn't need to manage the whole room to survive; they left before they even saw you."
                 }
             ]
         },
         {
             zone: "SOCIAL", title: "The Compliment That Felt Like An Audit",
-            desc: "'You look so much better than you used to' — technically a compliment, somehow lands like a review of a previous, worse you.",
+            desc: "'You look so much better than you used to' is technically a compliment, but it somehow lands like backdoor insult.",
             choices: [
                 {
                     text: "Say 'thank you!' brightly and file the sting away for later.",
                     tag: "fawn",
                     effects: {mask: 10, child: -15, rep: 5},
-                    log: "You smiled through the part that actually stung."
+                    log: "You smiled through the part that actually stung. Now your face hurts."
                 },
                 {
-                    text: "Say, lightly, 'I looked fine before too.'",
+                    text: "Say, lightly, 'I looked good before, too!'",
                     tag: "fight",
                     effects: {mask: -5, child: 10, rep: -5},
-                    log: "You corrected the record instead of just absorbing it."
+                    log: "You corrected the record instead of just absorbing it. Mad respect."
                 },
                 {
                     text: "Replay the sentence for the rest of the night.",
                     tag: "freeze",
                     effects: {rep: 15, mask: 0, child: -15},
-                    log: "One sentence got more airtime in your head than the whole party."
+                    log: "One sentence got more airtime in your head than the whole party. It's all you remember."
                 }
             ]
         },
@@ -1801,16 +1621,16 @@ const DEFAULT_CONTENT = {
             desc: "Someone you sort of know, from somewhere, makes eye contact across the room. Neither of you commits to a greeting.",
             choices: [
                 {
-                    text: "Suddenly find your phone extremely interesting.",
+                    text: "You suddenly find your phone extremely interesting.",
                     tag: "flight",
                     effects: {mask: 0, child: -5, rep: 10},
-                    log: "You disappeared into a screen to avoid deciding anything."
+                    log: "You disappeared into a screen to avoid making a decision."
                 },
                 {
                     text: "Overcommit to a huge wave and walk over, unsure why.",
                     tag: "fawn",
                     effects: {mask: 10, child: -10, rep: 5},
-                    log: "You escalated a maybe into a whole interaction."
+                    log: "You escalated a maybe into a whole interaction. It's awkward."
                 },
                 {
                     text: "Give a small, real wave and let it be whatever it is.",
@@ -1821,7 +1641,7 @@ const DEFAULT_CONTENT = {
             ]
         },
         {
-            zone: "SOCIAL", title: "The Split-The-Bill Math",
+            zone: "SOCIAL", title: "The Split-the-Bill Math",
             desc: "You had a salad and water. Someone else had three cocktails. The bill's being split evenly, and everyone's already agreeing.",
             choices: [
                 {
@@ -1834,7 +1654,7 @@ const DEFAULT_CONTENT = {
                     text: "Suggest, casually, splitting it by what people actually got.",
                     tag: "fight",
                     effects: {mask: -10, child: 10, rep: -5},
-                    log: "You named the math out loud before it became a resentment."
+                    log: "You named the math out loud before it became a resentment. Three other people suddenly agree."
                 },
                 {
                     text: "Pay your share silently and feel weird about it for days.",
@@ -1864,12 +1684,12 @@ const DEFAULT_CONTENT = {
                     text: "Close the app. It's one person. It's fine.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "A number went down. The sky, notably, did not fall."
+                    log: "A number went down. The sky, notably, did not fall. Their loss."
                 }
             ]
         },
         {
-            zone: "SOCIAL", title: "The Small Talk About The Weather, Again",
+            zone: "SOCIAL", title: "The Small Talk About The Weather (Again)",
             desc: "Third conversation this week that's stayed entirely on the weather. You're both clearly capable of more.",
             choices: [
                 {
@@ -1882,18 +1702,18 @@ const DEFAULT_CONTENT = {
                     text: "Ask a real question and see what happens.",
                     tag: "fight",
                     effects: {mask: -5, child: 10, rep: -5},
-                    log: "You risked a real question on a conversation about rain."
+                    log: "You risked it all on a real question. You get a real answer (and a new friend)."
                 },
                 {
                     text: "Let the conversation end there, like it always does.",
                     tag: "freeze",
                     effects: {rep: 10, mask: 0, child: -10},
-                    log: "Another conversation stayed exactly as deep as the last one."
+                    log: "Another conversation stayed exactly as deep as the last one. This is fine."
                 }
             ]
         },
         {
-            zone: "SOCIAL", title: "The Party You Left Early From",
+            zone: "SOCIAL", title: "The Party You Left Early",
             desc: "You said you were tired. You weren't tired. You just needed to be somewhere with fewer people in it.",
             choices: [
                 {
@@ -1906,13 +1726,13 @@ const DEFAULT_CONTENT = {
                     text: "Lie awake replaying whether anyone noticed you'd gone.",
                     tag: "freeze",
                     effects: {rep: 15, mask: 0, child: -15},
-                    log: "You audited an exit that was, to everyone else, unremarkable."
+                    log: "You audited an exit that was, to everyone else, unremarkable and totally fine."
                 },
                 {
                     text: "Let leaving early just be a thing you did. No debrief required.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "You left when you needed to and didn't file a report about it."
+                    log: "You left when you needed to and didn't file a report about it. Irish Goodbye FTW."
                 }
             ]
         },
@@ -1952,7 +1772,7 @@ const DEFAULT_CONTENT = {
                 },
                 {
                     text: "Quietly pull back from making plans, without saying why.",
-                    tag: "freeze",
+                    tag: "flight",
                     effects: {rep: 15, mask: 0, child: -10},
                     log: "You left the room before anyone asked you to."
                 },
@@ -1960,7 +1780,7 @@ const DEFAULT_CONTENT = {
                     text: "Name the feeling to yourself: a little jealous, and that's okay.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "Jealousy, acknowledged, took up less room than it usually does."
+                    log: "Jealousy, acknowledged, took up less room than it usually does. You all go out for drinks later."
                 }
             ]
         },
@@ -1978,13 +1798,13 @@ const DEFAULT_CONTENT = {
                     text: "Actually suggest a specific day and time.",
                     tag: "fight",
                     effects: {mask: -5, child: 10, rep: -5},
-                    log: "You called the bluff, including your own."
+                    log: "You called the bluff, including your own. It worked."
                 },
                 {
                     text: "Let the phrase pass, again, unchallenged.",
                     tag: "freeze",
                     effects: {rep: 10, mask: 0, child: -10},
-                    log: "A fifth 'sometime' joined the pile of the first four."
+                    log: "A fifth 'sometime' joined the pile of the first four. Nice collection!"
                 }
             ]
         },
@@ -2002,19 +1822,19 @@ const DEFAULT_CONTENT = {
                     text: "Change your position in the room, just in case.",
                     tag: "flight",
                     effects: {mask: 0, child: -5, rep: 10},
-                    log: "You relocated to escape a theory you invented yourself."
+                    log: "You relocated to escape a theory you invented about yourself."
                 },
                 {
                     text: "Let the laugh be about literally anything else. It probably is.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 10},
-                    log: "Most laughter in a crowded room has nothing to do with you."
+                    log: "Most laughter in a crowded room has nothing to do with you. Unless you're doing something funny."
                 }
             ]
         },
         {
             zone: "SOCIAL", title: "The Seat Saved For Someone Else",
-            desc: "You go to sit down. 'Oh, that one's taken' — said kindly, but you're now standing in a room full of seated people.",
+            desc: "You go to sit down. 'Oh, that one's taken,' said kindly, but you're now standing in a room full of seated people.",
             choices: [
                 {
                     text: "Laugh it off and hover near the wall instead.",
@@ -2068,12 +1888,12 @@ const DEFAULT_CONTENT = {
                     text: "Let it sit. Voicemails are for people who don't need you to reply fast.",
                     tag: "freeze",
                     effects: {rep: 15, mask: 0, child: -10},
-                    log: "An unopened voicemail can hold a lot of imagined weight, again."
+                    log: "An unopened voicemail can hold a lot of imagined weight."
                 },
                 {
                     text: "Call back immediately, bracing yourself for bad news that might not be there.",
-                    tag: "fawn",
-                    effects: {mask: 5, child: -10, rep: 10},
+                    tag: "fight",
+                    effects: {mask: 5, child: -10, rep: 5},
                     log: "You armored up for a threat you hadn't confirmed yet."
                 },
                 {
@@ -2085,7 +1905,175 @@ const DEFAULT_CONTENT = {
             ]
         },
 
-        // --- SELF (batch 2) ---
+        // --- SELF ---
+        {
+            zone: "SELF", title: "The Nostalgic Smell",
+            desc: "You catch a whiff of a specific cleaning product that smells exactly like your childhood home.",
+            choices: [
+                {
+                    text: "Hold your breath until you pass out.",
+                    tag: "flight",
+                    effects: {mask: 0, child: -5, rep: 30},
+                    log: "You physically rejected the memory."
+                },
+                {
+                    text: "Cry silently in a bathroom stall.",
+                    tag: "secure",
+                    effects: {mask: -10, child: 20, rep: -20},
+                    log: "You processed an emotion privately. It's okay."
+                },
+                {
+                    text: "Make a dark, self-deprecating joke to a coworker.",
+                    tag: "fight",
+                    effects: {mask: -15, child: -10, rep: 5},
+                    log: "You weaponized the trauma for comedy."
+                }
+            ]
+        },
+        {
+            zone: "SELF", title: "The Mirror",
+            desc: "You catch your reflection in a dark window and don't recognize yourself for a full second.",
+            choices: [
+                {
+                    text: "Immediately look away and think about anything else.",
+                    tag: "flight",
+                    effects: {mask: 0, child: -10, rep: 15},
+                    log: "You declined an invitation from your own face."
+                },
+                {
+                    text: "Stare longer, looking for evidence of who you used to be.",
+                    tag: "freeze",
+                    effects: {rep: 15, child: -15, mask: 0},
+                    log: "You interrogated a witness who can't testify."
+                },
+                {
+                    text: "Say something kind to it, out loud, even though it's weird.",
+                    tag: "secure",
+                    effects: {rep: -15, child: 15, mask: -5},
+                    log: "You addressed yourself like a person worth addressing. Because you are."
+                }
+            ]
+        },
+        {
+            zone: "SELF", title: "The Old Journal Entry",
+            desc: "You find something you wrote at nineteen. It is more honest than anything you've said out loud this year.",
+            choices: [
+                {
+                    text: "Close it immediately and never mention this happened.",
+                    tag: "flight",
+                    effects: {mask: 0, child: -10, rep: 10},
+                    log: "You returned the evidence to its tomb."
+                },
+                {
+                    text: "Feel a specific, targeted contempt for who you used to be.",
+                    tag: "fight",
+                    effects: {mask: 0, child: -20, rep: 5},
+                    log: "You picked a fight with a nineteen-year-old and lost."
+                },
+                {
+                    text: "Let it be true. You used to know something you forgot.",
+                    tag: "secure",
+                    effects: {rep: -10, child: 20, mask: -5},
+                    log: "You let an old truth back into the room. It feels warm."
+                }
+            ]
+        },
+        {
+            zone: "SELF", title: "The 3 AM Wake-Up",
+            desc: "No reason. No noise. Just awake, and your brain has already opened seventeen tabs of decade-old conversations.",
+            choices: [
+                {
+                    text: "Start drafting an apology text you'll delete by morning.",
+                    tag: "fawn",
+                    effects: {mask: 5, child: -15, rep: 10},
+                    log: "You litigated a conversation the other person forgot happened."
+                },
+                {
+                    text: "Get up and reorganize something small and physical.",
+                    tag: "flight",
+                    effects: {mask: 0, child: 0, rep: 10},
+                    log: "You redirected 3 AM into a drawer."
+                },
+                {
+                    text: "Name it: this is just cortisol, not prophecy.",
+                    tag: "secure",
+                    effects: {rep: -15, child: 10, mask: 0},
+                    log: "You out-argued your own nervous system and won. You sleep in victory."
+                }
+            ]
+        },
+        {
+            zone: "SELF", title: "The Empty Sunday",
+            desc: "Nothing is scheduled. Nobody needs anything from you. This is, somehow, the hardest part of the week.",
+            choices: [
+                {
+                    text: "Invent an urgent task to feel useful again.",
+                    tag: "fawn",
+                    effects: {mask: 5, child: -10, rep: 10},
+                    log: "You manufactured a purpose to avoid the quiet."
+                },
+                {
+                    text: "Scroll until the day disappears without you in it.",
+                    tag: "flight",
+                    effects: {mask: 0, child: -15, rep: 5},
+                    log: "You outsourced eight hours to a feed."
+                },
+                {
+                    text: "Sit with the unscheduled hour and let it be boring.",
+                    tag: "secure",
+                    effects: {rep: -10, child: 15, mask: 0},
+                    log: "You survived free time without earning it first. You didn't explode."
+                }
+            ]
+        },
+        {
+            zone: "SELF", title: "The Unfinished Thing",
+            desc: "A project, a hobby, a draft you were once genuinely excited about sits untouched in a folder you avoid opening.",
+            choices: [
+                {
+                    text: "Open the folder, look at it, close it again without touching anything.",
+                    tag: "freeze",
+                    effects: {rep: 15, mask: 0, child: -15},
+                    log: "You visited the grave without bringing flowers or a shovel. Ingrate."
+                },
+                {
+                    text: "Start something new and shinier instead.",
+                    tag: "flight",
+                    effects: {mask: 0, child: -5, rep: 10},
+                    log: "You outran the old excitement with a fresh one."
+                },
+                {
+                    text: "Open it. Change one small thing. Close it again.",
+                    tag: "secure",
+                    effects: {rep: -15, mask: -5, child: 15},
+                    log: "You proved the thing wasn't actually dead, just resting."
+                }
+            ]
+        },
+        {
+            zone: "SELF", title: "The Accidental Self-Compliment",
+            desc: "You catch yourself thinking something kind about your own work, unprompted, and immediately feel weird about it.",
+            choices: [
+                {
+                    text: "Correct yourself internally: find the flaw, restore the natural order.",
+                    tag: "fight",
+                    effects: {mask: 0, child: -15, rep: 5},
+                    log: "You disqualified the thought before it could get comfortable."
+                },
+                {
+                    text: "Change the subject in your own head immediately.",
+                    tag: "flight",
+                    effects: {mask: 0, child: -5, rep: 10},
+                    log: "You fled a compliment like it was a fire alarm."
+                },
+                {
+                    text: "Let the thought stand. Don't correct it. Just let it be true for a second.",
+                    tag: "secure",
+                    effects: {rep: -15, mask: -5, child: 20},
+                    log: "You let something kind about yourself survive contact with your own scrutiny."
+                }
+            ]
+        },
         {
             zone: "SELF", title: "The Song That Still Does This To You",
             desc: "Three seconds of a song you haven't heard in years, and your chest does something you didn't authorize.",
@@ -2106,7 +2094,7 @@ const DEFAULT_CONTENT = {
                     text: "Let it play. Feel whatever it wants you to feel.",
                     tag: "secure",
                     effects: {rep: -15, mask: 0, child: 15},
-                    log: "You let three minutes of sound be exactly as big as it was."
+                    log: "You let three minutes of sound be exactly as small as it actually was."
                 }
             ]
         },
@@ -2130,7 +2118,7 @@ const DEFAULT_CONTENT = {
                     text: "Let 'I don't know how I felt' be a complete, acceptable answer.",
                     tag: "secure",
                     effects: {rep: -10, mask: 0, child: 15},
-                    log: "Not knowing turned out to be allowed."
+                    log: "Not knowing turned out to be allowed. It always is."
                 }
             ]
         },
@@ -2154,7 +2142,7 @@ const DEFAULT_CONTENT = {
                     text: "Notice it. Name it. Try, gently, to do the next one differently.",
                     tag: "secure",
                     effects: {rep: -15, mask: 0, child: 15},
-                    log: "You caught a pattern mid-motion, which is most of the work."
+                    log: "You caught a pattern mid-motion, which is most of the work. Keep going."
                 }
             ]
         },
@@ -2190,19 +2178,19 @@ const DEFAULT_CONTENT = {
                     text: "Ignore it. It'll probably go away on its own.",
                     tag: "freeze",
                     effects: {rep: 15, mask: 0, child: -10},
-                    log: "You outsourced the problem to future-you, again."
+                    log: "You outsourced the problem to future-you. Again. (Jerk)."
                 },
                 {
                     text: "Push through it, it's fine, everyone's tired, this is normal.",
                     tag: "fawn",
                     effects: {mask: 5, child: -10, rep: 10},
-                    log: "You normalized a body that was actively asking for something."
+                    log: "You neglected a body that was actively asking for something."
                 },
                 {
-                    text: "Stop. Roll your shoulders. Take one real breath.",
+                    text: "Stop. Relax. Roll your shoulders. Unclench your jaw. Take one real breath.",
                     tag: "secure",
                     effects: {rep: -15, mask: 0, child: 15},
-                    log: "You gave your body thirty seconds of the attention it was asking for."
+                    log: "You gave your body the attention it was asking for. It thanks you by flooding your brain with dopamine."
                 }
             ]
         },
@@ -2217,7 +2205,7 @@ const DEFAULT_CONTENT = {
                     log: "You sentenced yourself over one inherited sentence."
                 },
                 {
-                    text: "Laugh it off in the moment and never think about it again — you swear.",
+                    text: "Laugh it off in the moment and never think about it again... You swear!",
                     tag: "fawn",
                     effects: {mask: 10, child: -10, rep: 5},
                     log: "You buried it under a laugh instead of a look."
@@ -2231,14 +2219,14 @@ const DEFAULT_CONTENT = {
             ]
         },
         {
-            zone: "SELF", title: "The List Of Things You're Supposed To Want",
-            desc: "You're scrolling through someone else's milestones — house, promotion, wedding — checking your own life against a list you never actually agreed to.",
+            zone: "SELF", title: "The List of Things You're Supposed To Want",
+            desc: "You're scrolling through someone else's milestones; house, promotion, wedding, etc.  You keep checking your own life against it.",
             choices: [
                 {
                     text: "Keep scrolling, keep comparing, feel worse with each one.",
                     tag: "freeze",
                     effects: {rep: 15, mask: 0, child: -15},
-                    log: "You audited your life against a list you didn't write."
+                    log: "You audited your life against an idealized list you didn't write. Of course you fell short."
                 },
                 {
                     text: "Convince yourself you want all of it too, just to feel aligned.",
@@ -2274,7 +2262,7 @@ const DEFAULT_CONTENT = {
                     text: "Let today be a harder day. You don't owe anyone your usual output.",
                     tag: "secure",
                     effects: {rep: -15, mask: 0, child: 15},
-                    log: "You gave a hard day permission to just be hard."
+                    log: "You gave a hard day permission to be hard."
                 }
             ]
         },
@@ -2298,7 +2286,7 @@ const DEFAULT_CONTENT = {
                     text: "Send a little compassion backward. They didn't know what you know now.",
                     tag: "secure",
                     effects: {rep: -15, mask: 0, child: 15},
-                    log: "You forgave a person for not having information they didn't have yet."
+                    log: "You forgave a person for not having information they didn't learn yet."
                 }
             ]
         },
@@ -2328,7 +2316,7 @@ const DEFAULT_CONTENT = {
         },
         {
             zone: "SELF", title: "The Question A Stranger Asked That Undid You",
-            desc: "'Are you doing okay, actually?' — from someone who barely knows you, at exactly the wrong, right moment.",
+            desc: "'Are you doing okay, actually?' — from someone who barely knows you, at exactly the wrong-yet-right moment.",
             choices: [
                 {
                     text: "Say 'I'm fine!' faster than the question finished.",
@@ -2346,7 +2334,7 @@ const DEFAULT_CONTENT = {
                     text: "Pause. Tell a small piece of the truth.",
                     tag: "secure",
                     effects: {rep: -15, mask: 0, child: 15},
-                    log: "A stranger's question got an honest, small answer."
+                    log: "A stranger's question got an honest, small answer. Mutual respect intensifies."
                 }
             ]
         },
@@ -2361,7 +2349,7 @@ const DEFAULT_CONTENT = {
                     log: "You held a post-mortem for a conversation that never happened."
                 },
                 {
-                    text: "Decide it's better this way, probably, for everyone.",
+                    text: "Decide it's better this way for everyone. Probably.",
                     tag: "fawn",
                     effects: {mask: 5, child: -10, rep: 5},
                     log: "You reframed silence as consideration for other people."
@@ -2410,7 +2398,7 @@ const DEFAULT_CONTENT = {
                 },
                 {
                     text: "Get up and immediately start the day like nothing happened.",
-                    tag: "fawn",
+                    tag: "flight",
                     effects: {mask: 5, child: -15, rep: 10},
                     log: "You outran a feeling by scheduling over it."
                 },
@@ -2439,7 +2427,7 @@ const DEFAULT_CONTENT = {
                     log: "You let a two-second reflex become an all-day mood."
                 },
                 {
-                    text: "Notice the reflex. Don't perform an apology this time.",
+                    text: "Notice the reflex. Don't perform an apology for the apology.",
                     tag: "secure",
                     effects: {rep: -15, mask: 0, child: 15},
                     log: "You caught the reflex mid-air and let it just pass through."
@@ -2508,7 +2496,7 @@ const DEFAULT_CONTENT = {
                     text: "Apologize to no one in an empty car for crying at all.",
                     tag: "fawn",
                     effects: {mask: 5, child: -10, rep: 5},
-                    log: "You apologized to an empty passenger seat."
+                    log: "You apologized to an empty passenger seat. It was unmoved."
                 },
                 {
                     text: "Let it happen. Stay in the car until it passes on its own.",

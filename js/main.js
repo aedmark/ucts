@@ -86,13 +86,13 @@ function showSplash() {
     elSplashScreen.classList.remove('hidden');
 }
 
-function dismissSplash() {
+function dismissSplash(arcade = false) {
     elSplashScreen.classList.add('hidden');
     timedEnabled = elSplashTimedToggle.checked;
     setTimedPref(timedEnabled);
     playerName = elSplashNameInput.value.trim().slice(0, 24);
     setStoredPlayerName(playerName);
-    startGame(false, elSplashSeedInput.value);
+    startGame(false, elSplashSeedInput.value, arcade);
 }
 
 function setMode(mode) {

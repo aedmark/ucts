@@ -66,6 +66,25 @@ function unlockNgPlus() {
     }
 }
 
+// Arcade Mode: unseeded, uncapped turns, escalating stat costs. Its own
+// high score, separate from anything a normal or Extended Therapy run tracks.
+const ARCADE_HIGHSCORE_KEY = 'uct_arcade_highscore';
+
+function getArcadeHighScore() {
+    try {
+        return parseInt(localStorage.getItem(ARCADE_HIGHSCORE_KEY), 10) || 0;
+    } catch (e) {
+        return 0;
+    }
+}
+
+function setArcadeHighScore(score) {
+    try {
+        localStorage.setItem(ARCADE_HIGHSCORE_KEY, String(score));
+    } catch (e) { /* storage unavailable, high score just won't persist */
+    }
+}
+
 // DOM Elements
 const elRepressionBar = document.getElementById('bar-repression');
 const elRepressionVal = document.getElementById('val-repression');
@@ -119,6 +138,7 @@ const elEndScreen = document.getElementById('end-screen');
 const elEndTitle = document.getElementById('end-title');
 const elEndDesc = document.getElementById('end-desc');
 const elEndNgPlusBtn = document.getElementById('end-ngplus-btn');
+const elEndReplayBtn = document.getElementById('end-replay-btn');
 const elEndSeedTag = document.getElementById('end-seed-tag');
 const elEndShareStatus = document.getElementById('end-share-status');
 const elEndShareText = document.getElementById('end-share-text');
@@ -152,13 +172,16 @@ function buildShareText() {
         const filled = Math.max(0, Math.min(10, Math.round(val / 10)));
         return '█'.repeat(filled) + '░'.repeat(10 - filled);
     };
-    const modeTag = state.hardMode ? " (Extended Therapy)" : "";
+    const modeTag = state.arcade ? " (Arcade)" : state.hardMode ? " (Extended Therapy)" : "";
     const titleLine = playerName
         ? `${playerName}'s ${elGameTitle.textContent} — ${elEndTitle.textContent}`
         : `${elGameTitle.textContent} — ${elEndTitle.textContent}`;
+    const footerLine = state.arcade
+        ? `Turns Survived: ${state.arcadeScore}${state.arcadeIsNewBest ? " — New Best!" : ` · Best: ${getArcadeHighScore()}`}${modeTag}`
+        : `Seed: ${state.seed} · Turn ${Math.min(state.turn, state.maxTurns)}/${state.maxTurns}${modeTag}`;
     const lines = [
         titleLine,
-        `Seed: ${state.seed} · Turn ${Math.min(state.turn, state.maxTurns)}/${state.maxTurns}${modeTag}`,
+        footerLine,
         `${labels.repression}  ${barify(state.repression)}  ${state.repression}%`,
         `${labels.mask}  ${barify(state.mask)}  ${state.mask}%`,
         `${labels.child}  ${barify(state.child)}  ${state.child}%`
@@ -405,14 +428,14 @@ async function renderResultCanvas() {
     }
 
     // --- Footer (on the case) ---
-    const modeTag = state.hardMode ? ' (Extended Therapy)' : '';
+    const modeTag = state.arcade ? ' (Arcade)' : state.hardMode ? ' (Extended Therapy)' : '';
+    const footerLine = state.arcade
+        ? `Turns Survived: ${state.arcadeScore}${state.arcadeIsNewBest ? ' — New Best!' : `  ·  Best: ${getArcadeHighScore()}`}${modeTag}`
+        : `Seed: ${state.seed}  ·  Turn ${Math.min(state.turn, state.maxTurns)}/${state.maxTurns}${modeTag}`;
     ctx.textAlign = 'center';
     ctx.fillStyle = CANVAS_COLORS.inkSoft;
     ctx.font = '24px "Space Mono", monospace';
-    ctx.fillText(
-        `Seed: ${state.seed}  ·  Turn ${Math.min(state.turn, state.maxTurns)}/${state.maxTurns}${modeTag}`,
-        W / 2, H - 95
-    );
+    ctx.fillText(footerLine, W / 2, H - 95);
 
     ctx.fillStyle = CANVAS_COLORS.ink;
     ctx.font = '22px "Space Mono", monospace';
@@ -548,7 +571,9 @@ function updateUI() {
     elChildVal.textContent = `${state.child}%`;
     elChildBar.className = state.child < 30 ? "stat-bar-fill pink-hot" : "stat-bar-fill pink-dim";
 
-    elTurnCounter.textContent = `Turn: ${Math.min(state.turn, state.maxTurns)}/${state.maxTurns}`;
+    elTurnCounter.textContent = state.arcade
+        ? `Turn: ${state.turn} · Best: ${getArcadeHighScore()}`
+        : `Turn: ${Math.min(state.turn, state.maxTurns)}/${state.maxTurns}`;
 }
 
 function evalCondition(cond, stats) {
@@ -616,8 +641,19 @@ function endGame(title, desc, win = false) {
     elEndTitle.textContent = title;
     elEndTitle.className = "overlay-heading end " + (win ? "win" : "loss");
     elEndDesc.textContent = desc;
-    elEndSeedTag.textContent = `Seed: ${state.seed}`;
-    elEndNgPlusBtn.classList.toggle('hidden', state.hardMode || !isNgPlusUnlocked());
+
+    if (state.arcade) {
+        state.arcadeScore = state.turn - 1;
+        state.arcadeIsNewBest = state.arcadeScore > getArcadeHighScore();
+        if (state.arcadeIsNewBest) setArcadeHighScore(state.arcadeScore);
+        elEndSeedTag.textContent = state.arcadeIsNewBest
+            ? `New High Score: ${state.arcadeScore} turns!`
+            : `Turns Survived: ${state.arcadeScore} · Best: ${getArcadeHighScore()}`;
+    } else {
+        elEndSeedTag.textContent = `Seed: ${state.seed}`;
+    }
+    elEndReplayBtn.classList.toggle('hidden', state.arcade);
+    elEndNgPlusBtn.classList.toggle('hidden', state.hardMode || state.arcade || !isNgPlusUnlocked());
     elEndShareStatus.textContent = '';
     elEndShareText.classList.add('hidden');
     elEndShareText.value = '';
@@ -652,7 +688,18 @@ function handleChoice(rawEffects, logMsg, tag) {
 
     const resolvedEffects = resolveEffects(rawEffects);
     let effects = tag ? applyMechanismModifiers(tag, resolvedEffects) : resolvedEffects;
-    if (state.hardMode) {
+    if (state.arcade) {
+        // Escalates in steps of ten turns rather than smoothly, so the
+        // difficulty climb reads as distinct plateaus, not a slow creep.
+        const step = content.config.hardModeMultiplier;
+        const tier = Math.floor((state.turn - 1) / 10);
+        const mult = 1 + tier * (step - 1);
+        effects = {
+            rep: Math.round((effects.rep || 0) * mult),
+            mask: Math.round((effects.mask || 0) * mult),
+            child: Math.round((effects.child || 0) * mult)
+        };
+    } else if (state.hardMode) {
         const mult = content.config.hardModeMultiplier;
         effects = {
             rep: Math.round((effects.rep || 0) * mult),
@@ -821,19 +868,22 @@ function loadRandomEvent() {
     }
 }
 
-function startGame(hard = false, seedOverride = null) {
+function startGame(hard = false, seedOverride = null, arcade = false) {
     clearTimedChoice();
+    if (arcade) hard = false;
     const content = getContent();
     const cfg = content.config;
-    const seed = (seedOverride && String(seedOverride).trim()) ? String(seedOverride).trim() : generateRandomSeed();
+    const seed = (!arcade && seedOverride && String(seedOverride).trim())
+        ? String(seedOverride).trim() : generateRandomSeed();
     state = {
         repression: cfg.startingStats.repression,
         mask: cfg.startingStats.mask,
         child: cfg.startingStats.child,
         turn: 1,
-        maxTurns: hard ? cfg.hardModeTurns : cfg.maxTurns,
+        maxTurns: hard ? cfg.hardModeTurns : (arcade ? Infinity : cfg.maxTurns),
         isGameOver: false,
         hardMode: hard,
+        arcade: arcade,
         seed: seed,
         rng: makeRng(seed)
     };
@@ -847,13 +897,17 @@ function startGame(hard = false, seedOverride = null) {
     elMaskLabel.textContent = labels.mask;
     elChildLabel.textContent = labels.child;
 
-    elGameTitle.textContent = hard ? "U.C.T.S :: EXTENDED THERAPY" : "U.C.T.S";
-    elObjectiveText.textContent = `Objective: Survive ${state.maxTurns} Turns`;
-    elNgPlusBtn.classList.toggle('hidden', hard || !isNgPlusUnlocked());
+    elGameTitle.textContent = arcade ? "U.C.T.S :: ARCADE" : hard ? "U.C.T.S :: EXTENDED THERAPY" : "U.C.T.S";
+    elObjectiveText.textContent = arcade
+        ? `Objective: Survive as long as you can. Best: ${getArcadeHighScore()} turns.`
+        : `Objective: Survive ${state.maxTurns} Turns`;
+    elNgPlusBtn.classList.toggle('hidden', hard || arcade || !isNgPlusUnlocked());
 
-    elActionLog.innerHTML = hard
-        ? '<div>> Extended session initiated. Your nervous system has been here before.</div>'
-        : '<div>> Therapy session restarted. Commencing psychological baseline.</div>';
+    elActionLog.innerHTML = arcade
+        ? '<div>> Arcade mode engaged. No ceiling. Escalation every ten turns.</div>'
+        : hard
+            ? '<div>> Extended session initiated. Your nervous system has been here before.</div>'
+            : '<div>> Therapy session restarted. Commencing psychological baseline.</div>';
     renderMechanisms(false);
     updateUI();
     loadRandomEvent();

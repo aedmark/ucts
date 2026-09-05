@@ -163,11 +163,12 @@
         <p id="end-desc" class="end-desc">Your psychological defenses have collapsed.</p>
         <p id="end-seed-tag" class="end-seed-tag"></p>
         <div class="overlay-actions">
-            <button onclick="startGame(state.hardMode)" class="end-btn">Restart Therapy</button>
-            <button onclick="startGame(state.hardMode, state.seed)" class="end-btn replay">Replay Seed ↻</button>
+            <button onclick="startGame(state.hardMode, null, state.arcade)" class="end-btn">Restart Therapy</button>
+            <button id="end-replay-btn" onclick="startGame(state.hardMode, state.seed)" class="end-btn replay">Replay Seed ↻</button>
             <button onclick="toggleSharePanel()" class="end-btn share">Share Result ⤴</button>
             <button id="end-ngplus-btn" onclick="startGame(true)" class="hidden end-btn ngplus">Extended Therapy ▶
             </button>
+            <button onclick="startGame(false, null, true)" class="end-btn arcade">Arcade Mode ▶</button>
         </div>
 
         <div id="share-panel" class="hidden share-panel">
@@ -202,7 +203,10 @@
                 </label>
             </div>
         </div>
-        <button id="splash-start-btn" onclick="dismissSplash()" class="end-btn">Start</button>
+        <div class="overlay-actions">
+            <button id="splash-start-btn" onclick="dismissSplash()" class="end-btn">Start</button>
+            <button id="splash-arcade-btn" onclick="dismissSplash(true)" class="end-btn arcade">Arcade Mode ▶</button>
+        </div>
     </div>
 
 </main>

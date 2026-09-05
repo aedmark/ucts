@@ -84,6 +84,7 @@ a {
     --key-amber: #eda123;
     --key-teal: #2f9e8f;
     --key-violet: #8b5fbf;
+    --key-blue: #4a72c9;
     --key-cream: #f4ecd8;
 
     --font-display: 'Press Start 2P', 'Courier New', monospace;
@@ -1255,6 +1256,16 @@ a {
 
 .end-btn.share:hover {
     background-color: var(--key-red);
+    color: var(--key-cream);
+}
+
+.end-btn.arcade {
+    border-color: var(--key-blue);
+    color: var(--key-blue);
+}
+
+.end-btn.arcade:hover {
+    background-color: var(--key-blue);
     color: var(--key-cream);
 }
 

@@ -7,172 +7,182 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="crt-overlay"></div>
+<div class="crt-overlay"></div>
 
-    <main class="app">
+<main class="app">
 
-        <!-- Header -->
-        <header class="app-header">
-            <div class="row">
-                <h1 id="game-title" class="app-title">Unresolved Childhood Trauma Sim</h1>
-                <button id="help-btn" onclick="toggleHelp(true)" title="How this works" aria-label="How this works" class="icon-btn">?</button>
-            </div>
-            <div id="objective-text" class="objective">Objective: Survive 10 Turns</div>
-            <button id="ng-plus-btn" onclick="startGame(true)" class="hidden ngplus-btn">Extended Therapy ▶</button>
-            <div id="turn-counter" class="turn-counter">Turn: 1/10</div>
-        </header>
-
-        <!-- Mode Switcher -->
-        <nav class="tabs">
-            <button id="tab-sim" onclick="setMode('sim')" class="tab active">Simulation</button>
-            <button id="tab-field" onclick="setMode('field')" class="tab">Field Log</button>
-        </nav>
-
-        <!-- SIM VIEW -->
-        <div id="sim-view" class="sim-view">
-
-            <!-- Stats Panel -->
-            <section class="stats-panel">
-
-                <!-- Repression -->
-                <div>
-                    <div class="stat-label-row repression">
-                        <span id="label-repression">Repression Level</span>
-                        <span id="val-repression">0%</span>
-                    </div>
-                    <div class="stat-bar-container">
-                        <div id="bar-repression" class="stat-bar-fill red-dim" style="width: 20%;"></div>
-                    </div>
-                    <p class="stat-caption">If it hits 100%, you explode.</p>
-                </div>
-
-                <!-- Social Mask -->
-                <div>
-                    <div class="stat-label-row mask">
-                        <span id="label-mask">Social Mask</span>
-                        <span id="val-mask">100%</span>
-                    </div>
-                    <div class="stat-bar-container">
-                        <div id="bar-mask" class="stat-bar-fill blue-dim" style="width: 100%;"></div>
-                    </div>
-                    <p class="stat-caption">If it hits 0%, you are exiled.</p>
-                </div>
-
-                <!-- Inner Child -->
-                <div>
-                    <div class="stat-label-row child">
-                        <span id="label-child">Inner Child</span>
-                        <span id="val-child">50%</span>
-                    </div>
-                    <div class="stat-bar-container">
-                        <div id="bar-child" class="stat-bar-fill pink-dim" style="width: 50%;"></div>
-                    </div>
-                    <p class="stat-caption">If it hits 0%, total collapse.</p>
-                </div>
-            </section>
-
-            <!-- Coping Mechanisms Panel -->
-            <section id="mechanisms-panel" class="hidden mechanisms-panel">
-                <span class="mechanisms-label">Coping Mechanisms Acquired:</span>
-                <div id="mechanisms-list" class="row-wrap"></div>
-            </section>
-
-            <!-- Main Gameplay Area -->
-            <section class="gameplay">
-
-                <!-- Event Description -->
-                <div id="event-display" class="event-display">
-                    <h2 class="event-title">Loading Trigger...</h2>
-                    <p class="event-desc">Please wait while your nervous system calibrates to a perceived threat.</p>
-                </div>
-
-                <!-- Choices -->
-                <div id="choices-container" class="choices">
-                    <!-- Buttons injected via JS -->
-                </div>
-            </section>
-
-            <!-- Action Log -->
-            <footer class="action-log" id="action-log">
-                <div>> System initialized. Awaiting traumatic stimuli.</div>
-            </footer>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="row">
+            <h1 id="game-title" class="app-title">Unresolved Childhood Trauma Sim</h1>
+            <button id="help-btn" onclick="toggleHelp(true)" title="How this works" aria-label="How this works"
+                    class="icon-btn">?
+            </button>
         </div>
+        <div id="objective-text" class="objective">Objective: Survive 10 Turns</div>
+        <button id="ng-plus-btn" onclick="startGame(true)" class="hidden ngplus-btn">Extended Therapy ▶</button>
+        <div id="turn-counter" class="turn-counter">Turn: 1/10</div>
+    </header>
 
-        <!-- FIELD LOG VIEW -->
-        <div id="field-view" class="hidden field-view">
+    <!-- Mode Switcher -->
+    <nav class="tabs">
+        <button id="tab-sim" onclick="setMode('sim')" class="tab active">Simulation</button>
+        <button id="tab-field" onclick="setMode('field')" class="tab">Field Log</button>
+    </nav>
 
-            <div class="field-disclaimer">
-                <p>This log stays in your browser. Nothing is sent anywhere, ever. This is a self-tracking tool, not therapy — if you're in crisis, contact a crisis line or a licensed professional.</p>
+    <!-- SIM VIEW -->
+    <div id="sim-view" class="sim-view">
+
+        <!-- Stats Panel -->
+        <section class="stats-panel">
+
+            <!-- Repression -->
+            <div>
+                <div class="stat-label-row repression">
+                    <span id="label-repression">Repression Level</span>
+                    <span id="val-repression">0%</span>
+                </div>
+                <div class="stat-bar-container">
+                    <div id="bar-repression" class="stat-bar-fill red-dim" style="width: 20%;"></div>
+                </div>
+                <p class="stat-caption">If it hits 100%, you explode.</p>
             </div>
 
-            <div class="field-form">
-                <label>What actually happened?</label>
-                <textarea id="field-note" rows="3" class="field-note" placeholder="Describe a real moment. This is for you, not a grade."></textarea>
-
-                <div class="row-wrap" id="field-tag-picker"></div>
-                <div class="row-wrap" id="field-zone-picker"></div>
-
-                <button id="field-submit-btn" onclick="submitFieldEntry()" class="field-submit-btn">Log It</button>
+            <!-- Social Mask -->
+            <div>
+                <div class="stat-label-row mask">
+                    <span id="label-mask">Social Mask</span>
+                    <span id="val-mask">100%</span>
+                </div>
+                <div class="stat-bar-container">
+                    <div id="bar-mask" class="stat-bar-fill blue-dim" style="width: 100%;"></div>
+                </div>
+                <p class="stat-caption">If it hits 0%, you are exiled.</p>
             </div>
 
-            <div class="field-pattern">
-                <div class="field-pattern-heading">Pattern, Last 7 Days</div>
-                <div id="field-pattern-bars" class="field-pattern-bars"></div>
-                <p id="field-reading" class="field-reading"></p>
+            <!-- Inner Child -->
+            <div>
+                <div class="stat-label-row child">
+                    <span id="label-child">Inner Child</span>
+                    <span id="val-child">50%</span>
+                </div>
+                <div class="stat-bar-container">
+                    <div id="bar-child" class="stat-bar-fill pink-dim" style="width: 50%;"></div>
+                </div>
+                <p class="stat-caption">If it hits 0%, total collapse.</p>
+            </div>
+        </section>
+
+        <!-- Coping Mechanisms Panel -->
+        <section id="mechanisms-panel" class="hidden mechanisms-panel">
+            <span class="mechanisms-label">Coping Mechanisms Acquired:</span>
+            <div id="mechanisms-list" class="row-wrap"></div>
+        </section>
+
+        <!-- Main Gameplay Area -->
+        <section class="gameplay">
+
+            <!-- Event Description -->
+            <div id="event-display" class="event-display">
+                <h2 class="event-title">Loading Trigger...</h2>
+                <p class="event-desc">Please wait while your nervous system calibrates to a perceived threat.</p>
             </div>
 
-            <div class="field-entries" id="field-entries"></div>
-
-            <div class="field-actions">
-                <button id="field-export-btn" onclick="exportFieldLog()" class="field-action-btn">Export Log</button>
-                <button id="field-clear-btn" onclick="clearFieldLog()" class="field-action-btn danger">Clear Log</button>
+            <!-- Choices -->
+            <div id="choices-container" class="choices">
+                <!-- Buttons injected via JS -->
             </div>
-        </div>
+        </section>
 
-        <!-- App Footer -->
-        <footer class="app-footer">
-            <a href="editor.html">Content Editor</a>
-            <span class="app-footer-sep">·</span>
-            <a href="https://github.com/aedmark/ucts" target="_blank" rel="noopener">GitHub</a>
+        <!-- Action Log -->
+        <footer class="action-log" id="action-log">
+            <div>> System initialized. Awaiting traumatic stimuli.</div>
         </footer>
+    </div>
 
-        <!-- Help / About Overlay (Hidden by default) -->
-        <div id="help-screen" class="hidden overlay overlay-help">
-            <h2 class="overlay-heading">How This Works</h2>
-            <div class="overlay-body">
-                <p>Welcome to the <strong>Unresolved Childhood Trauma Simulator!</strong></p>
-                <p>You're navigating a short, cumulative bad day. Three stats track how you're holding up &mdash; watch the bars up top; each one's caption explains what happens if it runs out.</p>
-                <p>Each turn presents a scenario with a few responses. Pick one. Your stats move &mdash; not always the way you'd expect &mdash; and the day continues. Survive the full run and you'll get an ending built from wherever your stats landed.</p>
-                <p>Every so often, a fourth option shows up with no hint attached. That one's a real gamble.</p>
-                <p>Survive once, and a harder mode &mdash; Extended Therapy &mdash; unlocks permanently: more turns, bigger swings, no mercy.</p>
-                <p>The <span class="accent">Field Log</span> tab is a separate, real one &mdash; for tracking actual moments in your actual life, not the fictional ones. It has its own note explaining what it is and isn't.</p>
-                <p class="fine-print">Everything else, you'll have to find out by playing.</p>
-            </div>
-            <button onclick="toggleHelp(false)" class="overlay-close-btn">Close</button>
+    <!-- FIELD LOG VIEW -->
+    <div id="field-view" class="hidden field-view">
+
+        <div class="field-disclaimer">
+            <p>This log stays in your browser. Nothing is sent anywhere, ever. This is a self-tracking tool, not therapy
+                — if you're in crisis, contact a crisis line or a licensed professional.</p>
         </div>
 
-        <!-- Game Over / End Screen (Hidden by default) -->
-        <div id="end-screen" class="hidden overlay overlay-end">
-            <h2 id="end-title" class="overlay-heading end loss">Catastrophic Failure</h2>
-            <p id="end-desc" class="end-desc">Your psychological defenses have collapsed.</p>
-            <div class="overlay-actions">
-                <button onclick="startGame(state.hardMode)" class="end-btn">Restart Therapy</button>
-                <button id="end-ngplus-btn" onclick="startGame(true)" class="hidden end-btn ngplus">Extended Therapy ▶</button>
-            </div>
+        <div class="field-form">
+            <label>What actually happened?</label>
+            <textarea id="field-note" rows="3" class="field-note"
+                      placeholder="Describe a real moment. This is for you, not a grade."></textarea>
+
+            <div class="row-wrap" id="field-tag-picker"></div>
+            <div class="row-wrap" id="field-zone-picker"></div>
+
+            <button id="field-submit-btn" onclick="submitFieldEntry()" class="field-submit-btn">Log It</button>
         </div>
 
-        <!-- Splash / Title Screen (shown via JS on first load, per-pack customizable) -->
-        <div id="splash-screen" class="hidden overlay overlay-splash">
-            <h2 id="splash-title" class="overlay-heading"></h2>
-            <div id="splash-intro" class="overlay-body"></div>
-            <button id="splash-start-btn" onclick="dismissSplash()" class="end-btn">Start</button>
+        <div class="field-pattern">
+            <div class="field-pattern-heading">Pattern, Last 7 Days</div>
+            <div id="field-pattern-bars" class="field-pattern-bars"></div>
+            <p id="field-reading" class="field-reading"></p>
         </div>
 
-    </main>
+        <div class="field-entries" id="field-entries"></div>
 
-    <script src="js/content.js"></script>
-    <script src="js/engine.js"></script>
-    <script src="js/field-log.js"></script>
-    <script src="js/main.js"></script>
+        <div class="field-actions">
+            <button id="field-export-btn" onclick="exportFieldLog()" class="field-action-btn">Export Log</button>
+            <button id="field-clear-btn" onclick="clearFieldLog()" class="field-action-btn danger">Clear Log</button>
+        </div>
+    </div>
+
+    <!-- App Footer -->
+    <footer class="app-footer">
+        <a href="editor.html">Content Editor</a>
+        <span class="app-footer-sep">·</span>
+        <a href="https://github.com/aedmark/ucts" target="_blank" rel="noopener">GitHub</a>
+    </footer>
+
+    <!-- Help / About Overlay (Hidden by default) -->
+    <div id="help-screen" class="hidden overlay overlay-help">
+        <h2 class="overlay-heading">How This Works</h2>
+        <div class="overlay-body">
+            <p>Welcome to the <strong>Unresolved Childhood Trauma Simulator!</strong></p>
+            <p>You're navigating a short, cumulative bad day. Three stats track how you're holding up &mdash; watch the
+                bars up top; each one's caption explains what happens if it runs out.</p>
+            <p>Each turn presents a scenario with a few responses. Pick one. Your stats move &mdash; not always the way
+                you'd expect &mdash; and the day continues. Survive the full run and you'll get an ending built from
+                wherever your stats landed.</p>
+            <p>Every so often, a fourth option shows up with no hint attached. That one's a real gamble.</p>
+            <p>Survive once, and a harder mode &mdash; Extended Therapy &mdash; unlocks permanently: more turns, bigger
+                swings, no mercy.</p>
+            <p>The <span class="accent">Field Log</span> tab is a separate, real one &mdash; for tracking actual moments
+                in your actual life, not the fictional ones. It has its own note explaining what it is and isn't.</p>
+            <p class="fine-print">Everything else, you'll have to find out by playing.</p>
+        </div>
+        <button onclick="toggleHelp(false)" class="overlay-close-btn">Close</button>
+    </div>
+
+    <!-- Game Over / End Screen (Hidden by default) -->
+    <div id="end-screen" class="hidden overlay overlay-end">
+        <h2 id="end-title" class="overlay-heading end loss">Catastrophic Failure</h2>
+        <p id="end-desc" class="end-desc">Your psychological defenses have collapsed.</p>
+        <div class="overlay-actions">
+            <button onclick="startGame(state.hardMode)" class="end-btn">Restart Therapy</button>
+            <button id="end-ngplus-btn" onclick="startGame(true)" class="hidden end-btn ngplus">Extended Therapy ▶
+            </button>
+        </div>
+    </div>
+
+    <!-- Splash / Title Screen (shown via JS on first load, per-pack customizable) -->
+    <div id="splash-screen" class="hidden overlay overlay-splash">
+        <h2 id="splash-title" class="overlay-heading"></h2>
+        <div id="splash-intro" class="overlay-body"></div>
+        <button id="splash-start-btn" onclick="dismissSplash()" class="end-btn">Start</button>
+    </div>
+
+</main>
+
+<script src="js/content.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/field-log.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>

@@ -12,11 +12,20 @@ let seenEventTitles = new Set();
 
 // New Game+: unlocked permanently on your first survival.
 const NG_PLUS_KEY = 'uct_extended_unlocked';
+
 function isNgPlusUnlocked() {
-    try { return localStorage.getItem(NG_PLUS_KEY) === '1'; } catch (e) { return false; }
+    try {
+        return localStorage.getItem(NG_PLUS_KEY) === '1';
+    } catch (e) {
+        return false;
+    }
 }
+
 function unlockNgPlus() {
-    try { localStorage.setItem(NG_PLUS_KEY, '1'); } catch (e) { /* storage unavailable, unlock just won't persist */ }
+    try {
+        localStorage.setItem(NG_PLUS_KEY, '1');
+    } catch (e) { /* storage unavailable, unlock just won't persist */
+    }
 }
 
 // DOM Elements
@@ -30,16 +39,27 @@ const elChildBar = document.getElementById('bar-child');
 const elChildVal = document.getElementById('val-child');
 const elChildLabel = document.getElementById('label-child');
 
-const DEFAULT_STAT_LABELS = { repression: "Repression Level", mask: "Social Mask", child: "Inner Child" };
+const DEFAULT_STAT_LABELS = {repression: "Repression Level", mask: "Social Mask", child: "Inner Child"};
+
 function statLabels() {
     return Object.assign({}, DEFAULT_STAT_LABELS, getContent().config.statLabels || {});
 }
 
 const DEFAULT_FAILURE_ENDINGS = {
-    repression: { title: "Panic Attack", desc: "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet." },
-    mask: { title: "Social Exile", desc: "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free." },
-    child: { title: "Total Disassociation", desc: "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing." }
+    repression: {
+        title: "Panic Attack",
+        desc: "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet."
+    },
+    mask: {
+        title: "Social Exile",
+        desc: "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free."
+    },
+    child: {
+        title: "Total Disassociation",
+        desc: "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing."
+    }
 };
+
 function failureEndings() {
     const custom = getContent().failureEndings || {};
     return {
@@ -79,7 +99,7 @@ function logAction(msg) {
 function resetMechanismState() {
     mechanismState = {};
     Object.keys(getContent().mechanisms).forEach(tag => {
-        mechanismState[tag] = { unlocked: false, count: 0 };
+        mechanismState[tag] = {unlocked: false, count: 0};
     });
 }
 
@@ -87,7 +107,7 @@ function applyMechanismModifiers(tag, effects) {
     const content = getContent();
     const mech = content.mechanisms[tag];
     const s = mechanismState[tag];
-    const e = { rep: effects.rep || 0, mask: effects.mask || 0, child: effects.child || 0 };
+    const e = {rep: effects.rep || 0, mask: effects.mask || 0, child: effects.child || 0};
     if (!mech || !s || !s.unlocked) return e;
     e.rep += mech.mod.rep || 0;
     e.mask += mech.mod.mask || 0;
@@ -150,18 +170,24 @@ function evalCondition(cond, stats) {
     const v = stats[cond.stat];
     if (typeof v !== 'number') return false;
     switch (cond.op) {
-        case '>=': return v >= cond.value;
-        case '<=': return v <= cond.value;
-        case '>':  return v > cond.value;
-        case '<':  return v < cond.value;
-        case '==': return v === cond.value;
-        default: return false;
+        case '>=':
+            return v >= cond.value;
+        case '<=':
+            return v <= cond.value;
+        case '>':
+            return v > cond.value;
+        case '<':
+            return v < cond.value;
+        case '==':
+            return v === cond.value;
+        default:
+            return false;
     }
 }
 
 function getSurvivalEnding() {
     const content = getContent();
-    const stats = { repression: state.repression, mask: state.mask, child: state.child };
+    const stats = {repression: state.repression, mask: state.mask, child: state.child};
     const match = content.endings.find(e => (e.conditions || []).every(c => evalCondition(c, stats)))
         || content.endings[content.endings.length - 1];
 
@@ -172,7 +198,7 @@ function getSurvivalEnding() {
     if (unlockedNames.length) {
         desc += ` Coping mechanisms acquired: ${unlockedNames.join(', ')}.`;
     }
-    return { title: match.title, desc };
+    return {title: match.title, desc};
 }
 
 function checkGameEnd() {
@@ -207,13 +233,6 @@ function endGame(title, desc, win = false) {
     elEndNgPlusBtn.classList.toggle('hidden', state.hardMode || !isNgPlusUnlocked());
 }
 
-// A stat's raw effect can be a plain number (legacy — an implicit relative
-// delta, the only format that's ever existed) or, as of the Add/Subtract/Set
-// expansion, { op: "add"|"subtract"|"set", value }. Either way this resolves
-// to a plain relative delta before anything else (mechanism mods, hard-mode
-// scaling) touches it, so nothing downstream needs to know the difference.
-// No existing content uses the object form — this only exists so future
-// choices can opt in.
 function resolveStatEffect(raw, currentValue) {
     if (raw == null) return 0;
     if (typeof raw === 'number') return raw;
@@ -225,6 +244,7 @@ function resolveStatEffect(raw, currentValue) {
     }
     return 0;
 }
+
 function resolveEffects(rawEffects) {
     rawEffects = rawEffects || {};
     return {
@@ -272,9 +292,6 @@ function handleGlitchChoice(evt) {
         mask: Math.floor(Math.random() * 51) - 25,
         child: Math.floor(Math.random() * 51) - 25
     };
-    // Each event can write its own wildcard log line; packs saved before
-    // that existed (or an event nobody's gotten to yet) fall back to the
-    // pack-wide pool.
     let log;
     if (evt && evt.glitch && evt.glitch.log) {
         log = evt.glitch.log;
@@ -349,8 +366,6 @@ function loadRandomEvent() {
         const glitchBtn = document.createElement('button');
         glitchBtn.className = "choice-btn glitch";
         const glitchTextSpan = document.createElement('span');
-        // Built with textContent, not innerHTML — evt.glitch.text can come
-        // from an imported pack, same as choice text elsewhere.
         glitchTextSpan.textContent = (evt.glitch && evt.glitch.text) || "??? Do something you can't predict.";
         glitchBtn.appendChild(glitchTextSpan);
         glitchBtn.onclick = () => handleGlitchChoice(evt);

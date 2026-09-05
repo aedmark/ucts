@@ -42,8 +42,8 @@ function dismissSplash() {
 }
 
 function setMode(mode) {
-    const views = { sim: elSimView, field: elFieldView };
-    const tabs = { sim: elTabSim, field: elTabField };
+    const views = {sim: elSimView, field: elFieldView};
+    const tabs = {sim: elTabSim, field: elTabField};
 
     Object.keys(views).forEach(key => {
         views[key].classList.toggle('hidden', key !== mode);

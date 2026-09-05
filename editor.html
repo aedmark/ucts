@@ -8,39 +8,41 @@
     <link rel="stylesheet" href="css/editor.css">
 </head>
 <body>
-    <div class="crt-overlay"></div>
+<div class="crt-overlay"></div>
 
-    <main class="app editor-shell">
+<main class="app editor-shell">
 
-        <!-- Header -->
-        <header class="editor-header">
-            <h1 class="editor-title">U.C.T. Content Editor</h1>
-            <a href="index.html" class="editor-back-link">◀ Back to Simulator</a>
-        </header>
+    <!-- Header -->
+    <header class="editor-header">
+        <h1 class="editor-title">U.C.T. Content Editor</h1>
+        <a href="index.html" class="editor-back-link">◀ Back to Simulator</a>
+    </header>
 
-        <!-- Toolbar -->
-        <div class="editor-toolbar">
-            <div>
-                <p class="editor-toolbar-note">Changes save to this browser only.</p>
-                <p id="editor-status" class="editor-status-text"></p>
-            </div>
-            <div class="editor-toolbar-actions">
-                <a id="play-pack-link" href="index.html" class="hidden editor-play-link">▶ Play This Pack</a>
-                <button onclick="document.getElementById('editor-import-input').click()" class="editor-btn">Import Pack</button>
-                <input type="file" id="editor-import-input" accept="application/json" class="hidden" onchange="handleImportFile(event)">
-                <button onclick="exportContentPack()" class="editor-btn">Export Pack</button>
-                <button onclick="discardEditorDraft()" class="editor-btn">Discard Draft</button>
-                <button onclick="resetContentPack()" class="editor-btn-danger">Reset to Default</button>
-                <button onclick="saveContentDraft()" class="editor-save-btn">Save All Changes</button>
-            </div>
+    <!-- Toolbar -->
+    <div class="editor-toolbar">
+        <div>
+            <p class="editor-toolbar-note">Changes save to this browser only.</p>
+            <p id="editor-status" class="editor-status-text"></p>
         </div>
+        <div class="editor-toolbar-actions">
+            <a id="play-pack-link" href="index.html" class="hidden editor-play-link">▶ Play This Pack</a>
+            <button onclick="document.getElementById('editor-import-input').click()" class="editor-btn">Import Pack
+            </button>
+            <input type="file" id="editor-import-input" accept="application/json" class="hidden"
+                   onchange="handleImportFile(event)">
+            <button onclick="exportContentPack()" class="editor-btn">Export Pack</button>
+            <button onclick="discardEditorDraft()" class="editor-btn">Discard Draft</button>
+            <button onclick="resetContentPack()" class="editor-btn-danger">Reset to Default</button>
+            <button onclick="saveContentDraft()" class="editor-save-btn">Save All Changes</button>
+        </div>
+    </div>
 
-        <!-- Editor Body -->
-        <div id="editor-body" class="editor-body"></div>
+    <!-- Editor Body -->
+    <div id="editor-body" class="editor-body"></div>
 
-    </main>
+</main>
 
-    <script src="js/content.js"></script>
-    <script src="js/editor.js"></script>
+<script src="js/content.js"></script>
+<script src="js/editor.js"></script>
 </body>
 </html>

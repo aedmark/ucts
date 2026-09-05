@@ -7,21 +7,19 @@ const elPlayPackLink = document.getElementById('play-pack-link');
 
 let editorDraft = null;
 
-// Which top-level section is showing. Editing used to dump all six sections
-// into one long scroll — with 100+ events that became unusable, so now only
-// the active tab renders.
+// Which top-level section is showing.
 let activeEditorTab = 'config';
 // Which zone groups are expanded in the Events tab, remembered across
 // re-renders (rebuilding the DOM each render would otherwise reset them).
 let openEventZones = new Set();
 
 const EDITOR_TABS = [
-    { key: 'config', label: () => 'Config' },
-    { key: 'zones', label: () => 'Zones' },
-    { key: 'mechanisms', label: () => 'Mechanisms' },
-    { key: 'failureEndings', label: () => 'Failure Endings' },
-    { key: 'endings', label: () => 'Survival Endings' },
-    { key: 'events', label: () => `Events (${editorDraft.events.length})` }
+    {key: 'config', label: () => 'Config'},
+    {key: 'zones', label: () => 'Zones'},
+    {key: 'mechanisms', label: () => 'Mechanisms'},
+    {key: 'failureEndings', label: () => 'Failure Endings'},
+    {key: 'endings', label: () => 'Survival Endings'},
+    {key: 'events', label: () => `Events (${editorDraft.events.length})`}
 ];
 
 function ensureEditorDraft() {
@@ -46,7 +44,10 @@ function buildEditorTabsBar() {
         const btn = document.createElement('button');
         btn.className = "tab" + (activeEditorTab === t.key ? " active" : "");
         btn.textContent = t.label();
-        btn.onclick = () => { activeEditorTab = t.key; renderEditor(); };
+        btn.onclick = () => {
+            activeEditorTab = t.key;
+            renderEditor();
+        };
         nav.appendChild(btn);
     });
     return nav;
@@ -87,15 +88,24 @@ function buildConfigSection() {
 
     const cfg = editorDraft.config;
     const fields = [
-        { label: "Starting Repression", get: () => cfg.startingStats.repression, set: v => cfg.startingStats.repression = v },
-        { label: "Starting Mask", get: () => cfg.startingStats.mask, set: v => cfg.startingStats.mask = v },
-        { label: "Starting Inner Child", get: () => cfg.startingStats.child, set: v => cfg.startingStats.child = v },
-        { label: "Base Max Turns", get: () => cfg.maxTurns, set: v => cfg.maxTurns = v },
-        { label: "Extended Therapy Turns", get: () => cfg.hardModeTurns, set: v => cfg.hardModeTurns = v },
-        { label: "Extended Therapy Multiplier", get: () => cfg.hardModeMultiplier, set: v => cfg.hardModeMultiplier = v, step: 0.05 },
-        { label: "Mechanism Unlock Threshold", get: () => cfg.unlockThreshold, set: v => cfg.unlockThreshold = v },
-        { label: "Glitch Chance (0-1)", get: () => cfg.glitchChance, set: v => cfg.glitchChance = v, step: 0.01 },
-        { label: "Weak Zone Weight", get: () => cfg.weakZoneWeight, set: v => cfg.weakZoneWeight = v, step: 0.1 }
+        {
+            label: "Starting Repression",
+            get: () => cfg.startingStats.repression,
+            set: v => cfg.startingStats.repression = v
+        },
+        {label: "Starting Mask", get: () => cfg.startingStats.mask, set: v => cfg.startingStats.mask = v},
+        {label: "Starting Inner Child", get: () => cfg.startingStats.child, set: v => cfg.startingStats.child = v},
+        {label: "Base Max Turns", get: () => cfg.maxTurns, set: v => cfg.maxTurns = v},
+        {label: "Extended Therapy Turns", get: () => cfg.hardModeTurns, set: v => cfg.hardModeTurns = v},
+        {
+            label: "Extended Therapy Multiplier",
+            get: () => cfg.hardModeMultiplier,
+            set: v => cfg.hardModeMultiplier = v,
+            step: 0.05
+        },
+        {label: "Mechanism Unlock Threshold", get: () => cfg.unlockThreshold, set: v => cfg.unlockThreshold = v},
+        {label: "Glitch Chance (0-1)", get: () => cfg.glitchChance, set: v => cfg.glitchChance = v, step: 0.01},
+        {label: "Weak Zone Weight", get: () => cfg.weakZoneWeight, set: v => cfg.weakZoneWeight = v, step: 0.1}
     ];
 
     fields.forEach(f => {
@@ -104,11 +114,14 @@ function buildConfigSection() {
         input.step = f.step || 1;
         input.value = f.get();
         input.className = "editor-input";
-        input.oninput = () => { const v = parseFloat(input.value); if (!isNaN(v)) f.set(v); };
+        input.oninput = () => {
+            const v = parseFloat(input.value);
+            if (!isNaN(v)) f.set(v);
+        };
         grid.appendChild(labeledWrap(f.label, input));
     });
 
-    if (!cfg.statLabels) cfg.statLabels = { repression: "Repression Level", mask: "Social Mask", child: "Inner Child" };
+    if (!cfg.statLabels) cfg.statLabels = {repression: "Repression Level", mask: "Social Mask", child: "Inner Child"};
     const labelNote = document.createElement('p');
     labelNote.className = "editor-note";
     labelNote.textContent = "Bar Display Names — shown on the stats panel and in choice hints. Doesn't change how repression/mask/child work.";
@@ -119,20 +132,22 @@ function buildConfigSection() {
     wrap.appendChild(labelGrid);
 
     const labelFields = [
-        { label: "Repression Bar Name", get: () => cfg.statLabels.repression, set: v => cfg.statLabels.repression = v },
-        { label: "Mask Bar Name", get: () => cfg.statLabels.mask, set: v => cfg.statLabels.mask = v },
-        { label: "Inner Child Bar Name", get: () => cfg.statLabels.child, set: v => cfg.statLabels.child = v }
+        {label: "Repression Bar Name", get: () => cfg.statLabels.repression, set: v => cfg.statLabels.repression = v},
+        {label: "Mask Bar Name", get: () => cfg.statLabels.mask, set: v => cfg.statLabels.mask = v},
+        {label: "Inner Child Bar Name", get: () => cfg.statLabels.child, set: v => cfg.statLabels.child = v}
     ];
     labelFields.forEach(f => {
         const input = document.createElement('input');
         input.type = 'text';
         input.value = f.get();
         input.className = "editor-input";
-        input.oninput = () => { f.set(input.value); };
+        input.oninput = () => {
+            f.set(input.value);
+        };
         labelGrid.appendChild(labeledWrap(f.label, input));
     });
 
-    if (!cfg.splash) cfg.splash = { title: "", intro: "" };
+    if (!cfg.splash) cfg.splash = {title: "", intro: ""};
     const splashNote = document.createElement('p');
     splashNote.className = "editor-note";
     splashNote.textContent = "Splash Screen — shown once before the run starts. Leave blank to fall back to the game's own title and a generic prompt.";
@@ -143,7 +158,9 @@ function buildConfigSection() {
     splashTitleInput.className = "editor-input";
     splashTitleInput.placeholder = "Splash title";
     splashTitleInput.value = cfg.splash.title;
-    splashTitleInput.oninput = () => { cfg.splash.title = splashTitleInput.value; };
+    splashTitleInput.oninput = () => {
+        cfg.splash.title = splashTitleInput.value;
+    };
     wrap.appendChild(splashTitleInput);
 
     const splashIntroArea = document.createElement('textarea');
@@ -151,7 +168,9 @@ function buildConfigSection() {
     splashIntroArea.className = "editor-input";
     splashIntroArea.placeholder = "Splash intro text — a blank line starts a new paragraph";
     splashIntroArea.value = cfg.splash.intro;
-    splashIntroArea.oninput = () => { cfg.splash.intro = splashIntroArea.value; };
+    splashIntroArea.oninput = () => {
+        cfg.splash.intro = splashIntroArea.value;
+    };
     wrap.appendChild(splashIntroArea);
 
     return wrap;
@@ -187,15 +206,23 @@ function buildZonesSection() {
             if (zone.statBias === stat) opt.selected = true;
             select.appendChild(opt);
         });
-        select.onchange = () => { zone.statBias = select.value; };
+        select.onchange = () => {
+            zone.statBias = select.value;
+        };
 
         const delBtn = document.createElement('button');
         delBtn.textContent = "Remove";
         delBtn.className = "editor-btn-danger";
         delBtn.onclick = () => {
             const inUse = editorDraft.events.some(e => e.zone === zone.key);
-            if (inUse) { alert(`Can't remove "${zone.key}" — events still use it. Reassign or delete those events first.`); return; }
-            if (editorDraft.zones.length <= 1) { alert("Keep at least one zone."); return; }
+            if (inUse) {
+                alert(`Can't remove "${zone.key}" — events still use it. Reassign or delete those events first.`);
+                return;
+            }
+            if (editorDraft.zones.length <= 1) {
+                alert("Keep at least one zone.");
+                return;
+            }
             editorDraft.zones.splice(idx, 1);
             renderEditor();
         };
@@ -217,7 +244,8 @@ function buildZonesSection() {
     biasSelect.style.width = "auto";
     ["repression", "mask", "child"].forEach(stat => {
         const opt = document.createElement('option');
-        opt.value = stat; opt.textContent = stat;
+        opt.value = stat;
+        opt.textContent = stat;
         biasSelect.appendChild(opt);
     });
     const addBtn = document.createElement('button');
@@ -225,9 +253,15 @@ function buildZonesSection() {
     addBtn.className = "editor-btn";
     addBtn.onclick = () => {
         const key = keyInput.value.trim().toUpperCase();
-        if (!key) { alert("Zone needs a name."); return; }
-        if (editorDraft.zones.some(z => z.key === key)) { alert("That zone key already exists."); return; }
-        editorDraft.zones.push({ key, statBias: biasSelect.value });
+        if (!key) {
+            alert("Zone needs a name.");
+            return;
+        }
+        if (editorDraft.zones.some(z => z.key === key)) {
+            alert("That zone key already exists.");
+            return;
+        }
+        editorDraft.zones.push({key, statBias: biasSelect.value});
         renderEditor();
     };
     addRow.appendChild(keyInput);
@@ -262,7 +296,9 @@ function buildMechanismsSection() {
         const nameInput = document.createElement('input');
         nameInput.className = "editor-input";
         nameInput.value = mech.name;
-        nameInput.oninput = () => { mech.name = nameInput.value; };
+        nameInput.oninput = () => {
+            mech.name = nameInput.value;
+        };
         head.appendChild(tagLabel);
         head.appendChild(nameInput);
         row.appendChild(head);
@@ -274,7 +310,10 @@ function buildMechanismsSection() {
             input.type = 'number';
             input.className = "editor-input";
             input.value = mech.mod[k] || 0;
-            input.oninput = () => { const v = parseFloat(input.value); mech.mod[k] = isNaN(v) ? 0 : v; };
+            input.oninput = () => {
+                const v = parseFloat(input.value);
+                mech.mod[k] = isNaN(v) ? 0 : v;
+            };
             modGrid.appendChild(labeledWrap(`Mod: ${k}`, input));
         });
         row.appendChild(modGrid);
@@ -299,17 +338,26 @@ function buildFailureEndingsSection() {
 
     if (!editorDraft.failureEndings) {
         editorDraft.failureEndings = {
-            repression: { title: "Panic Attack", desc: "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet." },
-            mask: { title: "Social Exile", desc: "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free." },
-            child: { title: "Total Disassociation", desc: "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing." }
+            repression: {
+                title: "Panic Attack",
+                desc: "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet."
+            },
+            mask: {
+                title: "Social Exile",
+                desc: "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free."
+            },
+            child: {
+                title: "Total Disassociation",
+                desc: "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing."
+            }
         };
     }
 
     [
-        { key: "repression", trigger: "Repression ≥ 100" },
-        { key: "mask", trigger: "Mask ≤ 0" },
-        { key: "child", trigger: "Inner Child ≤ 0" }
-    ].forEach(({ key, trigger }) => {
+        {key: "repression", trigger: "Repression ≥ 100"},
+        {key: "mask", trigger: "Mask ≤ 0"},
+        {key: "child", trigger: "Inner Child ≤ 0"}
+    ].forEach(({key, trigger}) => {
         const fe = editorDraft.failureEndings[key];
         const card = document.createElement('div');
         card.className = "editor-card";
@@ -322,7 +370,9 @@ function buildFailureEndingsSection() {
         const titleInput = document.createElement('input');
         titleInput.className = "editor-input";
         titleInput.value = fe.title;
-        titleInput.oninput = () => { fe.title = titleInput.value; };
+        titleInput.oninput = () => {
+            fe.title = titleInput.value;
+        };
         head.appendChild(triggerLabel);
         head.appendChild(titleInput);
         card.appendChild(head);
@@ -331,7 +381,9 @@ function buildFailureEndingsSection() {
         descArea.rows = 2;
         descArea.className = "editor-input";
         descArea.value = fe.desc;
-        descArea.oninput = () => { fe.desc = descArea.value; };
+        descArea.oninput = () => {
+            fe.desc = descArea.value;
+        };
         card.appendChild(descArea);
 
         wrap.appendChild(card);
@@ -361,7 +413,9 @@ function buildEndingsSection() {
         const titleInput = document.createElement('input');
         titleInput.className = "editor-input";
         titleInput.value = ending.title;
-        titleInput.oninput = () => { ending.title = titleInput.value; };
+        titleInput.oninput = () => {
+            ending.title = titleInput.value;
+        };
         headRow.appendChild(titleInput);
 
         const upBtn = document.createElement('button');
@@ -384,7 +438,10 @@ function buildEndingsSection() {
         delBtn.textContent = "Remove";
         delBtn.className = "editor-btn-danger";
         delBtn.onclick = () => {
-            if (editorDraft.endings.length <= 1) { alert("Keep at least one ending."); return; }
+            if (editorDraft.endings.length <= 1) {
+                alert("Keep at least one ending.");
+                return;
+            }
             editorDraft.endings.splice(idx, 1);
             renderEditor();
         };
@@ -397,7 +454,9 @@ function buildEndingsSection() {
         descArea.rows = 2;
         descArea.className = "editor-input";
         descArea.value = ending.desc;
-        descArea.oninput = () => { ending.desc = descArea.value; };
+        descArea.oninput = () => {
+            ending.desc = descArea.value;
+        };
         card.appendChild(descArea);
 
         const condWrap = document.createElement('div');
@@ -411,34 +470,46 @@ function buildEndingsSection() {
             statSelect.style.width = "auto";
             ["repression", "mask", "child"].forEach(stat => {
                 const opt = document.createElement('option');
-                opt.value = stat; opt.textContent = stat;
+                opt.value = stat;
+                opt.textContent = stat;
                 if (cond.stat === stat) opt.selected = true;
                 statSelect.appendChild(opt);
             });
-            statSelect.onchange = () => { cond.stat = statSelect.value; };
+            statSelect.onchange = () => {
+                cond.stat = statSelect.value;
+            };
 
             const opSelect = document.createElement('select');
             opSelect.className = "editor-input";
             opSelect.style.width = "auto";
             [">=", "<=", ">", "<", "=="].forEach(op => {
                 const opt = document.createElement('option');
-                opt.value = op; opt.textContent = op;
+                opt.value = op;
+                opt.textContent = op;
                 if (cond.op === op) opt.selected = true;
                 opSelect.appendChild(opt);
             });
-            opSelect.onchange = () => { cond.op = opSelect.value; };
+            opSelect.onchange = () => {
+                cond.op = opSelect.value;
+            };
 
             const valInput = document.createElement('input');
             valInput.type = 'number';
             valInput.className = "editor-input";
             valInput.style.width = "5rem";
             valInput.value = cond.value;
-            valInput.oninput = () => { const v = parseFloat(valInput.value); if (!isNaN(v)) cond.value = v; };
+            valInput.oninput = () => {
+                const v = parseFloat(valInput.value);
+                if (!isNaN(v)) cond.value = v;
+            };
 
             const removeCondBtn = document.createElement('button');
             removeCondBtn.textContent = "×";
             removeCondBtn.className = "editor-btn-danger";
-            removeCondBtn.onclick = () => { ending.conditions.splice(cIdx, 1); renderEditor(); };
+            removeCondBtn.onclick = () => {
+                ending.conditions.splice(cIdx, 1);
+                renderEditor();
+            };
 
             condRow.appendChild(statSelect);
             condRow.appendChild(opSelect);
@@ -453,7 +524,7 @@ function buildEndingsSection() {
         addCondBtn.className = "editor-btn self-start";
         addCondBtn.onclick = () => {
             ending.conditions = ending.conditions || [];
-            ending.conditions.push({ stat: "repression", op: ">=", value: 50 });
+            ending.conditions.push({stat: "repression", op: ">=", value: 50});
             renderEditor();
         };
         card.appendChild(addCondBtn);
@@ -465,7 +536,7 @@ function buildEndingsSection() {
     addEndingBtn.textContent = "+ Add Ending";
     addEndingBtn.className = "editor-btn self-start";
     addEndingBtn.onclick = () => {
-        editorDraft.endings.push({ title: "New Ending", desc: "Describe what this ending means.", conditions: [] });
+        editorDraft.endings.push({title: "New Ending", desc: "Describe what this ending means.", conditions: []});
         renderEditor();
     };
     wrap.appendChild(addEndingBtn);
@@ -479,10 +550,10 @@ function newBlankEvent(zoneKey) {
         title: "New Event",
         desc: "Describe the trigger.",
         choices: [
-            { text: "First response.", tag: "fawn", effects: { rep: 0, mask: 0, child: 0 }, log: "Logged reaction." },
-            { text: "Second response.", tag: "secure", effects: { rep: 0, mask: 0, child: 0 }, log: "Logged reaction." }
+            {text: "First response.", tag: "fawn", effects: {rep: 0, mask: 0, child: 0}, log: "Logged reaction."},
+            {text: "Second response.", tag: "secure", effects: {rep: 0, mask: 0, child: 0}, log: "Logged reaction."}
         ],
-        glitch: { text: "", log: "" }
+        glitch: {text: "", log: ""}
     };
 }
 
@@ -504,13 +575,13 @@ function buildEventZoneGroup(zoneKey, zoneEntries, statBias) {
     cardsWrap.className = "editor-zone-cards";
     details.appendChild(cardsWrap);
 
-    const cardEntries = zoneEntries.map(({ evt, idx }) => {
+    const cardEntries = zoneEntries.map(({evt, idx}) => {
         const card = buildEventCard(evt, idx);
         cardsWrap.appendChild(card);
-        return { card, evt };
+        return {card, evt};
     });
 
-    return { zoneKey, details, cardEntries };
+    return {zoneKey, details, cardEntries};
 }
 
 function buildEventsSection() {
@@ -538,7 +609,7 @@ function buildEventsSection() {
     const usedIndices = new Set();
     const zoneGroups = editorDraft.zones.map(zone => {
         const zoneEntries = editorDraft.events
-            .map((evt, idx) => ({ evt, idx }))
+            .map((evt, idx) => ({evt, idx}))
             .filter(x => x.evt.zone === zone.key);
         zoneEntries.forEach(x => usedIndices.add(x.idx));
 
@@ -562,7 +633,7 @@ function buildEventsSection() {
     // old key, e.g. from a hand-edited import) — surface those instead of
     // letting them silently vanish from the grouped view.
     const orphaned = editorDraft.events
-        .map((evt, idx) => ({ evt, idx }))
+        .map((evt, idx) => ({evt, idx}))
         .filter(x => !usedIndices.has(x.idx));
     if (orphaned.length) {
         const orphanNote = document.createElement('p');
@@ -585,7 +656,7 @@ function buildEventsSection() {
         const q = searchInput.value.trim().toLowerCase();
         zoneGroups.forEach(g => {
             let anyMatch = false;
-            g.cardEntries.forEach(({ card, evt }) => {
+            g.cardEntries.forEach(({card, evt}) => {
                 const matches = !q || evt.title.toLowerCase().includes(q);
                 card.style.display = matches ? '' : 'none';
                 if (matches) anyMatch = true;
@@ -604,7 +675,9 @@ function buildEventCard(evt, idx) {
     const titleInput = document.createElement('input');
     titleInput.className = "editor-input";
     titleInput.value = evt.title;
-    titleInput.oninput = () => { evt.title = titleInput.value; };
+    titleInput.oninput = () => {
+        evt.title = titleInput.value;
+    };
     card.appendChild(titleInput);
 
     const metaRow = document.createElement('div');
@@ -615,17 +688,23 @@ function buildEventCard(evt, idx) {
     zoneSelect.style.width = "auto";
     editorDraft.zones.forEach(z => {
         const opt = document.createElement('option');
-        opt.value = z.key; opt.textContent = z.key;
+        opt.value = z.key;
+        opt.textContent = z.key;
         if (evt.zone === z.key) opt.selected = true;
         zoneSelect.appendChild(opt);
     });
-    zoneSelect.onchange = () => { evt.zone = zoneSelect.value; };
+    zoneSelect.onchange = () => {
+        evt.zone = zoneSelect.value;
+    };
 
     const delBtn = document.createElement('button');
     delBtn.textContent = "Remove Event";
     delBtn.className = "editor-btn-danger";
     delBtn.onclick = () => {
-        if (editorDraft.events.length <= 1) { alert("Keep at least one event."); return; }
+        if (editorDraft.events.length <= 1) {
+            alert("Keep at least one event.");
+            return;
+        }
         editorDraft.events.splice(idx, 1);
         renderEditor();
     };
@@ -638,7 +717,9 @@ function buildEventCard(evt, idx) {
     descArea.rows = 2;
     descArea.className = "editor-input";
     descArea.value = evt.desc;
-    descArea.oninput = () => { evt.desc = descArea.value; };
+    descArea.oninput = () => {
+        evt.desc = descArea.value;
+    };
     card.appendChild(descArea);
 
     const choicesWrap = document.createElement('div');
@@ -654,7 +735,12 @@ function buildEventCard(evt, idx) {
     addChoiceBtn.disabled = evt.choices.length >= 5;
     addChoiceBtn.onclick = () => {
         if (evt.choices.length >= 5) return;
-        evt.choices.push({ text: "New response.", tag: "fawn", effects: { rep: 0, mask: 0, child: 0 }, log: "Logged reaction." });
+        evt.choices.push({
+            text: "New response.",
+            tag: "fawn",
+            effects: {rep: 0, mask: 0, child: 0},
+            log: "Logged reaction."
+        });
         renderEditor();
     };
     card.appendChild(addChoiceBtn);
@@ -665,7 +751,7 @@ function buildEventCard(evt, idx) {
 }
 
 function buildEventGlitchRow(evt) {
-    if (!evt.glitch) evt.glitch = { text: "", log: "" };
+    if (!evt.glitch) evt.glitch = {text: "", log: ""};
 
     const wrap = document.createElement('div');
     wrap.className = "editor-glitch-row";
@@ -679,21 +765,25 @@ function buildEventGlitchRow(evt) {
     textInput.className = "editor-input";
     textInput.placeholder = "Button text — leave blank for the generic default";
     textInput.value = evt.glitch.text;
-    textInput.oninput = () => { evt.glitch.text = textInput.value; };
+    textInput.oninput = () => {
+        evt.glitch.text = textInput.value;
+    };
     wrap.appendChild(textInput);
 
     const logInput = document.createElement('input');
     logInput.className = "editor-input";
     logInput.placeholder = "Action log line — leave blank to pull from the pack's shared pool";
     logInput.value = evt.glitch.log;
-    logInput.oninput = () => { evt.glitch.log = logInput.value; };
+    logInput.oninput = () => {
+        evt.glitch.log = logInput.value;
+    };
     wrap.appendChild(logInput);
 
     return wrap;
 }
 
 function buildChoiceRow(evt, choice, cIdx) {
-    choice.effects = choice.effects || { rep: 0, mask: 0, child: 0 };
+    choice.effects = choice.effects || {rep: 0, mask: 0, child: 0};
     const row = document.createElement('div');
     row.className = "editor-choice-row";
 
@@ -701,7 +791,9 @@ function buildChoiceRow(evt, choice, cIdx) {
     textInput.className = "editor-input";
     textInput.value = choice.text;
     textInput.placeholder = "Choice text";
-    textInput.oninput = () => { choice.text = textInput.value; };
+    textInput.oninput = () => {
+        choice.text = textInput.value;
+    };
     row.appendChild(textInput);
 
     const metaRow = document.createElement('div');
@@ -711,11 +803,14 @@ function buildChoiceRow(evt, choice, cIdx) {
     tagSelect.className = "editor-input";
     Object.keys(editorDraft.mechanisms).forEach(tag => {
         const opt = document.createElement('option');
-        opt.value = tag; opt.textContent = tag;
+        opt.value = tag;
+        opt.textContent = tag;
         if (choice.tag === tag) opt.selected = true;
         tagSelect.appendChild(opt);
     });
-    tagSelect.onchange = () => { choice.tag = tagSelect.value; };
+    tagSelect.onchange = () => {
+        choice.tag = tagSelect.value;
+    };
     metaRow.appendChild(labeledWrap("Response", tagSelect));
 
     ["rep", "mask", "child"].forEach(k => {
@@ -739,32 +834,25 @@ function buildChoiceRow(evt, choice, cIdx) {
     logInput.className = "editor-input";
     logInput.placeholder = "Action log line";
     logInput.value = choice.log;
-    logInput.oninput = () => { choice.log = logInput.value; };
+    logInput.oninput = () => {
+        choice.log = logInput.value;
+    };
     row.appendChild(logInput);
 
     return row;
 }
 
 const STAT_EFFECT_MODES = [
-    { value: "add", label: "+" },
-    { value: "subtract", label: "−" },
-    { value: "set", label: "=" }
+    {value: "add", label: "+"},
+    {value: "subtract", label: "−"},
+    {value: "set", label: "="}
 ];
 
-// A choice's per-stat effect is always { op, value } here — Add/Subtract a
-// magnitude, or Set an exact 0-100 value. The built-in pack was migrated to
-// this shape rather than living alongside it, so the editor never needs to
-// show two different kinds of control for "old" vs "new" choices. A plain
-// signed number is still accepted at the engine/import level (an older
-// exported pack, or hand-edited JSON) — encountering one here just
-// normalizes it in place the instant this card renders, losslessly, so the
-// dropdown always reflects a real selection instead of defaulting to
-// whichever option happens to be first.
 function buildStatEffectControl(choice, statKey) {
     const current = choice.effects[statKey];
     if (current === null || typeof current !== 'object') {
         const v = current || 0;
-        choice.effects[statKey] = { op: v < 0 ? "subtract" : "add", value: Math.abs(v) };
+        choice.effects[statKey] = {op: v < 0 ? "subtract" : "add", value: Math.abs(v)};
     }
     const raw = choice.effects[statKey];
 
@@ -782,11 +870,14 @@ function buildStatEffectControl(choice, statKey) {
     modeSelect.title = "+ / − add or subtract a magnitude. = sets the stat to an exact value.";
     STAT_EFFECT_MODES.forEach(m => {
         const opt = document.createElement('option');
-        opt.value = m.value; opt.textContent = m.label;
+        opt.value = m.value;
+        opt.textContent = m.label;
         if (m.value === raw.op) opt.selected = true;
         modeSelect.appendChild(opt);
     });
-    modeSelect.onchange = () => { raw.op = modeSelect.value; };
+    modeSelect.onchange = () => {
+        raw.op = modeSelect.value;
+    };
 
     const valueInput = document.createElement('input');
     valueInput.type = 'number';
@@ -839,7 +930,7 @@ function resetContentPack() {
 
 function exportContentPack() {
     const pack = editorDraft || getContent();
-    const blob = new Blob([JSON.stringify(pack, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(pack, null, 2)], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

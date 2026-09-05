@@ -7,10 +7,12 @@
     padding: 0.45rem 0.55rem;
     width: 100%;
 }
+
 .editor-input:focus {
     outline: none;
     border-color: var(--key-teal);
 }
+
 .editor-label {
     font-family: var(--font-display);
     font-size: 9px;
@@ -20,6 +22,7 @@
     display: block;
     margin-bottom: 4px;
 }
+
 .editor-btn {
     font-family: var(--font-display);
     font-size: 9px;
@@ -34,18 +37,33 @@
     transition: transform 0.08s, box-shadow 0.08s;
     white-space: nowrap;
 }
+
 .editor-btn:hover:not(:disabled) {
     transform: translateY(1px);
     box-shadow: 0 2px 0 var(--ink);
 }
+
 .editor-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
     box-shadow: none;
 }
-.editor-toolbar-actions .editor-btn:nth-of-type(1) { background: var(--key-teal); color: var(--key-cream); }
-.editor-toolbar-actions .editor-btn:nth-of-type(2) { background: var(--key-amber); color: var(--key-cream); }
-.editor-toolbar-actions .editor-btn:nth-of-type(3) { background: var(--key-violet); color: var(--key-cream); }
+
+.editor-toolbar-actions .editor-btn:nth-of-type(1) {
+    background: var(--key-teal);
+    color: var(--key-cream);
+}
+
+.editor-toolbar-actions .editor-btn:nth-of-type(2) {
+    background: var(--key-amber);
+    color: var(--key-cream);
+}
+
+.editor-toolbar-actions .editor-btn:nth-of-type(3) {
+    background: var(--key-violet);
+    color: var(--key-cream);
+}
+
 .editor-btn-danger {
     font-family: var(--font-display);
     font-size: 9px;
@@ -60,15 +78,18 @@
     transition: transform 0.08s, box-shadow 0.08s;
     white-space: nowrap;
 }
+
 .editor-btn-danger:hover:not(:disabled) {
     transform: translateY(1px);
     box-shadow: 0 2px 0 var(--ink);
 }
+
 .editor-btn-danger:disabled {
     opacity: 0.4;
     cursor: not-allowed;
     box-shadow: none;
 }
+
 .editor-section {
     border: 3px solid var(--ink);
     border-radius: 10px;
@@ -78,6 +99,7 @@
     flex-direction: column;
     gap: 0.75rem;
 }
+
 .editor-card {
     border: 2px solid var(--ink);
     border-radius: 8px;
@@ -99,18 +121,22 @@
     letter-spacing: 0.03em;
     color: var(--key-red);
 }
+
 .editor-note {
     font-size: 10px;
     color: var(--ink-soft);
 }
+
 .editor-row {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
+
 .editor-row.mt {
     margin-top: 0.25rem;
 }
+
 .editor-zone-key {
     font-family: var(--font-display);
     font-size: 0.65rem;
@@ -119,19 +145,25 @@
     text-transform: uppercase;
     letter-spacing: 0.03em;
 }
+
 .editor-grid-config {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
 }
+
 @media (min-width: 768px) {
-    .editor-grid-config { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .editor-grid-config {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
+
 .editor-grid-mods {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.5rem;
 }
+
 .editor-tag-label {
     font-family: var(--font-display);
     font-size: 9px;
@@ -141,14 +173,17 @@
     width: 4.5rem;
     flex-shrink: 0;
 }
+
 .editor-col {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
 }
+
 .self-start {
     align-self: flex-start;
 }
+
 .editor-choices-wrap {
     display: flex;
     flex-direction: column;
@@ -156,6 +191,7 @@
     padding-left: 0.75rem;
     border-left: 3px solid var(--case-shadow);
 }
+
 .editor-choice-row {
     display: flex;
     flex-direction: column;
@@ -165,28 +201,30 @@
     background: var(--case);
     padding: 0.5rem;
 }
+
 .editor-meta-row {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem;
     align-items: end;
 }
+
 @media (min-width: 768px) {
-    /* 5 real children (Response, REP, MASK, CHILD, Remove) — this was
-       templated for 6 columns, leaving a whole phantom column's worth of
-       width unused and squeezing the other 5 into 5/6 of the row. That's
-       what made the ±/number split inside each stat cell feel zero-sum:
-       the row itself was a column short, not the split between them. */
-    .editor-meta-row { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .editor-meta-row {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
 }
+
 .editor-stat-effect-row {
     display: flex;
     gap: 0.25rem;
 }
+
 .editor-stat-effect-row .editor-input {
     flex: 1 1 auto;
     min-width: 0;
 }
+
 .editor-stat-op-select {
     width: 2.6rem;
     flex: 0 0 auto;
@@ -201,6 +239,7 @@
 .app.editor-shell {
     height: 90vh;
 }
+
 .editor-header {
     padding: 1rem;
     border-bottom: 3px solid var(--ink);
@@ -210,6 +249,7 @@
     align-items: center;
     gap: 0.5rem;
 }
+
 .editor-title {
     font-family: var(--font-display);
     font-size: 0.65rem;
@@ -218,7 +258,13 @@
     color: var(--key-violet);
     margin-left: 2.5rem;
 }
-@media (min-width: 768px) { .editor-title { font-size: 0.8rem; } }
+
+@media (min-width: 768px) {
+    .editor-title {
+        font-size: 0.8rem;
+    }
+}
+
 .editor-back-link {
     font-family: var(--font-display);
     font-size: 9px;
@@ -232,10 +278,12 @@
     box-shadow: 0 3px 0 var(--ink);
     transition: transform 0.08s, box-shadow 0.08s;
 }
+
 .editor-back-link:hover {
     transform: translateY(1px);
     box-shadow: 0 2px 0 var(--ink);
 }
+
 .editor-toolbar {
     padding: 0.75rem 1.25rem;
     border-bottom: 3px solid var(--ink);
@@ -246,22 +294,26 @@
     justify-content: space-between;
     gap: 0.75rem;
 }
+
 .editor-toolbar-note {
     font-size: 11px;
     color: var(--ink-soft);
 }
+
 .editor-status-text {
     font-size: 10px;
     color: var(--key-violet);
     margin-top: 0.25rem;
     min-height: 1em;
 }
+
 .editor-toolbar-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     align-items: center;
 }
+
 .editor-play-link {
     font-family: var(--font-display);
     font-size: 9px;
@@ -275,10 +327,12 @@
     box-shadow: 0 3px 0 var(--ink);
     transition: transform 0.08s, box-shadow 0.08s;
 }
+
 .editor-play-link:hover {
     transform: translateY(1px);
     box-shadow: 0 2px 0 var(--ink);
 }
+
 .editor-save-btn {
     padding: 6px 12px;
     font-family: var(--font-display);
@@ -292,10 +346,12 @@
     box-shadow: 0 3px 0 var(--ink);
     transition: transform 0.08s, box-shadow 0.08s;
 }
+
 .editor-save-btn:hover {
     transform: translateY(1px);
     box-shadow: 0 2px 0 var(--ink);
 }
+
 .editor-body {
     flex-grow: 1;
     overflow-y: auto;
@@ -304,31 +360,54 @@
     display: flex;
     flex-direction: column;
 }
+
 .editor-tab-content {
     padding: 1rem;
 }
 
 /* ============================================================
-   EDITOR TABS — one section visible at a time instead of one
-   long scroll. Reuses the game's own .tabs/.tab look.
+   EDITOR TABS
    ============================================================ */
 #editor-tabs {
     flex-wrap: wrap;
     padding: 0.5rem 0.5rem 0;
 }
+
 #editor-tabs .tab {
     flex: 1 1 30%;
     font-size: 0.5rem;
 }
+
 @media (min-width: 640px) {
-    #editor-tabs .tab { flex: 1; font-size: 0.6rem; }
+    #editor-tabs .tab {
+        flex: 1;
+        font-size: 0.6rem;
+    }
 }
-#editor-tabs .tab:nth-child(6n+1).active { background: var(--key-red); }
-#editor-tabs .tab:nth-child(6n+2).active { background: var(--key-amber); }
-#editor-tabs .tab:nth-child(6n+3).active { background: var(--key-teal); }
-#editor-tabs .tab:nth-child(6n+4).active { background: var(--key-violet); }
-#editor-tabs .tab:nth-child(6n+5).active { background: #4a72c9; }
-#editor-tabs .tab:nth-child(6n+6).active { background: var(--ink); }
+
+#editor-tabs .tab:nth-child(6n+1).active {
+    background: var(--key-red);
+}
+
+#editor-tabs .tab:nth-child(6n+2).active {
+    background: var(--key-amber);
+}
+
+#editor-tabs .tab:nth-child(6n+3).active {
+    background: var(--key-teal);
+}
+
+#editor-tabs .tab:nth-child(6n+4).active {
+    background: var(--key-violet);
+}
+
+#editor-tabs .tab:nth-child(6n+5).active {
+    background: #4a72c9;
+}
+
+#editor-tabs .tab:nth-child(6n+6).active {
+    background: var(--ink);
+}
 
 /* ============================================================
    EVENTS TAB — zone groups, collapsed by default.
@@ -339,6 +418,7 @@
     background: var(--case);
     overflow: hidden;
 }
+
 .editor-zone-summary {
     list-style: none;
     cursor: pointer;
@@ -354,20 +434,42 @@
     align-items: center;
     justify-content: space-between;
 }
-.editor-zone-summary::-webkit-details-marker { display: none; }
+
+.editor-zone-summary::-webkit-details-marker {
+    display: none;
+}
+
 .editor-zone-summary::after {
     content: "+";
     font-size: 0.9rem;
 }
+
 details[open] > .editor-zone-summary::after,
-details.force-open > .editor-zone-summary::after { content: "−"; }
-/* Search-forced-visible, independent of the native open/close state — see
-   the comment above searchInput.oninput in editor.js for why. */
-details.force-open > .editor-zone-cards { display: flex !important; }
-.bias-repression > .editor-zone-summary { border-left-color: var(--key-red); }
-.bias-mask > .editor-zone-summary { border-left-color: var(--key-amber); }
-.bias-child > .editor-zone-summary { border-left-color: var(--key-teal); }
-.bias-unassigned > .editor-zone-summary { border-left-color: var(--case-shadow); background: #e8b4a8; }
+details.force-open > .editor-zone-summary::after {
+    content: "−";
+}
+
+details.force-open > .editor-zone-cards {
+    display: flex !important;
+}
+
+.bias-repression > .editor-zone-summary {
+    border-left-color: var(--key-red);
+}
+
+.bias-mask > .editor-zone-summary {
+    border-left-color: var(--key-amber);
+}
+
+.bias-child > .editor-zone-summary {
+    border-left-color: var(--key-teal);
+}
+
+.bias-unassigned > .editor-zone-summary {
+    border-left-color: var(--case-shadow);
+    background: #e8b4a8;
+}
+
 .editor-zone-cards {
     padding: 0.75rem;
     display: flex;
@@ -375,9 +477,11 @@ details.force-open > .editor-zone-cards { display: flex !important; }
     gap: 0.75rem;
     border-top: 2px solid var(--ink);
 }
+
 .editor-zone-group > .editor-btn {
     margin: 0 0.75rem 0.75rem;
 }
+
 .editor-glitch-row {
     display: flex;
     flex-direction: column;
@@ -387,6 +491,7 @@ details.force-open > .editor-zone-cards { display: flex !important; }
     border-radius: 6px;
     background: var(--case-deep);
 }
+
 .editor-glitch-row .editor-tag-label {
     width: auto;
     color: var(--key-violet);

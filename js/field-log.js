@@ -9,14 +9,20 @@ let fieldLogCache = null;
 
 function loadFieldLog() {
     if (fieldLogCache) return fieldLogCache;
-    try { fieldLogCache = JSON.parse(localStorage.getItem(FIELD_LOG_KEY)) || []; }
-    catch (e) { fieldLogCache = []; }
+    try {
+        fieldLogCache = JSON.parse(localStorage.getItem(FIELD_LOG_KEY)) || [];
+    } catch (e) {
+        fieldLogCache = [];
+    }
     return fieldLogCache;
 }
+
 function saveFieldLog(entries) {
     fieldLogCache = entries;
-    try { localStorage.setItem(FIELD_LOG_KEY, JSON.stringify(entries)); }
-    catch (e) { /* storage unavailable, entries persist for this session only */ }
+    try {
+        localStorage.setItem(FIELD_LOG_KEY, JSON.stringify(entries));
+    } catch (e) { /* storage unavailable, entries persist for this session only */
+    }
 }
 
 function deleteFieldEntry(id) {
@@ -147,8 +153,10 @@ function renderFieldEntries() {
 }
 
 function computeTagCounts(entries) {
-    const counts = { fawn: 0, flight: 0, fight: 0, freeze: 0, secure: 0 };
-    entries.forEach(e => { if (counts.hasOwnProperty(e.tag)) counts[e.tag]++; });
+    const counts = {fawn: 0, flight: 0, fight: 0, freeze: 0, secure: 0};
+    entries.forEach(e => {
+        if (counts.hasOwnProperty(e.tag)) counts[e.tag]++;
+    });
     return counts;
 }
 
@@ -191,10 +199,6 @@ function renderPattern() {
         return;
     }
 
-    // A tie on count used to get broken silently by object key order (fawn always
-    // beat flight, no matter what actually happened). Break it on something real
-    // instead: whichever tied response showed up most recently in the window. If
-    // it's still a genuine tie, say so rather than pretending one response won.
     const mostRecentTimestamp = tag => {
         const hits = windowEntries.filter(e => e.tag === tag);
         return hits.length ? Math.max(...hits.map(e => new Date(e.date).getTime())) : -Infinity;
@@ -222,7 +226,7 @@ function exportFieldLog() {
     const lines = entries.map(e =>
         `[${new Date(e.date).toLocaleString()}] ${e.tag}${e.zone ? ' / ' + e.zone : ''}\n${e.note}\n`
     );
-    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const blob = new Blob([lines.join('\n')], {type: 'text/plain'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

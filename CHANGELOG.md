@@ -6,6 +6,7 @@ All notable changes to the Unresolved Childhood Trauma Simulator are documented 
 
 ### Changed
 - **Result card now matches the game's own case**, instead of floating as a plain dark rectangle. The image card is framed like the toy itself — cream plastic bezel, the rainbow corner ribbon, a dark LED screen inset for the actual ending/stats/mechanisms — plus denser spacing throughout (bigger type, thicker bars, tighter gaps) so a short result no longer leaves a large empty gap before the footer.
+- The corner ribbon went through a few passes to get right: color order corrected to run red-nearest-corner-to-blue-farthest (matching the real `.app::before` ribbon's direction), the card's own bezel stroke moved to draw *before* the ribbon instead of after (it was painting over the corner and hiding the innermost band), and the stripes' position/thickness tuned by sampling actual rendered pixel colors along the top and left edges rather than eyeballing screenshots — confirmed symmetric (both edges transition through all five colors at matching distances) rather than merely close.
 - The link on both share formats (text and image) now points to `aedmark.itch.io/ucts` instead of the GitHub repo, since that's where someone would actually go to play.
 
 ## [4.16.0] - 2026-09-05

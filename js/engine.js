@@ -286,15 +286,31 @@ async function renderResultCanvas() {
     ctx.save();
     roundedRectPath(ctx, 0, 0, W, H, 48);
     ctx.clip();
-    ctx.translate(-30, 110);
+    // Matches the real .app::before ribbon: rotate(-45deg) around a point
+    // near the corner, with the color bands stacked going INTO the card
+    // (down-right) so red sits nearest the corner and blue farthest —
+    // stacking them along local +x here would put blue nearest the corner
+    // instead, which is the bug this replaced. The rounded corner (radius
+    // 48) clips away a chunk near the true (0,0) pixel, so the origin has
+    // to sit far enough past that arc that red's own band isn't entirely
+    // swallowed by it — verified by sampling pixel colors along the top
+    // and left edges, which now transition through all five colors at
+    // matching distances (genuinely symmetric, not just visually close).
+    ctx.translate(-20, 50);
     ctx.rotate(-Math.PI / 4);
     const stripeColors = ['#e3543f', '#eda123', '#f0d048', '#2f9e8f', '#4a72c9'];
-    const stripeW = 46;
+    const stripeH = 22;
+    // Run each stripe well past both card edges (rather than just past the
+    // near corner) so the outer bands — teal, blue — don't visibly run out
+    // before reaching the edge the way a short rect does at a 45° cut.
     stripeColors.forEach((c, i) => {
         ctx.fillStyle = c;
-        ctx.fillRect(i * stripeW, 0, stripeW + 1, 260);
+        ctx.fillRect(-300, i * stripeH, 1200, stripeH + 1);
     });
     ctx.restore();
+
+    // Border strokes on top of the rainbow (rather than before it), so the
+    // bezel reads as framing the ribbon instead of the ribbon bleeding over it.
     ctx.lineWidth = 22;
     ctx.strokeStyle = CANVAS_COLORS.ink;
     roundedRectPath(ctx, 0, 0, W, H, 48);

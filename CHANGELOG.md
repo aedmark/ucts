@@ -2,6 +2,33 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.17.0] - 2026-09-05
+
+### Changed
+- **Result card now matches the game's own case**, instead of floating as a plain dark rectangle. The image card is framed like the toy itself — cream plastic bezel, the rainbow corner ribbon, a dark LED screen inset for the actual ending/stats/mechanisms — plus denser spacing throughout (bigger type, thicker bars, tighter gaps) so a short result no longer leaves a large empty gap before the footer.
+- The link on both share formats (text and image) now points to `aedmark.itch.io/ucts` instead of the GitHub repo, since that's where someone would actually go to play.
+
+## [4.16.0] - 2026-09-05
+
+### Added
+- **Player Name**, an optional field on the splash screen (default blank, remembered in `localStorage` for next time). When set, it shows up on both share formats: the text card's title line becomes "*Name*'s U.C.T.S — *Ending*", and the image card gets a "Played by *Name*" line under the game title. Purely cosmetic — never touches stats, endings, or the seeded RNG — and skipped entirely on both cards when left blank, same as before this existed.
+
+## [4.15.0] - 2026-09-05
+
+### Added
+- **Share Result now includes an image**, alongside the existing text version. The end screen's Share Result button opens a panel with a rendered portrait result card (ending, stat bars in the pack's own colors and labels, seed, coping mechanisms) built fresh on a `<canvas>` — no DOM screenshot, no server — using a two-pass layout that centers the content block regardless of how long the ending or mechanism list runs. **Share / Save Image** hands that PNG straight to the device's native share sheet where `navigator.share` supports files, letting the phone's own OS-level share sheet decide what's available (Instagram, X, Threads, Messages, whatever's installed) instead of the game guessing with platform-specific buttons; on desktop, with no share sheet to hand off to, it just downloads the file.
+- `README.md`'s "nothing leaves your browser" claim now carries the one honest exception this creates: sharing is opt-in and user-initiated, nothing else changed about the game's own data handling.
+
+## [4.14.0] - 2026-09-04
+
+### Added
+- **Share Result (text).** The end screen has a Share Result button that builds a Wordle-style plain-text summary of the run — ending, seed, each stat as a block-character bar using the pack's own labels, coping mechanisms acquired — then copies it to the clipboard (with a brief confirmation) or, if clipboard access isn't available, reveals a pre-selected text box so it can always be copied by hand.
+
+## [4.13.0] - 2026-09-04
+
+### Changed
+- **Mobile layout: gameplay first, stats compact and below.** On viewports under 640px, the event/choices section now renders ahead of the stat HUD (via a flex `order` swap — no DOM changes, so nothing above 640px is affected) instead of forcing players to scroll past three full-height meters before reaching the actual turn. The HUD itself also shrinks on mobile: tighter panel padding and gaps, thinner bars, smaller label text, and captions ("If it hits 100%, you explode.") dropped since that's already covered by the Help screen.
+
 ## [4.12.0] - 2026-09-04
 
 ### Added

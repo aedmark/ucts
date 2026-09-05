@@ -150,6 +150,7 @@
             <p>Every so often, a fourth option shows up with no hint attached. That one's a real gamble.</p>
             <p>Survive once, and a harder mode called Extended Therapy unlocks permanently: more turns, bigger swings, no mercy.</p>
             <p>Every run has a <span class="accent">seed</span>. You can set one on the splash screen (or grab the daily one) to compare runs with someone else, and replay a specific run's seed from the end screen. <span class="accent">Timed Events</span> is an opt-in toggle there too: some turns get a countdown, and running it out freezes you into a random pick.</p>
+            <p>The end screen's <span class="accent">Share Result</span> button builds an image or text version of what just happened, entirely on your own device — sharing it anywhere from there is your device's own share sheet (or a plain download/copy), never automatic.</p>
             <p>The <span class="accent">Field Log</span> tab is a separate, real one made for tracking genuine moments in your actual life, not the fictional ones. It has its own note explaining what it is and isn't.</p>
             <p class="fine-print">Everything else? You'll have to find out by playing.</p>
         </div>
@@ -164,12 +165,20 @@
         <div class="overlay-actions">
             <button onclick="startGame(state.hardMode)" class="end-btn">Restart Therapy</button>
             <button onclick="startGame(state.hardMode, state.seed)" class="end-btn replay">Replay Seed ↻</button>
-            <button onclick="shareResult()" class="end-btn share">Share Result ⤴</button>
+            <button onclick="toggleSharePanel()" class="end-btn share">Share Result ⤴</button>
             <button id="end-ngplus-btn" onclick="startGame(true)" class="hidden end-btn ngplus">Extended Therapy ▶
             </button>
         </div>
-        <p id="end-share-status" class="end-share-status"></p>
-        <textarea id="end-share-text" class="hidden share-textarea" readonly rows="6"></textarea>
+
+        <div id="share-panel" class="hidden share-panel">
+            <div id="share-canvas-container" class="share-canvas-container"></div>
+            <div class="share-panel-row">
+                <button onclick="shareResultImage()" class="share-action-btn">Share / Save Image ⤴</button>
+                <button onclick="copyResultText()" class="share-action-btn">Copy Text ⧉</button>
+            </div>
+            <p id="end-share-status" class="end-share-status"></p>
+            <textarea id="end-share-text" class="hidden share-textarea" readonly rows="4"></textarea>
+        </div>
     </div>
 
     <!-- Splash / Title Screen (shown via JS on first load, per-pack customizable) -->
@@ -177,16 +186,20 @@
         <h2 id="splash-title" class="overlay-heading"></h2>
         <div id="splash-intro" class="overlay-body"></div>
         <div class="splash-options">
-            <label class="splash-option-row">
-                <input type="checkbox" id="splash-timed-toggle">
-                <span>Timed Events — some choices get a countdown; run it out and you freeze</span>
-            </label>
+            <div class="splash-seed-row">
+                <label for="splash-name-input">Your Name</label>
+                <input type="text" id="splash-name-input" class="seed-input" placeholder="Anonymous" maxlength="24">
+            </div>
             <div class="splash-seed-row">
                 <label for="splash-seed-input">Run Seed</label>
                 <input type="text" id="splash-seed-input" class="seed-input" placeholder="Leave blank for random">
                 <button type="button" onclick="randomizeSeed()" class="seed-btn" title="Randomize seed">🎲</button>
                 <button type="button" onclick="useDailySeed()" class="seed-btn" title="Today's challenge seed">📅
-                </button>
+                </button><br>
+                <label class="splash-option-row">
+                    <input type="checkbox" id="splash-timed-toggle">
+                    <span>Timed Events</span>
+                </label>
             </div>
         </div>
         <button id="splash-start-btn" onclick="dismissSplash()" class="end-btn">Start</button>

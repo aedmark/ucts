@@ -11,6 +11,7 @@ let lastEventTitle = null;
 let seenEventTitles = new Set();
 let timedEnabled = false;
 let timerInterval = null;
+let playerName = '';
 
 function hashSeed(str) {
     let h = 1779033703 ^ str.length;
@@ -121,6 +122,8 @@ const elEndNgPlusBtn = document.getElementById('end-ngplus-btn');
 const elEndSeedTag = document.getElementById('end-seed-tag');
 const elEndShareStatus = document.getElementById('end-share-status');
 const elEndShareText = document.getElementById('end-share-text');
+const elSharePanel = document.getElementById('share-panel');
+const elShareCanvasContainer = document.getElementById('share-canvas-container');
 let shareStatusTimeout = null;
 
 function copySeed() {
@@ -150,8 +153,11 @@ function buildShareText() {
         return '█'.repeat(filled) + '░'.repeat(10 - filled);
     };
     const modeTag = state.hardMode ? " (Extended Therapy)" : "";
+    const titleLine = playerName
+        ? `${playerName}'s ${elGameTitle.textContent} — ${elEndTitle.textContent}`
+        : `${elGameTitle.textContent} — ${elEndTitle.textContent}`;
     const lines = [
-        `${elGameTitle.textContent} — ${elEndTitle.textContent}`,
+        titleLine,
         `Seed: ${state.seed} · Turn ${Math.min(state.turn, state.maxTurns)}/${state.maxTurns}${modeTag}`,
         `${labels.repression}  ${barify(state.repression)}  ${state.repression}%`,
         `${labels.mask}  ${barify(state.mask)}  ${state.mask}%`,
@@ -163,21 +169,13 @@ function buildShareText() {
     if (unlockedNames.length) {
         lines.push(`Coping Mechanisms: ${unlockedNames.join(', ')}`);
     }
-    lines.push('github.com/aedmark/ucts');
+    lines.push('aedmark.itch.io/ucts');
     return lines.join('\n');
 }
 
-async function shareResult() {
+async function copyResultText() {
     const text = buildShareText();
     elEndShareText.classList.add('hidden');
-
-    if (navigator.share) {
-        try {
-            await navigator.share({text});
-            return;
-        } catch (e) { /* share sheet dismissed or unavailable here — fall back below */
-        }
-    }
     if (navigator.clipboard && navigator.clipboard.writeText) {
         try {
             await navigator.clipboard.writeText(text);
@@ -190,6 +188,267 @@ async function shareResult() {
     elEndShareText.classList.remove('hidden');
     elEndShareText.select();
     showShareStatus('Select and copy the text below.');
+}
+
+const CANVAS_COLORS = {
+    case: '#e6dabd',
+    caseDeep: '#d3c39c',
+    ink: '#2c2013',
+    inkSoft: '#6b5a3f',
+    keyRed: '#e3543f',
+    screen: '#1a0e08',
+    screenEdge: '#0a0503',
+    ledRed: '#ff5240',
+    ledAmber: '#ffb100',
+    ledTeal: '#2fe0c4'
+};
+
+function roundedRectPath(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+}
+
+// Splits text into lines under maxWidth using whatever font is already set
+// on ctx — measurement only, no drawing, so the same call can size a layout
+// before a second pass actually renders it.
+function layoutWrappedLines(ctx, text, maxWidth) {
+    const words = text.split(' ');
+    const lines = [];
+    let line = '';
+    words.forEach(word => {
+        const test = line ? `${line} ${word}` : word;
+        if (line && ctx.measureText(test).width > maxWidth) {
+            lines.push(line);
+            line = word;
+        } else {
+            line = test;
+        }
+    });
+    if (line) lines.push(line);
+    return lines;
+}
+
+function drawWrappedLines(ctx, lines, x, y, lineHeight) {
+    lines.forEach(line => {
+        ctx.fillText(line, x, y);
+        y += lineHeight;
+    });
+    return y;
+}
+
+function drawStatBar(ctx, x, y, w, h, pct, color) {
+    ctx.fillStyle = CANVAS_COLORS.screenEdge;
+    ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, (w * Math.max(0, Math.min(100, pct))) / 100, h);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, w, h);
+}
+
+// Renders the same result as buildShareText(), as a portrait image sized
+// for Instagram/Threads-style story sharing. Built fresh each time off the
+// pack's own colors and labels rather than screenshotting the DOM, so it
+// looks right regardless of viewport size when the end screen appeared.
+// Framed like the game's own case — cream plastic bezel and rainbow corner
+// outside, a dark LED screen inset for the actual result — instead of just
+// being a floating dark rectangle.
+//
+// Two passes: the screen's content (ending text, stat bars, mechanisms)
+// varies a lot in height depending on how long the ending is and how many
+// mechanisms unlocked, so it's measured first and then vertically centered
+// inside the screen inset, rather than leaving a fixed-size gap that's
+// mostly empty on a short result.
+async function renderResultCanvas() {
+    await document.fonts.ready;
+    const content = getContent();
+    const labels = statLabels();
+    const win = elEndTitle.classList.contains('win');
+    const W = 1080, H = 1350;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // --- Outer case ---
+    roundedRectPath(ctx, 0, 0, W, H, 48);
+    const caseGrad = ctx.createLinearGradient(0, 0, 0, H);
+    caseGrad.addColorStop(0, CANVAS_COLORS.case);
+    caseGrad.addColorStop(1, CANVAS_COLORS.caseDeep);
+    ctx.fillStyle = caseGrad;
+    ctx.fill();
+    ctx.save();
+    roundedRectPath(ctx, 0, 0, W, H, 48);
+    ctx.clip();
+    ctx.translate(-30, 110);
+    ctx.rotate(-Math.PI / 4);
+    const stripeColors = ['#e3543f', '#eda123', '#f0d048', '#2f9e8f', '#4a72c9'];
+    const stripeW = 46;
+    stripeColors.forEach((c, i) => {
+        ctx.fillStyle = c;
+        ctx.fillRect(i * stripeW, 0, stripeW + 1, 260);
+    });
+    ctx.restore();
+    ctx.lineWidth = 22;
+    ctx.strokeStyle = CANVAS_COLORS.ink;
+    roundedRectPath(ctx, 0, 0, W, H, 48);
+    ctx.stroke();
+
+    // --- Header (on the case) ---
+    ctx.textAlign = 'center';
+    ctx.fillStyle = CANVAS_COLORS.keyRed;
+    ctx.font = '52px "Press Start 2P", monospace';
+    ctx.fillText(elGameTitle.textContent, W / 2, 150);
+
+    let screenTop = 195;
+    if (playerName) {
+        ctx.fillStyle = CANVAS_COLORS.inkSoft;
+        ctx.font = '26px "Space Mono", monospace';
+        ctx.fillText(`Played by ${playerName}`, W / 2, 195);
+        screenTop = 230;
+    }
+
+    // --- Screen inset ---
+    const screenX = 66, footerBlockH = 150;
+    const screenW = W - screenX * 2;
+    const screenBottom = H - 40 - footerBlockH;
+    const screenH = screenBottom - screenTop;
+    roundedRectPath(ctx, screenX, screenTop, screenW, screenH, 22);
+    ctx.fillStyle = CANVAS_COLORS.screen;
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = CANVAS_COLORS.ink;
+    ctx.stroke();
+
+    const innerPad = 50;
+    const contentX = screenX + innerPad;
+    const contentW = screenW - innerPad * 2;
+
+    const endingFont = '34px "Press Start 2P", monospace';
+    const mechHeaderFont = '24px "Space Mono", monospace';
+    const mechBodyFont = 'italic 24px "Space Mono", monospace';
+    const endingLineHeight = 44, statRowHeight = 22 + 46 + 58, mechLineHeight = 30;
+
+    ctx.font = endingFont;
+    const endingLines = layoutWrappedLines(ctx, elEndTitle.textContent.toUpperCase(), contentW);
+
+    const unlockedNames = Object.entries(mechanismState)
+        .filter(([, s]) => s.unlocked)
+        .map(([tag]) => content.mechanisms[tag] ? content.mechanisms[tag].name : tag);
+    ctx.font = mechBodyFont;
+    const mechLines = unlockedNames.length ? layoutWrappedLines(ctx, unlockedNames.join(', '), contentW) : [];
+
+    const blockHeight = endingLines.length * endingLineHeight + 26 + 50 + statRowHeight * 3
+        + (mechLines.length ? 30 + mechLines.length * mechLineHeight + 16 : 0);
+    const blockTop = screenTop + 40, blockBottom = screenBottom - 40;
+    let y = blockTop + Math.max(0, (blockBottom - blockTop - blockHeight) / 2);
+
+    ctx.fillStyle = win ? CANVAS_COLORS.ledTeal : CANVAS_COLORS.ledRed;
+    ctx.font = endingFont;
+    y = drawWrappedLines(ctx, endingLines, W / 2, y, endingLineHeight) + 26;
+
+    ctx.strokeStyle = CANVAS_COLORS.screenEdge;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(contentX, y);
+    ctx.lineTo(contentX + contentW, y);
+    ctx.stroke();
+    y += 50;
+
+    const statRows = [
+        {label: labels.repression, val: state.repression, color: CANVAS_COLORS.ledRed},
+        {label: labels.mask, val: state.mask, color: CANVAS_COLORS.ledAmber},
+        {label: labels.child, val: state.child, color: CANVAS_COLORS.ledTeal}
+    ];
+    statRows.forEach(row => {
+        ctx.font = '30px "Space Mono", monospace';
+        ctx.fillStyle = row.color;
+        ctx.textAlign = 'left';
+        ctx.fillText(row.label.toUpperCase(), contentX, y);
+        ctx.textAlign = 'right';
+        ctx.fillText(`${row.val}%`, contentX + contentW, y);
+        y += 22;
+        drawStatBar(ctx, contentX, y, contentW, 46, row.val, row.color);
+        y += 46 + 58;
+    });
+
+    if (mechLines.length) {
+        ctx.textAlign = 'left';
+        ctx.fillStyle = CANVAS_COLORS.ledTeal;
+        ctx.font = mechHeaderFont;
+        ctx.fillText('COPING MECHANISMS ACQUIRED:', contentX, y);
+        y += 30;
+        ctx.font = mechBodyFont;
+        drawWrappedLines(ctx, mechLines, contentX, y, mechLineHeight);
+    }
+
+    // --- Footer (on the case) ---
+    const modeTag = state.hardMode ? ' (Extended Therapy)' : '';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = CANVAS_COLORS.inkSoft;
+    ctx.font = '24px "Space Mono", monospace';
+    ctx.fillText(
+        `Seed: ${state.seed}  ·  Turn ${Math.min(state.turn, state.maxTurns)}/${state.maxTurns}${modeTag}`,
+        W / 2, H - 95
+    );
+
+    ctx.fillStyle = CANVAS_COLORS.ink;
+    ctx.font = '22px "Space Mono", monospace';
+    ctx.fillText('aedmark.itch.io/ucts', W / 2, H - 55);
+
+    return canvas;
+}
+
+async function toggleSharePanel() {
+    const opening = elSharePanel.classList.contains('hidden');
+    if (!opening) {
+        elSharePanel.classList.add('hidden');
+        return;
+    }
+    elSharePanel.classList.remove('hidden');
+    elShareCanvasContainer.innerHTML = '<p class="share-note">Rendering result card…</p>';
+    const canvas = await renderResultCanvas();
+    elShareCanvasContainer.innerHTML = '';
+    elShareCanvasContainer.appendChild(canvas);
+}
+
+function downloadCanvasBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+// On a phone with file-sharing support, this hands the image straight to
+// the OS share sheet — Instagram, Threads, Messages, whatever's installed
+// — since no platform except that sheet actually lets a website post an
+// image to Instagram directly. Everywhere else, it just downloads the PNG.
+async function shareResultImage() {
+    const canvas = await renderResultCanvas();
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    if (!blob) return;
+    const filename = `ucts-result-${state.seed}.png`;
+    const file = new File([blob], filename, {type: 'image/png'});
+
+    if (navigator.canShare && navigator.canShare({files: [file]})) {
+        try {
+            await navigator.share({files: [file], text: buildShareText()});
+            return;
+        } catch (e) { /* share sheet dismissed — fall back to a plain download */
+        }
+    }
+    downloadCanvasBlob(blob, filename);
+    showShareStatus('Image downloaded.');
 }
 
 const elGameTitle = document.getElementById('game-title');
@@ -346,6 +605,8 @@ function endGame(title, desc, win = false) {
     elEndShareStatus.textContent = '';
     elEndShareText.classList.add('hidden');
     elEndShareText.value = '';
+    elSharePanel.classList.add('hidden');
+    elShareCanvasContainer.innerHTML = '';
 }
 
 function resolveStatEffect(raw, currentValue) {

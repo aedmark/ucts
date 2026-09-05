@@ -5,7 +5,7 @@
 // ============================================================
 const DEFAULT_CONTENT = {
     config: {
-        startingStats: {repression: 20, mask: 100, child: 50},
+        startingStats: {repression: 40, mask: 80, child: 30},
         statLabels: {repression: "Repression Level", mask: "Social Mask", child: "Inner Child"},
         splash: {
             title: "Unresolved Childhood Trauma Simulator",

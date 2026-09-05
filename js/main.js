@@ -12,6 +12,24 @@ const elSplashTitle = document.getElementById('splash-title');
 const elSplashIntro = document.getElementById('splash-intro');
 const elSplashTimedToggle = document.getElementById('splash-timed-toggle');
 const elSplashSeedInput = document.getElementById('splash-seed-input');
+const elSplashNameInput = document.getElementById('splash-name-input');
+
+const PLAYER_NAME_KEY = 'uct_player_name';
+
+function getStoredPlayerName() {
+    try {
+        return localStorage.getItem(PLAYER_NAME_KEY) || '';
+    } catch (e) {
+        return '';
+    }
+}
+
+function setStoredPlayerName(name) {
+    try {
+        localStorage.setItem(PLAYER_NAME_KEY, name);
+    } catch (e) { /* storage unavailable, name just won't persist */
+    }
+}
 
 const TIMED_PREF_KEY = 'uct_timed_pref';
 
@@ -64,6 +82,7 @@ function showSplash() {
 
     elSplashTimedToggle.checked = getTimedPref();
     elSplashSeedInput.value = '';
+    elSplashNameInput.value = getStoredPlayerName();
     elSplashScreen.classList.remove('hidden');
 }
 
@@ -71,6 +90,8 @@ function dismissSplash() {
     elSplashScreen.classList.add('hidden');
     timedEnabled = elSplashTimedToggle.checked;
     setTimedPref(timedEnabled);
+    playerName = elSplashNameInput.value.trim().slice(0, 24);
+    setStoredPlayerName(playerName);
     startGame(false, elSplashSeedInput.value);
 }
 

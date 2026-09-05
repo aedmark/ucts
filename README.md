@@ -2,7 +2,7 @@
 
 A turn-based browser toy about the five ways people actually cope with a bad moment — dressed up as a CRT-terminal therapy simulator. Every event is a small, absurdly specific bad moment (a typo in an email to your boss, a sigh from the next room, your own reflection not looking like you for a second), and every choice you make is quietly one of five trauma responses, whether you meant it to be or not.
 
-Nothing about this leaves your browser. No server, no account, no analytics, no build step.
+Nothing about this leaves your browser on its own. No server, no account, no analytics, no build step. The one exception is entirely opt-in: tapping Share Result can hand your device's native share sheet an image of your result — see [Sharing a Result](#sharing-a-result) below. Nothing goes anywhere without you tapping something first.
 
 ## Running It
 
@@ -53,6 +53,15 @@ Every run has a seed — a short string that drives every random draw made durin
 ## Timed Events
 
 An opt-in toggle on the splash screen. On, each turn has a chance of putting a countdown under the event text — the same hidden-effects choices as always, just under a clock. Let it run out and the game picks one of that event's choices for you at random, logged as a `[FROZE]` line and always counted toward the `freeze` coping mechanism, whatever that choice actually did to your stats. Off by default; your last choice is remembered for next time.
+
+## Sharing a Result
+
+The end screen has a **Share Result** button that opens a small panel with a couple of ways to hand off what just happened, both built client-side from your run's own numbers — no server round-trip for either:
+
+- **Share / Save Image** renders a portrait result card (ending, stat bars, seed, coping mechanisms acquired) to a PNG. On a phone, this hands the image straight to your device's own share sheet — Instagram, X, Threads, Messages, whatever's installed — since that's the actual, real way to get an image onto any of those, rather than a handful of platform-specific buttons trying to guess which one you wanted. On desktop (no share sheet to hand off to) it just downloads the file.
+- **Copy Text** copies a plain-text version of the same result (bars rendered as block characters) to your clipboard, or reveals a pre-selected text box if clipboard access isn't available.
+
+An optional **Your Name** field on the splash screen (blank by default, remembered for next time) shows up on both: "*Name*'s U.C.T.S — *Ending*" in the text version, "Played by *Name*" under the title on the image card. Leave it blank and neither format mentions it.
 
 ## The Field Log
 

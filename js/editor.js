@@ -105,7 +105,19 @@ function buildConfigSection() {
         },
         {label: "Mechanism Unlock Threshold", get: () => cfg.unlockThreshold, set: v => cfg.unlockThreshold = v},
         {label: "Glitch Chance (0-1)", get: () => cfg.glitchChance, set: v => cfg.glitchChance = v, step: 0.01},
-        {label: "Weak Zone Weight", get: () => cfg.weakZoneWeight, set: v => cfg.weakZoneWeight = v, step: 0.1}
+        {label: "Weak Zone Weight", get: () => cfg.weakZoneWeight, set: v => cfg.weakZoneWeight = v, step: 0.1},
+        {
+            label: "Timed Event Chance (0-1)",
+            get: () => cfg.timedEventChance,
+            set: v => cfg.timedEventChance = v,
+            step: 0.01
+        },
+        {
+            label: "Timed Event Duration (ms)",
+            get: () => cfg.timedDuration,
+            set: v => cfg.timedDuration = v,
+            step: 500
+        }
     ];
 
     fields.forEach(f => {
@@ -907,6 +919,8 @@ function saveContentDraft() {
     cfg.hardModeTurns = Math.max(1, Math.round(cfg.hardModeTurns));
     cfg.hardModeMultiplier = Math.max(0.1, cfg.hardModeMultiplier);
     cfg.weakZoneWeight = Math.max(0, cfg.weakZoneWeight);
+    cfg.timedEventChance = Math.max(0, Math.min(1, cfg.timedEventChance || 0));
+    cfg.timedDuration = Math.max(1000, Math.round(cfg.timedDuration || 8000));
 
     saveContent(editorDraft);
     logEditorStatus("Saved. Open the simulator to play with these changes.");

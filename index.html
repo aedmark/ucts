@@ -153,6 +153,10 @@
             <p>Every so often, a fourth option shows up with no hint attached. That one's a real gamble.</p>
             <p>Survive once, and a harder mode &mdash; Extended Therapy &mdash; unlocks permanently: more turns, bigger
                 swings, no mercy.</p>
+            <p>Every run has a <span class="accent">seed</span> &mdash; set one on the splash screen (or grab the
+                daily one) to compare runs with someone else, and replay a specific run's seed from the end screen.
+                <span class="accent">Timed Events</span> is an opt-in toggle there too: some turns get a countdown,
+                and running it out freezes you into a random pick.</p>
             <p>The <span class="accent">Field Log</span> tab is a separate, real one &mdash; for tracking actual moments
                 in your actual life, not the fictional ones. It has its own note explaining what it is and isn't.</p>
             <p class="fine-print">Everything else, you'll have to find out by playing.</p>
@@ -164,8 +168,10 @@
     <div id="end-screen" class="hidden overlay overlay-end">
         <h2 id="end-title" class="overlay-heading end loss">Catastrophic Failure</h2>
         <p id="end-desc" class="end-desc">Your psychological defenses have collapsed.</p>
+        <p id="end-seed-tag" class="end-seed-tag"></p>
         <div class="overlay-actions">
             <button onclick="startGame(state.hardMode)" class="end-btn">Restart Therapy</button>
+            <button onclick="startGame(state.hardMode, state.seed)" class="end-btn replay">Replay Seed ↻</button>
             <button id="end-ngplus-btn" onclick="startGame(true)" class="hidden end-btn ngplus">Extended Therapy ▶
             </button>
         </div>
@@ -175,6 +181,19 @@
     <div id="splash-screen" class="hidden overlay overlay-splash">
         <h2 id="splash-title" class="overlay-heading"></h2>
         <div id="splash-intro" class="overlay-body"></div>
+        <div class="splash-options">
+            <label class="splash-option-row">
+                <input type="checkbox" id="splash-timed-toggle">
+                <span>Timed Events — some choices get a countdown; run it out and you freeze</span>
+            </label>
+            <div class="splash-seed-row">
+                <label for="splash-seed-input">Run Seed</label>
+                <input type="text" id="splash-seed-input" class="seed-input" placeholder="Leave blank for random">
+                <button type="button" onclick="randomizeSeed()" class="seed-btn" title="Randomize seed">🎲</button>
+                <button type="button" onclick="useDailySeed()" class="seed-btn" title="Today's challenge seed">📅
+                </button>
+            </div>
+        </div>
         <button id="splash-start-btn" onclick="dismissSplash()" class="end-btn">Start</button>
     </div>
 

@@ -33,6 +33,8 @@ Global numbers that shape the whole run, not any one event:
 | Mechanism Unlock Threshold | How many times you have to pick the *same* response type before it "locks in" as a coping mechanism. Default `3`. |
 | Glitch Chance (0-1) | Odds, each turn, of a bonus fourth choice with fully random effects. `0.15` = 15%. |
 | Weak Zone Weight | How much more likely an event is to be picked when its zone matches your worst stat. `2.5` means 2.5x the normal odds. `1` would turn this off entirely (pure random selection). |
+| Timed Event Chance (0-1) | Odds, each turn, that a countdown gets attached to the choices (only when the player has opted into Timed Events on the splash screen). Running it out auto-picks a random choice and always counts as a `freeze` response, regardless of that choice's own tag. `0.2` = 20%. |
+| Timed Event Duration (ms) | How long that countdown runs by default. An individual event can override this (or opt out of timing entirely) via raw JSON — see Events below. |
 | Repression / Mask / Inner Child Bar Name | What the stats panel calls each stat. Purely cosmetic — the underlying `repression`/`mask`/`child` keys used everywhere else (zone bias, ending conditions, mechanism mods) don't change, so renaming a bar doesn't rewire what it tracks. |
 | Splash Title / Splash Intro | Shown once, before the first turn, covering the whole app until the player clicks Start. Leave either blank and it falls back to the game's own title and a generic prompt rather than showing nothing. A blank line in the intro starts a new paragraph. Only shown on first load — restarting a run or unlocking Extended Therapy doesn't bring it back. |
 
@@ -92,6 +94,15 @@ Every event carries its own version of the random fourth choice (the glitch), ra
 
 The wildcard should read differently from the event's other three choices — those are the grounded, specific-but-plausible options; the wildcard is where the simulation stops pretending to be realistic and gets deliberately unhinged. Its effects are still fully random every time regardless of what the button says (the text doesn't telegraph the outcome any more than the other choices do), so write it for the joke, not as a fourth balanced option.
 
+### Timed Events (raw JSON only)
+
+Players opt into Timed Events on the splash screen; when they do, each turn has the pack-wide **Timed Event Chance** of putting a countdown on that event's choices. There's no editor UI for the per-event override yet — it's a raw JSON field on the event object:
+
+- `"timed": false` — this event never gets a countdown, no matter what's rolled.
+- `"timed": {"duration": 5000}` — this event uses a 5-second countdown instead of the pack-wide default.
+
+Leaving the field off entirely means the event uses the pack-wide chance and duration like everything else. Reach for `false` on events that need a slower, more deliberate read (a long description, a heavier moment) — a countdown fighting the player's ability to actually read the event undercuts it rather than adding tension.
+
 ## Walkthrough: writing one event start to finish
 
 1. Scroll to **Events**, click **+ Add Event**. A blank card appears with two starter choices.
@@ -117,7 +128,7 @@ Export a pack to see the exact shape. The top level is:
 
 ```json
 {
-  "config": { "startingStats": { "repression": 20, "mask": 100, "child": 50 }, "statLabels": { "repression": "Repression Level", "mask": "Social Mask", "child": "Inner Child" }, "splash": { "title": "U.C.T. Simulator", "intro": "Shown once before the run starts.\n\nBlank lines start new paragraphs." }, "maxTurns": 10, "hardModeTurns": 20, "hardModeMultiplier": 1.25, "unlockThreshold": 3, "glitchChance": 0.15, "weakZoneWeight": 2.5 },
+  "config": { "startingStats": { "repression": 20, "mask": 100, "child": 50 }, "statLabels": { "repression": "Repression Level", "mask": "Social Mask", "child": "Inner Child" }, "splash": { "title": "U.C.T. Simulator", "intro": "Shown once before the run starts.\n\nBlank lines start new paragraphs." }, "maxTurns": 10, "hardModeTurns": 20, "hardModeMultiplier": 1.25, "unlockThreshold": 3, "glitchChance": 0.15, "weakZoneWeight": 2.5, "timedEventChance": 0.2, "timedDuration": 8000 },
   "zones": [ { "key": "WORK", "statBias": "repression" } ],
   "mechanisms": {
     "fawn":   { "name": "The Approval Loop", "mod": { "rep": 0,  "mask": 3,  "child": -5 } },

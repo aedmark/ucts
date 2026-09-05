@@ -15,14 +15,20 @@ const DEFAULT_CONTENT = {
         // own title and a generic prompt instead of skipping the screen.
         splash: {
             title: "U.C.T. Simulator",
-            intro: "Three stats. Ten turns. Every choice you click is quietly one of five ways people cope with a bad day.\n\n you won't know which, or what it costs, until it's already happened.\n\nPress START when you're ready to find out."
+            intro: "Three stats. Ten turns. Every choice you click is quietly one of five ways people cope with a bad day.\n\nYou won't know which, or what it costs, until it's already happened.\n\nPress START when you're ready to find out."
         },
         maxTurns: 10,
         hardModeTurns: 20,
         hardModeMultiplier: 1.25,
         unlockThreshold: 3,
         glitchChance: 0.15,
-        weakZoneWeight: 2.5
+        weakZoneWeight: 2.5,
+        // Timed Events (opt-in on the splash screen). Each turn has this chance
+        // of putting a countdown on the choices; running it out auto-picks one
+        // at random and always counts as a `freeze` response. An event can set
+        // its own `timed: {duration}` override or `timed: false` to opt out.
+        timedEventChance: 0.2,
+        timedDuration: 8000
     },
 
     // Each zone leans on one of the three core stats. Event selection weights
@@ -2274,7 +2280,7 @@ const DEFAULT_CONTENT = {
                         child: {op: "subtract", value: 5},
                         rep: {op: "add", value: 0}
                     },
-                    log: "You filled the void with the safest possible noise. You and your coworker like you less, now."
+                    log: "You filled the void with the safest possible noise. Coward."
                 },
                 {
                     text: "Stare at the floor numbers with religious intensity.",

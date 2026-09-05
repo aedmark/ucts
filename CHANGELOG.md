@@ -2,6 +2,12 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.12.0] - 2026-09-04
+
+### Added
+- **Run Seeds.** Every run now has a seed — a short human-readable string that drives every random draw in that run (event selection, the wildcard's roll and effects, timed-choice timeouts) through a seeded PRNG instead of `Math.random()`. The splash screen has a Run Seed field: leave it blank for a fresh random seed, roll the 🎲 button for a new one without starting, or hit 📅 for a shared daily-challenge seed (`daily-YYYY-MM-DD`, same for everyone on a given date). The end screen shows the seed a run used and adds a **Replay Seed** button next to Restart, so a specific run — daily challenge or otherwise — can be re-run identically to compare results or actually beat it.
+- **Timed Events**, opt-in via a checkbox on the splash screen (off by default, preference remembered for next time). When enabled, each turn has a pack-configurable chance (`config.timedEventChance`, default 20%) of putting a countdown bar under the event text; running it out auto-picks a random choice from that event and logs it as `[FROZE] ...`, always counting toward the `freeze` coping-mechanism track regardless of that choice's own tag. Duration defaults to `config.timedDuration` (8s) and both the editor's Config tab and an event's own raw-JSON `timed: {duration}` / `timed: false` can override or disable it per-event.
+
 ## [4.11.0] - 2026-09-04
 
 ### Changed

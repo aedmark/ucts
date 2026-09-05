@@ -10,6 +10,51 @@ let mechanismState = {}; // tag -> { unlocked, count }
 let lastEventTitle = null;
 let seenEventTitles = new Set();
 
+// Timed Events: opt-in per session, set once from the splash screen and
+// carried across restarts/NG+ within it. Not part of `state` since it
+// survives a state reset.
+let timedEnabled = false;
+let timerInterval = null;
+
+// ============================================================
+// SEEDED RNG — every run's full sequence of random draws (event picks,
+// glitch rolls, timeouts) can be reproduced from a single seed string.
+// ============================================================
+function hashSeed(str) {
+    let h = 1779033703 ^ str.length;
+    for (let i = 0; i < str.length; i++) {
+        h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+        h = (h << 13) | (h >>> 19);
+    }
+    return () => {
+        h = Math.imul(h ^ (h >>> 16), 2246822507);
+        h = Math.imul(h ^ (h >>> 13), 3266489909);
+        return (h ^= h >>> 16) >>> 0;
+    };
+}
+
+function mulberry32(a) {
+    return function () {
+        a |= 0;
+        a = (a + 0x6D2B79F5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+
+function makeRng(seedString) {
+    return mulberry32(hashSeed(String(seedString))());
+}
+
+const SEED_WORDS = ["ash", "bramble", "cinder", "drift", "ember", "fawn", "glass", "hollow", "ivy", "knot",
+    "lull", "moth", "nettle", "opal", "pale", "quiet", "rust", "salt", "thorn", "umber", "veil", "wick", "yarrow", "zephyr"];
+
+function generateRandomSeed() {
+    const pick = () => SEED_WORDS[Math.floor(Math.random() * SEED_WORDS.length)];
+    return `${pick()}-${pick()}-${Math.floor(Math.random() * 900 + 100)}`;
+}
+
 // New Game+: unlocked permanently on your first survival.
 const NG_PLUS_KEY = 'uct_extended_unlocked';
 
@@ -81,6 +126,14 @@ const elEndScreen = document.getElementById('end-screen');
 const elEndTitle = document.getElementById('end-title');
 const elEndDesc = document.getElementById('end-desc');
 const elEndNgPlusBtn = document.getElementById('end-ngplus-btn');
+const elEndSeedTag = document.getElementById('end-seed-tag');
+
+function copySeed() {
+    if (!state.seed || !navigator.clipboard) return;
+    navigator.clipboard.writeText(state.seed).catch(() => {
+        /* clipboard unavailable — the seed is still visible on screen to copy by hand */
+    });
+}
 
 const elGameTitle = document.getElementById('game-title');
 const elObjectiveText = document.getElementById('objective-text');
@@ -225,11 +278,13 @@ function checkGameEnd() {
 }
 
 function endGame(title, desc, win = false) {
+    clearTimedChoice();
     state.isGameOver = true;
     elEndScreen.classList.remove('hidden');
     elEndTitle.textContent = title;
     elEndTitle.className = "overlay-heading end " + (win ? "win" : "loss");
     elEndDesc.textContent = desc;
+    elEndSeedTag.textContent = `Seed: ${state.seed}`;
     elEndNgPlusBtn.classList.toggle('hidden', state.hardMode || !isNgPlusUnlocked());
 }
 
@@ -288,16 +343,16 @@ function handleGlitchChoice(evt) {
     if (state.isGameOver) return;
     const content = getContent();
     const effects = {
-        rep: Math.floor(Math.random() * 51) - 25,
-        mask: Math.floor(Math.random() * 51) - 25,
-        child: Math.floor(Math.random() * 51) - 25
+        rep: Math.floor(state.rng() * 51) - 25,
+        mask: Math.floor(state.rng() * 51) - 25,
+        child: Math.floor(state.rng() * 51) - 25
     };
     let log;
     if (evt && evt.glitch && evt.glitch.log) {
         log = evt.glitch.log;
     } else {
         const logs = content.glitchLogs.length ? content.glitchLogs : ["Something happened."];
-        log = logs[Math.floor(Math.random() * logs.length)];
+        log = logs[Math.floor(state.rng() * logs.length)];
     }
     handleChoice(effects, log, null);
 }
@@ -321,7 +376,7 @@ function pickWeightedEvent() {
     });
     const total = weights.reduce((a, b) => a + b, 0);
 
-    let r = Math.random() * total;
+    let r = state.rng() * total;
     for (let i = 0; i < pool.length; i++) {
         r -= weights[i];
         if (r <= 0) return pool[i];
@@ -329,7 +384,52 @@ function pickWeightedEvent() {
     return pool[pool.length - 1];
 }
 
+function timedConfigFor(evt, content) {
+    if (evt.timed === false) return null;
+    const chance = typeof content.config.timedEventChance === 'number' ? content.config.timedEventChance : 0.2;
+    const baseDuration = typeof content.config.timedDuration === 'number' ? content.config.timedDuration : 8000;
+    const duration = (evt.timed && typeof evt.timed.duration === 'number') ? evt.timed.duration : baseDuration;
+    return {chance, duration};
+}
+
+function clearTimedChoice() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+}
+
+function resolveTimedOut(evt) {
+    if (state.isGameOver) return;
+    const choices = evt.choices || [];
+    if (!choices.length) return;
+    const pick = choices[Math.floor(state.rng() * choices.length)];
+    handleChoice(pick.effects || {}, `[FROZE] ${pick.log || pick.text || "..."}`, 'freeze');
+}
+
+function startTimedChoice(evt, duration) {
+    const bar = document.createElement('div');
+    bar.className = "timer-bar-container";
+    bar.innerHTML = '<div id="event-timer-fill" class="timer-bar-fill"></div>';
+    elEventDisplay.appendChild(bar);
+    const fill = document.getElementById('event-timer-fill');
+    const deadline = performance.now() + duration;
+
+    const tick = () => {
+        const remaining = deadline - performance.now();
+        fill.style.width = `${Math.max(0, Math.min(100, (remaining / duration) * 100))}%`;
+        fill.classList.toggle('timer-critical', remaining < duration * 0.25);
+        if (remaining <= 0) {
+            clearTimedChoice();
+            resolveTimedOut(evt);
+        }
+    };
+    tick();
+    timerInterval = setInterval(tick, 100);
+}
+
 function loadRandomEvent() {
+    clearTimedChoice();
     const content = getContent();
     const evt = pickWeightedEvent();
     lastEventTitle = evt.title;
@@ -358,24 +458,37 @@ function loadRandomEvent() {
         textSpan.textContent = choice.text || "...";
         btn.appendChild(textSpan);
 
-        btn.onclick = () => handleChoice(fx, choice.log, choice.tag || null);
+        btn.onclick = () => {
+            clearTimedChoice();
+            handleChoice(fx, choice.log, choice.tag || null);
+        };
         elChoicesContainer.appendChild(btn);
     });
 
-    if (Math.random() < content.config.glitchChance) {
+    if (state.rng() < content.config.glitchChance) {
         const glitchBtn = document.createElement('button');
         glitchBtn.className = "choice-btn glitch";
         const glitchTextSpan = document.createElement('span');
         glitchTextSpan.textContent = (evt.glitch && evt.glitch.text) || "??? Do something you can't predict.";
         glitchBtn.appendChild(glitchTextSpan);
-        glitchBtn.onclick = () => handleGlitchChoice(evt);
+        glitchBtn.onclick = () => {
+            clearTimedChoice();
+            handleGlitchChoice(evt);
+        };
         elChoicesContainer.appendChild(glitchBtn);
+    }
+
+    const timedCfg = timedEnabled ? timedConfigFor(evt, content) : null;
+    if (timedCfg && (evt.choices || []).length && state.rng() < timedCfg.chance) {
+        startTimedChoice(evt, timedCfg.duration);
     }
 }
 
-function startGame(hard = false) {
+function startGame(hard = false, seedOverride = null) {
+    clearTimedChoice();
     const content = getContent();
     const cfg = content.config;
+    const seed = (seedOverride && String(seedOverride).trim()) ? String(seedOverride).trim() : generateRandomSeed();
     state = {
         repression: cfg.startingStats.repression,
         mask: cfg.startingStats.mask,
@@ -383,7 +496,9 @@ function startGame(hard = false) {
         turn: 1,
         maxTurns: hard ? cfg.hardModeTurns : cfg.maxTurns,
         isGameOver: false,
-        hardMode: hard
+        hardMode: hard,
+        seed: seed,
+        rng: makeRng(seed)
     };
     resetMechanismState();
     lastEventTitle = null;

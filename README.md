@@ -46,6 +46,14 @@ Each turn carries a small chance (15% by default) of a fourth choice — a wildc
 
 Survive a standard run once and a harder New Game+ mode unlocks permanently: double the turns, and every stat swing — including mechanism modifiers — scaled up. Your nervous system has been here before; it doesn't get an easier version of the same problem.
 
+## Run Seeds
+
+Every run has a seed — a short string that drives every random draw made during it (which events show up, the wildcard's roll, a timed-choice timeout) through a seeded generator instead of raw randomness. Leave the splash screen's seed field blank for a fresh random one each time, or set it yourself: type a shared seed to compare runs with someone else, or hit the 📅 button for that day's challenge seed, the same for everyone who plays it that day. The end screen shows whatever seed a run used and offers a **Replay Seed** button to run it back identically, next to the normal (freshly seeded) restart.
+
+## Timed Events
+
+An opt-in toggle on the splash screen. On, each turn has a chance of putting a countdown under the event text — the same hidden-effects choices as always, just under a clock. Let it run out and the game picks one of that event's choices for you at random, logged as a `[FROZE]` line and always counted toward the `freeze` coping mechanism, whatever that choice actually did to your stats. Off by default; your last choice is remembered for next time.
+
 ## The Field Log
 
 A second mode, separate from the simulation: a real, persistent journal that uses the same five-word vocabulary. Log an actual moment from your actual life, tag it with whichever response fits closest, and build a local history — a rolling 7-day pattern reading, a plain-language read on your most common response, text export, and a confirm-gated way to delete a single entry or clear everything.

@@ -464,12 +464,12 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Stand up and simply read the email aloud instead.",
-                log: "The meeting ends four seconds later. Nobody claps, but they should."
+                log: "The meeting ends four seconds later. Nobody claps, but you think they maybe want to."
             }
         },
         {
             zone: "WORK", title: "The Away Message",
-            desc: "You set your status to 'in a meeting' twenty minutes ago and never actually joined one. Someone just @-mentioned you directly.",
+            desc: "You set your status to 'in a meeting' twenty minutes ago and never actually joined one. Someone just pinged you directly.",
             choices: [
                 {
                     text: "Type 'sorry, just wrapped up, what's up!' like it's true.",
@@ -504,7 +504,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Reply with a photo of an actual empty desk, for evidence.",
-                log: "The desk is, notably, yours. This raises more questions than it answers."
+                log: "The desk is, notably, yours. This raises more questions than it answers. You're okay with this."
             }
         },
         {
@@ -542,7 +542,7 @@ const DEFAULT_CONTENT = {
                     log: "You watched the thread instead of joining it."
                 }
             ],
-            glitch: {text: "CC the entire company. Let everyone share in this.", log: "Democracy, but for blame."}
+            glitch: {text: "Reply-All to the entire company. Let everyone share in this learning experience.", log: "Democracy, but for blame. Nobody wins but nobody loses, either. Except maybe some brain cells."}
         },
         {
             zone: "WORK", title: "The Unclaimed Credit",
@@ -581,7 +581,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Stand up and take a long, silent bow.",
-                log: "Three people clap before realizing they don't know why."
+                log: "Three people clap before realizing they don't know why. Doesn't matter; validation is transferable but NOT refundable."
             }
         },
         {
@@ -621,7 +621,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Start typing back before they've even sent anything.",
-                log: "Your dots meet their dots. A standoff of pure anticipation."
+                log: "Your dots meet their dots. A standoff of pure anticipation. Who will win? ..."
             }
         },
         {
@@ -661,7 +661,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Set your own auto-reply to something ominous and cryptic.",
-                log: "It now reads: 'I am also out. Existentially.'"
+                log: "It now reads: 'I am also out. Of my mind. Please check back later.'"
             }
         },
         {
@@ -701,7 +701,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Challenge them to a desk-chair race down the hallway.",
-                log: "You lose. You also nearly take out a filing cabinet."
+                log: "You lose. You also nearly take out a filing cabinet. It's a bonding experience."
             }
         },
         {
@@ -741,7 +741,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Reply with only a countdown timer emoji, repeated forty times.",
-                log: "Nobody has ever communicated dread this efficiently."
+                log: "Nobody has ever communicated dread this efficiently. You're promoted to CEO."
             }
         },
         {
@@ -781,7 +781,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Lean into the frozen frame. Hold the expression on purpose now.",
-                log: "You have become a meme in your own meeting."
+                log: "You have become a meme in your own meeting. People appreciate your whimsy, but respect you slightly less."
             }
         },
         {
@@ -820,8 +820,8 @@ const DEFAULT_CONTENT = {
                 }
             ],
             glitch: {
-                text: "Enter dramatically, out of breath, narrating your own arrival like a nature documentary.",
-                log: "'And here, the latecomer returns to the herd.'"
+                text: "Enter dramatically, out of breath, with an incredulous look in your eye.",
+                log: "'Quick! There's no time to explain!'"
             }
         },
         {
@@ -860,8 +860,8 @@ const DEFAULT_CONTENT = {
                 }
             ],
             glitch: {
-                text: "Reply with the same screenshot, circled in red, seventeen times.",
-                log: "You have made your point. Several points, actually. All the same one."
+                text: "Reply with the same screenshot, circled in red, underlined in red, and highlighted in red.",
+                log: "You have made your point. Several points, actually. All very helpful."
             }
         },
         {
@@ -1100,8 +1100,8 @@ const DEFAULT_CONTENT = {
                 }
             ],
             glitch: {
-                text: "Reply instantly with a single word: 'ALWAYS.'",
-                log: "This was not the reassurance they were hoping for."
+                text: "Reply instantly with 'Your wish is my command, Master.'",
+                log: "This was not the reassurance they were hoping for. You never hear from them again."
             }
         },
         {
@@ -1141,7 +1141,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Reply with an equally cryptic single word of your own.",
-                log: "A one-word war has begun. Nobody will win it."
+                log: "A one-word war has begun. Nobody will walk away alive."
             }
         },
         // --- HOME ---
@@ -1222,7 +1222,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Build an elaborate dish-based sculpture instead of washing them.",
-                log: "It's actually kind of impressive. It does not count as washing them."
+                log: "It's actually kind of impressive. It does not count as washing them, though."
             }
         },
         {
@@ -1302,7 +1302,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Start narrating the drive like a hushed golf commentator.",
-                log: "'And she signals... she signals early. Remarkable composure.'"
+                log: "'And she signals... she signals early. Remarkable composure. Will she return her hands to ten and two? Stay tuned to find out...'"
             }
         },
         {
@@ -1507,7 +1507,7 @@ const DEFAULT_CONTENT = {
         },
         {
             zone: "HOME", title: "The Passive-Aggressive Post-it",
-            desc: "'Please rinse dishes before leaving in sink :)' — the smiley face is doing a lot of unpaid emotional labor.",
+            desc: "'Please rinse dishes before leaving in sink :)'\n\n\n The smiley face is doing a lot of unpaid emotional labor.",
             choices: [
                 {
                     text: "Rinse everything in the house preemptively for a week.",
@@ -1542,7 +1542,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Cover the entire kitchen in post-its of your own.",
-                log: "The kitchen now resembles a ransom note made of politeness."
+                log: "The kitchen now resembles a ransom note made of passively aggressive politeness."
             }
         },
         {
@@ -1581,7 +1581,7 @@ const DEFAULT_CONTENT = {
                 }
             ],
             glitch: {
-                text: "Knock back a rhythm, just to see if they knock again.",
+                text: "Knock back in a rhythm, just to see if they knock again.",
                 log: "A wall-based friendship begins, tentatively, in Morse-adjacent taps."
             }
         },
@@ -1622,7 +1622,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Launch a full forensic investigation, complete with a labeled evidence board.",
-                log: "You have connected several pieces of red string to absolutely nothing."
+                log: "You have connected several pieces of red string to absolutely nothing helpful."
             }
         },
         {
@@ -1662,7 +1662,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Answer your own question instead, at great length, to the room.",
-                log: "The room does not respond either. Fair."
+                log: "The room does not respond either. Hurtful, but fair."
             }
         },
         {
@@ -1702,7 +1702,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Install a tiny sign declaring the thermostat a neutral zone.",
-                log: "Switzerland would be proud. Nobody honors the treaty."
+                log: "Switzerland would be proud. (Nobody honors the treaty)."
             }
         },
         {
@@ -1737,12 +1737,12 @@ const DEFAULT_CONTENT = {
                         mask: {op: "subtract", value: 5},
                         child: {op: "add", value: 10}
                     },
-                    log: "This did not, in fact, end the friendship. They bought you dinner to thank you, instead."
+                    log: "This did not, in fact, end the friendship. They bought you dinner in appreciation."
                 }
             ],
             glitch: {
                 text: "Start a dramatic heist-movie-style plan to retrieve it.",
-                log: "The plan involves zero actual heisting and a lot of standing outside their door."
+                log: "The plan involves zero actual heisting and a lot of standing outside their door whining."
             }
         },
         {
@@ -1782,7 +1782,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Photobomb the memory. Mentally. With your current face.",
-                log: "Past-you and present-you now occupy the same photograph, spiritually."
+                log: "Past-you and present-you now occupy the same photograph, spiritually. So there."
             }
         },
         {
@@ -1822,7 +1822,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Call back using a dramatically different, unexplained voice.",
-                log: "You are now, for reasons unclear, doing a full accent."
+                log: "You are now, for reasons unclear, doing a full Irish accent."
             }
         },
         {
@@ -1861,8 +1861,8 @@ const DEFAULT_CONTENT = {
                 }
             ],
             glitch: {
-                text: "Build a small, dignified pillow fort in the empty space.",
-                log: "The fort has excellent structural integrity and zero strategic purpose."
+                text: "Build a small, dignified pillow fort in the empty space and watch Netflix in it.",
+                log: "The fort has excellent structural integrity and zero strategic purpose. "
             }
         },
         {
@@ -1902,7 +1902,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Shake the envelope and try to guess the contents like a game show.",
-                log: "You have guessed 'ferret' three times. You are not close."
+                log: "You have guessed 'ferret' three times. You weren't even close."
             }
         },
         {
@@ -2022,7 +2022,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Leap up and greet them in full detective-noir monologue.",
-                log: "'You've got some explaining to do, at 2 AM, in this economy.'"
+                log: "'You've got some explaining to do! At 2 AM! ...In this economy!'"
             }
         },
         {
@@ -2142,8 +2142,8 @@ const DEFAULT_CONTENT = {
                 }
             ],
             glitch: {
-                text: "Ask them, with complete sincerity, for their oat milk opinions.",
-                log: "You now know more about oat milk than several dairy scientists."
+                text: "Ask them, with complete sincerity, for their thoughts on oat milk.",
+                log: "You now know more about oat milk than many food scientists. And have a new tennis partner."
             }
         },
         {
@@ -2178,7 +2178,7 @@ const DEFAULT_CONTENT = {
                 }
             ],
             glitch: {
-                text: "Reply with a single, deeply dramatic single tear emoji.",
+                text: "Reply with a single, deeply dramatic tear emoji.",
                 log: "They have not responded. The emoji stands alone, weeping into the void."
             }
         },
@@ -2259,7 +2259,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Comment demanding a formal recount of the likes.",
-                log: "The recount is denied. Democracy fails you again."
+                log: "The recount is denied. Someone photoshops a powdered wig on your head in said photo. Democracy has failed you again."
             }
         },
         {
@@ -2339,7 +2339,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Claim, boldly, that you were actually a time traveler that day.",
-                log: "They seem to accept this explanation more readily than expected."
+                log: "They seem to accept this explanation more readily than expected. Someone asks if you've ever met Elvis."
             }
         },
         {
@@ -2499,7 +2499,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Start your own group chat. Name it something deeply petty.",
-                log: "It has one member. It is thriving anyway."
+                log: "It has one member. It is thriving."
             }
         },
         {
@@ -2619,7 +2619,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Demand a formal, itemized list of exactly how much better.",
-                log: "They did not prepare a spreadsheet. You are disappointed in their lack of documentation."
+                log: "They did not prepare a spreadsheet. You are disappointed in their inability to verify their claims."
             }
         },
         {
@@ -2659,7 +2659,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Commit fully: sprint over and hug a near-stranger.",
-                log: "This escalated several social contracts beyond what either of you agreed to."
+                log: "This escalated several social contracts beyond what either of you agreed to. It feels right."
             }
         },
         {
@@ -2739,7 +2739,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Post a single cryptic status implying you know things.",
-                log: "You do not, in fact, know anything. The mystery deepens for everyone, including you."
+                log: "You know anything. The mystery deepens for everyone, including you."
             }
         },
         {
@@ -2819,7 +2819,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Send the group a full, dramatic exit statement the next morning.",
-                log: "It reads like a press release. Nobody asked for a press release."
+                log: "It reads like a press release nobody asked for."
             }
         },
         {
@@ -2859,7 +2859,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Stand up and propose your own toast, entirely about yourself.",
-                log: "It runs eleven minutes. The room claps out of confusion, mostly."
+                log: "It runs nine minutes. The room claps out of confusion, mostly."
             }
         },
         {
@@ -2899,7 +2899,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Invent an equally mysterious new friend of your own to mention constantly.",
-                log: "Your new friend, 'Gary,' does not exist. This works better than expected."
+                log: "Your new friend, 'Gary,' may not exist, but this plan works better than expected."
             }
         },
         {
@@ -2979,7 +2979,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Walk over and ask, directly, if it's about you.",
-                log: "It was not about you. It is now, slightly, about you."
+                log: "It was not about you...Well, it is *now*... but it wasn't, then Thank God. That could have been embarrassing."
             }
         },
         {
@@ -3059,7 +3059,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Comment on every photo with a single, ominous 'interesting.'",
-                log: "Nobody knows what you meant. You are not entirely sure either."
+                log: "Nobody knows what you meant. You are not entirely sure either. Regardless, it IS interesting."
             }
         },
         {
@@ -3098,7 +3098,7 @@ const DEFAULT_CONTENT = {
                 }
             ],
             glitch: {
-                text: "Reply via voicemail of your own, without listening to theirs first.",
+                text: "Reply via a voicemail of your own, without listening to theirs first.",
                 log: "Two unheard voicemails now orbit each other, unopened, forever."
             }
         },
@@ -3140,7 +3140,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Track down the exact cleaning product, immediately, mid-errand.",
-                log: "You now own four bottles of it. This is, medically, a lot of bottles."
+                log: "You now own four bottles of it. This is a lot of bottles."
             }
         },
         {
@@ -3220,7 +3220,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Write a formal reply to nineteen-year-old you, dated properly.",
-                log: "You have now started a pen-pal relationship with your own past."
+                log: "You have now started a pen-pal relationship with your past self. Neat!"
             }
         },
         {
@@ -3336,7 +3336,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Finish it in one unhinged, caffeinated burst, right now.",
-                log: "It is done. It is also, somehow, about ferrets now."
+                log: "It is done. It is also, somehow, about cats now."
             }
         },
         {
@@ -3456,7 +3456,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Interview the photo directly, out loud, like a documentary subject.",
-                log: "The photo declines to comment, as photos generally do."
+                log: "The photo declines to comment... Which is ironic, since they're worth a thousand words each, minimum."
             }
         },
         {
@@ -3496,7 +3496,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Lean all the way in and do a full, committed impression of them.",
-                log: "It's uncannily accurate. This is deeply unsettling for everyone, including you."
+                log: "It's uncannily accurate. Everyone is deeply unsettled."
             }
         },
         {
@@ -3575,8 +3575,8 @@ const DEFAULT_CONTENT = {
                 }
             ],
             glitch: {
-                text: "Blame it, loudly and specifically, on Mercury retrograde.",
-                log: "This explains nothing. It helps anyway, somehow."
+                text: "Blame it, loudly and specifically, on Mercury being in retrograde.",
+                log: "This explains nothing. It helps somehow, anyway."
             }
         },
         {
@@ -3615,8 +3615,8 @@ const DEFAULT_CONTENT = {
                 }
             ],
             glitch: {
-                text: "Lean all the way into it, theatrically, for one bit.",
-                log: "You have never committed to a bit this hard. Everyone is a little worried."
+                text: "Lean all the way into it.",
+                log: "You have never committed to a bit this hard. Everyone is a little worried about you."
             }
         },
         {
@@ -3656,7 +3656,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Write your own unhinged, deeply specific counter-list right now.",
-                log: "Item four is just 'a really good sandwich.' You stand by it."
+                log: "Item four is just 'made a really good sandwich.' You stand by it."
             }
         },
         {
@@ -3696,7 +3696,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Give the day an oddly specific, ceremonial little ritual.",
-                log: "You have invented a holiday nobody else knows about. It helps anyway."
+                log: "You have invented a holiday nobody else knows about. It helps."
             }
         },
         {
@@ -3776,7 +3776,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Draft their apology yourself, in full, and read it aloud dramatically.",
-                log: "It's a great apology. Extremely well-written. Deeply, deeply fake."
+                log: "It's a great apology. Extremely well-written and deeply, deeply fake."
             }
         },
         {
@@ -3896,7 +3896,7 @@ const DEFAULT_CONTENT = {
             ],
             glitch: {
                 text: "Announce it to a stranger on the street, at volume.",
-                log: "A stranger claps for you. This was not what either of you expected."
+                log: "A stranger claps for you. You're both very proud of yourself.."
             }
         },
         {

@@ -658,6 +658,7 @@ a { color: inherit; text-decoration: none; }
 .overlay-help { z-index: 30; }
 .overlay-end { z-index: 20; }
 .overlay-splash { z-index: 40; }
+#splash-start-btn { margin-top: 2rem; }
 
 .overlay-heading {
     font-family: var(--font-display);

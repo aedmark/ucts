@@ -1,0 +1,1659 @@
+{
+  "config": {
+    "startingStats": {
+      "repression": 25,
+      "mask": 100,
+      "child": 65
+    },
+    "maxTurns": 10,
+    "hardModeTurns": 20,
+    "hardModeMultiplier": 1.25,
+    "unlockThreshold": 3,
+    "glitchChance": 0.15,
+    "weakZoneWeight": 2.5,
+    "statLabels": {
+      "repression": "Loyalty",
+      "mask": "Job keepability",
+      "child": "Free will"
+    },
+    "splash": {
+      "title": "ScumSoft™ E-S.A.T.",
+      "intro": "Welcome, Valued Employmee!\n\n This aptitude test is mandatory, anonymous (ish), and will be used to determine your continued usefulness (or uselessness) to the company.\n\nYour Loyalty, Job Keepability, and Free Will shall be monitored throughout. \n\nTry to keep at least one.\n\nThere are no wrong answers. There are, however, consequences.\n\nPress 'START' to begin."
+    }
+  },
+  "zones": [
+    {
+      "key": "WORK",
+      "statBias": "repression"
+    },
+    {
+      "key": "HOME",
+      "statBias": "child"
+    },
+    {
+      "key": "SOCIAL",
+      "statBias": "mask"
+    },
+    {
+      "key": "SELF",
+      "statBias": "child"
+    }
+  ],
+  "mechanisms": {
+    "fawn": {
+      "name": "Secretive Calculations",
+      "mod": {
+        "rep": -8,
+        "mask": 3,
+        "child": 9
+      }
+    },
+    "flight": {
+      "name": "Yeastilating",
+      "mod": {
+        "rep": -10,
+        "mask": -3,
+        "child": 0
+      }
+    },
+    "fight": {
+      "name": "Troublemaking",
+      "mod": {
+        "rep": -5,
+        "mask": -8,
+        "child": -8
+      }
+    },
+    "freeze": {
+      "name": "Toiletbreak Allowance",
+      "mod": {
+        "rep": -15,
+        "mask": -9,
+        "child": 18
+      }
+    },
+    "secure": {
+      "name": "$0.01 Payrise",
+      "mod": {
+        "rep": -5,
+        "mask": 0,
+        "child": 5
+      }
+    }
+  },
+  "glitchLogs": [
+    "You cover your body in gravy. Nobody consented to this outcome.",
+    "You're not close enough to do that.",
+    "Oooooh... Bad move...",
+    "I'M BEING HELD PRISONER BY SCUMSOFT, SEND HELP PLEASE!",
+    "Keith says: Boy, this sure is mucho paperwork.",
+    "Wait, you're not supposed to be able to do that!",
+    "Blue Frogs suddenly appear on your shoulder, croak, and vanish. For a short moment, you felt happy.",
+    "Hey there! Sorry to interrupt, but I was wondering if you would like to make a charitable donation towards Changis' Procrastination Fund for Bored and Lazy Changises?"
+  ],
+  "failureEndings": {
+    "repression": {
+      "title": "Employee Worker Award for Achieving Excellence in the field of: Loyalty.",
+      "desc": "Cognatrulatons!\nYou have achieved the title of \"Subdued Hard Worker\".\n\nYour achievement has been forwarded to management.\n\nAs your reward, starting immediately, you will receive a 200% increase in your workload.\n\nYou will also receive a one-time coupon for the work canteen, where you get a whopping 1% off one single lunch purchase totalling at least $6875.\n(Coupon valid until 06/04/2017)\n\nThanks for being a pantload."
+    },
+    "mask": {
+      "title": "Employee Worker Award for Achieving Excellence in the field of: Job Loss",
+      "desc": "Cognatrulatons\nYou have achieved the title of \"Unemployed\".\n\nYour achievement has been forwarded to management.\n\nAs your reward, starting immediately, you will receive a 100% decrease in your workload and office access.\n\nYou have 26 seconds to clean out your desk and vacate the premises before we press charges.\n\nThanks for being a pantload."
+    },
+    "child": {
+      "title": "Employee Worker Award for Achieving Excellence in the field of: Independent Thinking.",
+      "desc": "Cognatrulatons!\nYou have achieved the title of \"Independent Thinker\".\n\nYour achievement has been forwarded to management.\n\nAs your reward, starting immediately, you will receive a free vacation to the ScumSoft Internment and Brainwashing Center.\n\nAttendance is mandatory.\nYour stay will be paid for by garnishing 100% of your wages for the next 78 months.\n\nThanks for being a pantload."
+    }
+  },
+  "endings": [
+    {
+      "title": "Evaluation of Employee B90210-H",
+      "desc": "Thank you for completing the ScumSoft™ Employee Satisfaction Aptitude Test. \n\nYour answers have been analysed.\nYour score is: 467 out of 540.\nNew High Score!\n\nCorgnatulituons!\nYou have received a promotion.\nYou have been promoted to:\nClass III Janitor.\n\nPlease report immediately to the manager of Fecal Sewers Zone D.\n\nThank you for being a pantload.",
+      "conditions": [
+        {
+          "stat": "repression",
+          "op": "<=",
+          "value": 30
+        },
+        {
+          "stat": "mask",
+          "op": ">=",
+          "value": 40
+        },
+        {
+          "stat": "child",
+          "op": ">=",
+          "value": 40
+        }
+      ]
+    },
+    {
+      "title": "Evaluation of Employee D925-P",
+      "desc": "Thank you for completing the ScumSoft™ Employee Satisfaction Aptitude Test. \n\nYour answers have been analysed.\nYour score is: 728.\nNew High Score!\n\nCongartulatuins!\nYou have received a promotion.\nYou have been promoted to:\nA Lesser Position and a 87% Paycut.\n\nYou have also been stripped of all bathroom privileges.\n\nNOW GET BACK TO WORK YOU PANTLOAD!",
+      "conditions": [
+        {
+          "stat": "mask",
+          "op": ">=",
+          "value": 85
+        },
+        {
+          "stat": "child",
+          "op": "<=",
+          "value": 35
+        }
+      ]
+    },
+    {
+      "title": "Evaluation of Employee K317H",
+      "desc": "Thank you for completing the ScumSoft™ Employee Satisfaction Aptitude Test. \n\nYour answers have been analysed.\nYour score is: 74 out of 3870.\nNew High Score!\n\nCnogartultons!\nYou have received a promotion.\nYou have been promoted to:\nKeith.\n\nYour new position requires constant mandatory smoking and a 9650% increase of paperwork.\n\nYou must provide your own cigarettes.\n\nThank you for being a pantload.",
+      "conditions": [
+        {
+          "stat": "child",
+          "op": ">=",
+          "value": 60
+        },
+        {
+          "stat": "mask",
+          "op": "<=",
+          "value": 50
+        }
+      ]
+    },
+    {
+      "title": "Evaluation of Employee 69420",
+      "desc": "Thank you for completing the ScumSoft™ Employee Satisfaction Aptitude Test. \n\nYour answers have been analysed.\nYour final score is: 26.\n\nCorgnatulituons!\nYou have received a promotion.\nYou have been promoted to:\nA Security Risk.\n\nArmed ScumSoft Security Officers will escort you to the ScumSoft™ Human Experimentation Department, where you will be lowered into a vat of brine for conservation.\n\nYour next of kin have been notified and sent a bill for the cost of your stay and security.\n\nThank you for being a pantload.",
+      "conditions": [
+        {
+          "stat": "repression",
+          "op": ">=",
+          "value": 60
+        }
+      ]
+    },
+    {
+      "title": "Evaluation of Employee *REDACTED*",
+      "desc": "Thank you for completing the ScumSoft™ Employee Satisfaction Aptitude Test. \n\nYour answers have been analysed.\nYour score is: -47 out of 100.\nERROR! Employee's score is lower than  \"Can barely read\" threshold.\n\nRunning failafe script...\nScript loaded.\n\nHello Sonny Bonds.\n\nCrognagluatons, you have received a new position as:\n\"Special\" Company Security and Driver.\n\nYour duties will include:\nRatting out employees for the smallest infraction.\nBreaking into employees private belongings for dirr.\nParticipating in rival company shootouts.\nDriving the ones who declined our deals the scenic route to the airport.\n\nA ScumSoft™ Pantloader® has been dispatched to your location, so keep your pants on... literally.",
+      "conditions": [
+        {
+          "stat": "repression",
+          "op": "<=",
+          "value": 25
+        },
+        {
+          "stat": "mask",
+          "op": "<=",
+          "value": 25
+        },
+        {
+          "stat": "child",
+          "op": "<=",
+          "value": 25
+        }
+      ]
+    },
+    {
+      "title": "Evaluation of Employee 42069",
+      "desc": "Thank you for completing the ScumSoft™ Employee Satisfaction Aptitude Test. \n\nYour answers have been analysed.\nYour score is: -65535 out of 10.\nERROR! Employee's score is lower than  \"Heavily Drunk and Blindfolded Monkey\" threshold.\n\nRunning failafe script: D1M.WIT...\nScript loaded.\n\nYou have received this message because you managed to scored so abysmally bad that you triggered the failsafe.\n\nConragnulsnot!\nYou have received a promotion!\n\nYou have been promoted to a new position in Management.\nYour new position is:\nScapegoat.\n\nYou will be handling the signing of all documents and being our face outwards when we need someone to blame.\nYou will receive a cushy office with a bouncy castle and an infinite supply of ice-cream.\n\nBecause you scored so atrociously bad, we understand that you are most likely cognitively capable of reading and understanding this, so a ScumSoft™ lackey has been sent to lure you into your new office with candy.\n\nThank you for being the biggest pantload of all.",
+      "conditions": [
+        {
+          "stat": "repression",
+          "op": "<=",
+          "value": 35
+        },
+        {
+          "stat": "mask",
+          "op": "<=",
+          "value": 45
+        },
+        {
+          "stat": "child",
+          "op": "<=",
+          "value": 35
+        }
+      ]
+    },
+    {
+      "title": "Boring Ending",
+      "desc": "You got the boring ending.",
+      "conditions": []
+    }
+  ],
+  "events": [
+    {
+      "zone": "WORK",
+      "title": "Work Assignment",
+      "desc": "Question 18462:\n\nYou receive an email from your manager asking if you can work weekends as well as weekdays.\nHow do you respond?",
+      "choices": [
+        {
+          "text": "By sending a reply, explaining that you unfortunately have to respectfully decline because you have a family that needs you..",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 10
+            },
+            "child": {
+              "op": "subtract",
+              "value": 15
+            },
+            "rep": {
+              "op": "subtract",
+              "value": 5
+            }
+          },
+          "log": "You get demoted to a \"less intensive\" position with a significant paycut."
+        },
+        {
+          "text": "By Ignoring the Email and go to have a coffee and a smoke, following the teachings of Keithology.",
+          "tag": "freeze",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "subtract",
+              "value": 5
+            },
+            "rep": {
+              "op": "add",
+              "value": 20
+            }
+          },
+          "log": "Your coworker gets the offer and takes it, he's promoted to a cushy management position after 1 week"
+        },
+        {
+          "text": "By Immediately accepting and kissing as much ass as possible. You'll surely get that promotion now!",
+          "tag": "secure",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 5
+            },
+            "child": {
+              "op": "add",
+              "value": 10
+            },
+            "rep": {
+              "op": "subtract",
+              "value": 10
+            }
+          },
+          "log": "You barely have time to go home anymore, you're still hoping for that promotion"
+        }
+      ],
+      "glitch": {
+        "text": "Reply to the whole company thread with just a GIF of a screaming goat.",
+        "log": "HR opens a formal inquiry into the goat. The goat is unavailable for comment."
+      }
+    },
+    {
+      "zone": "WORK",
+      "title": "Executive Choices",
+      "desc": "Question 2:\n\nYou see an executive walk into their office with two prostitutes, all three have white powder around their nostrils and are sniffing profusely.\n\nHow do you react?",
+      "choices": [
+        {
+          "text": "Make an anonymous tip to the police. Everyone has to follow the law.",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 20
+            },
+            "child": {
+              "op": "subtract",
+              "value": 25
+            },
+            "rep": {
+              "op": "add",
+              "value": 10
+            }
+          },
+          "log": "The executive got a notification that your number called the authorities, You are totally perplexed when the police find drugs in *your* desk drawer."
+        },
+        {
+          "text": "Hide and hope no-one saw you, and never mention it to anyone, ever! You don't want to get fired.",
+          "tag": "secure",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 5
+            },
+            "child": {
+              "op": "add",
+              "value": 5
+            },
+            "rep": {
+              "op": "subtract",
+              "value": 10
+            }
+          },
+          "log": "Your coworker who also spotted them received a $1.000.0000 payment to not say anything."
+        },
+        {
+          "text": "Ignore it and go have a coffee and a smoke. You follow the teachings of Keithology.",
+          "tag": "freeze",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 20
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 1
+            }
+          },
+          "log": "When you return to your desk, you notice you've gotten mucho paperwork to go through."
+        }
+      ],
+      "glitch": {
+        "text": "Ask the executive for a sample of whatever they're having.",
+        "log": "You are now also perplexed, but in a much better mood about it."
+      }
+    },
+    {
+      "zone": "WORK",
+      "title": "The Dilemma",
+      "desc": "Question 69:\n\nYour colleague sent you a picture of their cat.\nIt opens into full-screen just as your manager is coming towards your cubicle.\nWhat do you do?",
+      "choices": [
+        {
+          "text": "Immediately press the reset button, blame it on Windows and hope the manager didn't notice you not working for a few seconds.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 20
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            },
+            "rep": {
+              "op": "add",
+              "value": 20
+            }
+          },
+          "log": "The wait is excruciatingly long, and with the manager standing right next you, it's profusely intense and awkward. The picture popped up again as soon as you logged in."
+        },
+        {
+          "text": "Show the cat picture and other personal photos to the manager, after all, everyone loves cats.",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 5
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            },
+            "rep": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "Rhe manager did not like cats, and now, they don't like you either "
+        },
+        {
+          "text": "Quickly open up a video from your \"Special hidden folder\".",
+          "tag": "fight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 15
+            },
+            "child": {
+              "op": "add",
+              "value": 15
+            },
+            "rep": {
+              "op": "subtract",
+              "value": 10
+            }
+          },
+          "log": "You chose the one with the donkey and moist broccoli, The manager turns out to be a true gentleman of culture."
+        }
+      ],
+      "glitch": {
+        "text": "Full-screen the cat picture on purpose and start narrating it like a nature documentary.",
+        "log": "The manager stays to watch the whole thing. You are both late for everything now."
+      }
+    },
+    {
+      "zone": "WORK",
+      "title": "Time Management",
+      "desc": "Question 683347:\n\nYou are expected in a meeting 20 minutes from now.\nDo you;",
+      "choices": [
+        {
+          "text": "Spend the 20 minutes getting a coffee and having a smoke.",
+          "tag": "freeze",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 25
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "subtract",
+              "value": 15
+            }
+          },
+          "log": "You spent 34 minutes before going to the meeting."
+        },
+        {
+          "text": "Take 10 minutes to prepare, add 5 minutes to get to the meeting room, and arrive 5 minutes early",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 5
+            },
+            "child": {
+              "op": "subtract",
+              "value": 5
+            },
+            "rep": {
+              "op": "add",
+              "value": 10
+            }
+          },
+          "log": "The meeting was rescheduled 4 minutes before it should have started. They will surely notice your enthusiasm."
+        },
+        {
+          "text": "Quickly grab as many relevant notes as you can and run as fast as you can to the meeting to be as early as possible.",
+          "tag": "secure",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 10
+            },
+            "rep": {
+              "op": "subtract",
+              "value": 15
+            }
+          },
+          "log": "You were only asked one question, about the one thing you didn't bring your notes on, you fumbled the answer."
+        }
+      ],
+      "glitch": {
+        "text": "Declare the meeting a 'Keithology observance' and light a cigarette in the doorway.",
+        "log": "Nobody stops you. Nobody ever stops Keith either."
+      }
+    },
+    {
+      "zone": "WORK",
+      "title": "Communication",
+      "desc": "Question 74863:\n\nYou have an urgent issue that only your manager can resolve,  so you sent an Email marked Urgent and with read receipt.\nYou received a \"Read\" receipt at 11:37 AM.\nIt is now 9:27 PM, and still no reply.\nHow do you react?",
+      "choices": [
+        {
+          "text": "I Call the manager's personal phone, this can't wait any longer. You've avoided it too long already.",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 10
+            },
+            "child": {
+              "op": "subtract",
+              "value": 15
+            },
+            "rep": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "When they finally answer, they lash out at you for calling their personal number, and that whatever you want is denied as avresult."
+        },
+        {
+          "text": "Really start to panic and run around trying to get hold of your manager.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 5
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            },
+            "rep": {
+              "op": "add",
+              "value": 15
+            }
+          },
+          "log": "When you finally got hold of them, it was too late. You're reprimanded for not informing them sooner."
+        },
+        {
+          "text": "It's technically not *your* problem, so you relax with a drink and a smoke",
+          "tag": "freeze",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 20
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            }
+          },
+          "log": "You put on a vinyl record, but fall a sleep and your manual turntable arm has been grinding your stylus into the runout, all night. You lost the client and 24% of your wages."
+        }
+      ],
+      "glitch": {
+        "text": "Reply-all to your own unanswered email, agreeing with yourself enthusiastically.",
+        "log": "You have now cc'd management on an argument with nobody. It escalates anyway."
+      }
+    },
+    {
+      "zone": "HOME",
+      "title": "Home Environment",
+      "desc": "Question 6432:\n\nYou hear your neighbor shouting expletives.\nDo you:",
+      "choices": [
+        {
+          "text": "Go over and respectfully ask them to keep it down, no one should have to listen to such filth.",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 15
+            },
+            "child": {
+              "op": "subtract",
+              "value": 20
+            },
+            "rep": {
+              "op": "add",
+              "value": 10
+            }
+          },
+          "log": "They ignore your knocks, just as you hear your door close and automatically lock.  You did not remember to bring your key."
+        },
+        {
+          "text": "Slam open the neighbours door and shout \"Hey [Redacted], did you trap your little [Redacted] in the shredder? Or why the [Redacted] [Redacted] are you screaming like my ex? SHUT THE [Redacted] UP!",
+          "tag": "fight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 25
+            },
+            "child": {
+              "op": "add",
+              "value": 5
+            },
+            "rep": {
+              "op": "subtract",
+              "value": 15
+            }
+          },
+          "log": "You offer the neighbor a sniff of your little bag of \"magic\" white powder to calm down. Now he pesters you daily for more drugs."
+        },
+        {
+          "text": "You immediately assume it's you, so you turn off anything making a noise and hide under your covers.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 10
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            },
+            "rep": {
+              "op": "add",
+              "value": 25
+            }
+          },
+          "log": "You don't dare going outside between 2:45AM and 3:25AM"
+        }
+      ],
+      "glitch": {
+        "text": "Join in on the shouting, but about something completely unrelated, like printer toner.",
+        "log": "The neighbor stops to ask what your printer did to you. You don't have an answer."
+      }
+    },
+    {
+      "zone": "HOME",
+      "title": "Privacy",
+      "desc": "Question 420:\n\nA coworker asks you a mundane question about your private life.\nDo you:",
+      "choices": [
+        {
+          "text": "Politely change the subject to something work related.",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 10
+            },
+            "child": {
+              "op": "subtract",
+              "value": 15
+            },
+            "rep": {
+              "op": "add",
+              "value": 15
+            }
+          },
+          "log": "Your coworker must never know if you saw *that* movie. You inadvertently mention several other private details instead"
+        },
+        {
+          "text": "Invite them out instead so you can show them",
+          "tag": "fight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 15
+            },
+            "child": {
+              "op": "add",
+              "value": 5
+            },
+            "rep": {
+              "op": "subtract",
+              "value": 10
+            }
+          },
+          "log": "You woke up too hung-over to remember anything, As you turn around and see them in bed next to you, you figure that's the best outcome."
+        },
+        {
+          "text": "Point behind them and shout \"WHAT THE HELL IS *THAT?*\" and make your escape.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 5
+            },
+            "child": {
+              "op": "subtract",
+              "value": 5
+            },
+            "rep": {
+              "op": "add",
+              "value": 10
+            }
+          },
+          "log": "The coworker you accidentally pointed to filed a complaint about you calling them \"that\", you are reprimanded with no pay for a month."
+        }
+      ],
+      "glitch": {
+        "text": "Answer with a ScumSoft™-approved corporate non-disclosure statement, verbatim, out loud.",
+        "log": "Your coworker has never respected you more, or understood you less."
+      }
+    },
+    {
+      "zone": "HOME",
+      "title": "Free Time",
+      "desc": "Question 53:\n\nHow do you spend your free time? ",
+      "choices": [
+        {
+          "text": "Think about work and spend hours online researching and learning job related stuff.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 5
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            },
+            "rep": {
+              "op": "add",
+              "value": 10
+            }
+          },
+          "log": "You got a nice 2.3 hours of sleep that weekend, and a free trip to the hospital for only $8576"
+        },
+        {
+          "text": "Roll up cigarettes and smoke them.",
+          "tag": "freeze",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 20
+            },
+            "mask": {
+              "op": "add",
+              "value": 5
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            }
+          },
+          "log": "You practice your Keithology rituals."
+        },
+        {
+          "text": "Structured and scheduled, consistency is key.",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 10
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            },
+            "rep": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "Your life is now so routine, that you once forgot to schedule bathroom breaks, and you ended up giving yourself massive constipation."
+        }
+      ],
+      "glitch": {
+        "text": "Alphabetize your cigarettes by brand, then by how much you regret each one.",
+        "log": "This took four hours. You feel strangely accomplished."
+      }
+    },
+    {
+      "zone": "HOME",
+      "title": "Local Interactions",
+      "desc": "Question 53-C:\n\nA neighbour complains that your yard is unkempt.\n\nDo you:",
+      "choices": [
+        {
+          "text": "Apologize profusely, clean up your yard and offer to clean their yard as well.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "subtract",
+              "value": 5
+            },
+            "rep": {
+              "op": "add",
+              "value": 10
+            }
+          },
+          "log": "You now clean all your neighbours yards for free."
+        },
+        {
+          "text": "Explain how you haven't been able to, because of your demanding work",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 5
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            },
+            "rep": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "The neighbor mocks your excuse and reports you to HOA."
+        },
+        {
+          "text": "You immediately clean up your yard, and even do landscaping to make it look nice.",
+          "tag": "secure",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 10
+            },
+            "rep": {
+              "op": "subtract",
+              "value": 15
+            }
+          },
+          "log": "You're fined by the Home Owners Association for illegally breaking your yard's regulated esthetics."
+        }
+      ],
+      "glitch": {
+        "text": "Present the neighbor with a ScumSoft™ Employee Yard Beautification Award you made yourself.",
+        "log": "The neighbor is confused, then oddly touched, then still reports you to the HOA."
+      }
+    },
+    {
+      "zone": "SOCIAL",
+      "title": "Social Awareness",
+      "desc": "Question 89:\n\nYou are in the store, you have 4 items you want to purchase.\nTo pay, you can go to the following places:\n1: Cashier with a long queue.\n2: 3 Items or less Express Checkout, with no queue.\n3: Self checkout with a short queue.\n\nWhere do you go to pay?",
+      "choices": [
+        {
+          "text": "1: The cashier with the long queue",
+          "tag": "secure",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 10
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            },
+            "rep": {
+              "op": "add",
+              "value": 15
+            }
+          },
+          "log": "After 20 minutes, when it's finally your turn, the till closes and you have to stand in a new line."
+        },
+        {
+          "text": "2: 3 Items or less Express Checkout, with no queue",
+          "tag": "freeze",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "subtract",
+              "value": 25
+            },
+            "rep": {
+              "op": "add",
+              "value": 10
+            }
+          },
+          "log": "You are caught by store security and you're banned from the store for a month."
+        },
+        {
+          "text": "3: Self checkout with a short queue.",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 5
+            },
+            "child": {
+              "op": "subtract",
+              "value": 5
+            },
+            "rep": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "2 tills are out of order, 1 is waiting for an employee and an old lady is still struggling with the last one. They also opened more registers, so it would've been much faster to wait in the long cue."
+        }
+      ],
+      "glitch": {
+        "text": "Announce, to the whole store, that you are 'conducting a queue efficiency audit.'",
+        "log": "Nobody believes you. You believe you. That's what matters, ScumSoft™ says."
+      }
+    },
+    {
+      "zone": "SOCIAL",
+      "title": "Social Interactions",
+      "desc": "Question 386548:\n\nA friend asks if you want to go out partying next weekend.\nDo you:",
+      "choices": [
+        {
+          "text": "Immediately accept and call your dealer to stock up.",
+          "tag": "fight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 15
+            },
+            "child": {
+              "op": "subtract",
+              "value": 15
+            },
+            "rep": {
+              "op": "add",
+              "value": 20
+            }
+          },
+          "log": "You managed to chemically burn a hole in your nose, but you insist it was worth it, even though you can't remember anything."
+        },
+        {
+          "text": "Explain how you're an adult with a family now and respectfully decline, you're not 21 anymore and have responsibilities.",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 15
+            },
+            "child": {
+              "op": "subtract",
+              "value": 20
+            },
+            "rep": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "You forgot your wife was taking the kids to that Bluey concert for the weekend, so you spend it alone."
+        },
+        {
+          "text": "Say yes, but immediately try to make up an excuse to not go.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 10
+            },
+            "rep": {
+              "op": "add",
+              "value": 10
+            }
+          },
+          "log": "Your excuse wasn't good, and you could sense your friend's disappointment, but at least you can sit alone and watch TV and go to bed at 8PM."
+        }
+      ],
+      "glitch": {
+        "text": "Suggest, instead, a mandatory ScumSoft™ Team Bonding Paperwork Night.",
+        "log": "Everyone declines instantly. Somehow you're the one who feels rejected."
+      }
+    },
+    {
+      "zone": "SOCIAL",
+      "title": "Social Empathy",
+      "desc": "Question 27439:\n\nYou see a homeless person begging on the street, calling out to everyone who walks past him.\nTo get to where you want to go, you have to pass them.\n\nWhat do you do?",
+      "choices": [
+        {
+          "text": "Ignore them and sip your coffe and take a drag of your smoke as you walk past,",
+          "tag": "freeze",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 20
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "They call you an insensitive asshole."
+        },
+        {
+          "text": "You round them and their friends together, present alcohol as a prize and have your own private \"Hobo Olympics\".",
+          "tag": "fight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 10
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            },
+            "rep": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "You never saw such savagery over half a can of beer before. You didn't see the final results as you had  to run from the cops."
+        },
+        {
+          "text": "You offer to buy them a meal of their choice.",
+          "tag": "secure",
+          "effects": {
+            "rep": {
+              "op": "subtract",
+              "value": 10
+            },
+            "mask": {
+              "op": "add",
+              "value": 5
+            },
+            "child": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "You spent $4700 at a 3 star Michelin restaurant, though the $35 glass of water you ordeted *was* refreshing."
+        }
+      ],
+      "glitch": {
+        "text": "Offer them a position at ScumSoft™ on the spot, no interview required.",
+        "log": "They accept. HR is extremely confused by the new hire's application, which is a napkin."
+      }
+    },
+    {
+      "zone": "SOCIAL",
+      "title": "Private Family Sosialicing",
+      "desc": "Question 45F-674:\n\nA family member invites you to a family gathering.\nDo you:",
+      "choices": [
+        {
+          "text": "See this as an opportunity to get completely wasted with your uncle Jed, who always brings moonshine.",
+          "tag": "fight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 10
+            },
+            "child": {
+              "op": "add",
+              "value": 5
+            },
+            "rep": {
+              "op": "subtract",
+              "value": 5
+            }
+          },
+          "log": "You never knew your grandma could do *that* without any clothes on."
+        },
+        {
+          "text": "Say you're sick and stay home.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            },
+            "rep": {
+              "op": "add",
+              "value": 10
+            }
+          },
+          "log": "Your family comes to visit you instead, they stay for the week."
+        },
+        {
+          "text": "You reluctantly attend.",
+          "tag": "freeze",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 20
+            },
+            "child": {
+              "op": "subtract",
+              "value": 20
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "You ran out of cigarettes half way through and nearly didn't survive the shock from the lack of nicotine. -70 to Stamina"
+        }
+      ],
+      "glitch": {
+        "text": "Bring a PowerPoint presentation on 'Why I Can't Stay Long' to the gathering.",
+        "log": "Slide 7 is just a photo of your desk. Your family is very worried about slide 7."
+      }
+    },
+    {
+      "zone": "SOCIAL",
+      "title": "Parking Lot Diplomacy",
+      "desc": "Question 256:\n\nJust as you are about to swing in to the one free parking space you've seen since arriving, someone else squeezes their car infront of yours and parks it.\nHow do you react?",
+      "choices": [
+        {
+          "text": "Calmly ask them to move, explaining you were here first.",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 10
+            },
+            "child": {
+              "op": "subtract",
+              "value": 5
+            },
+            "rep": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "The guy ignores you, while other drivers are honking their horns behind you, you drive away stressed and miss 2 free spots."
+        },
+        {
+          "text": "You light up a cigarette and wait.",
+          "tag": "freeze",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 15
+            },
+            "mask": {
+              "op": "subtract",
+              "value": 5
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "You wait for 57 minutes before you are able to park in that space. You had to move your car 19 times to let other cars in and out of the spots you were blocking with your car."
+        },
+        {
+          "text": "Slink away and try to find another free parking space",
+          "tag": "secure",
+          "effects": {
+            "rep": {
+              "op": "subtract",
+              "value": 5
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "You end up finding a parking spot that's further away than if you had walked from home."
+        }
+      ],
+      "glitch": {
+        "text": "Leave a strongly worded, ScumSoft™-letterhead note on their windshield.",
+        "log": "The note is returned the next day with corrections to your grammar."
+      }
+    },
+    {
+      "zone": "SELF",
+      "title": "Memory",
+      "desc": "Question 78463:\n\nYou suddenly have a vivid flashback from your youth.\nThe memory was:",
+      "choices": [
+        {
+          "text": "When you were 12, standing in front of the school assembly, when your belt failed, so your pants fell down.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "subtract",
+              "value": 5
+            },
+            "rep": {
+              "op": "add",
+              "value": 30
+            }
+          },
+          "log": "You still remember the teachers laughing loudest."
+        },
+        {
+          "text": "When you were 24, and decided to stay in on New Years Eve with your favourite teddy, hot cocoa and going to bed at 8PM",
+          "tag": "secure",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 10
+            },
+            "child": {
+              "op": "add",
+              "value": 20
+            },
+            "rep": {
+              "op": "subtract",
+              "value": 20
+            }
+          },
+          "log": "It has since become a yearly tradition for you."
+        },
+        {
+          "text": "When you were 15, and you and your friend got f'ed up on some toadstools, and spent 3 whole days running around the forest, being chased by jolly gnomes that demanded you joined their karaoke and time-share meeting.",
+          "tag": "fight",
+          "effects": {
+            "mask": {
+              "op": "subtract",
+              "value": 15
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            },
+            "rep": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "You freeze in terror to this day, whenever you hear someone playing \"Cotton Eye'd Joe\"."
+        }
+      ],
+      "glitch": {
+        "text": "Try to relive the exact moment via interpretive dance, in the break room, right now.",
+        "log": "Two coworkers applaud. One files an HR report. Both reactions are correct."
+      }
+    },
+    {
+      "zone": "SELF",
+      "title": "Socialising",
+      "desc": "Question 4756:\n\nYou see a coworker outside of their cubicle.\nDo you:",
+      "choices": [
+        {
+          "text": "Duck under your desk to avoid them, hoping they didn't see you.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            },
+            "rep": {
+              "op": "add",
+              "value": 15
+            }
+          },
+          "log": "When you finally dare come out, your manager who's standing just outside your cubicle gets startled by your emergence, making them lose their coffee cup to the floor, splashing it all over your stuff. You have to buy a new coffee cup."
+        },
+        {
+          "text": "Ignore them and go have a smoke instead",
+          "tag": "freeze",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 15
+            },
+            "child": {
+              "op": "subtract",
+              "value": 15
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "You keep work and private seperate."
+        },
+        {
+          "text": "Eagerly greet them and start talking only about work related stuff.",
+          "tag": "secure",
+          "effects": {
+            "rep": {
+              "op": "subtract",
+              "value": 15
+            },
+            "child": {
+              "op": "add",
+              "value": 15
+            },
+            "mask": {
+              "op": "subtract",
+              "value": 5
+            }
+          },
+          "log": "Maybe management will notice your eagerness for your work."
+        }
+      ],
+      "glitch": {
+        "text": "Invite them to a ScumSoft™-sanctioned 'water cooler summit,' agenda: nothing.",
+        "log": "The summit runs long. Nothing remains firmly on the agenda throughout."
+      }
+    },
+    {
+      "zone": "SELF",
+      "title": "Personal History",
+      "desc": "Question 843-P:\n\nYou find your old notebook/diary from when you were 11 years old, where you wrote that you expected to be married with kids and own a house by 7 years ago.\n\nHow do you react?",
+      "choices": [
+        {
+          "text": "You get an immediate sense of dread and start panicking for not achieving any of your goals.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            },
+            "rep": {
+              "op": "add",
+              "value": 10
+            }
+          },
+          "log": "You burn it and try to forget, but you get into a heavy mid-life crisis instead."
+        },
+        {
+          "text": "You laugh and turn to the next page, where you write your new goal was to be a \"Space Janitor\" with brooms and your own Space-Garbage Truck.",
+          "tag": "fight",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "subtract",
+              "value": 20
+            },
+            "rep": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "You *STILL* want to be a \"Space Janitor\" with brooms and your own Space-Garbage Truck, so you get some drugs try to experience it."
+        },
+        {
+          "text": "You feel relieved that never happened, and that you're just married to your work.",
+          "tag": "secure",
+          "effects": {
+            "rep": {
+              "op": "subtract",
+              "value": 10
+            },
+            "child": {
+              "op": "add",
+              "value": 20
+            },
+            "mask": {
+              "op": "subtract",
+              "value": 5
+            }
+          },
+          "log": "Why would you want MORE nagging, when you get more than enough of it at work?"
+        }
+      ],
+      "glitch": {
+        "text": "Add a new goal to the diary right now, in crayon, for consistency.",
+        "log": "The new goal is 'acquire a bouncy castle.' You are unexpectedly on track for this one."
+      }
+    },
+    {
+      "zone": "SELF",
+      "title": "Secretive Bonus Round With PRIZES!",
+      "desc": "Question Bonus-4:\n\nCongatrulations!\nYou just found the Secretive Bonus Round With PRIZES!\n\nYou only have to answer what prize you want to win!\n\n(Disclaimer: The Secretive Bonus Round With PRIZES! is valid until 01.01.2012 08:00 AM)\n\nChoose your prize!",
+      "choices": [
+        {
+          "text": "I want: The ScumSoft™ Luxury 24k Gold Bar® with Emerald studded ScumSoft™ logo.",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            },
+            "rep": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "Did you know? An elephant can weigh more than a bucket that's filled to the brim with water."
+        },
+        {
+          "text": "I want: The Extra 5 Minutes of yearly bathroom time.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            },
+            "rep": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "Did you know? A river is primarily made up of water."
+        },
+        {
+          "text": "I want The ScumSoft™ Travels' Trip Around The World",
+          "tag": "secure",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "Did you know? A Brown bear is not Green."
+        },
+        {
+          "text": "I want: The Mint Condition 1962 Ferrari 250 GTO",
+          "tag": "fight",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 0
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "Did you know? A horse can have up to four legs."
+        },
+        {
+          "text": "I want: A lifetime supply of cigarettes and lighters.",
+          "tag": "freeze",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 0
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "Did you know? If a train leaves the station in Chicago at 4:27AM, and another train leaves the station in New York at 5:26AM... Do you care?"
+        }
+      ],
+      "glitch": {
+        "text": "Demand all five prizes simultaneously, citing a loophole you invented.",
+        "log": "ScumSoft™ Legal is impressed by the audacity and mildly threatened by the loophole."
+      }
+    },
+    {
+      "zone": "SELF",
+      "title": "Activities / Hobbies",
+      "desc": "Question 98567:\n\nYou find yourself having nothing to do all day.\n\nHow do you spend the day?",
+      "choices": [
+        {
+          "text": "I do all the chores and cleaning, and maybe some DIY if there's time.",
+          "tag": "fawn",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 5
+            },
+            "child": {
+              "op": "subtract",
+              "value": 10
+            },
+            "rep": {
+              "op": "add",
+              "value": 10
+            }
+          },
+          "log": "Idle hands and all that."
+        },
+        {
+          "text": "I log on remotely to the work PC and get some work done.",
+          "tag": "flight",
+          "effects": {
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "subtract",
+              "value": 15
+            },
+            "rep": {
+              "op": "add",
+              "value": 5
+            }
+          },
+          "log": "This will show management my dedication to work."
+        },
+        {
+          "text": "You sit and stare at the wall.",
+          "tag": "secure",
+          "effects": {
+            "rep": {
+              "op": "subtract",
+              "value": 10
+            },
+            "child": {
+              "op": "add",
+              "value": 15
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "You learned that your wallpaper has 467 flowers in all."
+        }
+      ],
+      "glitch": {
+        "text": "Reorganize the office supply closet at home, alphabetically, by smell.",
+        "log": "This is, medically, too many staplers to own."
+      }
+    },
+    {
+      "zone": "HOME",
+      "title": "ERROR.",
+      "desc": "Yeast not found in system files.",
+      "choices": [
+        {
+          "text": "Call maintenance.",
+          "tag": "flight",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 0
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "They spend 3 months on the problem. They didn't fix it."
+        },
+        {
+          "text": "Refill Yeast container yourself.",
+          "tag": "fawn",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 0
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "You spill some on your shirt, it grows and becomes sentient. You call it \"Sir Yeastly\". It likes being hot and moist"
+        },
+        {
+          "text": "Smoking break!",
+          "tag": "freeze",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 0
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "You run out of cigarettes before the problem is fixed."
+        },
+        {
+          "text": "Go home early.",
+          "tag": "secure",
+          "effects": {
+            "rep": {
+              "op": "add",
+              "value": 0
+            },
+            "mask": {
+              "op": "add",
+              "value": 0
+            },
+            "child": {
+              "op": "add",
+              "value": 0
+            }
+          },
+          "log": "You get home to several messages on your answering machine from your manager wondering where you are. The problem was fixed 2 minutes after you left."
+        },
+        {
+          "text": "Lord, please end this drivel",
+          "tag": "fight",
+          "effects": {
+            "rep": {
+              "op": "subtract",
+              "value": 100
+            },
+            "mask": {
+              "op": "subtract",
+              "value": 100
+            },
+            "child": {
+              "op": "subtract",
+              "value": 100
+            }
+          },
+          "log": "The lord ended this drivel"
+        }
+      ],
+      "glitch": {
+        "text": "Report the ERROR to Keith directly, in person, mid-smoke-break.",
+        "log": "Keith nods slowly. The Yeast situation remains unresolved. Keith seems fine with this."
+      }
+    }
+  ]
+}

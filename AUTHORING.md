@@ -154,6 +154,17 @@ Requirements the importer actually checks: `config` is an object; `zones` is a n
 
 `failureEndings`, `config.statLabels`, `config.splash`, and each event's `glitch` are all optional — a pack from before these existed imports fine and just falls back to the built-in defaults (or the pack-wide `glitchLogs` pool, for `glitch`) for whichever it's missing. A plain number is likewise still accepted for any choice's per-stat effect — the editor writes and displays the `{ "op", "value" }` form exclusively now, but importing an older pack that still uses plain numbers works fine; that choice's numbers just get normalized into Add/Subtract the moment its card is opened in the editor.
 
+## Example pack: ScumSoft™ E-S.A.T.
+
+Our first community-made pack is a full reskin: same three stats and five response types, but recast as a dystopian corporate "Employee Satisfaction Aptitude Test," with `WORK`/`HOME`/`SOCIAL`/`SELF` zones covering the same ground under new names. It's a good second reference alongside the built-in content if you want to see the newer optional fields used in a pack with a completely different voice:
+
+- `config.statLabels` renames the three bars to **Loyalty**, **Job Keepability**, and **Free Will** — the underlying `repression`/`mask`/`child` keys never change, so the mechanism mods and ending conditions written against them still work untouched.
+- `config.splash` sets the mandatory-in-name-only intro screen the player sees before turn one.
+- Every event defines its own `glitch` rather than leaning on a shared `glitchLogs` line, each one written in the pack's own HR-memo-gone-wrong voice.
+- All choice effects use the `{ "op", "value" }` form throughout — none of its data relies on the older plain-number shape.
+
+It isn't bundled with the game — it's a separate `.json` file its author maintains and hands out directly, imported the same way any exported pack is (**Import Pack** → **Save All Changes**). If someone sends you a pack and you want to see how it's built, Export your own current pack first so you don't lose it, then Import theirs to look around.
+
 ## Design notes
 
 - **Second person, present or just-past tense.** Every existing event is written as something that just happened *to the player* — not a hypothetical, not addressed to a character.

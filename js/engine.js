@@ -119,12 +119,77 @@ const elEndTitle = document.getElementById('end-title');
 const elEndDesc = document.getElementById('end-desc');
 const elEndNgPlusBtn = document.getElementById('end-ngplus-btn');
 const elEndSeedTag = document.getElementById('end-seed-tag');
+const elEndShareStatus = document.getElementById('end-share-status');
+const elEndShareText = document.getElementById('end-share-text');
+let shareStatusTimeout = null;
 
 function copySeed() {
     if (!state.seed || !navigator.clipboard) return;
     navigator.clipboard.writeText(state.seed).catch(() => {
         /* clipboard unavailable — the seed is still visible on screen to copy by hand */
     });
+}
+
+function showShareStatus(msg) {
+    elEndShareStatus.textContent = msg;
+    clearTimeout(shareStatusTimeout);
+    shareStatusTimeout = setTimeout(() => {
+        elEndShareStatus.textContent = '';
+    }, 4000);
+}
+
+// A Wordle-style plain-text result card — bars rendered as block characters
+// so it reads fine pasted anywhere (chat, a text, a forum post), no image
+// or network round-trip required. Uses the pack's own stat labels and
+// mechanism names, so a custom pack's share text matches its own voice.
+function buildShareText() {
+    const content = getContent();
+    const labels = statLabels();
+    const barify = val => {
+        const filled = Math.max(0, Math.min(10, Math.round(val / 10)));
+        return '█'.repeat(filled) + '░'.repeat(10 - filled);
+    };
+    const modeTag = state.hardMode ? " (Extended Therapy)" : "";
+    const lines = [
+        `${elGameTitle.textContent} — ${elEndTitle.textContent}`,
+        `Seed: ${state.seed} · Turn ${Math.min(state.turn, state.maxTurns)}/${state.maxTurns}${modeTag}`,
+        `${labels.repression}  ${barify(state.repression)}  ${state.repression}%`,
+        `${labels.mask}  ${barify(state.mask)}  ${state.mask}%`,
+        `${labels.child}  ${barify(state.child)}  ${state.child}%`
+    ];
+    const unlockedNames = Object.entries(mechanismState)
+        .filter(([, s]) => s.unlocked)
+        .map(([tag]) => content.mechanisms[tag] ? content.mechanisms[tag].name : tag);
+    if (unlockedNames.length) {
+        lines.push(`Coping Mechanisms: ${unlockedNames.join(', ')}`);
+    }
+    lines.push('github.com/aedmark/ucts');
+    return lines.join('\n');
+}
+
+async function shareResult() {
+    const text = buildShareText();
+    elEndShareText.classList.add('hidden');
+
+    if (navigator.share) {
+        try {
+            await navigator.share({text});
+            return;
+        } catch (e) { /* share sheet dismissed or unavailable here — fall back below */
+        }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+            await navigator.clipboard.writeText(text);
+            showShareStatus('Copied to clipboard.');
+            return;
+        } catch (e) { /* clipboard blocked — fall back to manual select below */
+        }
+    }
+    elEndShareText.value = text;
+    elEndShareText.classList.remove('hidden');
+    elEndShareText.select();
+    showShareStatus('Select and copy the text below.');
 }
 
 const elGameTitle = document.getElementById('game-title');
@@ -278,6 +343,9 @@ function endGame(title, desc, win = false) {
     elEndDesc.textContent = desc;
     elEndSeedTag.textContent = `Seed: ${state.seed}`;
     elEndNgPlusBtn.classList.toggle('hidden', state.hardMode || !isNgPlusUnlocked());
+    elEndShareStatus.textContent = '';
+    elEndShareText.classList.add('hidden');
+    elEndShareText.value = '';
 }
 
 function resolveStatEffect(raw, currentValue) {

@@ -1248,6 +1248,37 @@ a {
     color: var(--screen);
 }
 
+.end-btn.share {
+    border-color: var(--key-red);
+    color: var(--key-red);
+}
+
+.end-btn.share:hover {
+    background-color: var(--key-red);
+    color: var(--key-cream);
+}
+
+.end-share-status {
+    color: var(--led-teal);
+    font-size: 0.75rem;
+    margin-top: 1rem;
+    min-height: 1em;
+}
+
+.share-textarea {
+    width: 100%;
+    max-width: 28rem;
+    margin-top: 0.75rem;
+    background: var(--screen-edge);
+    border: 2px solid var(--led-teal-dim);
+    border-radius: 4px;
+    color: var(--led-teal);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    padding: 0.6rem;
+    resize: none;
+}
+
 /* ============================================================
    APP FOOTER
    ============================================================ */

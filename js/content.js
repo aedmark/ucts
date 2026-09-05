@@ -6,15 +6,9 @@
 const DEFAULT_CONTENT = {
     config: {
         startingStats: {repression: 20, mask: 100, child: 50},
-        // Display names for the three stat bars. Purely cosmetic — used in the
-        // stats panel and in the ↑/↓ choice hints. The underlying keys
-        // (repression/mask/child) are fixed and unrelated to these labels.
         statLabels: {repression: "Repression Level", mask: "Social Mask", child: "Inner Child"},
-        // Shown once, on first load, before the run starts. Optional — a pack
-        // missing this (or with blank title/intro) falls back to the game's
-        // own title and a generic prompt instead of skipping the screen.
         splash: {
-            title: "U.C.T. Simulator",
+            title: "Unresolved Childhood Trauma Simulator",
             intro: "Three stats. Ten turns. Every choice you click is quietly one of five ways people cope with a bad day.\n\nYou won't know which, or what it costs, until it's already happened.\n\nPress START when you're ready to find out."
         },
         maxTurns: 10,
@@ -23,16 +17,10 @@ const DEFAULT_CONTENT = {
         unlockThreshold: 3,
         glitchChance: 0.15,
         weakZoneWeight: 2.5,
-        // Timed Events (opt-in on the splash screen). Each turn has this chance
-        // of putting a countdown on the choices; running it out auto-picks one
-        // at random and always counts as a `freeze` response. An event can set
-        // its own `timed: {duration}` override or `timed: false` to opt out.
         timedEventChance: 0.2,
         timedDuration: 8000
     },
 
-    // Each zone leans on one of the three core stats. Event selection weights
-    // toward whichever zone matches your currently most endangered stat.
     zones: [
         {key: "WORK", statBias: "repression"},
         {key: "HOME", statBias: "child"},
@@ -40,8 +28,6 @@ const DEFAULT_CONTENT = {
         {key: "SELF", statBias: "child"}
     ],
 
-    // The five response identities are fixed — used by the engine and the Field Log.
-    // Name and numeric mod are yours to retune.
     mechanisms: {
         fawn: {name: "The Approval Loop", mod: {rep: 0, mask: 3, child: -5}},
         flight: {name: "The Exit Strategy", mod: {rep: -5, mask: -3, child: 0}},
@@ -58,10 +44,6 @@ const DEFAULT_CONTENT = {
         "You rolled the dice on your own nervous system."
     ],
 
-    // The three ways to lose a run — hitting the hardcoded threshold on one stat
-    // (repression >= 100, mask <= 0, child <= 0). Unlike survival endings these
-    // aren't picked by conditions; each stat has exactly one, shown the instant
-    // it crosses its threshold.
     failureEndings: {
         repression: {
             title: "Panic Attack",
@@ -77,8 +59,6 @@ const DEFAULT_CONTENT = {
         }
     },
 
-    // Evaluated top to bottom. First ending whose conditions all match wins.
-    // An ending with no conditions always matches — keep one at the bottom as a fallback.
     endings: [
         {
             title: "The Powder Keg",
@@ -4131,9 +4111,6 @@ function deepClone(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
 
-// Returns DEFAULT_CONTENT by reference when no custom pack exists — never mutate
-// the returned object directly. Callers that need to edit it must deepClone() first
-// (every current caller already does: editorDraft is always a clone).
 function getContent() {
     if (contentCache) return contentCache;
     try {

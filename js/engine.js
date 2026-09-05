@@ -9,17 +9,9 @@ let state = {
 let mechanismState = {}; // tag -> { unlocked, count }
 let lastEventTitle = null;
 let seenEventTitles = new Set();
-
-// Timed Events: opt-in per session, set once from the splash screen and
-// carried across restarts/NG+ within it. Not part of `state` since it
-// survives a state reset.
 let timedEnabled = false;
 let timerInterval = null;
 
-// ============================================================
-// SEEDED RNG — every run's full sequence of random draws (event picks,
-// glitch rolls, timeouts) can be reproduced from a single seed string.
-// ============================================================
 function hashSeed(str) {
     let h = 1779033703 ^ str.length;
     for (let i = 0; i < str.length; i++) {

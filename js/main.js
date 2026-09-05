@@ -48,10 +48,6 @@ function toggleHelp(show) {
     elHelpScreen.classList.toggle('hidden', !show);
 }
 
-// Shown once on load, covering the whole app until dismissed — the actual
-// run (startGame) doesn't begin until then. Falls back to generic text so
-// packs saved before this field existed still get a title screen rather
-// than none at all.
 function showSplash() {
     const content = getContent();
     const splash = (content.config && content.config.splash) || {};

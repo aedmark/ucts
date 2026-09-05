@@ -357,6 +357,36 @@ a {
     }
 }
 
+/* Mobile: the event/choices are what you're actually reading and acting on
+   each turn, so they move ahead of the stat HUD instead of sitting below a
+   wall of meters. The HUD itself shrinks to match — full captions and
+   1.4rem-tall bars are a tablet/desktop luxury the shortest viewports
+   don't have room for. */
+@media (max-width: 639px) {
+    .gameplay {
+        order: -1;
+    }
+
+    .stats-panel {
+        padding: 0.6rem 0.75rem;
+        gap: 0.5rem;
+    }
+
+    .stat-label-row {
+        font-size: 0.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-bar-container {
+        height: 0.85rem;
+        padding: 2px;
+    }
+
+    .stat-caption {
+        display: none;
+    }
+}
+
 .stat-label-row {
     display: flex;
     justify-content: space-between;

@@ -675,5 +675,229 @@ const CONTENT_EVENTS_BODY = [
             text: "Deep-clean the entire bathroom instead of just brushing your teeth.",
             log: "The sink has never been shinier. Your teeth remain exactly as they were."
         }
+    },
+    {
+        zone: "BODY", title: "The Insomnia Loop",
+        desc: "It's 2 AM. Your body is exhausted. Your brain has opened fourteen tabs and refuses to close any of them.",
+        choices: [
+            {
+                text: "Keep lying there, perfectly still, willing sleep to just happen.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 15}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "Stillness didn't work. It never really does."
+            },
+            {
+                text: "Give up and scroll your phone until your eyes finally give out first.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 5}, child: {op: "add", value: 0}},
+                log: "You traded one kind of awake for an eye-straining kind."
+            },
+            {
+                text: "Get up, write down whatever's looping, and try again without it in your head.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You gave the thought somewhere to be that wasn't just your pillow."
+            }
+        ],
+        glitch: {
+            text: "Start reorganizing your phone's apps by color.",
+            log: "Your home screen has never looked better. You are still awake."
+        }
+    },
+    {
+        zone: "BODY", title: "The Flinch",
+        desc: "Someone reaches out for a hug, or just to touch your arm, and your whole body stiffens for a second before you can stop it.",
+        choices: [
+            {
+                text: "Force the hug to look natural and hope nobody noticed the flinch.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 10}, child: {op: "subtract", value: 8}},
+                log: "You performed comfortable so well even you almost believed it."
+            },
+            {
+                text: "Get through the contact by mentally leaving the room while your body stays in it.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "You were there for the hug. Technically."
+            },
+            {
+                text: "Let the flinch happen and just say, lightly, 'sorry, jumpy today.'",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 8}},
+                log: "You named it instead of hiding it, and the moment passed anyway."
+            }
+        ],
+        glitch: {
+            text: "Overcorrect by hugging everyone in the room, unprompted.",
+            log: "Several people are now confused but more fulfilled. Your arms are tired."
+        }
+    },
+    {
+        zone: "BODY", title: "The Strain Headache",
+        desc: "A dull ache starts behind your eyes around hour six of sustained screen time, and it isn't going anywhere.",
+        choices: [
+            {
+                text: "Push through it and keep working like the headache isn't happening.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "The headache did not care that you ignored it. It rarely does."
+            },
+            {
+                text: "Snap the laptop shut harder than necessary and complain to whoever's nearby.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "subtract", value: 10}, child: {op: "add", value: 0}},
+                log: "The laptop survived. Your reputation for calmness took the hit."
+            },
+            {
+                text: "Actually step away for ten whole minutes.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "Time away did more than the last two hours of pushing through did."
+            }
+        ],
+        glitch: {
+            text: "Diagnose yourself with something dramatic via a search engine",
+            log: "The internet has once again ruined your day. You are tired, not sick."
+        }
+    },
+    {
+        zone: "BODY", title: "The Bag You Don't Remember Opening",
+        desc: "You look down and an entire bag of something is gone. You don't remember deciding to eat any of it.",
+        choices: [
+            {
+                text: "Laugh it off if anyone mentions it and change the subject fast.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 8}},
+                log: "You made a joke out of it before anyone could ask a real question."
+            },
+            {
+                text: "Say nothing to anyone, including yourself, and just move on like it didn't happen.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 10}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "Not talking about it didn't make it not have happened."
+            },
+            {
+                text: "Notice, without judgment, that you might be stressed about something specific.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You looked past the bag to the actual thing underneath it."
+            }
+        ],
+        glitch: {
+            text: "Immediately open a second bag out of pure defiance.",
+            log: "Neither bag solved anything. Both are now empty."
+        }
+    },
+    {
+        zone: "BODY", title: "The Shallow Breathing Mid-Task",
+        desc: "You catch yourself mid-email, barely breathing, jaw clenched, for who knows how long.",
+        choices: [
+            {
+                text: "Notice it, feel briefly alarmed, and keep typing exactly the same way.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 10}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "You clocked it and kept going anyway. The body filed a complaint it can't really enforce."
+            },
+            {
+                text: "Apologize to no one in particular for being 'a little tense today.'",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 5}, child: {op: "subtract", value: 8}},
+                log: "You apologized for your own nervous system to an indifferent room."
+            },
+            {
+                text: "Stop, take three actual breaths, and unclench your shoulders on purpose.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "Thirty seconds of actually breathing did more than the last hour of holding it."
+            }
+        ],
+        glitch: {
+            text: "Set a recurring hourly alarm labeled 'BREATHE.'",
+            log: "It will go off in the middle of a meeting later. This is fine."
+        }
+    },
+    {
+        zone: "BODY", title: "The Exhaustion Sleep Didn't Fix",
+        desc: "You slept eight hours. You wake up exactly as tired as when you laid down, if not more so.",
+        choices: [
+            {
+                text: "Push through the day on caffeine and sheer stubbornness.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "You made it through. 'Made it through' is doing a lot of work in that sentence."
+            },
+            {
+                text: "Tell everyone who asks that you're 'just a little tired, no big deal.'",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 8}},
+                log: "You minimized it into something small enough that nobody, including you, has to look at it."
+            },
+            {
+                text: "Actually cancel one non-essential thing today to protect what's left of your energy.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You spent the energy on rest instead of one more obligation you didn't have room for."
+            }
+        ],
+        glitch: {
+            text: "Drink a fourth coffee and decide this will definitely be the one that works.",
+            log: "It was not the one that worked. Your entire body is vibrating and still tired."
+        }
+    },
+    {
+        zone: "BODY", title: "The Cold Hands",
+        desc: "Your hands have been cold for an hour, in a room that isn't. You notice it right as you're trying to sign something important.",
+        choices: [
+            {
+                text: "Apologize for the shaky signature and joke about the room being cold.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 5}},
+                log: "You blamed the thermostat for something the thermostat had nothing to do with."
+            },
+            {
+                text: "Just push through and hope no one notices your hands.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 10}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "Someone noticed. You'll never know if it mattered."
+            },
+            {
+                text: "Pause, shake it out, and just wait until your hands actually feel steady.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "You waited for your own body instead of overriding it."
+            }
+        ],
+        glitch: {
+            text: "Blow on your hands dramatically like you're in a survival documentary.",
+            log: "It didn't warm anything up. It did get a laugh."
+        }
+    },
+    {
+        zone: "BODY", title: "The Tight Throat",
+        desc: "Someone asks if you're okay, and your throat closes around the answer before you can decide what it actually is.",
+        choices: [
+            {
+                text: "Force out a bright 'I'm fine!' before the tightness can turn into anything else.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 8}, mask: {op: "add", value: 10}, child: {op: "subtract", value: 10}},
+                log: "You got the words out. They weren't the true ones. Nobody believes you."
+            },
+            {
+                text: "Say nothing and just nod until the moment passes on its own.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "The moment passed. The tightness didn't, not really."
+            },
+            {
+                text: "Say 'actually, not really' and let the sentence stop there for now.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 3}, child: {op: "add", value: 10}},
+                log: "Three honest words did more than a paragraph of fine would have."
+            }
+        ],
+        glitch: {
+            text: "Answer with a completely unrelated fact about your day instead.",
+            log: "Nobody knows what just happened, including you. The moment is over, at least."
+        }
     }
 ];

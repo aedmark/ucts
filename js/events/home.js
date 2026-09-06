@@ -964,4 +964,228 @@ const CONTENT_EVENTS_HOME = [
             log: "'And here, in its natural habitat, the human finally exhales.'"
         }
     },
+    {
+        zone: "HOME", title: "The Rent Increase",
+        desc: "An envelope from the landlord. The number at the bottom is $200 more than last year, effective next month.",
+        choices: [
+            {
+                text: "Set the letter on the counter and don't look at the actual number again for a week.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 15}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "The number didn't go away. It just waited."
+            },
+            {
+                text: "Draft a furious response citing every unfixed thing in the apartment.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 12}, child: {op: "add", value: 0}},
+                log: "All true. None of it will lower the rent. Or your blood pressure."
+            },
+            {
+                text: "Sit down and actually rework the budget around the new number.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "You made the number smaller by making it real instead of avoided."
+            }
+        ],
+        glitch: {
+            text: "Start browsing apartments you can't afford, in a city you don't live in.",
+            log: "You've mentally moved to a lake house. Your higher rent is still due next month."
+        }
+    },
+    {
+        zone: "HOME", title: "The Utility Bill That Doubled",
+        desc: "The electric bill arrives at nearly twice last month's number, with no explanation you can find.",
+        choices: [
+            {
+                text: "Set up autopay so you never have to actually look at the number again.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 5}, child: {op: "add", value: 0}},
+                log: "Out of sight. Still, technically, out of your account."
+            },
+            {
+                text: "Reread every line item like it's a puzzle with a solution.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 10}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "There is no puzzle. There is just a bigger number."
+            },
+            {
+                text: "Call and actually ask what changed, instead of guessing.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "Turns out asking a real question gets you a real answer."
+            }
+        ],
+        glitch: {
+            text: "Unplug everything in the apartment out of spite.",
+            log: "You now sit in the dark, on principle, having solved nothing."
+        }
+    },
+    {
+        zone: "HOME", title: "The Overdraft Notification",
+        desc: "Your phone buzzes. Balance below zero. You do the math and know exactly which charge did it.",
+        choices: [
+            {
+                text: "Text a family member asking, in a roundabout way, if they're doing okay 'financially, generally.'",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 10}},
+                log: "You asked about someone else's money to avoid saying anything about yours."
+            },
+            {
+                text: "Don't check the account again until the fee posts.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "The fee posted anyway. It always does."
+            },
+            {
+                text: "Move what you can, call the bank, and actually look at the number.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "You looked right at it, which turns out to be the hard part."
+            }
+        ],
+        glitch: {
+            text: "Buy something small and unnecessary out of pure defiance.",
+            log: "The balance is more negative. You feel powerful. Briefly."
+        }
+    },
+    {
+        zone: "HOME", title: "The Forgotten Subscription Charge",
+        desc: "A charge you don't recognize turns out to be a subscription you forgot to cancel eight months ago.",
+        choices: [
+            {
+                text: "Decide it's not worth the hassle of calling to complain.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 5}, child: {op: "subtract", value: 8}},
+                log: "You let it go, mostly because asking felt like more of a cost than the actual money lost."
+            },
+            {
+                text: "Call and argue for a full refund on principle.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 10}, child: {op: "add", value: 0}},
+                log: "You got half the money back and a mild reputation with customer service."
+            },
+            {
+                text: "Cancel it, note the loss, and set a reminder to check for others.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "You closed the leak instead of just being mad about the water."
+            }
+        ],
+        glitch: {
+            text: "Audit every single subscription you have in the middle of the night.",
+            log: "You found six more. You are now afraid of your own bank statement. And your goldfish-like memory."
+        }
+    },
+    {
+        zone: "HOME", title: "The Broken Appliance No One Can Afford to Fix",
+        desc: "The washing machine makes a sound it shouldn't and then stops entirely. The repair quote costs almost as much as a new one.",
+        choices: [
+            {
+                text: "Leave the wet laundry in it for two days while you decide what to do.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 10}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "The laundry did not decide anything on your behalf."
+            },
+            {
+                text: "Tell whoever asks that it's 'basically fine, just being weird.'",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 8}},
+                log: "It is not fine. You've just decided saying so is easier."
+            },
+            {
+                text: "Get a second quote and actually compare the real numbers.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "You treated it like a decision instead of a crisis."
+            }
+        ],
+        glitch: {
+            text: "Watch seventeen YouTube tutorials on fixing it yourself.",
+            log: "You now understand washing machine repair on a conceptual level. The machine remains tangibly broken."
+        }
+    },
+    {
+        zone: "HOME", title: "The Family Loan Request",
+        desc: "A family member asks to borrow money you don't really have room to lend, in a tone that makes it hard to say no.",
+        choices: [
+            {
+                text: "Say yes immediately and figure out the math later.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 8}, mask: {op: "add", value: 10}, child: {op: "subtract", value: 15}},
+                log: "You said yes with your mouth before your budget got a vote."
+            },
+            {
+                text: "Say no bluntly, then feel terrible about how it came out.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 0}},
+                log: "The no was correct. The delivery could use some work."
+            },
+            {
+                text: "Say what you can actually afford, clearly, without over-explaining.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "You gave an honest number instead of an apologetic one."
+            }
+        ],
+        glitch: {
+            text: "Offer to lend double what they asked for, out of guilt.",
+            log: "Your bank account did not consent to this decision. You may never financially recover from this."
+        }
+    },
+    {
+        zone: "HOME", title: "The Split Bill Argument",
+        desc: "Whoever you live with wants to talk about the shared expenses again. The conversation you've both been avoiding for a month.",
+        choices: [
+            {
+                text: "Say you're too tired to get into it tonight, again.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 8}, child: {op: "add", value: 0}},
+                log: "You bought one more night of not talking about it. The bill didn't wait."
+            },
+            {
+                text: "Bring up every uneven expense from the last six months at once.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 12}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 0}},
+                log: "You were right about most of it. It still didn't land well."
+            },
+            {
+                text: "Actually sit down, split it fairly, and let the conversation be boring.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 5}, child: {op: "add", value: 8}},
+                log: "Nothing dramatic happened. That was sort of the point."
+            }
+        ],
+        glitch: {
+            text: "Propose settling it with a coin flip.",
+            log: "Nobody agreed to this. You flipped it anyway. Somehow it worked flawlessly, anyway."
+        }
+    },
+    {
+        zone: "HOME", title: "The Pet Skipping Meals",
+        desc: "Your dog, or cat, walks right past a full food bowl for the second day in a row, and the vet visit you can't quite afford yet keeps not happening.",
+        choices: [
+            {
+                text: "Tell yourself it's probably nothing and keep watching from across the room.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "Watching didn't make the bowl any emptier or any fuller."
+            },
+            {
+                text: "Post about it online and let strangers' reassurance stand in for an actual appointment.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 5}, child: {op: "subtract", value: 8}},
+                log: "Forty people said it's probably fine. None of them are a vet."
+            },
+            {
+                text: "Call and ask what a visit actually costs, then book it anyway.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You let the real number decide instead of your fear of it."
+            }
+        ],
+        glitch: {
+            text: "Offer the pet seventeen different foods in immediate succession.",
+            log: "Nothing worked. You now have six open cans and one unimpressed animal."
+        }
+    },
 ];

@@ -1,16 +1,9 @@
 // ============================================================
-// ENDINGS — the three ways to lose (failureEndings, one pool of variants
-// per stat, picked at random each time) and the ways to survive (endings,
-// evaluated top to bottom — first match wins).
+// ENDINGS
 // Loaded before content.js, which assembles DEFAULT_CONTENT from this.
 // ============================================================
 
-// Each stat has a pool of variants instead of one fixed ending, picked at
-// random when that stat crosses its threshold — so repeated runs (arcade
-// especially, which can end this way many times in a sitting) don't show
-// the identical line every single time. A legacy pack with a single
-// {title, desc} object per stat instead of an array still works — see
-// failureEndings() in engine.js.
+
 const CONTENT_FAILURE_ENDINGS = {
     repression: [
         {
@@ -19,11 +12,11 @@ const CONTENT_FAILURE_ENDINGS = {
         },
         {
             title: "Tectonic Reset",
-            desc: "Repression hit 100%. Something that was supposed to stay buried came up all at once, in the worst possible meeting."
+            desc: "Repression maxed out the scale. Something that was supposed to stay buried came up all at once, in the worst possible meeting."
         },
         {
             title: "The Blowup",
-            desc: "Repression maxed out. You said the quiet part loud, at volume, to the wrong person."
+            desc: "Repression blown. You said the quiet part out loud. To the wrong person."
         },
         {
             title: "System Overpressure",
@@ -35,7 +28,7 @@ const CONTENT_FAILURE_ENDINGS = {
         },
         {
             title: "The Snap",
-            desc: "You reached capacity. The thing that finally broke you was, embarrassingly, a printer."
+            desc: "You reached capacity. The thing that finally broke you was, embarrassingly, very minor."
         },
         {
             title: "Delayed Detonation",
@@ -43,11 +36,11 @@ const CONTENT_FAILURE_ENDINGS = {
         },
         {
             title: "Public Unraveling",
-            desc: "Repression hit 100% in front of coworkers. There is no version of Monday that fixes this."
+            desc: "Repression hit 100% in front everybody. There is no version of Monday that fixes this."
         },
         {
             title: "The Overflow",
-            desc: "You'd been fine. You'd been fine. You'd been fine. You are not fine."
+            desc: "You were just fine! You've been fine this whole time!. You planned on being fine all day... \n\n\n You are not fine."
         },
         {
             title: "Structural Failure",
@@ -57,7 +50,7 @@ const CONTENT_FAILURE_ENDINGS = {
     mask: [
         {
             title: "Social Exile",
-            desc: "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free."
+            desc: "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but free."
         },
         {
             title: "The Unmasking",
@@ -69,7 +62,7 @@ const CONTENT_FAILURE_ENDINGS = {
         },
         {
             title: "No Filter Left",
-            desc: "You ran out of mask exactly when someone asked \"no really, how are you?\" They got the real answer."
+            desc: "You ran out of mask exactly when someone asked how you were and they got the real answer."
         },
         {
             title: "The Reveal",
@@ -81,19 +74,19 @@ const CONTENT_FAILURE_ENDINGS = {
         },
         {
             title: "Exiled",
-            desc: "You stopped performing \"fine,\" and the room noticed immediately."
+            desc: "You stopped performing how \"fine\" you are, and the room noticed immediately."
         },
         {
             title: "The Real You, Unscheduled",
-            desc: "Mask hit 0% at the worst possible meeting. At least it's memorable."
+            desc: "Mask hit 0% at the worst possible time in the company meeting. At least it's memorable. You try to tell yourself they were laughing *with* you."
         },
         {
             title: "Social Combustion",
-            desc: "You said the true thing instead of the nice thing. The silence afterward was very loud."
+            desc: "You said the true thing instead of the nice thing. The silence afterward was very loud (and awkward)."
         },
         {
             title: "Unfiltered",
-            desc: "Mask dropped to zero. You are now saying things out loud that used to just be thoughts."
+            desc: "Mask dropped to zero. You are now saying things out loud that used to just be inside thoughts."
         }
     ],
     child: [
@@ -115,19 +108,19 @@ const CONTENT_FAILURE_ENDINGS = {
         },
         {
             title: "Flatline",
-            desc: "Inner Child hit 0%. Nothing feels good. Nothing feels bad. Nothing, mostly, feels."
+            desc: "Inner Child hit 0%. Nothing feels good. Nothing feels bad.\n\nNothing feels at all."
         },
         {
             title: "Muscle Memory Only",
-            desc: "Inner Child bottomed out. You are functioning perfectly and feeling absolutely nothing about it."
+            desc: "Inner Child bottomed out. You are functioning perfectly and feeling absolutely no joy from it."
         },
         {
             title: "The Static",
-            desc: "Inner Child hit zero. There's a version of you still doing the tasks. You're not entirely sure where you went."
+            desc: "Inner Child hit zero. There's a version of you still doing the tasks. You're not entirely sure where the rest of you went."
         },
         {
             title: "Checked Out",
-            desc: "Inner Child hit 0%. You're present in the way furniture is present."
+            desc: "Inner Child hit 0%. You're present in the room in the way furniture is also present."
         },
         {
             title: "The Long Blink",
@@ -163,6 +156,15 @@ const CONTENT_ENDINGS = [
             {stat: "repression", op: "<=", value: 30},
             {stat: "mask", op: ">=", value: 40}, {stat: "mask", op: "<=", value: 70},
             {stat: "child", op: ">=", value: 40}, {stat: "child", op: "<=", value: 70}
+        ]
+    },
+    {
+        title: "Actually Okay",
+        desc: "Not surviving. Not performing okay. Just, for once, actually okay. You can tell the difference from the inside.",
+        conditions: [
+            {stat: "repression", op: "<=", value: 30},
+            {stat: "mask", op: ">=", value: 60},
+            {stat: "child", op: ">=", value: 60}
         ]
     },
     {

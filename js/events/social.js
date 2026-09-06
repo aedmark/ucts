@@ -1000,4 +1000,228 @@ const CONTENT_EVENTS_SOCIAL = [
             log: "Two unheard voicemails now orbit each other, unopened, forever."
         }
     },
+    {
+        zone: "SOCIAL", title: "The Dating App Match Who Stopped Responding",
+        desc: "Three good days of conversation. Then nothing, mid-sentence, two days ago.",
+        choices: [
+            {
+                text: "Reread the whole conversation looking for the exact moment it went wrong.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 10}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "You found nothing. There was nothing to find."
+            },
+            {
+                text: "Send one more message, lighter this time, just in case they missed the first.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 10}},
+                log: "You performed casual. It did not feel casual."
+            },
+            {
+                text: "Unmatch and let it be exactly as unremarkable as it actually is.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "Three good days doesn't owe you an explanation for a fourth."
+            }
+        ],
+        glitch: {
+            text: "Rewrite your entire profile at midnight out of spite.",
+            log: "You now describe yourself as 'allegedly fun.' It's an improvement, actually."
+        }
+    },
+    {
+        zone: "SOCIAL", title: "The Second Date That Never Got Scheduled",
+        desc: "The first date was good. You both said 'we should do this again.' Neither of you has said anything since.",
+        choices: [
+            {
+                text: "Decide you're clearly not that interested and move on without saying so.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 5}, child: {op: "add", value: 0}},
+                log: "Cleaner this way, probably. You'll never actually know."
+            },
+            {
+                text: "Wait for them to text first so you don't seem too eager.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 8}, mask: {op: "add", value: 5}, child: {op: "subtract", value: 8}},
+                log: "You outlasted your own interest waiting for permission to show it."
+            },
+            {
+                text: "Just text and ask if they want to grab coffee this week.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 8}},
+                log: "You said the plain thing instead of waiting for the safer one."
+            }
+        ],
+        glitch: {
+            text: "Have a friend text them from your phone 'as a joke.'",
+            log: "This has never worked in the history of dating. It does not work now."
+        }
+    },
+    {
+        zone: "SOCIAL", title: "The Wedding Invite You Can't Afford to Attend",
+        desc: "A close friend's wedding, three states away, right when your budget has zero room for flights and a hotel.",
+        choices: [
+            {
+                text: "RSVP yes and figure out the money somehow, some way you haven't found yet.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 8}, mask: {op: "add", value: 10}, child: {op: "subtract", value: 12}},
+                log: "You said yes to the invitation and no, quietly, to your own budget."
+            },
+            {
+                text: "Don't respond to the invite for as long as you possibly can.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 10}, child: {op: "add", value: 0}},
+                log: "The deadline is still coming. It doesn't care that you didn't look at it."
+            },
+            {
+                text: "Call your friend and just tell them the truth about the money.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "The honest version of 'I can't' turned out to cost you less than the performance of 'I'll try.'"
+            }
+        ],
+        glitch: {
+            text: "Look into whether you could realistically drive three states in one weekend.",
+            log: "You could not. You looked anyway."
+        }
+    },
+    {
+        zone: "SOCIAL", title: "The Friend Who Cancelled Last Minute (Again)",
+        desc: "Twenty minutes before you were supposed to meet, the same friend cancels for the third time this month.",
+        choices: [
+            {
+                text: "Reply 'no worries at all!' and mean less than half of it.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 8}, mask: {op: "add", value: 10}, child: {op: "subtract", value: 10}},
+                log: "You absorbed the disappointment so smoothly nobody, including you, noticed it happened."
+            },
+            {
+                text: "Send a pointed text about the pattern, right then, while you're still annoyed.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 0}},
+                log: "Accurate. Badly timed. Both true at once."
+            },
+            {
+                text: "Say it's fine tonight, and bring up the pattern later when you're not standing in your coat.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 8}},
+                log: "You separated the moment from the pattern instead of dumping both at once."
+            }
+        ],
+        glitch: {
+            text: "Show up to the venue alone anyway, on principle.",
+            log: "You had a fine time by yourself. This was not the point you were trying to prove."
+        }
+    },
+    {
+        zone: "SOCIAL", title: "The Unsolicited Advice",
+        desc: "You mention, in passing, that you're a little stressed. What you get back is a twelve-point plan for fixing your entire life.",
+        choices: [
+            {
+                text: "Nod, say 'that's a good point,' and absorb advice you didn't ask for.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 8}},
+                log: "You outsourced twelve minutes of your afternoon to someone else's certainty."
+            },
+            {
+                text: "Cut them off and say you weren't actually asking for a solution.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 12}, child: {op: "add", value: 0}},
+                log: "True, and it landed like a slap instead of a boundary. And made your stress feel worse."
+            },
+            {
+                text: "Say gently that you just wanted to vent, not fix it right now. But thank you.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 8}},
+                log: "You named exactly what you needed instead of quietly enduring the wrong thing."
+            }
+        ],
+        glitch: {
+            text: "Start giving them unsolicited advice back, immediately, at the same volume.",
+            log: "Neither of you asked for this exchange. It is happening regardless."
+        }
+    },
+    {
+        zone: "SOCIAL", title: "The Comparison Scroll",
+        desc: "You open the app for one notification and forty minutes later you're deep in someone else's vacation photos, doing math on their life against yours.",
+        choices: [
+            {
+                text: "Keep scrolling well past the point it started feeling bad.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 10}},
+                log: "You know more about a stranger's trip to Portugal than you do about how you're actually doing right now."
+            },
+            {
+                text: "Like everything, generously, while feeling worse with every tap.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 10}},
+                log: "You performed happiness for people while quietly auditing your own life against theirs."
+            },
+            {
+                text: "Close the app and name, out loud, that it's a highlight reel, not a life.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You put the comparison down instead of finishing the whole plate of it."
+            }
+        ],
+        glitch: {
+            text: "Post something deliberately, aggressively mundane in response.",
+            log: "Twelve people liked a photo of your ceiling. Justice, kinda."
+        }
+    },
+    {
+        zone: "SOCIAL", title: "The Wrong Group Chat Text",
+        desc: "You mean to vent about your coworker to one friend. You send it to the group chat that includes that coworker.",
+        choices: [
+            {
+                text: "Stare at the message, unsent-but-sent, for a full minute before doing anything.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 15}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "Time did not undo it. It rarely does."
+            },
+            {
+                text: "Immediately send eight apology messages in a row.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 8}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 10}},
+                log: "Eight messages later, everyone has now read about the mistake three extra times."
+            },
+            {
+                text: "Send one clear apology, own it, and stop typing.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 5}, child: {op: "add", value: 8}},
+                log: "One honest sentence did more than eight nervous ones would have. The coworker actually admits they deserved it."
+            }
+        ],
+        glitch: {
+            text: "Try to convince everyone your account got hacked.",
+            log: "Nobody believes this. You did not really expect them to."
+        }
+    },
+    {
+        zone: "SOCIAL", title: "The New Partner Absorbing the Friend Group",
+        desc: "Your friend has a new partner, and lately every group hangout quietly becomes about the two of them.",
+        choices: [
+            {
+                text: "Say how much you love the new couple, louder than you feel it.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 10}, child: {op: "subtract", value: 8}},
+                log: "You clapped for something that, honestly, you have mixed feelings about."
+            },
+            {
+                text: "Start finding reasons to skip the group hangouts for a while.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 8}, child: {op: "add", value: 0}},
+                log: "Easier than saying anything. Also, quietly, lonelier."
+            },
+            {
+                text: "Tell your friend directly that you miss the just-us version of hanging out.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 8}},
+                log: "You said how you felt instead of just fading out of the group chat."
+            }
+        ],
+        glitch: {
+            text: "'Accidentally' plan something that conflicts with their next couple's outing.",
+            log: "Petty, effective, and everyone can tell exactly what you did."
+        }
+    },
 ];

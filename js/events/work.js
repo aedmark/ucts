@@ -1041,4 +1041,228 @@ const CONTENT_EVENTS_WORK = [
             log: "A one-word war has begun. Nobody will walk away alive."
         }
     },
+    {
+        zone: "WORK", title: "The Imposter Spiral",
+        desc: "Your manager says the presentation went great. You spend the next hour building a case for why she's wrong.",
+        choices: [
+            {
+                text: "Deflect the compliment immediately and list everyone else who helped.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 8}},
+                log: "You gave the credit away before anyone could take a closer look at you."
+            },
+            {
+                text: "Reread your own slides looking for the mistake everyone's too polite to mention.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "You found four typos and no evidence of the disaster you were sure was coming."
+            },
+            {
+                text: "Say 'thank you' and let it be true.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You accepted a good thing without an asterisk on it."
+            }
+        ],
+        glitch: {
+            text: "Ask your manager to list, out loud, every mistake you've made this quarter.",
+            log: "She could only think of one. You are unreasonably disappointed. She now thinks you're hiding something."
+        }
+    },
+    {
+        zone: "WORK", title: "The Layoff Rumor",
+        desc: "A screenshot from an anonymous coworker forum is going around. It names your department. Nobody official has said a word.",
+        choices: [
+            {
+                text: "Refresh your email every four minutes for the rest of the day.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 15}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "You got nothing but a calendar reminder and a headache."
+            },
+            {
+                text: "Close every work tab and watch something mindless until it's time to log off.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "subtract", value: 8}, child: {op: "add", value: 0}},
+                log: "You bought yourself a few hours of not knowing, on purpose."
+            },
+            {
+                text: "Update your resume calmly, then close the laptop for the night.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "You prepared for the worst without living inside it."
+            }
+        ],
+        glitch: {
+            text: "Reply-all to the rumor thread with a single question mark.",
+            log: "Forty people saw it. Nobody answered. You have created a new, smaller panic."
+        }
+    },
+    {
+        zone: "WORK", title: "The Salary You Found Out",
+        desc: "A spreadsheet gets shared by accident. Someone with two fewer years than you makes more.",
+        choices: [
+            {
+                text: "Draft a furious email to HR and send it before you can think twice.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 15}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 0}},
+                log: "It's out there now. There is no version of tomorrow's meeting that isn't about this."
+            },
+            {
+                text: "Decide you're probably not remembering your own worth correctly, and let it go.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 8}, mask: {op: "add", value: 5}, child: {op: "subtract", value: 12}},
+                log: "You talked yourself out of being angry about something worth being angry about."
+            },
+            {
+                text: "Write down exactly what you'd ask for and schedule the actual conversation.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "You turned a number in a spreadsheet into a plan."
+            }
+        ],
+        glitch: {
+            text: "Casually ask three more coworkers what they make.",
+            log: "You now know everyone's salary, yet still cannot grasp your own self-worth. Progress?"
+        }
+    },
+    {
+        zone: "WORK", title: "The Return-to-Office Mandate",
+        desc: "An all-staff email announces four days in office starting next month. Your commute is about to double.",
+        choices: [
+            {
+                text: "Reply to the announcement thread with an enthusiastic 'Exciting news!!'",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 10}, child: {op: "subtract", value: 8}},
+                log: "You performed excitement you will need a long drive to recover from."
+            },
+            {
+                text: "Don't say anything. Just stare at the new calendar for a while.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "The calendar did not change. Neither did you."
+            },
+            {
+                text: "Block out the commute time and start planning around the real cost.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "You dealt with the schedule instead of the feeling about the schedule."
+            }
+        ],
+        glitch: {
+            text: "Start a betting pool on how long the mandate really lasts.",
+            log: "You are up eleven dollars and strangely invested in a policy you hate."
+        }
+    },
+    {
+        zone: "WORK", title: "The Rejection Email",
+        desc: "The recruiter finally writes back. 'We've decided to move forward with other candidates at this time.'",
+        choices: [
+            {
+                text: "Reread the email six times looking for a hidden opening.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 10}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 10}},
+                log: "The email said the same thing on the sixth read as it did on the first."
+            },
+            {
+                text: "Close the tab, close the laptop, and do literally anything else.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 5}, child: {op: "add", value: 0}},
+                log: "The feeling is still there. It's just unsupervised now."
+            },
+            {
+                text: "Let yourself be disappointed for a minute, then ask for feedback anyway.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You made room for the disappointment and asked a useful question anyway."
+            }
+        ],
+        glitch: {
+            text: "Send the recruiter a reply arguing your own case, after the decision's already final.",
+            log: "It changed nothing. For a brief moment, you feel like you really accomplished something."
+        }
+    },
+    {
+        zone: "WORK", title: "The Project That Got Cancelled",
+        desc: "Three months of work gets killed in a two-line message. 'Deprioritizing this for now.'",
+        choices: [
+            {
+                text: "Point out, at length, exactly how much time this wasted.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 12}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 0}},
+                log: "True and unhelpful, in roughly equal measure."
+            },
+            {
+                text: "Reply 'Totally understand, happy to pivot!' before you've processed it at all.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 10}},
+                log: "You agreed with a decision you haven't actually forgiven yet."
+            },
+            {
+                text: "Ask what, if anything, from the work can be reused elsewhere.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "You looked for what survives instead of just what died."
+            }
+        ],
+        glitch: {
+            text: "Frame the cancellation email and hang it somewhere you'll see it daily.",
+            log: "It is, unexpectedly, a little bit funny now."
+        }
+    },
+    {
+        zone: "WORK", title: "The Oversharing Coworker",
+        desc: "Someone uses your two-minute standup slot to tell the whole team about their divorce.",
+        choices: [
+            {
+                text: "Nod along and offer sympathetic follow-up questions you don't have time for.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 10}, child: {op: "subtract", value: 8}},
+                log: "You gave away ten minutes you didn't have to a conversation you didn't start."
+            },
+            {
+                text: "Suddenly remember an urgent message you have to go check.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 8}, child: {op: "add", value: 0}},
+                log: "You escaped clean. The next person in the meeting was not so lucky."
+            },
+            {
+                text: "Say gently that you hope they're okay, and steer the meeting back on track.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 5}},
+                log: "You were kind and still kept the meeting alive. Both things, at once. Everyone feels lighter now."
+            }
+        ],
+        glitch: {
+            text: "Overshare something of your own in return, just to even the score.",
+            log: "The meeting is now forty minutes long and everyone knows too much about the both of you."
+        }
+    },
+    {
+        zone: "WORK", title: "The Raise That Wasn't",
+        desc: "The open enrollment email arrives. This year's raise, after inflation, comes out to functionally nothing.",
+        choices: [
+            {
+                text: "Do the math four different ways hoping for a different number.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "The number stayed the same across every method. Math is like that."
+            },
+            {
+                text: "Thank your manager for the raise in the team channel anyway.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 10}},
+                log: "You said thank you for something that, functionally, cost you more than just money."
+            },
+            {
+                text: "Note the real number down and start pricing out what a market-rate offer looks like.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
+                log: "You stopped waiting for the number to feel different and used it instead."
+            }
+        ],
+        glitch: {
+            text: "Reply-all asking everyone else what they got.",
+            log: "Nobody answers. Somehow the silence answers anyway."
+        }
+    },
 ];

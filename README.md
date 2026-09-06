@@ -36,7 +36,7 @@ That asymmetry is the actual mechanic underneath the mechanic. Repeating the eas
 
 ## Zones
 
-Every event belongs to a zone — `WORK`, `HOME`, `SOCIAL`, `SELF` by default — and every zone leans toward one of the three stats. Event selection isn't uniformly random: it leans toward whichever zone matches your current worst stat, so if your Repression is climbing, `WORK`-zone events start showing up more. The game is quietly steering toward whatever your nervous system is currently most worried about.
+Every event belongs to a zone — `WORK`, `HOME`, `SOCIAL`, `SELF`, `BODY` by default — and every zone leans toward one of the three stats. Event selection isn't uniformly random: it leans toward whichever zone matches your current worst stat, so if your Repression is climbing, `WORK`-zone events start showing up more. The game is quietly steering toward whatever your nervous system is currently most worried about.
 
 ## The Glitch
 

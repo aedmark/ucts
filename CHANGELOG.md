@@ -2,6 +2,17 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.17.8] - 2026-09-06
+
+### Added
+- **40 new events, 8 per zone** (124 → 164 total), targeting specific gaps the existing 124 didn't cover: money and bills in `HOME` (rent increases, overdrafts, forgotten subscriptions, a family loan request), dating apps and modern-social friction in `SOCIAL` (a match who stopped responding, a wedding you can't afford, doomscroll comparison), career anxiety in `WORK` (imposter syndrome, layoff rumors, salary transparency gone wrong), physical-anxiety scenarios `BODY` hadn't gotten to yet (insomnia, touch-avoidance flinching, screen-strain), and identity/self-narrative gaps in `SELF` (compulsively checking a banking app, comparing yourself to one specific person, the decision you've been avoiding for months). Same structure and voice as the existing 124 — three tagged choices plus a per-event wildcard — verified with a Node-side structural check (no duplicate titles, every tag one of the five valid mechanisms, every zone real, every choice count in the 2–5 range, effect magnitudes landing in the same ±5–20-typical/±30-outlier band as the rest of the pack).
+- README's zone list caught up to actually mentioning `BODY`, added in 4.17.6 but never added to that sentence.
+
+## [4.17.7] - 2026-09-06
+
+### Added
+- **A new survival ending, "Actually Okay,"** for the specific outcome the game's own best strategy was landing on without ever getting a distinct payoff. Leaning on `secure` — the one coping mechanism that heals instead of trades, per its own description — drives Repression down and Inner Child up without touching Social Mask, which naturally leaves Mask sitting well above the 70 ceiling the existing "Fragile Equilibrium" ending checks for. A run that ends low-Repression, high-Mask, high-Child (the actual shape of playing well) fell through every named ending and landed on the generic "Functional Enough" catch-all — the same line a mediocre run gets. The new ending (`repression <= 30`, `mask >= 60`, `child >= 60`) sits after Fragile Equilibrium so its existing 40–70/40–70 band is untouched, and only catches the higher range nothing previously named.
+
 ## [4.17.3] - 2026-09-05
 
 ### Changed

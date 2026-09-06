@@ -999,5 +999,229 @@ const CONTENT_EVENTS_SELF = [
             text: "Turn on the radio and sing along badly through it.",
             log: "You are now simultaneously crying and singing off-key. A rare skill."
         }
+    },
+    {
+        zone: "SELF", title: "The Banking App",
+        desc: "You open the app, see the number, close it immediately, and open it again ninety seconds later like it might have changed.",
+        choices: [
+            {
+                text: "Check it six more times without doing anything differently.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "The number stayed the same. Checking isn't the same as changing it."
+            },
+            {
+                text: "Tell yourself other people are worse with money, so it's fine.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 5}, child: {op: "subtract", value: 8}},
+                log: "Comparing down didn't actually move the number either."
+            },
+            {
+                text: "Actually write the number down somewhere and make one small plan around it.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You stopped checking and started, in a small way, handling it."
+            }
+        ],
+        glitch: {
+            text: "Open three different budgeting apps in the same five minutes.",
+            log: "You now have three different opinions on how broke you are."
+        }
+    },
+    {
+        zone: "SELF", title: "The Age You Thought You'd Have This Figured Out By",
+        desc: "You do the math on how old you are versus how old you thought 'having it together' would happen by. The math is not flattering.",
+        choices: [
+            {
+                text: "Get irrationally angry at your younger self for the timeline they set.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 10}, child: {op: "add", value: 0}},
+                log: "Younger you didn't know anything. It's a strange thing to resent them for."
+            },
+            {
+                text: "Spiral quietly for the rest of the evening without telling anyone.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 12}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "The spiral had an audience of exactly one and no exit."
+            },
+            {
+                text: "Notice the timeline was arbitrary, made up by a much younger, much less informed you.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You fired a deadline nobody real ever actually set."
+            }
+        ],
+        glitch: {
+            text: "Google 'average age people figure their life out' at midnight.",
+            log: "The internet does not agree with itself. You are somehow less comforted."
+        }
+    },
+    {
+        zone: "SELF", title: "The Decision You've Been Avoiding for Months",
+        desc: "It's still sitting there, unmade, quietly getting heavier every week you don't touch it.",
+        choices: [
+            {
+                text: "Add it to tomorrow's list again, same as every day this month.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 10}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "Tomorrow's list is getting long. This is still at the top of it."
+            },
+            {
+                text: "Ask five different people what they'd do, hoping one of them decides for you.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 10}},
+                log: "Five people, five opinions, and the decision is still, somehow, yours."
+            },
+            {
+                text: "Give yourself an actual deadline and one criterion to decide by.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You made the decision smaller instead of making it disappear."
+            }
+        ],
+        glitch: {
+            text: "Flip a coin and pretend the outcome doesn't matter to you.",
+            log: "It landed. Your reaction to it told you exactly what you actually wanted."
+        }
+    },
+    {
+        zone: "SELF", title: "The Specific Person You Compare Yourself To",
+        desc: "There's one person (you know exactly who) whose life you measure your own against, always unfavorably, without ever really deciding to.",
+        choices: [
+            {
+                text: "Check what they're up to again, even though it never actually helps.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 10}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 10}},
+                log: "Same result as every other time. You checked anyway."
+            },
+            {
+                text: "Congratulate their latest thing extra warmly to prove to yourself you're not bitter.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 8}},
+                log: "The warmth was mostly for your own benefit, not theirs."
+            },
+            {
+                text: "Notice you're comparing your whole self to their highlight reel, and put the scale down.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You stopped measuring two different things with the same ruler."
+            }
+        ],
+        glitch: {
+            text: "Look up someone from high school you haven't thought about in a decade instead.",
+            log: "New person to compare yourself to. Same old habit, different target."
+        }
+    },
+    {
+        zone: "SELF", title: "The Question You Can't Answer",
+        desc: "Someone asks, casually, 'so what do you actually want?' and your mind goes completely, embarrassingly blank.",
+        choices: [
+            {
+                text: "Give the answer you think they want to hear instead of sitting in the blank.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 10}},
+                log: "You answered the question they asked instead of the one that stumped you."
+            },
+            {
+                text: "Laugh it off and change the subject before the silence gets uncomfortable.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 5}, child: {op: "add", value: 0}},
+                log: "The subject changed. The blank is still there, waiting for next time."
+            },
+            {
+                text: "Just say, honestly, 'I don't actually know yet.'",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "Not knowing, said out loud, turned out to be survivable."
+            }
+        ],
+        glitch: {
+            text: "Answer with the most impulsive thing that comes to mind, unfiltered.",
+            log: "You surprised yourself with the answer. You're still not sure it's 100% true."
+        }
+    },
+    {
+        zone: "SELF", title: "The Photo Where You Look Happy",
+        desc: "You find an old photo. You're laughing, genuinely, in a way you don't fully remember how to do anymore. You can't place the feeling.",
+        choices: [
+            {
+                text: "Stare at it a while, then close the folder without really processing anything.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 8}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "You looked at the feeling instead of into it. Close, but not quite."
+            },
+            {
+                text: "Post it with a caption implying everything's still that happy now.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 10}, child: {op: "subtract", value: 8}},
+                log: "The caption performed something the photo didn't actually contain anymore."
+            },
+            {
+                text: "Let yourself actually miss that feeling instead of performing that you still have it.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 12}},
+                log: "Missing something honestly takes up less room than pretending you don't."
+            }
+        ],
+        glitch: {
+            text: "Try to recreate the exact photo, right now, alone in your room.",
+            log: "It does not look the same. It was never really about the photo."
+        }
+    },
+    {
+        zone: "SELF", title: "The Urge to Label 'Isolation' as 'Introversion'",
+        desc: "You've cancelled the last four plans in a row and told yourself, each time, that you're just 'an introvert who needs space.'",
+        choices: [
+            {
+                text: "Cancel the fifth one too, and repeat the same explanation to yourself.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 8}, child: {op: "add", value: 0}},
+                log: "The explanation is getting worn out. You use it anyway because you know the only person holding you accountable is you."
+            },
+            {
+                text: "Don't examine it. Just stay in and let the pattern keep going.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 10}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "Staying in didn't recharge anything this time. It just kept happening."
+            },
+            {
+                text: "Ask yourself honestly whether this is self-care or avoidance, and answer honestly.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "You looked at the label before deciding whether to trust it. The answer was, as usual, the quantumly optimal 'Yes.'"
+            }
+        ],
+        glitch: {
+            text: "Accept a plan you don't want to go to, purely to prove a point to yourself.",
+            log: "You went. It was fine. It proved absolutely nothing either way."
+        }
+    },
+    {
+        zone: "SELF", title: "The Thing You're Waiting to Feel Ready For",
+        desc: "There's something you've wanted to start for a long time. You're still waiting to feel ready, and the feeling hasn't come.",
+        choices: [
+            {
+                text: "Keep waiting for the readiness to arrive on its own schedule.",
+                tag: "freeze",
+                effects: {rep: {op: "add", value: 10}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "It didn't arrive. It rarely does on its own."
+            },
+            {
+                text: "Tell people you're 'about to start soon' again, to keep the pressure off.",
+                tag: "fawn",
+                effects: {rep: {op: "add", value: 5}, mask: {op: "add", value: 8}, child: {op: "subtract", value: 8}},
+                log: "You bought yourself another round of not starting, at the cost of a small lie."
+            },
+            {
+                text: "Do one small piece of it today, ready or not.",
+                tag: "secure",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
+                log: "Turns out readiness was never actually the requirement."
+            }
+        ],
+        glitch: {
+            text: "Buy all the equipment for it and start absolutely nothing else.",
+            log: "You now own everything you need and have used none of it. A familiar shape."
+        }
     }
 ];

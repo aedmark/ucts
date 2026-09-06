@@ -1357,61 +1357,66 @@ a {
     padding: 0.75rem 1.5rem;
     border: 3px solid var(--key-teal);
     border-radius: 8px;
-    background: var(--key-cream);
-    color: var(--key-teal);
+    background: var(--key-teal);
+    color: var(--screen);
     font-family: var(--font-display);
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    box-shadow: 0 3px 0 var(--ink);
+    box-shadow: 0 2px 0 var(--ink);
+    transform: translateY(1px);
     transition: background-color 0.15s, color 0.15s, transform 0.08s, box-shadow 0.08s;
 }
 
 .end-btn:hover {
-    background-color: var(--key-teal);
-    color: var(--screen);
-    transform: translateY(1px);
-    box-shadow: 0 2px 0 var(--ink);
+    background-color: var(--key-cream);
+    color: var(--key-teal);
+    transform: translateY(0);
+    box-shadow: 0 3px 0 var(--ink);
 }
 
 .end-btn.ngplus {
     border-color: var(--key-violet);
-    color: var(--key-violet);
+    background: var(--key-violet);
+    color: var(--key-cream);
 }
 
 .end-btn.ngplus:hover {
-    background-color: var(--key-violet);
-    color: var(--key-cream);
+    background-color: var(--key-cream);
+    color: var(--key-violet);
 }
 
 .end-btn.replay {
     border-color: var(--key-amber);
-    color: var(--key-amber);
+    background: var(--key-amber);
+    color: var(--screen);
 }
 
 .end-btn.replay:hover {
-    background-color: var(--key-amber);
-    color: var(--screen);
+    background-color: var(--key-cream);
+    color: var(--key-amber);
 }
 
 .end-btn.share {
     border-color: var(--key-red);
-    color: var(--key-red);
+    background: var(--key-red);
+    color: var(--key-cream);
 }
 
 .end-btn.share:hover {
-    background-color: var(--key-red);
-    color: var(--key-cream);
+    background-color: var(--key-cream);
+    color: var(--key-red);
 }
 
 .end-btn.arcade {
     border-color: var(--key-blue);
-    color: var(--key-blue);
+    background: var(--key-blue);
+    color: var(--key-cream);
 }
 
 .end-btn.arcade:hover {
-    background-color: var(--key-blue);
-    color: var(--key-cream);
+    background-color: var(--key-cream);
+    color: var(--key-blue);
 }
 
 .end-share-status {

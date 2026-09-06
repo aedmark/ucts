@@ -253,7 +253,7 @@ const CONTENT_ENDINGS = [
         conditions: [],
         variants: [
             {title: "Functional Enough", desc: "You made it to tomorrow. Good job."},
-            {title: "You're Still Here", desc: "That's the whole ending. Some days that's actually the entire accomplishment."},
+            {title: "You're Still Here", desc: "That's it. Some days that's the entire accomplishment."},
             {title: "Day Survived", desc: "Nothing about today fits a neater category than this. You got through it. That counts."},
             {title: "The Unremarkable Ending", desc: "No dramatic collapse, no dramatic triumph. Just a day, ending, with you still in it."},
             {title: "Adequate", desc: "Not the best day. Not the worst. A perfectly forgettable, perfectly fine day, and those matter too."},

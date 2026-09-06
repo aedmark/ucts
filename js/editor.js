@@ -133,6 +133,38 @@ function buildConfigSection() {
         grid.appendChild(labeledWrap(f.label, input));
     });
 
+    if (!cfg.arcadeStartingStats) {
+        cfg.arcadeStartingStats = {
+            repression: {min: 20, max: 50},
+            mask: {min: 50, max: 80},
+            child: {min: 50, max: 80}
+        };
+    }
+    const arcadeNote = document.createElement('p');
+    arcadeNote.className = "editor-note";
+    arcadeNote.textContent = "Arcade Mode Starting Stats — each stat is rolled independently in this range at the start of an arcade run, instead of using Starting Repression/Mask/Inner Child above. Keep the ranges comparable in size (Repression's danger direction is inverted — a higher roll is closer to its 100 cap, so a narrower gap to 100 there matches a narrower gap to 0 for Mask/Inner Child).";
+    wrap.appendChild(arcadeNote);
+
+    const arcadeGrid = document.createElement('div');
+    arcadeGrid.className = "editor-grid-config";
+    wrap.appendChild(arcadeGrid);
+
+    ["repression", "mask", "child"].forEach(key => {
+        const range = cfg.arcadeStartingStats[key];
+        ["min", "max"].forEach(bound => {
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.className = "editor-input";
+            input.value = range[bound];
+            input.oninput = () => {
+                const v = parseFloat(input.value);
+                if (!isNaN(v)) range[bound] = v;
+            };
+            const label = `${key[0].toUpperCase()}${key.slice(1)} ${bound === 'min' ? 'Min' : 'Max'}`;
+            arcadeGrid.appendChild(labeledWrap(label, input));
+        });
+    });
+
     if (!cfg.statLabels) cfg.statLabels = {repression: "Repression Level", mask: "Social Mask", child: "Inner Child"};
     const labelNote = document.createElement('p');
     labelNote.className = "editor-note";
@@ -355,60 +387,79 @@ function buildFailureEndingsSection() {
     wrap.appendChild(title);
     const note = document.createElement('p');
     note.className = "editor-note";
-    note.textContent = "Shown the instant a stat crosses its loss threshold (repression ≥ 100, mask ≤ 0, child ≤ 0). One per stat, fixed — unlike Survival Endings below, there's no condition list to write.";
+    note.textContent = "Shown the instant a stat crosses its loss threshold (repression ≥ 100, mask ≤ 0, child ≤ 0) — unlike Survival Endings below, there's no condition list to write. Each is a pool of variants rather than one fixed line: the game picks one at random each time that stat breaks, so repeated runs don't show the identical text every time. Keep at least one variant per stat.";
     wrap.appendChild(note);
 
-    if (!editorDraft.failureEndings) {
-        editorDraft.failureEndings = {
-            repression: {
-                title: "Panic Attack",
-                desc: "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet."
-            },
-            mask: {
-                title: "Social Exile",
-                desc: "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free."
-            },
-            child: {
-                title: "Total Disassociation",
-                desc: "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing."
-            }
-        };
-    }
+    if (!editorDraft.failureEndings) editorDraft.failureEndings = {};
+    ["repression", "mask", "child"].forEach(key => {
+        const existing = editorDraft.failureEndings[key];
+        if (Array.isArray(existing) && existing.length) return;
+        if (existing && typeof existing === 'object' && existing.title) {
+            editorDraft.failureEndings[key] = [existing];
+            return;
+        }
+        editorDraft.failureEndings[key] = deepClone(DEFAULT_CONTENT.failureEndings[key]);
+    });
 
     [
         {key: "repression", trigger: "Repression ≥ 100"},
         {key: "mask", trigger: "Mask ≤ 0"},
         {key: "child", trigger: "Inner Child ≤ 0"}
     ].forEach(({key, trigger}) => {
-        const fe = editorDraft.failureEndings[key];
-        const card = document.createElement('div');
-        card.className = "editor-card";
+        const pool = editorDraft.failureEndings[key];
 
-        const head = document.createElement('div');
-        head.className = "editor-row";
-        const triggerLabel = document.createElement('span');
+        const triggerLabel = document.createElement('p');
         triggerLabel.className = "editor-tag-label";
         triggerLabel.textContent = trigger;
-        const titleInput = document.createElement('input');
-        titleInput.className = "editor-input";
-        titleInput.value = fe.title;
-        titleInput.oninput = () => {
-            fe.title = titleInput.value;
-        };
-        head.appendChild(triggerLabel);
-        head.appendChild(titleInput);
-        card.appendChild(head);
+        wrap.appendChild(triggerLabel);
 
-        const descArea = document.createElement('textarea');
-        descArea.rows = 2;
-        descArea.className = "editor-input";
-        descArea.value = fe.desc;
-        descArea.oninput = () => {
-            fe.desc = descArea.value;
-        };
-        card.appendChild(descArea);
+        pool.forEach((fe, idx) => {
+            const card = document.createElement('div');
+            card.className = "editor-card";
 
-        wrap.appendChild(card);
+            const head = document.createElement('div');
+            head.className = "editor-row";
+            const titleInput = document.createElement('input');
+            titleInput.className = "editor-input";
+            titleInput.value = fe.title;
+            titleInput.oninput = () => {
+                fe.title = titleInput.value;
+            };
+            const delBtn = document.createElement('button');
+            delBtn.textContent = "Remove";
+            delBtn.className = "editor-btn-danger";
+            delBtn.onclick = () => {
+                if (pool.length <= 1) {
+                    alert("Keep at least one variant.");
+                    return;
+                }
+                pool.splice(idx, 1);
+                renderEditor();
+            };
+            head.appendChild(titleInput);
+            head.appendChild(delBtn);
+            card.appendChild(head);
+
+            const descArea = document.createElement('textarea');
+            descArea.rows = 2;
+            descArea.className = "editor-input";
+            descArea.value = fe.desc;
+            descArea.oninput = () => {
+                fe.desc = descArea.value;
+            };
+            card.appendChild(descArea);
+
+            wrap.appendChild(card);
+        });
+
+        const addBtn = document.createElement('button');
+        addBtn.textContent = "+ Add Variant";
+        addBtn.className = "editor-btn self-start";
+        addBtn.onclick = () => {
+            pool.push({title: "", desc: ""});
+            renderEditor();
+        };
+        wrap.appendChild(addBtn);
     });
 
     return wrap;

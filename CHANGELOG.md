@@ -2,6 +2,26 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.17.3] - 2026-09-05
+
+### Changed
+- **Arcade Mode now rolls its own starting stats every run**, instead of using the same fixed 40/80/30 as a standard playthrough. A balance pass (600 simulated runs across a blind-random and a perfect-information strategy) found the fixed stats gave Inner Child roughly half the buffer to its 0 floor that Repression gets to its 100 cap — median survival for uninformed play was 6 turns, 81% of it to Inner Child alone, well before the escalation mechanic even gets to turn 11. Each stat now rolls independently in its own range (`config.arcadeStartingStats`, editable per-pack), tuned so every stat gets a comparable buffer regardless of which direction it fails in. Standard and Extended Therapy runs are untouched.
+- **Failure endings are now a pool of variants instead of one fixed line per stat.** "Total Disassociation," "Panic Attack," and "Social Exile" were the same title and description on every single loss — repetitive over a long session, and especially so in Arcade, which can end a run every few minutes. Each of the three now has 10 variants (`failureEndings.<stat>` is an array), picked at random when that stat breaks. A pack with the old single-object shape still works — treated as a one-variant pool.
+
+## [4.17.2] - 2026-09-05
+
+### Added
+- **Ending description now prints on the exported share card**, alongside the title that was already there. `renderResultCanvas()` measures and wraps the description text same as everything else on the card, so the block stays vertically centered whether the ending is a one-liner or a full paragraph — stress-tested at 400+ characters with no clipping against the screen inset.
+- **Coping mechanism badges are hoverable and tappable.** Each of the five mechanisms now carries a short description of what it actually does and costs (`content.js`'s `mechanisms[tag].desc`, editable per-pack from the Content Editor). Hovering a badge shows it via the native `title` tooltip; tapping/clicking toggles the same text into a readout line under the badge row, for touch devices where hover doesn't exist. Only one open at a time.
+
+### Fixed
+- **The splash screen's new Arcade Mode button (added in 4.17.1) rendered oversized and crowded the Run Seed row above it.** `#splash-start-btn { margin-top: 2rem; }` was written back when Start was the only button in that row; once Arcade Mode joined it as a flex sibling, that margin pushed only Start down while Arcade — carrying no margin of its own — stretched to fill the row's full height under the default `align-items: stretch`. The margin now lives on the shared `.splash-actions` wrapper instead of one button.
+
+## [4.17.1] - 2026-09-05
+
+### Added
+- **Arcade Mode.** Unseeded and uncapped — no turn limit, no seed field, just play until a stat runs out. Difficulty escalates in steps rather than smoothly: every ten turns, event and mechanism stat effects scale up one tier, reusing the existing `hardModeMultiplier` config value as the step size rather than adding a second tuning knob. Tracks its own high score (turns survived) in `localStorage`, separate from Extended Therapy's New Game+ unlock. Reachable from the splash screen or, after any run, from the end screen.
+
 ## [4.17.0] - 2026-09-05
 
 ### Changed

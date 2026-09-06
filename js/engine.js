@@ -102,28 +102,28 @@ function statLabels() {
     return Object.assign({}, DEFAULT_STAT_LABELS, getContent().config.statLabels || {});
 }
 
-const DEFAULT_FAILURE_ENDINGS = {
-    repression: {
-        title: "Panic Attack",
-        desc: "Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet."
-    },
-    mask: {
-        title: "Social Exile",
-        desc: "Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but strangely free."
-    },
-    child: {
-        title: "Total Disassociation",
-        desc: "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing."
-    }
-};
+const DEFAULT_FAILURE_ENDINGS = DEFAULT_CONTENT.failureEndings;
+
+// Each stat's failure ending is a pool of variants (an older pack, or one
+// hand-edited before this existed, may still have a single {title, desc}
+// object instead — normalized into a one-entry pool so it still works).
+function normalizeFailureEndingPool(value, fallback) {
+    if (Array.isArray(value) && value.length) return value;
+    if (value && typeof value === 'object' && value.title) return [value];
+    return fallback;
+}
 
 function failureEndings() {
     const custom = getContent().failureEndings || {};
     return {
-        repression: Object.assign({}, DEFAULT_FAILURE_ENDINGS.repression, custom.repression),
-        mask: Object.assign({}, DEFAULT_FAILURE_ENDINGS.mask, custom.mask),
-        child: Object.assign({}, DEFAULT_FAILURE_ENDINGS.child, custom.child)
+        repression: normalizeFailureEndingPool(custom.repression, DEFAULT_FAILURE_ENDINGS.repression),
+        mask: normalizeFailureEndingPool(custom.mask, DEFAULT_FAILURE_ENDINGS.mask),
+        child: normalizeFailureEndingPool(custom.child, DEFAULT_FAILURE_ENDINGS.child)
     };
+}
+
+function pickFailureEnding(pool) {
+    return pool[Math.floor(state.rng() * pool.length)];
 }
 
 const elEventDisplay = document.getElementById('event-display');
@@ -652,15 +652,18 @@ function getSurvivalEnding() {
 function checkGameEnd() {
     const fe = failureEndings();
     if (state.repression >= 100) {
-        endGame(fe.repression.title, fe.repression.desc);
+        const e = pickFailureEnding(fe.repression);
+        endGame(e.title, e.desc);
         return true;
     }
     if (state.mask <= 0) {
-        endGame(fe.mask.title, fe.mask.desc);
+        const e = pickFailureEnding(fe.mask);
+        endGame(e.title, e.desc);
         return true;
     }
     if (state.child <= 0) {
-        endGame(fe.child.title, fe.child.desc);
+        const e = pickFailureEnding(fe.child);
+        endGame(e.title, e.desc);
         return true;
     }
     if (state.turn > state.maxTurns) {
@@ -906,6 +909,21 @@ function loadRandomEvent() {
     }
 }
 
+const DEFAULT_ARCADE_STAT_RANGES = DEFAULT_CONTENT.config.arcadeStartingStats;
+
+// Arcade rolls its own starting stats each run instead of using the fixed
+// startingStats — every stat gets an independently-rolled range, defaulting
+// per-stat (and per-pack, if a custom pack only overrides one of the three)
+// to whatever the shipped pack defines.
+function rollArcadeStartingStats(rng, cfg) {
+    const ranges = Object.assign({}, DEFAULT_ARCADE_STAT_RANGES, cfg.arcadeStartingStats);
+    const roll = key => {
+        const r = Object.assign({}, DEFAULT_ARCADE_STAT_RANGES[key], ranges[key]);
+        return Math.round(r.min + rng() * (r.max - r.min));
+    };
+    return {repression: roll('repression'), mask: roll('mask'), child: roll('child')};
+}
+
 function startGame(hard = false, seedOverride = null, arcade = false) {
     clearTimedChoice();
     if (arcade) hard = false;
@@ -913,17 +931,19 @@ function startGame(hard = false, seedOverride = null, arcade = false) {
     const cfg = content.config;
     const seed = (!arcade && seedOverride && String(seedOverride).trim())
         ? String(seedOverride).trim() : generateRandomSeed();
+    const rng = makeRng(seed);
+    const startingStats = arcade ? rollArcadeStartingStats(rng, cfg) : cfg.startingStats;
     state = {
-        repression: cfg.startingStats.repression,
-        mask: cfg.startingStats.mask,
-        child: cfg.startingStats.child,
+        repression: startingStats.repression,
+        mask: startingStats.mask,
+        child: startingStats.child,
         turn: 1,
         maxTurns: hard ? cfg.hardModeTurns : (arcade ? Infinity : cfg.maxTurns),
         isGameOver: false,
         hardMode: hard,
         arcade: arcade,
         seed: seed,
-        rng: makeRng(seed)
+        rng: rng
     };
     resetMechanismState();
     lastEventTitle = null;

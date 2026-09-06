@@ -26,7 +26,8 @@ Global numbers that shape the whole run, not any one event:
 
 | Field | What it does |
 |---|---|
-| Starting Repression / Mask / Inner Child | Your three stats at turn 1. Same defaults every restart. |
+| Starting Repression / Mask / Inner Child | Your three stats at turn 1 in a standard or Extended Therapy run. Same defaults every restart. |
+| Arcade Mode Starting Stats (min/max per stat) | Arcade doesn't use the fixed stats above — each stat is rolled independently within its own range at the start of every arcade run. Keep the ranges comparably sized: Repression's danger direction is inverted (higher is worse, capping at 100), so a range like `20–50` there gives roughly the same buffer as `50–80` does for Mask/Inner Child (worse at 0). |
 | Base Max Turns | How many turns until a standard run ends in a survival ending. |
 | Extended Therapy Turns | Turn count for the harder mode unlocked after your first survival. |
 | Extended Therapy Multiplier | Every stat swing (including mechanism mods) is multiplied by this in Extended Therapy. `1.25` means 25% harder in both directions. |
@@ -56,9 +57,13 @@ One caveat: the Field Log's own tag picker (in `index.html`) shows the raw ident
 
 ### Failure Endings
 
-These are the three ways to *lose* — repression hitting 100%, mask hitting 0%, or inner child hitting 0%. Unlike survival endings, there's no condition list: each stat has exactly one, and it fires the instant that stat crosses its threshold, whichever turn that happens to be. Each has a **title** and a **desc**, same as a survival ending.
+These are the three ways to *lose* — repression hitting 100%, mask hitting 0%, or inner child hitting 0%. Unlike survival endings, there's no condition list: it fires the instant that stat crosses its threshold, whichever turn that happens to be.
+
+Each stat has a **pool** of variants rather than one fixed ending — the game picks one at random every time that stat breaks, so a player who loses the same way twice (easy to do over several runs, or across many arcade deaths in one sitting) doesn't see the identical line both times. Each variant has a **title** and a **desc**, same as a survival ending. Keep at least one variant per stat; there's no ceiling on how many you can add.
 
 These are easy to forget about because they're not "endings" in the same list as the rest, but statistically they're often the *most common* outcome, especially in a pack that pushes stats hard — so if your event effects skew heavy in one direction, more players will see one of these three than any survival ending you wrote. Give them the same voice as the rest of your pack; leaving them at the defaults means a reskinned pack still ends with unrelated flavor text on most losses.
+
+A pack saved before this pool existed — or one hand-edited with a single `{ "title", "desc" }` object per stat instead of an array — still works; it's treated as a one-variant pool.
 
 ### Survival Endings
 
@@ -128,20 +133,20 @@ Export a pack to see the exact shape. The top level is:
 
 ```json
 {
-  "config": { "startingStats": { "repression": 20, "mask": 100, "child": 50 }, "statLabels": { "repression": "Repression Level", "mask": "Social Mask", "child": "Inner Child" }, "splash": { "title": "U.C.T. Simulator", "intro": "Shown once before the run starts.\n\nBlank lines start new paragraphs." }, "maxTurns": 10, "hardModeTurns": 20, "hardModeMultiplier": 1.25, "unlockThreshold": 3, "glitchChance": 0.15, "weakZoneWeight": 2.5, "timedEventChance": 0.2, "timedDuration": 8000 },
+  "config": { "startingStats": { "repression": 20, "mask": 100, "child": 50 }, "arcadeStartingStats": { "repression": { "min": 20, "max": 50 }, "mask": { "min": 50, "max": 80 }, "child": { "min": 50, "max": 80 } }, "statLabels": { "repression": "Repression Level", "mask": "Social Mask", "child": "Inner Child" }, "splash": { "title": "U.C.T. Simulator", "intro": "Shown once before the run starts.\n\nBlank lines start new paragraphs." }, "maxTurns": 10, "hardModeTurns": 20, "hardModeMultiplier": 1.25, "unlockThreshold": 3, "glitchChance": 0.15, "weakZoneWeight": 2.5, "timedEventChance": 0.2, "timedDuration": 8000 },
   "zones": [ { "key": "WORK", "statBias": "repression" } ],
   "mechanisms": {
-    "fawn":   { "name": "The Approval Loop", "mod": { "rep": 0,  "mask": 3,  "child": -5 } },
-    "flight": { "name": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } },
-    "fight":  { "name": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } },
-    "freeze": { "name": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } },
-    "secure": { "name": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } }
+    "fawn":   { "name": "The Approval Loop", "desc": "Shown when a player hovers or taps this mechanism once unlocked.", "mod": { "rep": 0,  "mask": 3,  "child": -5 } },
+    "flight": { "name": "...", "desc": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } },
+    "fight":  { "name": "...", "desc": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } },
+    "freeze": { "name": "...", "desc": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } },
+    "secure": { "name": "...", "desc": "...", "mod": { "rep": 0, "mask": 0, "child": 0 } }
   },
   "glitchLogs": [ "A fallback line for the wildcard choice, used when an event doesn't define its own." ],
   "failureEndings": {
-    "repression": { "title": "Panic Attack", "desc": "Shown when repression hits 100." },
-    "mask": { "title": "Social Exile", "desc": "Shown when mask hits 0." },
-    "child": { "title": "Total Disassociation", "desc": "Shown when child hits 0." }
+    "repression": [ { "title": "Panic Attack", "desc": "Shown when repression hits 100." }, { "title": "...", "desc": "A second variant — picked at random alongside the first, and any others you add." } ],
+    "mask": [ { "title": "Social Exile", "desc": "Shown when mask hits 0." } ],
+    "child": [ { "title": "Total Disassociation", "desc": "Shown when child hits 0." } ]
   },
   "endings": [
     { "title": "...", "desc": "...", "conditions": [ { "stat": "repression", "op": ">=", "value": 70 } ] }
@@ -163,7 +168,7 @@ Export a pack to see the exact shape. The top level is:
 
 Requirements the importer actually checks: `config` is an object; `zones` is a non-empty array; `mechanisms` has all five keys (`fawn`/`flight`/`fight`/`freeze`/`secure`) present; `glitchLogs` is an array; `endings` is a non-empty array; `events` is a non-empty array. It doesn't deep-validate every field inside each event or choice, so a malformed individual event won't necessarily be caught at import — it'll just render oddly (missing text shows as `...`, missing effects default to `0`). When in doubt, edit through the UI, which can't produce a malformed shape in the first place.
 
-`failureEndings`, `config.statLabels`, `config.splash`, and each event's `glitch` are all optional — a pack from before these existed imports fine and just falls back to the built-in defaults (or the pack-wide `glitchLogs` pool, for `glitch`) for whichever it's missing. A plain number is likewise still accepted for any choice's per-stat effect — the editor writes and displays the `{ "op", "value" }` form exclusively now, but importing an older pack that still uses plain numbers works fine; that choice's numbers just get normalized into Add/Subtract the moment its card is opened in the editor.
+`failureEndings`, `config.statLabels`, `config.splash`, `config.arcadeStartingStats`, each mechanism's `desc`, and each event's `glitch` are all optional — a pack from before these existed imports fine and just falls back to the built-in defaults (or the pack-wide `glitchLogs` pool, for `glitch`) for whichever it's missing. `failureEndings` also accepts a single `{ "title", "desc" }` object per stat instead of an array, for a pack saved before the variant pool existed — it's treated as a one-variant pool. A plain number is likewise still accepted for any choice's per-stat effect — the editor writes and displays the `{ "op", "value" }` form exclusively now, but importing an older pack that still uses plain numbers works fine; that choice's numbers just get normalized into Add/Subtract the moment its card is opened in the editor.
 
 ## Example pack: ScumSoft™ E-S.A.T.
 

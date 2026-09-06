@@ -315,6 +315,16 @@ function buildMechanismsSection() {
         head.appendChild(nameInput);
         row.appendChild(head);
 
+        const descArea = document.createElement('textarea');
+        descArea.rows = 2;
+        descArea.className = "editor-input";
+        descArea.placeholder = "Shown when a player hovers or taps this mechanism once unlocked.";
+        descArea.value = mech.desc || '';
+        descArea.oninput = () => {
+            mech.desc = descArea.value;
+        };
+        row.appendChild(descArea);
+
         const modGrid = document.createElement('div');
         modGrid.className = "editor-grid-mods";
         ["rep", "mask", "child"].forEach(k => {

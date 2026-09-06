@@ -536,11 +536,29 @@ a {
     border-radius: 999px;
     background: var(--key-cream);
     padding: 4px 10px;
+    font-family: inherit;
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--ink);
     white-space: nowrap;
+    cursor: pointer;
+}
+
+.mechanism-badge.active {
+    background: var(--key-teal);
+    color: var(--key-cream);
+}
+
+.mechanisms-desc {
+    flex-basis: 100%;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    border-top: 2px dashed var(--ink);
+    padding-top: 0.5rem;
 }
 
 @keyframes flash-in {
@@ -1043,7 +1061,7 @@ a {
     z-index: 40;
 }
 
-#splash-start-btn {
+.splash-actions {
     margin-top: 2rem;
 }
 

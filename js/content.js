@@ -9,7 +9,7 @@ const DEFAULT_CONTENT = {
         statLabels: {repression: "Repression Level", mask: "Social Mask", child: "Inner Child"},
         splash: {
             title: "Unresolved Childhood Trauma Simulator",
-            intro: "Three stats. Ten turns. Every choice you click is quietly one of five ways people cope with a bad day.\n\nYou won't know which, or what it costs, until it's already happened.\n\nPress START when you're ready to find out."
+            intro: "You are about to have a very bad day. Every choice you make is quietly one of five ways people cope with stress and anxiety.\n\nYou won't know which one is which, or what it will cost you, until it's already happened."
         },
         maxTurns: 10,
         hardModeTurns: 20,
@@ -29,11 +29,31 @@ const DEFAULT_CONTENT = {
     ],
 
     mechanisms: {
-        fawn: {name: "The Approval Loop", mod: {rep: 0, mask: 3, child: -5}},
-        flight: {name: "The Exit Strategy", mod: {rep: -5, mask: -3, child: 0}},
-        fight: {name: "Hair-Trigger", mod: {rep: -5, mask: -8, child: 0}},
-        freeze: {name: "The Void", mod: {rep: 8, mask: 0, child: -5}},
-        secure: {name: "Earned Security", mod: {rep: -5, mask: 0, child: 5}}
+        fawn: {
+            name: "The Approval Loop",
+            desc: "You've learned that being needed is safer than being seen. It pads your Social Mask a little every time, and quietly costs your Inner Child.",
+            mod: {rep: 0, mask: 3, child: -5}
+        },
+        flight: {
+            name: "The Exit Strategy",
+            desc: "Removing yourself from the room becomes reflex. It bleeds off Repression fast, but your Social Mask takes the hit every time you leave.",
+            mod: {rep: -5, mask: -3, child: 0}
+        },
+        fight: {
+            name: "Hair-Trigger",
+            desc: "You stopped swallowing it. Repression drops hard and immediate, but the damage to your Social Mask is worse.",
+            mod: {rep: -5, mask: -8, child: 0}
+        },
+        freeze: {
+            name: "The Void",
+            desc: "You go somewhere else while your body stays in the room. Repression quietly climbs while you're gone, and your Inner Child pays the toll.",
+            mod: {rep: 8, mask: 0, child: -5}
+        },
+        secure: {
+            name: "Earned Security",
+            desc: "An actual regulated response instead of a coping one. It's the only mechanism that heals instead of trading: Repression drops, Inner Child grows.",
+            mod: {rep: -5, mask: 0, child: 5}
+        }
     },
 
     glitchLogs: [
@@ -55,7 +75,7 @@ const DEFAULT_CONTENT = {
         },
         child: {
             title: "Total Disassociation",
-            desc: "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing."
+            desc: "Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory.\n\n You feel nothing."
         }
     },
 

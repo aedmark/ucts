@@ -133,6 +133,7 @@ const elActionLog = document.getElementById('action-log');
 
 const elMechanismsPanel = document.getElementById('mechanisms-panel');
 const elMechanismsList = document.getElementById('mechanisms-list');
+const elMechanismsDesc = document.getElementById('mechanisms-desc');
 
 const elEndScreen = document.getElementById('end-screen');
 const elEndTitle = document.getElementById('end-title');
@@ -221,6 +222,7 @@ const CANVAS_COLORS = {
     keyRed: '#e3543f',
     screen: '#1a0e08',
     screenEdge: '#0a0503',
+    screenBody: '#c9b990',
     ledRed: '#ff5240',
     ledAmber: '#ffb100',
     ledTeal: '#2fe0c4'
@@ -370,12 +372,16 @@ async function renderResultCanvas() {
     const contentW = screenW - innerPad * 2;
 
     const endingFont = '34px "Press Start 2P", monospace';
+    const descFont = '24px "Space Mono", monospace';
     const mechHeaderFont = '24px "Space Mono", monospace';
     const mechBodyFont = 'italic 24px "Space Mono", monospace';
-    const endingLineHeight = 44, statRowHeight = 22 + 46 + 58, mechLineHeight = 30;
+    const endingLineHeight = 44, descLineHeight = 32, statRowHeight = 22 + 46 + 58, mechLineHeight = 30;
 
     ctx.font = endingFont;
     const endingLines = layoutWrappedLines(ctx, elEndTitle.textContent.toUpperCase(), contentW);
+
+    ctx.font = descFont;
+    const descLines = elEndDesc.textContent ? layoutWrappedLines(ctx, elEndDesc.textContent, contentW) : [];
 
     const unlockedNames = Object.entries(mechanismState)
         .filter(([, s]) => s.unlocked)
@@ -383,7 +389,9 @@ async function renderResultCanvas() {
     ctx.font = mechBodyFont;
     const mechLines = unlockedNames.length ? layoutWrappedLines(ctx, unlockedNames.join(', '), contentW) : [];
 
-    const blockHeight = endingLines.length * endingLineHeight + 26 + 50 + statRowHeight * 3
+    const blockHeight = endingLines.length * endingLineHeight + 26
+        + (descLines.length ? descLines.length * descLineHeight + 26 : 0)
+        + 50 + statRowHeight * 3
         + (mechLines.length ? 30 + mechLines.length * mechLineHeight + 16 : 0);
     const blockTop = screenTop + 40, blockBottom = screenBottom - 40;
     let y = blockTop + Math.max(0, (blockBottom - blockTop - blockHeight) / 2);
@@ -391,6 +399,12 @@ async function renderResultCanvas() {
     ctx.fillStyle = win ? CANVAS_COLORS.ledTeal : CANVAS_COLORS.ledRed;
     ctx.font = endingFont;
     y = drawWrappedLines(ctx, endingLines, W / 2, y, endingLineHeight) + 26;
+
+    if (descLines.length) {
+        ctx.fillStyle = CANVAS_COLORS.screenBody;
+        ctx.font = descFont;
+        y = drawWrappedLines(ctx, descLines, W / 2, y, descLineHeight) + 26;
+    }
 
     ctx.strokeStyle = CANVAS_COLORS.screenEdge;
     ctx.lineWidth = 4;
@@ -536,9 +550,29 @@ function trackMechanism(tag) {
     }
 }
 
+// Hover shows the description via the native title tooltip; tap/click
+// toggles the same text into elMechanismsDesc for touch devices, where
+// title tooltips are unreliable or absent.
+function showMechanismDesc(tag, badge) {
+    const content = getContent();
+    const mech = content.mechanisms[tag];
+    const alreadyOpen = badge.classList.contains('active');
+    elMechanismsList.querySelectorAll('.mechanism-badge').forEach(b => b.classList.remove('active'));
+    if (alreadyOpen || !mech || !mech.desc) {
+        elMechanismsDesc.classList.add('hidden');
+        elMechanismsDesc.textContent = '';
+        return;
+    }
+    badge.classList.add('active');
+    elMechanismsDesc.textContent = `${mech.name}: ${mech.desc}`;
+    elMechanismsDesc.classList.remove('hidden');
+}
+
 function renderMechanisms(hasFresh) {
     const content = getContent();
     const unlockedTags = Object.entries(mechanismState).filter(([, s]) => s.unlocked).map(([tag]) => tag);
+    elMechanismsDesc.classList.add('hidden');
+    elMechanismsDesc.textContent = '';
     if (unlockedTags.length === 0) {
         elMechanismsPanel.classList.add('hidden');
         return;
@@ -546,10 +580,14 @@ function renderMechanisms(hasFresh) {
     elMechanismsPanel.classList.remove('hidden');
     elMechanismsList.innerHTML = '';
     unlockedTags.forEach((tag, i) => {
-        const badge = document.createElement('span');
+        const mech = content.mechanisms[tag];
+        const badge = document.createElement('button');
+        badge.type = 'button';
         const isNewest = hasFresh && i === unlockedTags.length - 1;
         badge.className = "mechanism-badge" + (isNewest ? " fresh" : "");
-        badge.textContent = content.mechanisms[tag] ? content.mechanisms[tag].name : tag;
+        badge.textContent = mech ? mech.name : tag;
+        if (mech && mech.desc) badge.title = mech.desc;
+        badge.onclick = () => showMechanismDesc(tag, badge);
         elMechanismsList.appendChild(badge);
     });
 }

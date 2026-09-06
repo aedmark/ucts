@@ -1,8 +1,3 @@
-// ============================================================
-// EVENTS — HOME zone.
-// Loaded before content-events.js, which assembles CONTENT_EVENTS
-// from this file and the other three zones.
-// ============================================================
 const CONTENT_EVENTS_HOME = [
     {
         zone: "HOME", title: "The Sigh",

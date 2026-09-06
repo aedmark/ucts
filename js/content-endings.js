@@ -1,9 +1,3 @@
-// ============================================================
-// ENDINGS
-// Loaded before content.js, which assembles DEFAULT_CONTENT from this.
-// ============================================================
-
-
 const CONTENT_FAILURE_ENDINGS = {
     repression: [
         {

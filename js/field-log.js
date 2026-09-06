@@ -1,7 +1,3 @@
-// ============================================================
-// FIELD LOG — real, persistent journaling using the same tag vocabulary
-// as the simulation. index.html only. Depends on content.js.
-// ============================================================
 const FIELD_LOG_KEY = 'uct_field_log_v1';
 let selectedFieldTag = null;
 let selectedFieldZone = null;
@@ -21,7 +17,7 @@ function saveFieldLog(entries) {
     fieldLogCache = entries;
     try {
         localStorage.setItem(FIELD_LOG_KEY, JSON.stringify(entries));
-    } catch (e) { /* storage unavailable, entries persist for this session only */
+    } catch (e) {
     }
 }
 
@@ -32,7 +28,6 @@ function deleteFieldEntry(id) {
     renderPattern();
 }
 
-// DOM Elements
 const elFieldNote = document.getElementById('field-note');
 const elFieldTagPicker = document.getElementById('field-tag-picker');
 const elFieldZonePicker = document.getElementById('field-zone-picker');

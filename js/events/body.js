@@ -1,8 +1,3 @@
-// ============================================================
-// EVENTS — BODY zone.
-// Loaded before content-events.js, which assembles CONTENT_EVENTS
-// from this file and the other four zones.
-// ============================================================
 const CONTENT_EVENTS_BODY = [
     {
         zone: "BODY", title: "The Wake-Up Call",

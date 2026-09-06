@@ -110,10 +110,6 @@
     gap: 0.5rem;
 }
 
-/* ============================================================
-   LAYOUT HELPERS — replace inline Tailwind utility strings
-   that were built by editor.js. Hand-authored, Tailwind removed.
-   ============================================================ */
 .editor-section-title {
     font-family: var(--font-display);
     font-size: 0.7rem;
@@ -233,9 +229,6 @@
     text-align: center;
 }
 
-/* ============================================================
-   EDITOR PAGE SHELL — editor.html structural classes.
-   ============================================================ */
 .app.editor-shell {
     height: 90vh;
 }
@@ -365,9 +358,6 @@
     padding: 1rem;
 }
 
-/* ============================================================
-   EDITOR TABS
-   ============================================================ */
 #editor-tabs {
     flex-wrap: wrap;
     padding: 0.5rem 0.5rem 0;
@@ -409,9 +399,6 @@
     background: var(--ink);
 }
 
-/* ============================================================
-   EVENTS TAB — zone groups, collapsed by default.
-   ============================================================ */
 .editor-zone-group {
     border: 2px solid var(--ink);
     border-radius: 8px;

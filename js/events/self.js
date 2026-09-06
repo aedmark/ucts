@@ -1,8 +1,3 @@
-// ============================================================
-// EVENTS — SELF zone.
-// Loaded before content-events.js, which assembles CONTENT_EVENTS
-// from this file and the other three zones.
-// ============================================================
 const CONTENT_EVENTS_SELF = [
     {
         zone: "SELF", title: "The Nostalgic Smell",

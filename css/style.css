@@ -1,6 +1,4 @@
-/* ============================================================
-   RESET & BASE — replaces Tailwind's preflight, minimal on purpose.
-   ============================================================ */
+
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -54,9 +52,6 @@ a {
 
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Press+Start+2P&display=swap');
 
-/* ============================================================
-   DESIGN TOKENS — Speak & Spell: cream toy plastic + LED readouts.
-   ============================================================ */
 :root {
     --case: #e6dabd;
     --case-deep: #d3c39c;
@@ -73,9 +68,6 @@ a {
     --led-teal: #2fe0c4;
     --led-teal-dim: #0e6e5e;
 
-    /* Same three hues, darkened for text sitting on the cream case
-       instead of the dark screen — the bright LED tones read fine
-       glowing on --screen but wash out against --case. */
     --label-red: #a5281a;
     --label-amber: #7a4f00;
     --label-teal: #0a5a4c;
@@ -104,9 +96,6 @@ a {
     opacity: 0.5;
 }
 
-/* ============================================================
-   LAYOUT PRIMITIVES — small reusable shapes, hand-rolled.
-   ============================================================ */
 .row {
     display: flex;
     align-items: center;
@@ -126,9 +115,6 @@ a {
     gap: 0.5rem;
 }
 
-/* ============================================================
-   APP SHELL — the toy's plastic case
-   ============================================================ */
 .app {
     width: 100%;
     max-width: 48rem;
@@ -178,9 +164,6 @@ a {
     }
 }
 
-/* ============================================================
-   HEADER
-   ============================================================ */
 .app-header {
     padding: 0.75rem 1rem;
     border-bottom: 3px solid var(--ink);
@@ -280,9 +263,6 @@ a {
     padding: 0.3rem 0.5rem;
 }
 
-/* ============================================================
-   MODE TABS — chunky rocker switch
-   ============================================================ */
 .tabs {
     display: flex;
     border-bottom: 3px solid var(--ink);
@@ -326,9 +306,6 @@ a {
     background: var(--key-violet);
 }
 
-/* ============================================================
-   SIM VIEW
-   ============================================================ */
 .sim-view {
     display: flex;
     flex-direction: column;
@@ -358,11 +335,6 @@ a {
     }
 }
 
-/* Mobile: the event/choices are what you're actually reading and acting on
-   each turn, so they move ahead of the stat HUD instead of sitting below a
-   wall of meters. The HUD itself shrinks to match — full captions and
-   1.4rem-tall bars are a tablet/desktop luxury the shortest viewports
-   don't have room for. */
 @media (max-width: 639px) {
     .gameplay {
         order: -1;
@@ -754,9 +726,6 @@ a {
     scrollbar-color: var(--case-shadow) var(--case-deep);
 }
 
-/* ============================================================
-   FIELD LOG VIEW
-   ============================================================ */
 .field-view {
     display: flex;
     flex-direction: column;
@@ -1027,9 +996,6 @@ a {
     background: var(--key-red);
 }
 
-/* ============================================================
-   OVERLAYS — Help & End Screen
-   ============================================================ */
 .overlay {
     position: absolute;
     inset: 0;
@@ -1058,9 +1024,6 @@ a {
     background: linear-gradient(180deg, var(--case) 0%, var(--case-deep) 100%);
 }
 
-/* The end screen's own case-within-a-case: mirrors the exported share
-   card's layout (case header, dark screen inset with stat bars, case
-   footer) as real, responsive DOM instead of a fixed-size canvas image. */
 .end-card {
     width: 100%;
     max-width: 30rem;
@@ -1130,10 +1093,6 @@ a {
     text-align: left;
 }
 
-/* .stat-label-row's default --ink text (and --label-* accents) are
-   calibrated for the cream HUD background — invisible on this screen's
-   near-black one. Re-tuned to the same bright LED hues the exported
-   share card uses for these same three rows. */
 .end-card-stats .stat-label-row {
     color: var(--led-teal);
 }
@@ -1162,13 +1121,6 @@ a {
     color: var(--led-teal);
 }
 
-/* The live HUD's "-dim" bar colors are deliberately muted — an ambient
-   readout that only lights up when a stat gets dangerous. On the end
-   screen there's no more run to stay calm during; a stat that quietly
-   coasted through the whole game still deserves to read clearly in the
-   final summary, so every bar here shows at full brightness. "-hot"
-   (and its glow/pulse) is untouched — a stat that actually redlined
-   should still look different from one that didn't. */
 .end-card-stats .stat-bar-fill.red-dim {
     background-color: var(--led-red);
 }
@@ -1505,9 +1457,6 @@ a {
     margin: 0;
 }
 
-/* ============================================================
-   APP FOOTER
-   ============================================================ */
 .app-footer {
     padding: 0.5rem;
     border-top: 3px solid var(--ink);

@@ -1,9 +1,3 @@
-// ============================================================
-// COPING MECHANISMS — the five response identities (fawn/flight/fight/
-// freeze/secure): display name, the stat mods applied once unlocked, and
-// the description shown when a player hovers or taps an unlocked badge.
-// Loaded before content.js, which assembles DEFAULT_CONTENT from this.
-// ============================================================
 const CONTENT_MECHANISMS = {
     fawn: {
         name: "The Approval Loop",

@@ -11,7 +11,6 @@
 
 <main class="app">
 
-    <!-- Header -->
     <header class="app-header">
         <div class="row">
             <h1 id="game-title" class="app-title">Unresolved Childhood Trauma Sim</h1>
@@ -24,19 +23,15 @@
         <div id="turn-counter" class="turn-counter">Turn: 1/10</div>
     </header>
 
-    <!-- Mode Switcher -->
     <nav class="tabs">
         <button id="tab-sim" onclick="setMode('sim')" class="tab active">Simulation</button>
         <button id="tab-field" onclick="setMode('field')" class="tab">Field Log</button>
     </nav>
 
-    <!-- SIM VIEW -->
     <div id="sim-view" class="sim-view">
 
-        <!-- Stats Panel -->
         <section class="stats-panel">
 
-            <!-- Repression -->
             <div>
                 <div class="stat-label-row repression">
                     <span id="label-repression">Repression Level</span>
@@ -48,7 +43,6 @@
                 <p class="stat-caption">If it hits 100%, you explode.</p>
             </div>
 
-            <!-- Social Mask -->
             <div>
                 <div class="stat-label-row mask">
                     <span id="label-mask">Social Mask</span>
@@ -60,7 +54,6 @@
                 <p class="stat-caption">If it hits 0%, you are exiled.</p>
             </div>
 
-            <!-- Inner Child -->
             <div>
                 <div class="stat-label-row child">
                     <span id="label-child">Inner Child</span>
@@ -73,35 +66,28 @@
             </div>
         </section>
 
-        <!-- Coping Mechanisms Panel -->
         <section id="mechanisms-panel" class="hidden mechanisms-panel">
             <span class="mechanisms-label">Coping Mechanisms Acquired:</span>
             <div id="mechanisms-list" class="row-wrap"></div>
             <p id="mechanisms-desc" class="hidden mechanisms-desc"></p>
         </section>
 
-        <!-- Main Gameplay Area -->
         <section class="gameplay">
 
-            <!-- Event Description -->
             <div id="event-display" class="event-display">
                 <h2 class="event-title">Loading Trigger...</h2>
                 <p class="event-desc">Please wait while your nervous system calibrates to a perceived threat.</p>
             </div>
 
-            <!-- Choices -->
             <div id="choices-container" class="choices">
-                <!-- Buttons injected via JS -->
             </div>
         </section>
 
-        <!-- Action Log -->
         <footer class="action-log" id="action-log">
             <div>> System initialized. Awaiting traumatic stimuli.</div>
         </footer>
     </div>
 
-    <!-- FIELD LOG VIEW -->
     <div id="field-view" class="hidden field-view">
 
         <div class="field-disclaimer">
@@ -134,14 +120,12 @@
         </div>
     </div>
 
-    <!-- App Footer -->
     <footer class="app-footer">
         <a href="editor.html">Content Editor</a>
         <span class="app-footer-sep">·</span>
         <a href="https://github.com/aedmark/ucts" target="_blank" rel="noopener">GitHub</a>
     </footer>
 
-    <!-- Help / About Overlay (Hidden by default) -->
     <div id="help-screen" class="hidden overlay overlay-help">
         <h2 class="overlay-heading">How This Works</h2>
         <div class="overlay-body">
@@ -158,7 +142,6 @@
         <button onclick="toggleHelp(false)" class="overlay-close-btn">Close</button>
     </div>
 
-    <!-- Game Over / End Screen (Hidden by default) -->
     <div id="end-screen" class="hidden overlay overlay-end">
         <div class="end-card">
             <div class="end-card-header">
@@ -226,7 +209,6 @@
         </div>
     </div>
 
-    <!-- Splash / Title Screen (shown via JS on first load, per-pack customizable) -->
     <div id="splash-screen" class="hidden overlay overlay-splash">
         <h2 id="splash-title" class="overlay-heading"></h2>
         <div id="splash-intro" class="overlay-body"></div>
@@ -262,6 +244,7 @@
 <script src="js/events/social.js"></script>
 <script src="js/events/self.js"></script>
 <script src="js/events/body.js"></script>
+<script src="js/events/public.js"></script>
 <script src="js/content-events.js"></script>
 <script src="js/content.js"></script>
 <script src="js/engine.js"></script>

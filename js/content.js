@@ -1,22 +1,6 @@
-// ============================================================
-// DEFAULT CONTENT — the entire simulation, as data.
-// Everything here can be overridden by a saved or imported pack.
-// Shared by index.html and editor.html.
-//
-// The bulk of it — mechanisms, endings, events — lives in
-// content-mechanisms.js / content-endings.js / content-events.js, loaded
-// before this file (index.html and editor.html both list them first).
-// This file holds the small config/zones fields, assembles DEFAULT_CONTENT
-// from all four, and owns pack storage (getContent/saveContent/resetContent).
-// ============================================================
 const DEFAULT_CONTENT = {
     config: {
         startingStats: {repression: 40, mask: 80, child: 30},
-        // Arcade rolls each stat independently within its own range instead of
-        // using startingStats — ranges are picked so every stat gets a comparable
-        // buffer to its danger threshold (repression's is inverted: 100 minus
-        // the roll), rather than child starting with roughly half the runway
-        // repression and mask get under the fixed defaults above.
         arcadeStartingStats: {
             repression: {min: 20, max: 50},
             mask: {min: 50, max: 80},
@@ -42,10 +26,8 @@ const DEFAULT_CONTENT = {
         {key: "HOME", statBias: "child"},
         {key: "SOCIAL", statBias: "mask"},
         {key: "SELF", statBias: "child"},
-        // Repression and mask previously had one zone each pushing their
-        // "weak zone" event odds up, while child had two (HOME and SELF).
-        // Biasing BODY toward repression instead of child evens that out.
-        {key: "BODY", statBias: "repression"}
+        {key: "BODY", statBias: "repression"},
+        {key: "PUBLIC", statBias: "mask"}
     ],
 
     mechanisms: CONTENT_MECHANISMS,
@@ -59,10 +41,6 @@ const DEFAULT_CONTENT = {
     events: CONTENT_EVENTS
 };
 
-// ============================================================
-// CONTENT STORAGE — an active pack overlays the default entirely.
-// Shared by index.html and editor.html.
-// ============================================================
 const CONTENT_KEY = 'uct_custom_content_v1';
 let contentCache = null;
 
@@ -98,7 +76,7 @@ function saveContent(content) {
     contentCache = content;
     try {
         localStorage.setItem(CONTENT_KEY, JSON.stringify(content));
-    } catch (e) { /* storage unavailable, custom content persists for this session only */
+    } catch (e) {
     }
 }
 
@@ -106,6 +84,6 @@ function resetContent() {
     contentCache = DEFAULT_CONTENT;
     try {
         localStorage.removeItem(CONTENT_KEY);
-    } catch (e) { /* storage unavailable */
+    } catch (e) {
     }
 }

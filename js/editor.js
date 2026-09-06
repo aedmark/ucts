@@ -1,16 +1,10 @@
-// ============================================================
-// CONTENT EDITOR — editor.html only. Depends on content.js only.
-// ============================================================
 const elEditorBody = document.getElementById('editor-body');
 const elEditorStatus = document.getElementById('editor-status');
 const elPlayPackLink = document.getElementById('play-pack-link');
 
 let editorDraft = null;
 
-// Which top-level section is showing.
 let activeEditorTab = 'config';
-// Which zone groups are expanded in the Events tab, remembered across
-// re-renders (rebuilding the DOM each render would otherwise reset them).
 let openEventZones = new Set();
 
 const EDITOR_TABS = [
@@ -57,8 +51,6 @@ function renderEditor() {
     elEditorBody.innerHTML = '';
     elEditorBody.appendChild(buildEditorTabsBar());
 
-    // Function declarations below are hoisted, so referencing them here — before
-    // their own definitions appear later in the file — is safe.
     const sectionBuilders = {
         config: buildConfigSection,
         zones: buildZonesSection,
@@ -465,10 +457,6 @@ function buildFailureEndingsSection() {
     return wrap;
 }
 
-// A legacy ending (or one hand-edited before pools existed) may still
-// have flat title/desc instead of a variants array — normalize it in
-// place the first time the editor touches it, same idea as the Failure
-// Endings section already does per-stat.
 function normalizeEditorEndingVariants(ending) {
     if (Array.isArray(ending.variants) && ending.variants.length) return;
     if (ending.title) {
@@ -761,9 +749,6 @@ function buildEventsSection() {
         return group;
     });
 
-    // A zone can go stale (renamed/deleted while events still reference the
-    // old key, e.g. from a hand-edited import) — surface those instead of
-    // letting them silently vanish from the grouped view.
     const orphaned = editorDraft.events
         .map((evt, idx) => ({evt, idx}))
         .filter(x => !usedIndices.has(x.idx));
@@ -778,12 +763,6 @@ function buildEventsSection() {
         zoneGroups.push(group);
     }
 
-    // Search never touches the <details> `open` property directly — doing so
-    // fires the same 'toggle' event a real click does, which would stomp
-    // openEventZones with the search's own open/close state the moment you
-    // typed anything. Visibility during a search is driven entirely by the
-    // .force-open class + inline display instead, so a group's genuine
-    // user-set expanded/collapsed state survives clearing the search.
     searchInput.oninput = () => {
         const q = searchInput.value.trim().toLowerCase();
         zoneGroups.forEach(g => {
@@ -1094,7 +1073,6 @@ function handleImportFile(event) {
     reader.readAsText(file);
 }
 
-// Boot
 window.onload = () => {
     ensureEditorDraft();
     renderEditor();

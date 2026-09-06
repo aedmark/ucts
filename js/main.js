@@ -1,7 +1,3 @@
-// ============================================================
-// MODE SWITCHING + BOOT — index.html only.
-// Depends on content.js, engine.js, field-log.js.
-// ============================================================
 const elTabSim = document.getElementById('tab-sim');
 const elTabField = document.getElementById('tab-field');
 const elSimView = document.getElementById('sim-view');
@@ -27,7 +23,7 @@ function getStoredPlayerName() {
 function setStoredPlayerName(name) {
     try {
         localStorage.setItem(PLAYER_NAME_KEY, name);
-    } catch (e) { /* storage unavailable, name just won't persist */
+    } catch (e) {
     }
 }
 
@@ -44,7 +40,7 @@ function getTimedPref() {
 function setTimedPref(v) {
     try {
         localStorage.setItem(TIMED_PREF_KEY, v ? '1' : '0');
-    } catch (e) { /* storage unavailable, preference just won't persist */
+    } catch (e) {
     }
 }
 
@@ -110,7 +106,6 @@ function setMode(mode) {
     }
 }
 
-// Boot
 window.onload = () => {
     renderFieldPickers();
     showSplash();

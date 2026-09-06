@@ -1,12 +1,8 @@
-// ============================================================
-// RUNTIME STATE — resets every playthrough. Never part of content.
-// index.html only. Depends on content.js.
-// ============================================================
 let state = {
     repression: 20, mask: 100, child: 50,
     turn: 1, maxTurns: 10, isGameOver: false
 };
-let mechanismState = {}; // tag -> { unlocked, count }
+let mechanismState = {};
 let lastEventTitle = null;
 let seenEventTitles = new Set();
 let timedEnabled = false;
@@ -48,7 +44,6 @@ function generateRandomSeed() {
     return `${pick()}-${pick()}-${Math.floor(Math.random() * 900 + 100)}`;
 }
 
-// New Game+: unlocked permanently on your first survival.
 const NG_PLUS_KEY = 'uct_extended_unlocked';
 
 function isNgPlusUnlocked() {
@@ -62,12 +57,10 @@ function isNgPlusUnlocked() {
 function unlockNgPlus() {
     try {
         localStorage.setItem(NG_PLUS_KEY, '1');
-    } catch (e) { /* storage unavailable, unlock just won't persist */
+    } catch (e) {
     }
 }
 
-// Arcade Mode: unseeded, uncapped turns, escalating stat costs. Its own
-// high score, separate from anything a normal or Extended Therapy run tracks.
 const ARCADE_HIGHSCORE_KEY = 'uct_arcade_highscore';
 
 function getArcadeHighScore() {
@@ -81,11 +74,10 @@ function getArcadeHighScore() {
 function setArcadeHighScore(score) {
     try {
         localStorage.setItem(ARCADE_HIGHSCORE_KEY, String(score));
-    } catch (e) { /* storage unavailable, high score just won't persist */
+    } catch (e) {
     }
 }
 
-// DOM Elements
 const elRepressionBar = document.getElementById('bar-repression');
 const elRepressionVal = document.getElementById('val-repression');
 const elRepressionLabel = document.getElementById('label-repression');
@@ -107,9 +99,6 @@ function statLabels() {
 
 const DEFAULT_FAILURE_ENDINGS = DEFAULT_CONTENT.failureEndings;
 
-// Each stat's failure ending is a pool of variants (an older pack, or one
-// hand-edited before this existed, may still have a single {title, desc}
-// object instead — normalized into a one-entry pool so it still works).
 function normalizeFailureEndingPool(value, fallback) {
     if (Array.isArray(value) && value.length) return value;
     if (value && typeof value === 'object' && value.title) return [value];
@@ -161,7 +150,6 @@ let shareStatusTimeout = null;
 function copySeed() {
     if (!state.seed || !navigator.clipboard) return;
     navigator.clipboard.writeText(state.seed).catch(() => {
-        /* clipboard unavailable — the seed is still visible on screen to copy by hand */
     });
 }
 
@@ -173,10 +161,6 @@ function showShareStatus(msg) {
     }, 4000);
 }
 
-// A Wordle-style plain-text result card — bars rendered as block characters
-// so it reads fine pasted anywhere (chat, a text, a forum post), no image
-// or network round-trip required. Uses the pack's own stat labels and
-// mechanism names, so a custom pack's share text matches its own voice.
 function buildShareText() {
     const content = getContent();
     const labels = statLabels();
@@ -216,7 +200,7 @@ async function copyResultText() {
             await navigator.clipboard.writeText(text);
             showShareStatus('Copied to clipboard.');
             return;
-        } catch (e) { /* clipboard blocked — fall back to manual select below */
+        } catch (e) {
         }
     }
     elEndShareText.value = text;
@@ -249,9 +233,6 @@ function roundedRectPath(ctx, x, y, w, h, r) {
     ctx.closePath();
 }
 
-// Splits text into lines under maxWidth using whatever font is already set
-// on ctx — measurement only, no drawing, so the same call can size a layout
-// before a second pass actually renders it.
 function layoutWrappedLines(ctx, text, maxWidth) {
     const words = text.split(' ');
     const lines = [];
@@ -287,19 +268,6 @@ function drawStatBar(ctx, x, y, w, h, pct, color) {
     ctx.strokeRect(x, y, w, h);
 }
 
-// Renders the same result as buildShareText(), as a portrait image sized
-// for Instagram/Threads-style story sharing. Built fresh each time off the
-// pack's own colors and labels rather than screenshotting the DOM, so it
-// looks right regardless of viewport size when the end screen appeared.
-// Framed like the game's own case — cream plastic bezel and rainbow corner
-// outside, a dark LED screen inset for the actual result — instead of just
-// being a floating dark rectangle.
-//
-// Two passes: the screen's content (ending text, stat bars, mechanisms)
-// varies a lot in height depending on how long the ending is and how many
-// mechanisms unlocked, so it's measured first and then vertically centered
-// inside the screen inset, rather than leaving a fixed-size gap that's
-// mostly empty on a short result.
 async function renderResultCanvas() {
     await document.fonts.ready;
     const content = getContent();
@@ -312,7 +280,6 @@ async function renderResultCanvas() {
     canvas.height = H;
     const ctx = canvas.getContext('2d');
 
-    // --- Outer case ---
     roundedRectPath(ctx, 0, 0, W, H, 48);
     const caseGrad = ctx.createLinearGradient(0, 0, 0, H);
     caseGrad.addColorStop(0, CANVAS_COLORS.case);
@@ -322,37 +289,21 @@ async function renderResultCanvas() {
     ctx.save();
     roundedRectPath(ctx, 0, 0, W, H, 48);
     ctx.clip();
-    // Matches the real .app::before ribbon: rotate(-45deg) around a point
-    // near the corner, with the color bands stacked going INTO the card
-    // (down-right) so red sits nearest the corner and blue farthest —
-    // stacking them along local +x here would put blue nearest the corner
-    // instead, which is the bug this replaced. The rounded corner (radius
-    // 48) clips away a chunk near the true (0,0) pixel, so the origin has
-    // to sit far enough past that arc that red's own band isn't entirely
-    // swallowed by it — verified by sampling pixel colors along the top
-    // and left edges, which now transition through all five colors at
-    // matching distances (genuinely symmetric, not just visually close).
     ctx.translate(-20, 50);
     ctx.rotate(-Math.PI / 4);
     const stripeColors = ['#e3543f', '#eda123', '#f0d048', '#2f9e8f', '#4a72c9'];
     const stripeH = 22;
-    // Run each stripe well past both card edges (rather than just past the
-    // near corner) so the outer bands — teal, blue — don't visibly run out
-    // before reaching the edge the way a short rect does at a 45° cut.
     stripeColors.forEach((c, i) => {
         ctx.fillStyle = c;
         ctx.fillRect(-300, i * stripeH, 1200, stripeH + 1);
     });
     ctx.restore();
 
-    // Border strokes on top of the rainbow (rather than before it), so the
-    // bezel reads as framing the ribbon instead of the ribbon bleeding over it.
     ctx.lineWidth = 22;
     ctx.strokeStyle = CANVAS_COLORS.ink;
     roundedRectPath(ctx, 0, 0, W, H, 48);
     ctx.stroke();
 
-    // --- Header (on the case) ---
     ctx.textAlign = 'center';
     ctx.fillStyle = CANVAS_COLORS.keyRed;
     ctx.font = '52px "Press Start 2P", monospace';
@@ -366,7 +317,6 @@ async function renderResultCanvas() {
         screenTop = 230;
     }
 
-    // --- Screen inset ---
     const screenX = 66, footerBlockH = 150;
     const screenW = W - screenX * 2;
     const screenBottom = H - 40 - footerBlockH;
@@ -452,7 +402,6 @@ async function renderResultCanvas() {
         drawWrappedLines(ctx, mechLines, contentX, y, mechLineHeight);
     }
 
-    // --- Footer (on the case) ---
     const modeTag = state.arcade ? ' (Arcade)' : state.hardMode ? ' (Extended Therapy)' : '';
     const footerLine = state.arcade
         ? `Turns Survived: ${state.arcadeScore}${state.arcadeIsNewBest ? ' — New Best!' : `  ·  Best: ${getArcadeHighScore()}`}${modeTag}`
@@ -493,10 +442,6 @@ function downloadCanvasBlob(blob, filename) {
     setTimeout(() => URL.revokeObjectURL(url), 5000);
 }
 
-// On a phone with file-sharing support, this hands the image straight to
-// the OS share sheet — Instagram, Threads, Messages, whatever's installed
-// — since no platform except that sheet actually lets a website post an
-// image to Instagram directly. Everywhere else, it just downloads the PNG.
 async function shareResultImage() {
     const canvas = await renderResultCanvas();
     const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
@@ -508,7 +453,7 @@ async function shareResultImage() {
         try {
             await navigator.share({files: [file], text: buildShareText()});
             return;
-        } catch (e) { /* share sheet dismissed — fall back to a plain download */
+        } catch (e) {
         }
     }
     downloadCanvasBlob(blob, filename);
@@ -519,9 +464,6 @@ const elGameTitle = document.getElementById('game-title');
 const elObjectiveText = document.getElementById('objective-text');
 const elNgPlusBtn = document.getElementById('ng-plus-btn');
 
-// ============================================================
-// ENGINE
-// ============================================================
 function logAction(msg) {
     const entry = document.createElement('div');
     entry.textContent = `> Turn ${state.turn}: ${msg}`;
@@ -561,9 +503,6 @@ function trackMechanism(tag) {
     }
 }
 
-// Hover shows the description via the native title tooltip; tap/click
-// toggles the same text into elMechanismsDesc for touch devices, where
-// title tooltips are unreliable or absent.
 function showMechanismDesc(tag, badge) {
     const content = getContent();
     const mech = content.mechanisms[tag];
@@ -603,9 +542,6 @@ function renderMechanisms(hasFresh) {
     });
 }
 
-// Shared by the live HUD and the end screen's own stat readout, so a
-// stat that's redlining still reads as redlining on the ending you land
-// on, not just during play.
 function setStatBarVisual(barEl, valEl, value, colorName, isHot) {
     barEl.style.width = `${value}%`;
     if (valEl) valEl.textContent = `${value}%`;
@@ -645,13 +581,6 @@ function evalCondition(cond, stats) {
     }
 }
 
-// A survival ending's text is a pool of variants rather than one fixed
-// line, same reasoning as failureEndings(): repeated runs that resolve to
-// the same condition-match (easy to do across many seeds, or many arcade
-// survivals) shouldn't show the identical title and desc every time. A
-// pack saved before this existed — or one hand-edited with flat
-// {title, desc} instead of a variants array — still works, normalized
-// into a one-entry pool here.
 function normalizeEndingVariants(ending) {
     if (Array.isArray(ending.variants) && ending.variants.length) return ending.variants;
     if (ending.title) return [{title: ending.title, desc: ending.desc}];
@@ -766,8 +695,6 @@ function handleChoice(rawEffects, logMsg, tag) {
     const resolvedEffects = resolveEffects(rawEffects);
     let effects = tag ? applyMechanismModifiers(tag, resolvedEffects) : resolvedEffects;
     if (state.arcade) {
-        // Escalates in steps of ten turns rather than smoothly, so the
-        // difficulty climb reads as distinct plateaus, not a slow creep.
         const step = content.config.hardModeMultiplier;
         const tier = Math.floor((state.turn - 1) / 10);
         const mult = 1 + tier * (step - 1);
@@ -907,9 +834,6 @@ function loadRandomEvent() {
 
     elChoicesContainer.innerHTML = '';
 
-    // No stat-direction hint on the button — the whole point now is that you
-    // don't know what a choice does until you've picked it and watched the
-    // bars move.
     (evt.choices || []).forEach(choice => {
         const fx = choice.effects || {};
         const btn = document.createElement('button');
@@ -947,10 +871,6 @@ function loadRandomEvent() {
 
 const DEFAULT_ARCADE_STAT_RANGES = DEFAULT_CONTENT.config.arcadeStartingStats;
 
-// Arcade rolls its own starting stats each run instead of using the fixed
-// startingStats — every stat gets an independently-rolled range, defaulting
-// per-stat (and per-pack, if a custom pack only overrides one of the three)
-// to whatever the shipped pack defines.
 function rollArcadeStartingStats(rng, cfg) {
     const ranges = Object.assign({}, DEFAULT_ARCADE_STAT_RANGES, cfg.arcadeStartingStats);
     const roll = key => {

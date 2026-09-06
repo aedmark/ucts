@@ -71,7 +71,9 @@ These decide what a player sees if they make it to the end of a run without losi
 
 A condition is `stat` (repression / mask / child) + `op` (`>=`, `<=`, `>`, `<`, `==`) + `value`. An ending can have several conditions — they're all ANDed together.
 
-Don't restate "you unlocked these coping mechanisms" in your `desc` text — the game already appends that list automatically to whatever description you write, if the player unlocked any.
+Like Failure Endings, each survival ending is a **pool of variants** rather than one fixed line: once a run's final stats match that ending's conditions, the game picks one variant from its pool at random. This is what the `conditions` list is still evaluated against — the pool only decides which title/desc actually gets shown once that match is found. Keep at least one variant per ending; there's no ceiling on how many you can add. A pack saved before this pool existed — or one hand-edited with a single `{ "title", "desc" }` pair instead of a `variants` array — still works, treated as a one-variant pool.
+
+Don't restate "you unlocked these coping mechanisms" in a variant's `desc` — the game already appends that list automatically to whatever description you write, if the player unlocked any.
 
 A broad, easily-satisfied condition placed early (e.g. a single `repression >= 70`) will out-compete narrower, more specific endings placed after it, since evaluation stops at the first match — if your richer endings never seem to show up, check whether something earlier in the list is catching runs that were meant to reach them.
 
@@ -149,7 +151,7 @@ Export a pack to see the exact shape. The top level is:
     "child": [ { "title": "Total Disassociation", "desc": "Shown when child hits 0." } ]
   },
   "endings": [
-    { "title": "...", "desc": "...", "conditions": [ { "stat": "repression", "op": ">=", "value": 70 } ] }
+    { "conditions": [ { "stat": "repression", "op": ">=", "value": 70 } ], "variants": [ { "title": "...", "desc": "..." }, { "title": "A second variant, picked at random alongside the first.", "desc": "..." } ] }
   ],
   "events": [
     {
@@ -168,7 +170,7 @@ Export a pack to see the exact shape. The top level is:
 
 Requirements the importer actually checks: `config` is an object; `zones` is a non-empty array; `mechanisms` has all five keys (`fawn`/`flight`/`fight`/`freeze`/`secure`) present; `glitchLogs` is an array; `endings` is a non-empty array; `events` is a non-empty array. It doesn't deep-validate every field inside each event or choice, so a malformed individual event won't necessarily be caught at import — it'll just render oddly (missing text shows as `...`, missing effects default to `0`). When in doubt, edit through the UI, which can't produce a malformed shape in the first place.
 
-`failureEndings`, `config.statLabels`, `config.splash`, `config.arcadeStartingStats`, each mechanism's `desc`, and each event's `glitch` are all optional — a pack from before these existed imports fine and just falls back to the built-in defaults (or the pack-wide `glitchLogs` pool, for `glitch`) for whichever it's missing. `failureEndings` also accepts a single `{ "title", "desc" }` object per stat instead of an array, for a pack saved before the variant pool existed — it's treated as a one-variant pool. A plain number is likewise still accepted for any choice's per-stat effect — the editor writes and displays the `{ "op", "value" }` form exclusively now, but importing an older pack that still uses plain numbers works fine; that choice's numbers just get normalized into Add/Subtract the moment its card is opened in the editor.
+`failureEndings`, `config.statLabels`, `config.splash`, `config.arcadeStartingStats`, each mechanism's `desc`, and each event's `glitch` are all optional — a pack from before these existed imports fine and just falls back to the built-in defaults (or the pack-wide `glitchLogs` pool, for `glitch`) for whichever it's missing. `failureEndings` also accepts a single `{ "title", "desc" }` object per stat instead of an array, for a pack saved before the variant pool existed — it's treated as a one-variant pool. Each entry in `endings` likewise accepts a flat `{ "title", "desc" }` pair instead of a `variants` array, for a pack saved before survival endings had pools either — same one-variant treatment. A plain number is likewise still accepted for any choice's per-stat effect — the editor writes and displays the `{ "op", "value" }` form exclusively now, but importing an older pack that still uses plain numbers works fine; that choice's numbers just get normalized into Add/Subtract the moment its card is opened in the editor.
 
 ## Example pack: ScumSoft™ E-S.A.T.
 

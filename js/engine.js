@@ -633,20 +633,36 @@ function evalCondition(cond, stats) {
     }
 }
 
+// A survival ending's text is a pool of variants rather than one fixed
+// line, same reasoning as failureEndings(): repeated runs that resolve to
+// the same condition-match (easy to do across many seeds, or many arcade
+// survivals) shouldn't show the identical title and desc every time. A
+// pack saved before this existed — or one hand-edited with flat
+// {title, desc} instead of a variants array — still works, normalized
+// into a one-entry pool here.
+function normalizeEndingVariants(ending) {
+    if (Array.isArray(ending.variants) && ending.variants.length) return ending.variants;
+    if (ending.title) return [{title: ending.title, desc: ending.desc}];
+    return [{title: "Functional Enough", desc: "You made it to tomorrow."}];
+}
+
 function getSurvivalEnding() {
     const content = getContent();
     const stats = {repression: state.repression, mask: state.mask, child: state.child};
     const match = content.endings.find(e => (e.conditions || []).every(c => evalCondition(c, stats)))
         || content.endings[content.endings.length - 1];
 
-    let desc = match.desc;
+    const variants = normalizeEndingVariants(match);
+    const picked = variants[Math.floor(state.rng() * variants.length)];
+
+    let desc = picked.desc;
     const unlockedNames = Object.entries(mechanismState)
         .filter(([, s]) => s.unlocked)
         .map(([tag]) => content.mechanisms[tag] ? content.mechanisms[tag].name : tag);
     if (unlockedNames.length) {
         desc += ` Coping mechanisms acquired: ${unlockedNames.join(', ')}.`;
     }
-    return {title: match.title, desc};
+    return {title: picked.title, desc};
 }
 
 function checkGameEnd() {

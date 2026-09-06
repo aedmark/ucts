@@ -2,6 +2,12 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.17.9] - 2026-09-06
+
+### Added
+- **Survival Endings are now a pool of variants, same as Failure Endings.** Reaching, say, "Fragile Equilibrium" used to always show the exact same title and desc — noticeable across a lot of replays, especially with Run Seeds and Extended Therapy encouraging repeat runs. Each of the 6 existing survival endings got 8 variants (matching the failure-ending pool depth), and 3 brand-new endings were added for stat-shapes that previously fell through to the generic "Functional Enough" catch-all despite being distinct outcomes: `Raw Nerve` (very low Mask, moderate-to-high Inner Child — stopped performing without necessarily thriving), `Coasting on Empty` (moderate-to-high Mask, low Inner Child — still presentable, hollowed out underneath), and `The Long Fuse` (moderate Repression with healthy Mask/Inner Child — the large "holding it together, mostly" middle of the stat space that had no ending of its own). 9 endings × 8 variants = 72 total survival-ending texts, up from 6. `getSurvivalEnding()` in `engine.js` now picks a random variant from whichever ending's conditions matched, mirroring `pickFailureEnding()`; a pack with the old flat `{title, desc}` shape per ending still works, normalized into a one-variant pool.
+- The Content Editor's Survival Endings section now edits these as a pool (add/remove variant, same UI pattern as Failure Endings) instead of a single title/desc pair, and `AUTHORING.md` documents the new shape and updates the raw JSON schema example.
+
 ## [4.17.8] - 2026-09-06
 
 ### Added

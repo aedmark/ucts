@@ -465,6 +465,21 @@ function buildFailureEndingsSection() {
     return wrap;
 }
 
+// A legacy ending (or one hand-edited before pools existed) may still
+// have flat title/desc instead of a variants array — normalize it in
+// place the first time the editor touches it, same idea as the Failure
+// Endings section already does per-stat.
+function normalizeEditorEndingVariants(ending) {
+    if (Array.isArray(ending.variants) && ending.variants.length) return;
+    if (ending.title) {
+        ending.variants = [{title: ending.title, desc: ending.desc || ""}];
+        delete ending.title;
+        delete ending.desc;
+        return;
+    }
+    ending.variants = [{title: "New Ending", desc: "Describe what this ending means."}];
+}
+
 function buildEndingsSection() {
     const wrap = document.createElement('div');
     wrap.className = "editor-section";
@@ -474,8 +489,10 @@ function buildEndingsSection() {
     wrap.appendChild(title);
     const note = document.createElement('p');
     note.className = "editor-note";
-    note.textContent = "Evaluated top to bottom. First ending whose conditions all match wins. An ending with no conditions always matches — keep one at the bottom as a fallback.";
+    note.textContent = "Evaluated top to bottom. First ending whose conditions all match wins. An ending with no conditions always matches — keep one at the bottom as a fallback. Each ending is a pool of variants, same idea as Failure Endings: the game picks one at random each time that ending is reached, so replaying into the same stat-shape doesn't always print the identical line. Keep at least one variant per ending.";
     wrap.appendChild(note);
+
+    editorDraft.endings.forEach(normalizeEditorEndingVariants);
 
     editorDraft.endings.forEach((ending, idx) => {
         const card = document.createElement('div');
@@ -483,13 +500,10 @@ function buildEndingsSection() {
 
         const headRow = document.createElement('div');
         headRow.className = "editor-row";
-        const titleInput = document.createElement('input');
-        titleInput.className = "editor-input";
-        titleInput.value = ending.title;
-        titleInput.oninput = () => {
-            ending.title = titleInput.value;
-        };
-        headRow.appendChild(titleInput);
+        const headLabel = document.createElement('p');
+        headLabel.className = "editor-tag-label";
+        headLabel.textContent = `Ending ${idx + 1} (${ending.variants.length} variant${ending.variants.length === 1 ? '' : 's'})`;
+        headRow.appendChild(headLabel);
 
         const upBtn = document.createElement('button');
         upBtn.textContent = "↑";
@@ -523,14 +537,56 @@ function buildEndingsSection() {
         headRow.appendChild(delBtn);
         card.appendChild(headRow);
 
-        const descArea = document.createElement('textarea');
-        descArea.rows = 2;
-        descArea.className = "editor-input";
-        descArea.value = ending.desc;
-        descArea.oninput = () => {
-            ending.desc = descArea.value;
+        const variantWrap = document.createElement('div');
+        variantWrap.className = "editor-col";
+        ending.variants.forEach((variant, vIdx) => {
+            const variantCard = document.createElement('div');
+            variantCard.className = "editor-card";
+
+            const variantRow = document.createElement('div');
+            variantRow.className = "editor-row";
+            const titleInput = document.createElement('input');
+            titleInput.className = "editor-input";
+            titleInput.value = variant.title;
+            titleInput.oninput = () => {
+                variant.title = titleInput.value;
+            };
+            const removeVariantBtn = document.createElement('button');
+            removeVariantBtn.textContent = "Remove";
+            removeVariantBtn.className = "editor-btn-danger";
+            removeVariantBtn.onclick = () => {
+                if (ending.variants.length <= 1) {
+                    alert("Keep at least one variant.");
+                    return;
+                }
+                ending.variants.splice(vIdx, 1);
+                renderEditor();
+            };
+            variantRow.appendChild(titleInput);
+            variantRow.appendChild(removeVariantBtn);
+            variantCard.appendChild(variantRow);
+
+            const descArea = document.createElement('textarea');
+            descArea.rows = 2;
+            descArea.className = "editor-input";
+            descArea.value = variant.desc;
+            descArea.oninput = () => {
+                variant.desc = descArea.value;
+            };
+            variantCard.appendChild(descArea);
+
+            variantWrap.appendChild(variantCard);
+        });
+        card.appendChild(variantWrap);
+
+        const addVariantBtn = document.createElement('button');
+        addVariantBtn.textContent = "+ Add Variant";
+        addVariantBtn.className = "editor-btn self-start";
+        addVariantBtn.onclick = () => {
+            ending.variants.push({title: "", desc: ""});
+            renderEditor();
         };
-        card.appendChild(descArea);
+        card.appendChild(addVariantBtn);
 
         const condWrap = document.createElement('div');
         condWrap.className = "editor-col";
@@ -609,7 +665,10 @@ function buildEndingsSection() {
     addEndingBtn.textContent = "+ Add Ending";
     addEndingBtn.className = "editor-btn self-start";
     addEndingBtn.onclick = () => {
-        editorDraft.endings.push({title: "New Ending", desc: "Describe what this ending means.", conditions: []});
+        editorDraft.endings.push({
+            variants: [{title: "New Ending", desc: "Describe what this ending means."}],
+            conditions: []
+        });
         renderEditor();
     };
     wrap.appendChild(addEndingBtn);

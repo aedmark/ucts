@@ -41,7 +41,7 @@ Global numbers that shape the whole run, not any one event:
 
 ### Zones
 
-A zone is just a category — `WORK`, `HOME`, `SOCIAL`, `SELF` by default — with one property that matters mechanically: **Stat Bias**. It says which of the three stats that zone is "about." The game uses this to lean the random event selection toward whatever's currently your most dangerous stat — if your Repression is climbing, `WORK`-zone events (biased toward repression) start showing up more often, because that's a reasonable proxy for "the thing your nervous system is currently worried about."
+A zone is just a category — `WORK`, `HOME`, `SOCIAL`, `SELF`, `BODY` by default — with one property that matters mechanically: **Stat Bias**. It says which of the three stats that zone is "about." The game uses this to lean the random event selection toward whatever's currently your most dangerous stat — if your Repression is climbing, `WORK`-zone events (biased toward repression) start showing up more often, because that's a reasonable proxy for "the thing your nervous system is currently worried about." (`WORK` and `BODY` are both repression-biased, `SOCIAL` is mask-biased, `HOME` and `SELF` are child-biased — two zones per stat except mask, which only has one.)
 
 You can add a zone anytime; you can't remove one that's still used by an event (reassign or delete those events first).
 

@@ -41,7 +41,11 @@ const DEFAULT_CONTENT = {
         {key: "WORK", statBias: "repression"},
         {key: "HOME", statBias: "child"},
         {key: "SOCIAL", statBias: "mask"},
-        {key: "SELF", statBias: "child"}
+        {key: "SELF", statBias: "child"},
+        // Repression and mask previously had one zone each pushing their
+        // "weak zone" event odds up, while child had two (HOME and SELF).
+        // Biasing BODY toward repression instead of child evens that out.
+        {key: "BODY", statBias: "repression"}
     ],
 
     mechanisms: CONTENT_MECHANISMS,

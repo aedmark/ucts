@@ -141,10 +141,10 @@ const CONTENT_ENDINGS = [
             {title: "Holding Pattern", desc: "You didn't self-destruct, yet. Today just isn't over anywhere else, either."},
             {title: "Pressure Cooker", desc: "Something in you is very close to the surface. You made it to the deadline before it did."},
             {title: "The Held Breath", desc: "You survived by holding something in the whole way through. Your shoulders will remember this tomorrow."},
-            {title: "Simmering", desc: "Not boiling over. Not cooled down either. Just holding at a temperature that isn't sustainable."},
-            {title: "The Clenched Jaw Ending", desc: "You made it through white-knuckled. Nobody else could tell. Your jaw could."},
-            {title: "Running Hot", desc: "You crossed the finish line still overheating. The engine didn't seize. It came close."},
-            {title: "Barely Contained", desc: "Whatever's in there is still in there. That's the whole victory, such as it is."}
+            {title: "Simmering", desc: "Not boiling over. Not cooled down either. Just holding at a temperature (that isn't sustainable)."},
+            {title: "The Clenched Jaw Ending", desc: "You made it through; white-knuckled. Nobody else could tell. Your jaw could."},
+            {title: "Running Hot", desc: "You crossed the finish line still overheating. The engine didn't seize. It was a close one, though."},
+            {title: "Barely Contained", desc: "Whatever's in there is still in there."}
         ]
     },
     {
@@ -155,7 +155,7 @@ const CONTENT_ENDINGS = [
             {title: "The Understudy", desc: "You've played the part of yourself so long the understudy might genuinely be better at it by now."},
             {title: "Flawless Execution", desc: "The performance was seamless. Nobody asks what happens after the curtain, including you."},
             {title: "The Convincing Copy", desc: "You do a very good impression of someone who's fine. Most days, even you almost believe it."},
-            {title: "Standing Ovation", desc: "Everyone clapped. You bowed. Somewhere backstage, something's been waiting a long time for its turn."},
+            {title: "Standing Ovation", desc: "Everyone clapped. You bowed. Somewhere backstage, something's been waiting a long time for its cue."},
             {title: "The Mask That Fits", desc: "It fits so well now you forget you put it on this morning. Or any morning."},
             {title: "All Surface, No Depth Charge", desc: "Smooth all the way down, as far as anyone can tell, including the part of you that used to check."}
         ]
@@ -164,7 +164,7 @@ const CONTENT_ENDINGS = [
         conditions: [{stat: "child", op: ">=", value: 75}, {stat: "mask", op: "<=", value: 40}],
         variants: [
             {title: "Radically Undone", desc: "You stopped hiding. It cost you more than you expected, but you kept yourself."},
-            {title: "The Unvarnished Version", desc: "People saw the real thing, unedited. Some of them left. You're still here, which is the actual point."},
+            {title: "The Unvarnished Version", desc: "People saw the real thing, unedited. Some of them left. You're still here, which is the point."},
             {title: "Nothing Left to Perform", desc: "You ran out of energy for the act partway through and just stopped. Turns out that was allowed."},
             {title: "The Honest Wreckage", desc: "It isn't pretty. It isn't curated. It's yours, all the way through, for the first time in a while."},
             {title: "Seen and Not Sorry", desc: "You let people see the parts you used to manage. A few flinched. You didn't take it back."},

@@ -160,9 +160,52 @@
 
     <!-- Game Over / End Screen (Hidden by default) -->
     <div id="end-screen" class="hidden overlay overlay-end">
-        <h2 id="end-title" class="overlay-heading end loss">Catastrophic Failure</h2>
-        <p id="end-desc" class="end-desc">Your psychological defenses have collapsed.</p>
-        <p id="end-seed-tag" class="end-seed-tag"></p>
+        <div class="end-card">
+            <div class="end-card-header">
+                <span id="end-card-title" class="end-card-title">U.C.T.S</span>
+                <span id="end-card-played-by" class="hidden end-card-played-by"></span>
+            </div>
+
+            <div class="end-card-screen">
+                <h2 id="end-title" class="overlay-heading end loss">Catastrophic Failure</h2>
+                <p id="end-desc" class="end-desc">Your psychological defenses have collapsed.</p>
+
+                <div class="end-card-divider"></div>
+
+                <div class="end-card-stats">
+                    <div>
+                        <div class="stat-label-row repression">
+                            <span id="end-label-repression">Repression Level</span>
+                            <span id="end-val-repression">0%</span>
+                        </div>
+                        <div class="stat-bar-container">
+                            <div id="end-bar-repression" class="stat-bar-fill red-dim" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="stat-label-row mask">
+                            <span id="end-label-mask">Social Mask</span>
+                            <span id="end-val-mask">0%</span>
+                        </div>
+                        <div class="stat-bar-container">
+                            <div id="end-bar-mask" class="stat-bar-fill blue-dim" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="stat-label-row child">
+                            <span id="end-label-child">Inner Child</span>
+                            <span id="end-val-child">0%</span>
+                        </div>
+                        <div class="stat-bar-container">
+                            <div id="end-bar-child" class="stat-bar-fill pink-dim" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p id="end-seed-tag" class="end-seed-tag"></p>
+        </div>
+
         <div class="overlay-actions">
             <button onclick="startGame(state.hardMode, null, state.arcade)" class="end-btn">Restart Therapy</button>
             <button id="end-replay-btn" onclick="startGame(state.hardMode, state.seed)" class="end-btn replay">Replay Seed ↻</button>

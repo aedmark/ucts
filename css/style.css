@@ -1055,6 +1055,111 @@ a {
 
 .overlay-end {
     z-index: 20;
+    background: linear-gradient(180deg, var(--case) 0%, var(--case-deep) 100%);
+}
+
+/* The end screen's own case-within-a-case: mirrors the exported share
+   card's layout (case header, dark screen inset with stat bars, case
+   footer) as real, responsive DOM instead of a fixed-size canvas image. */
+.end-card {
+    width: 100%;
+    max-width: 30rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.end-card-header {
+    text-align: center;
+}
+
+.end-card-title {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: var(--key-red);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.end-card-played-by {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+}
+
+.end-card-screen {
+    background: var(--screen);
+    border: 5px solid var(--ink);
+    border-radius: 14px;
+    padding: 1.25rem 1rem;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+}
+
+@media (min-width: 640px) {
+    .end-card-screen {
+        padding: 1.75rem 1.5rem;
+    }
+}
+
+.end-card-screen .overlay-heading {
+    margin-bottom: 0;
+}
+
+.end-card-screen .end-desc {
+    margin-bottom: 0;
+    max-width: none;
+}
+
+.end-card-divider {
+    height: 3px;
+    background: var(--screen-edge);
+    border-radius: 2px;
+}
+
+.end-card-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    text-align: left;
+}
+
+/* .stat-label-row's default --ink text (and --label-* accents) are
+   calibrated for the cream HUD background — invisible on this screen's
+   near-black one. Re-tuned to the same bright LED hues the exported
+   share card uses for these same three rows. */
+.end-card-stats .stat-label-row {
+    color: var(--led-teal);
+}
+
+.end-card-stats .stat-label-row.repression {
+    color: var(--led-red);
+}
+
+.end-card-stats .stat-label-row.repression span:first-child {
+    color: var(--led-red);
+}
+
+.end-card-stats .stat-label-row.mask {
+    color: var(--led-amber);
+}
+
+.end-card-stats .stat-label-row.mask span:first-child {
+    color: var(--led-amber);
+}
+
+.end-card-stats .stat-label-row.child {
+    color: var(--led-teal);
+}
+
+.end-card-stats .stat-label-row.child span:first-child {
+    color: var(--led-teal);
 }
 
 .overlay-splash {
@@ -1138,10 +1243,9 @@ a {
 }
 
 .end-seed-tag {
-    color: var(--led-teal);
-    opacity: 0.75;
-    font-size: 0.75rem;
-    margin-bottom: 1rem;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    text-align: center;
 }
 
 .overlay-heading {

@@ -95,6 +95,9 @@ const elMaskLabel = document.getElementById('label-mask');
 const elChildBar = document.getElementById('bar-child');
 const elChildVal = document.getElementById('val-child');
 const elChildLabel = document.getElementById('label-child');
+const elEndRepressionLabel = document.getElementById('end-label-repression');
+const elEndMaskLabel = document.getElementById('end-label-mask');
+const elEndChildLabel = document.getElementById('end-label-child');
 
 const DEFAULT_STAT_LABELS = {repression: "Repression Level", mask: "Social Mask", child: "Inner Child"};
 
@@ -136,11 +139,19 @@ const elMechanismsList = document.getElementById('mechanisms-list');
 const elMechanismsDesc = document.getElementById('mechanisms-desc');
 
 const elEndScreen = document.getElementById('end-screen');
+const elEndCardTitle = document.getElementById('end-card-title');
+const elEndCardPlayedBy = document.getElementById('end-card-played-by');
 const elEndTitle = document.getElementById('end-title');
 const elEndDesc = document.getElementById('end-desc');
 const elEndNgPlusBtn = document.getElementById('end-ngplus-btn');
 const elEndReplayBtn = document.getElementById('end-replay-btn');
 const elEndSeedTag = document.getElementById('end-seed-tag');
+const elEndRepressionBar = document.getElementById('end-bar-repression');
+const elEndRepressionVal = document.getElementById('end-val-repression');
+const elEndMaskBar = document.getElementById('end-bar-mask');
+const elEndMaskVal = document.getElementById('end-val-mask');
+const elEndChildBar = document.getElementById('end-bar-child');
+const elEndChildVal = document.getElementById('end-val-child');
 const elEndShareStatus = document.getElementById('end-share-status');
 const elEndShareText = document.getElementById('end-share-text');
 const elSharePanel = document.getElementById('share-panel');
@@ -592,22 +603,23 @@ function renderMechanisms(hasFresh) {
     });
 }
 
+// Shared by the live HUD and the end screen's own stat readout, so a
+// stat that's redlining still reads as redlining on the ending you land
+// on, not just during play.
+function setStatBarVisual(barEl, valEl, value, colorName, isHot) {
+    barEl.style.width = `${value}%`;
+    if (valEl) valEl.textContent = `${value}%`;
+    barEl.className = `stat-bar-fill ${colorName}-${isHot ? 'hot' : 'dim'}`;
+}
+
 function updateUI() {
     state.repression = Math.max(0, Math.min(100, state.repression));
     state.mask = Math.max(0, Math.min(100, state.mask));
     state.child = Math.max(0, Math.min(100, state.child));
 
-    elRepressionBar.style.width = `${state.repression}%`;
-    elRepressionVal.textContent = `${state.repression}%`;
-    elRepressionBar.className = state.repression > 80 ? "stat-bar-fill red-hot" : "stat-bar-fill red-dim";
-
-    elMaskBar.style.width = `${state.mask}%`;
-    elMaskVal.textContent = `${state.mask}%`;
-    elMaskBar.className = state.mask < 30 ? "stat-bar-fill blue-hot" : "stat-bar-fill blue-dim";
-
-    elChildBar.style.width = `${state.child}%`;
-    elChildVal.textContent = `${state.child}%`;
-    elChildBar.className = state.child < 30 ? "stat-bar-fill pink-hot" : "stat-bar-fill pink-dim";
+    setStatBarVisual(elRepressionBar, elRepressionVal, state.repression, 'red', state.repression > 80);
+    setStatBarVisual(elMaskBar, elMaskVal, state.mask, 'blue', state.mask < 30);
+    setStatBarVisual(elChildBar, elChildVal, state.child, 'pink', state.child < 30);
 
     elTurnCounter.textContent = state.arcade
         ? `Turn: ${state.turn} · Best: ${getArcadeHighScore()}`
@@ -698,6 +710,14 @@ function endGame(title, desc, win = false) {
     elEndTitle.textContent = title;
     elEndTitle.className = "overlay-heading end " + (win ? "win" : "loss");
     elEndDesc.textContent = desc;
+
+    elEndCardTitle.textContent = elGameTitle.textContent;
+    elEndCardPlayedBy.textContent = playerName ? `Played by ${playerName}` : '';
+    elEndCardPlayedBy.classList.toggle('hidden', !playerName);
+
+    setStatBarVisual(elEndRepressionBar, elEndRepressionVal, state.repression, 'red', state.repression > 80);
+    setStatBarVisual(elEndMaskBar, elEndMaskVal, state.mask, 'blue', state.mask < 30);
+    setStatBarVisual(elEndChildBar, elEndChildVal, state.child, 'pink', state.child < 30);
 
     if (state.arcade) {
         state.arcadeScore = state.turn - 1;
@@ -970,6 +990,9 @@ function startGame(hard = false, seedOverride = null, arcade = false) {
     elRepressionLabel.textContent = labels.repression;
     elMaskLabel.textContent = labels.mask;
     elChildLabel.textContent = labels.child;
+    elEndRepressionLabel.textContent = labels.repression;
+    elEndMaskLabel.textContent = labels.mask;
+    elEndChildLabel.textContent = labels.child;
 
     elGameTitle.textContent = arcade ? "U.C.T.S :: ARCADE" : hard ? "U.C.T.S :: EXTENDED THERAPY" : "U.C.T.S";
     elObjectiveText.textContent = arcade

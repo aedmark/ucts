@@ -223,12 +223,12 @@ const CONTENT_ENDINGS = [
             {stat: "child", op: ">=", value: 60}
         ],
         variants: [
-            {title: "Actually Okay", desc: "Not surviving. Not performing okay. Just, for once, actually okay. You can tell the difference from the inside."},
+            {title: "Actually Okay", desc: "Not surviving. Not performing. Just, for once, actually okay. You can tell the difference from the inside."},
             {title: "The Real Thing", desc: "This isn't the version of fine you perform for other people. This is the actual, unperformed version."},
             {title: "No Asterisk", desc: "Good, without a footnote explaining why it doesn't count. You keep waiting for the footnote. It doesn't come."},
-            {title: "Quietly Thriving", desc: "Nobody's throwing you a parade for this, and it doesn't need one. You're just, genuinely, doing well."},
+            {title: "Quietly Thriving", desc: "Nobody's throwing you a parade for this, and it doesn't need one. You're just genuinely doing well, today."},
             {title: "The Unforced Smile", desc: "You didn't have to build this feeling. It was just there today, the way it's supposed to be sometimes."},
-            {title: "Solid Ground", desc: "For once, nothing underneath you feels like it's about to give way. You're still getting used to that."},
+            {title: "Solid Ground", desc: "Nothing underneath you feels like it's about to give way. You're still getting used to that."},
             {title: "Earned, Not Performed", desc: "This good day wasn't a mask. You checked. Twice. It held up both times."},
             {title: "The Genuine Article", desc: "Same shape as a good day you'd fake for someone else's benefit. The difference is nobody had to be convinced, including you."}
         ]

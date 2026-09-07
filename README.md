@@ -18,9 +18,9 @@ You start with three stats and a turn limit. Each turn, an event fires — a sho
 
 | Stat | Starts at | Loses the run at |
 |---|---|---|
-| **Repression** | 20% | 100% (*Panic Attack*) |
-| **Social Mask** | 100% | 0% (*Social Exile*) |
-| **Inner Child** | 50% | 0% (*Total Disassociation*) |
+| **Repression** | 40% | 100% (*Panic Attack*) |
+| **Social Mask** | 80% | 0% (*Social Exile*) |
+| **Inner Child** | 30% | 0% (*Total Disassociation*) |
 
 The names above — the bar labels and the three failure endings — are the built-in defaults; both are content-pack data, so a custom pack can rename the bars and rewrite what a loss says without touching what's actually being tracked underneath.
 

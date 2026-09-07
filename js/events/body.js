@@ -720,6 +720,12 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 8}},
                 log: "You named it instead of hiding it, and the moment passed anyway."
+            },
+            {
+                text: "Step back, mumble an excuse, and put distance between you and the contact.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 10}, child: {op: "subtract", value: 5}},
+                log: "You put space between yourself and a hug that hadn't done anything wrong."
             }
         ],
         glitch: {
@@ -832,6 +838,12 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You spent the energy on rest instead of one more obligation you didn't have room for."
+            },
+            {
+                text: "Cancel everything non-negotiable-sounding too, and disappear for the day.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 10}, child: {op: "subtract", value: 5}},
+                log: "The day happened without you in it. You'll deal with the fallout tomorrow, just as tired."
             }
         ],
         glitch: {
@@ -860,6 +872,12 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You waited for your own body instead of overriding it."
+            },
+            {
+                text: "Get irritated at your own body for picking now to do this.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 10}, child: {op: "subtract", value: 5}},
+                log: "You argued with your own nervous system. It did not concede the point."
             }
         ],
         glitch: {
@@ -888,6 +906,12 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 3}, child: {op: "add", value: 10}},
                 log: "Three honest words did more than a paragraph of fine would have."
+            },
+            {
+                text: "Snap 'why do you ask?' before you've decided you meant to sound that sharp.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 0}},
+                log: "The question was gentle. The answer wasn't."
             }
         ],
         glitch: {

@@ -388,6 +388,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "A feeling, felt and not expanded, passes on its own."
+            },
+            {
+                text: "Mute every group chat you're actually in, preemptively.",
+                tag: "flight",
+                effects: {
+                    rep: {op: "subtract", value: 5},
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 10}
+                },
+                log: "You left before anyone could leave you out again."
             }
         ],
         glitch: {
@@ -428,6 +438,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "You didn't need to perform that you were okay, you arrived there naturally."
+            },
+            {
+                text: "Text them directly: 'did you forget what today is?'",
+                tag: "fight",
+                effects: {
+                    rep: {op: "subtract", value: 10},
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 0}
+                },
+                log: "You forced the acknowledgment you were hoping would arrive on its own."
             }
         ],
         glitch: {
@@ -748,6 +768,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "You weren't named. You were, notably, still there."
+            },
+            {
+                text: "Mention to them afterward that you noticed.",
+                tag: "fight",
+                effects: {
+                    rep: {op: "subtract", value: 10},
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 0}
+                },
+                log: "You turned a passing feeling into a conversation neither of you wanted to have at a party."
             }
         ],
         glitch: {
@@ -1016,6 +1046,12 @@ const CONTENT_EVENTS_SOCIAL = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "Three good days doesn't owe you an explanation for a fourth."
+            },
+            {
+                text: "Delete the app. All of them, actually.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 5}},
+                log: "You solved the problem by removing the entire category it lived in."
             }
         ],
         glitch: {

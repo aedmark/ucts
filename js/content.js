@@ -1,6 +1,6 @@
 const DEFAULT_CONTENT = {
     config: {
-        startingStats: {repression: 40, mask: 80, child: 30},
+        startingStats: {repression: 40, mask: 60, child: 60},
         arcadeStartingStats: {
             repression: {min: 20, max: 50},
             mask: {min: 50, max: 80},

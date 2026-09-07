@@ -748,6 +748,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 10}
                 },
                 log: "You released the pressure of a single missed moment."
+            },
+            {
+                text: "Leave the conversation early, before anything else can slip out.",
+                tag: "flight",
+                effects: {
+                    rep: {op: "subtract", value: 10},
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5}
+                },
+                log: "You removed yourself from your own opening before it could close on its own."
             }
         ],
         glitch: {
@@ -868,6 +878,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "You caught the reflex mid-air and let it just pass through."
+            },
+            {
+                text: "Catch yourself mid-apology and snap, out loud, 'why am I sorry?'",
+                tag: "fight",
+                effects: {
+                    rep: {op: "subtract", value: 10},
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 5}
+                },
+                log: "You interrupted a lifelong reflex with your own irritation. Progress is loud sometimes."
             }
         ],
         glitch: {
@@ -1016,6 +1036,12 @@ const CONTENT_EVENTS_SELF = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You stopped checking and started, in a small way, handling it."
+            },
+            {
+                text: "Get sharply angry at whatever got you here in the first place.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 5}, child: {op: "subtract", value: 5}},
+                log: "The number didn't move. You definitely did, internally, at volume."
             }
         ],
         glitch: {
@@ -1072,6 +1098,12 @@ const CONTENT_EVENTS_SELF = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You made the decision smaller instead of making it disappear."
+            },
+            {
+                text: "Plan something else entirely, something big and distracting, instead.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 10}},
+                log: "You built an impressive amount of momentum in every direction except the correct one."
             }
         ],
         glitch: {

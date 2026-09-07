@@ -352,6 +352,16 @@ const CONTENT_EVENTS_HOME = [
                     child: {op: "add", value: 10}
                 },
                 log: "You left room for the conversation instead of finishing it alone."
+            },
+            {
+                text: "Put the phone in another room and go for a walk instead of replying.",
+                tag: "flight",
+                effects: {
+                    rep: {op: "subtract", value: 10},
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5}
+                },
+                log: "The text is still there. You aren't (for now)."
             }
         ],
         glitch: {
@@ -592,6 +602,16 @@ const CONTENT_EVENTS_HOME = [
                     child: {op: "add", value: 10}
                 },
                 log: "This did not, in fact, end the friendship. They bought you dinner in appreciation."
+            },
+            {
+                text: "Text them right now, annoyed, demanding it back today.",
+                tag: "fight",
+                effects: {
+                    rep: {op: "subtract", value: 10},
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 0}
+                },
+                log: "You got your thing back. You also got a slightly different friendship."
             }
         ],
         glitch: {
@@ -672,6 +692,16 @@ const CONTENT_EVENTS_HOME = [
                     child: {op: "add", value: 10}
                 },
                 log: "Information turned out to be less scary than the dread. Have fun at Disney World!"
+            },
+            {
+                text: "Call back irritated, leading with 'is everything okay?' in a tone that isn't really a question.",
+                tag: "fight",
+                effects: {
+                    rep: {op: "subtract", value: 10},
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0}
+                },
+                log: "You answered dread with an edge nobody on the other end asked for."
             }
         ],
         glitch: {
@@ -1092,6 +1122,12 @@ const CONTENT_EVENTS_HOME = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You treated it like a decision instead of a crisis."
+            },
+            {
+                text: "Start using the laundromat down the street and avoid thinking about the machine at all.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 8}},
+                log: "You outsourced the laundry and postponed the decision indefinitely."
             }
         ],
         glitch: {

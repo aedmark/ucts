@@ -469,6 +469,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "add", value: 15}
                 },
                 log: "You said the true thing to one person instead of nobody. Feel better?"
+            },
+            {
+                text: "Speak up in the meeting, right then, and correct the record.",
+                tag: "fight",
+                effects: {
+                    rep: {op: "subtract", value: 10},
+                    mask: {op: "subtract", value: 20},
+                    child: {op: "add", value: 5}
+                },
+                log: "You corrected the record in real time. The room got very interested in their notes."
             }
         ],
         glitch: {
@@ -909,6 +919,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "add", value: 10}
                 },
                 log: "You removed the audience instead of performing through it."
+            },
+            {
+                text: "Give up, turn around, and just go home for the day.",
+                tag: "flight",
+                effects: {
+                    rep: {op: "subtract", value: 5},
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "subtract", value: 5}
+                },
+                log: "You solved a broken badge reader by removing yourself from its jurisdiction."
             }
         ],
         glitch: {
@@ -1029,6 +1049,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "add", value: 10}
                 },
                 log: "Sometimes 'noted' just means noted."
+            },
+            {
+                text: "Reply asking, directly, what exactly 'noted' is supposed to mean.",
+                tag: "fight",
+                effects: {
+                    rep: {op: "subtract", value: 10},
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 0}
+                },
+                log: "You asked the question everyone thinks but nobody sends."
             }
         ],
         glitch: {
@@ -1253,6 +1283,12 @@ const CONTENT_EVENTS_WORK = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You stopped waiting for the number to feel different and used it instead."
+            },
+            {
+                text: "Close the email and refuse to think about it again today.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "add", value: 0}, child: {op: "subtract", value: 10}},
+                log: "You postponed the feeling. It kept the appointment without you."
             }
         ],
         glitch: {

@@ -412,6 +412,12 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 8}},
                 log: "You did the plain, obvious thing. It was enough."
+            },
+            {
+                text: "Keep walking like you didn't quite see it happen.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 10}, child: {op: "subtract", value: 5}},
+                log: "Someone else stopped. You kept your pace and a small, specific discomfort meant only for you."
             }
         ],
         glitch: {
@@ -692,6 +698,12 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "Two people stood quietly near each other for a few seconds. Nothing happened. Nothing needed to."
+            },
+            {
+                text: "Get off one floor early, for no reason you'd admit to.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 5}, child: {op: "subtract", value: 5}},
+                log: "You added four flights of stairs to your day to skip eleven more seconds of silence."
             }
         ],
         glitch: {
@@ -804,6 +816,12 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 5}},
                 log: "You let a waiting room be exactly as uneventful as it actually was."
+            },
+            {
+                text: "Ask, louder than the room expected, if anyone would mind turning the TV down.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 0}},
+                log: "Someone turned it down. Everyone also now knows exactly who asked."
             }
         ],
         glitch: {
@@ -888,6 +906,12 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 5}},
                 log: "You let a small, human noise be exactly that small."
+            },
+            {
+                text: "Say, loudly and a little defensively, 'it's just a sneeze, everyone relax.'",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 0}},
+                log: "Nobody had actually reacted yet. Now they have something to react to."
             }
         ],
         glitch: {

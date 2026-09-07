@@ -135,7 +135,7 @@ Export a pack to see the exact shape. The top level is:
 
 ```json
 {
-  "config": { "startingStats": { "repression": 20, "mask": 100, "child": 50 }, "arcadeStartingStats": { "repression": { "min": 20, "max": 50 }, "mask": { "min": 50, "max": 80 }, "child": { "min": 50, "max": 80 } }, "statLabels": { "repression": "Repression Level", "mask": "Social Mask", "child": "Inner Child" }, "splash": { "title": "U.C.T. Simulator", "intro": "Shown once before the run starts.\n\nBlank lines start new paragraphs." }, "maxTurns": 10, "hardModeTurns": 20, "hardModeMultiplier": 1.25, "unlockThreshold": 3, "glitchChance": 0.15, "weakZoneWeight": 2.5, "timedEventChance": 0.2, "timedDuration": 8000 },
+  "config": { "startingStats": { "repression": 40, "mask": 60, "child": 60 }, "arcadeStartingStats": { "repression": { "min": 20, "max": 50 }, "mask": { "min": 50, "max": 80 }, "child": { "min": 50, "max": 80 } }, "statLabels": { "repression": "Repression Level", "mask": "Social Mask", "child": "Inner Child" }, "splash": { "title": "U.C.T. Simulator", "intro": "Shown once before the run starts.\n\nBlank lines start new paragraphs." }, "maxTurns": 10, "hardModeTurns": 20, "hardModeMultiplier": 1.25, "unlockThreshold": 3, "glitchChance": 0.15, "weakZoneWeight": 2.5, "timedEventChance": 0.2, "timedDuration": 8000 },
   "zones": [ { "key": "WORK", "statBias": "repression" } ],
   "mechanisms": {
     "fawn":   { "name": "The Approval Loop", "desc": "Shown when a player hovers or taps this mechanism once unlocked.", "mod": { "rep": 0,  "mask": 3,  "child": -5 } },

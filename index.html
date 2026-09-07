@@ -127,6 +127,8 @@
         <a href="editor.html">Content Editor</a>
         <span class="app-footer-sep">·</span>
         <a href="https://github.com/aedmark/ucts" target="_blank" rel="noopener">GitHub</a>
+        <span class="app-footer-sep">·</span>
+        <button type="button" onclick="resetAllGameData()" class="app-footer-reset">⚠ Reset All Data</button>
     </footer>
 
     <div id="help-screen" class="hidden overlay overlay-help">
@@ -245,7 +247,10 @@
             <button id="splash-start-btn" onclick="dismissSplash()" class="end-btn">Start</button>
             <button id="splash-arcade-btn" onclick="dismissSplash(true)" class="end-btn arcade">Arcade Mode ▶</button>
         </div>
-        <button type="button" onclick="openCodex()" class="splash-codex-link">🗂 View Case Files</button>
+        <div class="splash-footer-links">
+            <button type="button" onclick="openCodex()" class="splash-codex-link">🗂 View Case Files</button>
+            <button type="button" onclick="resetAllGameData()" class="splash-reset-link">⚠ Reset All Data</button>
+        </div>
     </div>
 
 </main>

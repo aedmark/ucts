@@ -75,6 +75,10 @@ A second mode, separate from the simulation: a real, persistent journal that use
 
 This one matters enough to say plainly, in the app and here: **this is a self-tracking tool, not therapy.** If you're in crisis, contact a crisis line or a licensed professional — not a browser tab.
 
+## Resetting Your Data
+
+Everything above lives in your browser's `localStorage` — there's no account and no server, which also means a hard refresh (Ctrl/Cmd+Shift+R) doesn't touch any of it, since that only bypasses the page cache. A **⚠ Reset All Data** control on the splash screen and in the in-game footer actually clears it: your custom content pack, Case Files archive, Extended Therapy unlock, Arcade high score, saved name, and Timed Events preference, after a confirmation dialog. The Field Log is asked about separately, as a second confirmation — it's your own real journal, not part of the simulation, so it's never swept up in the same click as everything else.
+
 ## Writing Your Own Content
 
 Every event, ending (survival *and* failure), zone, stat bar name, and numeric knob in the game lives in one exportable/importable JSON structure called a content pack. [`editor.html`](editor.html) is a full visual editor for it — no code required — and [`AUTHORING.md`](AUTHORING.md) is the complete guide: what each field does, a start-to-finish walkthrough of writing a new event, the raw JSON schema if you'd rather hand-edit, and the design notes that keep new content feeling like it belongs next to everything already there.

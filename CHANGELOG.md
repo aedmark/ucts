@@ -2,6 +2,12 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.17.15] - 2026-09-07
+
+### Added
+- **A "⚠ Reset All Data" control, since a hard refresh does nothing to `localStorage` and there was previously no way to actually clear it from inside the app.** Two entry points — a link on the splash screen (reachable before a run even starts, for the "my save is stuck" case) and a persistent one in the in-game footer — both call the same `resetAllGameData()` in `main.js`. First confirm clears six keys in one pass: custom content pack, Case Files archive, Extended Therapy unlock, Arcade high score, saved player name, and Timed Events preference. A second, separate confirm asks specifically about the Field Log, worded to make clear it's a distinct, deliberate action — declining the first confirm skips the second entirely, and declining the second just leaves the Field Log alone while the rest of the reset still goes through. Either path ends in a page reload so the fresh state is immediately visible rather than requiring a manual refresh.
+- Verified with a scripted Playwright pass covering all four combinations (splash vs. footer entry point, accept vs. decline at each of the two confirms) plus a fifth check that declining the very first dialog leaves all seven keys untouched — zero JS errors across any of it.
+
 ## [4.17.14] - 2026-09-07
 
 ### Added

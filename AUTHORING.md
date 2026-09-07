@@ -137,6 +137,8 @@ For calibration, existing choice effects mostly land in the ±5 to ±20 range pe
 - **Discard Draft** — throws away unsaved changes and reloads whatever's currently saved.
 - **Reset to Default** — deletes your custom pack entirely and reverts to the built-in content. Asks for confirmation first; there's no undo after that.
 
+This editor-side reset only ever touches the content pack (`uct_custom_content_v1`). The main game has its own, broader **⚠ Reset All Data** control (splash screen and in-game footer) that clears the pack plus Case Files progress, the Extended Therapy unlock, Arcade high score, player name, and Timed Events preference — everything a testing session can leave behind — with the Field Log wipe kept as a separate, second confirmation so it's never caught in a pack reset by accident. Worth knowing if you're iterating on a pack and want a truly clean slate rather than just swapping content back to default.
+
 ## Editing the raw JSON instead
 
 Export a pack to see the exact shape. The top level is:

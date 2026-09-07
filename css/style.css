@@ -1484,6 +1484,24 @@ a {
     color: var(--case-shadow);
 }
 
+.app-footer-reset {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: var(--ink-soft);
+    font-family: var(--font-display);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.app-footer-reset:hover {
+    color: var(--key-red);
+}
+
 .icon-btn.codex-icon {
     background: var(--key-violet);
     color: var(--key-cream);
@@ -1500,11 +1518,18 @@ a {
     color: var(--key-violet);
 }
 
-.splash-codex-link {
+.splash-footer-links {
     margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.splash-codex-link,
+.splash-reset-link {
     background: transparent;
     border: none;
-    color: var(--led-teal);
     font-family: var(--font-body);
     font-size: 0.8rem;
     text-decoration: underline;
@@ -1513,9 +1538,23 @@ a {
     opacity: 0.85;
 }
 
+.splash-codex-link {
+    color: var(--led-teal);
+}
+
 .splash-codex-link:hover {
     opacity: 1;
     color: var(--led-amber);
+}
+
+.splash-reset-link {
+    color: #8fb8b0;
+    font-size: 0.7rem;
+}
+
+.splash-reset-link:hover {
+    opacity: 1;
+    color: var(--led-red);
 }
 
 .overlay-codex {

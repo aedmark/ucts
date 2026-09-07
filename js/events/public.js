@@ -20,6 +20,12 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You told a stranger a true thing instead of a convenient one. They gave you a sticker. "
+            },
+            {
+                text: "Snap back, sharper than you meant: 'Do you actually want to know?'",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 3}},
+                log: "You handed a stranger's small talk back with interest it didn't ask for."
             }
         ],
         glitch: {
@@ -104,6 +110,12 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 3}, child: {op: "add", value: 10}},
                 log: "You cried on a bus and didn't make it mean anything about you as a person."
+            },
+            {
+                text: "Get off two stops early just to escape the eyes on the bus.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 8}, child: {op: "subtract", value: 5}},
+                log: "You walked the rest of the way so nobody had to watch you do it."
             }
         ],
         glitch: {
@@ -132,6 +144,12 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You told a stranger something true, on purpose, in a room built for performance."
+            },
+            {
+                text: "'Honestly, I think that question rewards fake humility.'",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 5}},
+                log: "You argued with the format instead of playing along with it."
             }
         ],
         glitch: {
@@ -188,6 +206,12 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You gave the room slightly more of the real thing than it was expecting."
+            },
+            {
+                text: "Ask to come back to it later and hope the moment gets forgotten.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 5}, child: {op: "subtract", value: 5}},
+                log: "You bought time by passing the turn to someone else's ten seconds."
             }
         ],
         glitch: {
@@ -356,6 +380,12 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You made a number decision and didn't turn it into a referendum on your character."
+            },
+            {
+                text: "Exclaim to the cashier that these screens are a scam, then hit 'no tip' hard.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 3}},
+                log: "You picked a fight with a piece of hardware in front of the one person it couldn't help."
             }
         ],
         glitch: {
@@ -502,6 +532,12 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You let the honest answer be the answer, even through a curtain."
+            },
+            {
+                text: "Change back into your regular clothes fast and skip buying anything at all.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 5}, child: {op: "subtract", value: 5}},
+                log: "You left the store instead of the mirror. Same problem, different venue."
             }
         ],
         glitch: {
@@ -614,6 +650,12 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 5}},
                 log: "You gave two strangers the privacy of a fight that was never going to include you."
+            },
+            {
+                text: "Tell them both, loudly, to take it somewhere else.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 3}},
+                log: "You inserted yourself into a fight that was never yours to resolve."
             }
         ],
         glitch: {

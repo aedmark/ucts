@@ -2,6 +2,12 @@
 
 All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
 
+## [4.17.12] - 2026-09-07
+
+### Added
+- **50 more choices, one per remaining fawn/freeze/secure-only event, closing out the `fight`/`flight` coverage pass started in 4.17.11.** That entry's 24 additions left 50 events (9 WORK, 10 HOME, 9 SOCIAL, 10 SELF, 5 BODY, 7 PUBLIC) still without either tag; each now has a 4th choice, split 27 `fight` / 23 `flight` by alternating per zone, using that event's own established scenario. Coverage moves from 80/76 to 107/99 of 662 tagged choices — still shy of `fawn`/`freeze`/`secure` (152/134/170) but blind-play unlock rates for the two are now 17-20%, up from 5-16%, versus 29-49% for the other three. No event in the pack is below its original 3 choices; 74 of 196 now carry 4 (up from 24). Verified structurally (196 events, zero duplicate titles/tags/zones, zero out-of-range effect magnitudes, zero duplicate log lines or choice text introduced) and by a full in-browser playthrough hitting one of the new 4-choice events.
+- One pre-existing duplicate log line was noticed in passing (`"An unopened voicemail can hold a lot of imagined weight."`, shared by "The Missed Call From Mom" and "The Voicemail You Haven't Listened To") — predates this pass, left as-is pending a decision on which one should change.
+
 ## [4.17.11] - 2026-09-07
 
 ### Changed

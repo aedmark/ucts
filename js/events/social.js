@@ -188,6 +188,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 5}
                 },
                 log: "Eleven seconds of quiet did not erase you from this earth."
+            },
+            {
+                text: "Turn and ask, flatly, why neither of you will just say something real.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 12},
+                    child: {op: "add", value: 3},
+                    rep: {op: "subtract", value: 8}
+                },
+                log: "You called out the silence instead of just enduring it. The doors open two floors later. Not soon enough for either of you."
             }
         ],
         glitch: {
@@ -228,6 +238,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "You let not-knowing be an ordinary, survivable thing. Because it is."
+            },
+            {
+                text: "Change the subject fast, before anyone asks a follow-up question.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 8},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You steered the conversation somewhere you actually remembered."
             }
         ],
         glitch: {
@@ -308,6 +328,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "Being visibly alone turned out fine; you got fresh breadsticks and didn't have to share any."
+            },
+            {
+                text: "Flag down the host and ask, pointedly, if a smaller table's actually available.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 12},
+                    child: {op: "add", value: 3},
+                    rep: {op: "subtract", value: 8}
+                },
+                log: "You made the awkwardness someone else's problem to solve."
             }
         ],
         glitch: {
@@ -648,6 +678,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "A number went down. The sky, notably, did not fall. Their loss."
+            },
+            {
+                text: "Close the app entirely and delete it off your homescreen for the rest of the day.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 8},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You removed the scoreboard instead of the score."
             }
         ],
         glitch: {
@@ -728,6 +768,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "You left when you needed to and didn't file a report about it. Irish Goodbye FTW."
+            },
+            {
+                text: "Tell the group chat directly: 'I left because it was too much. That's allowed.'",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 5},
+                    rep: {op: "subtract", value: 8}
+                },
+                log: "You defended a boundary nobody was actually attacking."
             }
         ],
         glitch: {
@@ -938,6 +988,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "You solved a chair problem with a chair question."
+            },
+            {
+                text: "Slip out to the hallway for a few minutes until you can casually reappear.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 8},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You gave the room time to forget it saw you standing there."
             }
         ],
         glitch: {
@@ -978,6 +1038,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "You gave the feeling time before deciding what to do with it."
+            },
+            {
+                text: "Message the group directly: 'Hey, was this planned somewhere else? Just noticed.'",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 12},
+                    child: {op: "add", value: 3},
+                    rep: {op: "subtract", value: 8}
+                },
+                log: "You asked the question out loud instead of just doing math about it in silence."
             }
         ],
         glitch: {
@@ -1192,6 +1262,12 @@ const CONTENT_EVENTS_SOCIAL = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You put the comparison down instead of finishing the whole plate of it."
+            },
+            {
+                text: "Put the phone in another room and go do something with your hands instead.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 5}, child: {op: "subtract", value: 5}},
+                log: "You physically separated yourself from the plate you kept refilling."
             }
         ],
         glitch: {
@@ -1220,6 +1296,12 @@ const CONTENT_EVENTS_SOCIAL = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 5}, child: {op: "add", value: 8}},
                 log: "One honest sentence did more than eight nervous ones would have. The coworker actually admits they deserved it."
+            },
+            {
+                text: "Call the coworker directly and say the thing to their face, badly, right now.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 8}, mask: {op: "subtract", value: 18}, child: {op: "add", value: 5}},
+                log: "You turned a screenshot into an actual conversation. Braver, and much worse, in real time."
             }
         ],
         glitch: {

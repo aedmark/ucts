@@ -32,6 +32,16 @@ const CONTENT_EVENTS_WORK = [
                     rep: {op: "subtract", value: 10}
                 },
                 log: "You attempted self-soothing. It was highly unconvincing and only mildly successful."
+            },
+            {
+                text: "Reply-all with a terse non-apology: 'Typo. Not fixing it.'",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 3},
+                    rep: {op: "subtract", value: 8}
+                },
+                log: "You picked a fight with a comma and, somehow, won."
             }
         ],
         glitch: {
@@ -272,6 +282,16 @@ const CONTENT_EVENTS_WORK = [
                     rep: {op: "subtract", value: 10}
                 },
                 log: "You allowed yourself to be a person who makes typos. You survived."
+            },
+            {
+                text: "Set your status to 'in a meeting' and stay dark until the group chat moves on.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 8},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 15}
+                },
+                log: "You let the silence do the explaining. It explained nothing, which was the point."
             }
         ],
         glitch: {
@@ -352,6 +372,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "add", value: 10}
                 },
                 log: "You said the quiet part. People respect you for it."
+            },
+            {
+                text: "Cut in over the crosstalk: 'Stop—can we back up, this could've been an email.'",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 5},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You named the elephant. The elephant left. The meeting did not, quite."
             }
         ],
         glitch: {
@@ -599,6 +629,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "add", value: 15}
                 },
                 log: "You let not-knowing be a normal thing."
+            },
+            {
+                text: "Mute the channel and suddenly remember an urgent errand.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You left the room before the feeling could catch up to you."
             }
         ],
         glitch: {
@@ -719,6 +759,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "add", value: 10}
                 },
                 log: "You caught up effortlessly. Three people quietly thanked you because they weren't paying attention."
+            },
+            {
+                text: "Talk over the tangent: 'Stop—back up, what did I miss.'",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 5},
+                    rep: {op: "subtract", value: 8}
+                },
+                log: "You didn't wait for a pause. You made one."
             }
         ],
         glitch: {
@@ -839,6 +889,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "add", value: 10}
                 },
                 log: "You let a small ugly feeling exist without narrating it to anyone or destroying you."
+            },
+            {
+                text: "Mute their name from your feed without telling yourself why.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 8},
+                    child: {op: "subtract", value: 8},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You made the wound invisible. It's still there, just off-screen."
             }
         ],
         glitch: {
@@ -1009,6 +1069,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "subtract", value: 15}
                 },
                 log: "Indecision cost you the boundary you meant to keep."
+            },
+            {
+                text: "Reply immediately: 'This needs to wait until tomorrow. Logging off now.'",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 5},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You said no in real time, which is somehow rarer than saying yes."
             }
         ],
         glitch: {
@@ -1087,6 +1157,12 @@ const CONTENT_EVENTS_WORK = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You accepted a good thing without an asterisk on it."
+            },
+            {
+                text: "Close the laptop and go for a walk so you can't keep re-litigating it.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 8}, child: {op: "subtract", value: 5}},
+                log: "You physically removed yourself from the trial. The jury adjourns, for now."
             }
         ],
         glitch: {
@@ -1171,6 +1247,12 @@ const CONTENT_EVENTS_WORK = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You dealt with the schedule instead of the feeling about the schedule."
+            },
+            {
+                text: "Reply-all asking leadership to justify the policy with actual data.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 15}, child: {op: "add", value: 5}},
+                log: "You asked the room to show its work. The room did not appreciate it."
             }
         ],
         glitch: {

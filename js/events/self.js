@@ -348,6 +348,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "Not knowing turned out to be allowed. It always is."
+            },
+            {
+                text: "Get irritated at the photo for not just telling you the truth.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You picked a fight with a piece of paper. It did not blink first."
             }
         ],
         glitch: {
@@ -468,6 +478,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "You gave your body the attention it was asking for. It thanks you by flooding your brain with dopamine."
+            },
+            {
+                text: "Get up and go for a walk to shake it off instead of figuring out what it is.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You moved the tension around the block instead of asking where it came from."
             }
         ],
         glitch: {
@@ -548,6 +568,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "You checked the list against your own name instead of theirs."
+            },
+            {
+                text: "Fire off a defensive comment about how milestones aren't a real measure of anything.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 3},
+                    rep: {op: "subtract", value: 8}
+                },
+                log: "You argued with a stranger's wedding photos and, somehow, still lost."
             }
         ],
         glitch: {
@@ -588,6 +618,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "You gave a hard day permission to be hard."
+            },
+            {
+                text: "Cancel the rest of the day's plans and just leave without explanation.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 8},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You gave the day less of you instead of naming what the day actually was."
             }
         ],
         glitch: {
@@ -708,6 +748,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "A stranger's question got an honest, small answer. Mutual respect intensifies."
+            },
+            {
+                text: "Snap back: 'Why are you asking me that?' before you've thought about it.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 12},
+                    child: {op: "add", value: 3},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You treated a kind question like an ambush."
             }
         ],
         glitch: {
@@ -928,6 +978,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "You let the urge exist without feeding it."
+            },
+            {
+                text: "Throw the phone across the couch and go do something that doesn't have a number attached.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You removed the scoreboard from the room, at least for now."
             }
         ],
         glitch: {
@@ -1008,6 +1068,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 20}
                 },
                 log: "You let the parking lot hold something you'd been carrying all week."
+            },
+            {
+                text: "Hit the steering wheel, furious at yourself for needing this at all.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You turned the release into another thing to be angry about."
             }
         ],
         glitch: {
@@ -1132,6 +1202,12 @@ const CONTENT_EVENTS_SELF = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You stopped measuring two different things with the same ruler."
+            },
+            {
+                text: "Mute their profile entirely instead of figuring out why it stings.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 5}, child: {op: "subtract", value: 5}},
+                log: "You removed the mirror instead of asking what it kept showing you."
             }
         ],
         glitch: {
@@ -1188,6 +1264,12 @@ const CONTENT_EVENTS_SELF = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 12}},
                 log: "Missing something honestly takes up less room than pretending you don't."
+            },
+            {
+                text: "Get annoyed at the photo for making the present look worse by comparison.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 10}, child: {op: "add", value: 0}},
+                log: "You resented a memory for being better than the moment you're in."
             }
         ],
         glitch: {
@@ -1244,6 +1326,12 @@ const CONTENT_EVENTS_SELF = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "Turns out readiness was never actually the requirement."
+            },
+            {
+                text: "Change the subject whenever it comes up and quietly shelve the idea a while longer.",
+                tag: "flight",
+                effects: {rep: {op: "add", value: 15}, mask: {op: "subtract", value: 8}, child: {op: "subtract", value: 8}},
+                log: "You didn't decide against it. You just stopped bringing it up."
             }
         ],
         glitch: {

@@ -244,6 +244,12 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You caught yourself mid-habit without turning it into a crisis."
+            },
+            {
+                text: "Snap at yourself under your breath and jam your hands into your pockets.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 10}, child: {op: "subtract", value: 5}},
+                log: "You declared war on your own hands."
             }
         ],
         glitch: {
@@ -328,6 +334,12 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 5}, child: {op: "add", value: 10}},
                 log: "You let your body finish waking up before you asked it to perform."
+            },
+            {
+                text: "Skip breakfast, skip the shower, just get out the door as fast as possible.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 8}, child: {op: "subtract", value: 8}},
+                log: "You outran the morning instead of catching up to it."
             }
         ],
         glitch: {
@@ -412,11 +424,17 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 5}, mask: {op: "add", value: 0}, child: {op: "add", value: 15}},
                 log: "You treated a small mystery as information instead of noise."
+            },
+            {
+                text: "Press on it hard, annoyed at your own body for keeping secrets from you.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 10}, child: {op: "subtract", value: 5}},
+                log: "You took it out on the bruise. The bruise kept being a bruise, unbothered."
             }
         ],
         glitch: {
             text: "Construct an elaborate, confident lie about how you got it.",
-            log: "Nobody asked. You told them anyway. The story was very good."
+            log: "Nobody asked. You told them anyway. The story was *very* good."
         }
     },
     {
@@ -782,6 +800,12 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You looked past the bag to the actual thing underneath it."
+            },
+            {
+                text: "Throw the empty bag away fast and open the fridge to see what else there is.",
+                tag: "flight",
+                effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 8}, child: {op: "subtract", value: 8}},
+                log: "You moved straight past the question and onto the next snack."
             }
         ],
         glitch: {
@@ -810,6 +834,12 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "Thirty seconds of actually breathing did more than the last hour of holding it."
+            },
+            {
+                text: "Slam the laptop shut and mutter at the screen like it started this.",
+                tag: "fight",
+                effects: {rep: {op: "subtract", value: 5}, mask: {op: "subtract", value: 12}, child: {op: "add", value: 0}},
+                log: "You picked a fight with an inbox. The inbox didn't respond."
             }
         ],
         glitch: {

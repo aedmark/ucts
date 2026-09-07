@@ -20,6 +20,16 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You gave the thought somewhere else to live besides your brain."
+            },
+            {
+                text: "Draft the confrontation you'll never actually have, word for word.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 3},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You refought old arguments with people who aren't even in the room."
             }
         ],
         glitch: {
@@ -48,6 +58,16 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You noticed the tension and let it go. On purpose (for once)."
+            },
+            {
+                text: "Cancel the call you were dreading and deal with the jaw later.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You removed yourself from the thing clenching your jaw, not the clenching."
             }
         ],
         glitch: {
@@ -76,6 +96,16 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 5}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You clocked your nervous system doing a bit and didn't argue with it."
+            },
+            {
+                text: "Announce, annoyed, that your phone is haunted and someone should fix that.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You picked a fight with a phone that wasn't even there."
             }
         ],
         glitch: {
@@ -104,6 +134,16 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 15}},
                 log: "Wild concept: feeding yourself food when your body needs it because you matter."
+            },
+            {
+                text: "Snap at whoever scheduled back-to-back meetings through your lunch.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You picked a fight with the calendar, which cannot hear you."
             }
         ],
         glitch: {
@@ -132,6 +172,16 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 15}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You treated the cause instead of white-knuckling the symptom."
+            },
+            {
+                text: "Tell everyone you're 'stepping out for air' and just don't come back for a while.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You left before the headache did."
             }
         ],
         glitch: {
@@ -160,6 +210,16 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 5}, child: {op: "add", value: 10}},
                 log: "You told the truth about your own body. Small, but real. Everyone else rolls their shoulders, too."
+            },
+            {
+                text: "Change the subject fast and hope nobody looks at your shoulders again.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You redirected the conversation instead of your shoulders."
             }
         ],
         glitch: {
@@ -188,6 +248,16 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 5}},
                 log: "You let your body catch up before you made a decision."
+            },
+            {
+                text: "Reply before finishing the email, already annoyed at whatever it says.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You answered a feeling, not the actual email."
             }
         ],
         glitch: {
@@ -216,6 +286,16 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 15}, mask: {op: "add", value: 0}, child: {op: "add", value: 5}},
                 log: "You gave your nervous system one thing to not fight."
+            },
+            {
+                text: "Leave your desk and wander the building until it eases, unannounced.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You disappeared for twenty minutes and called it a walk."
             }
         ],
         glitch: {
@@ -278,6 +358,16 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "subtract", value: 5}, child: {op: "add", value: 10}},
                 log: "You let the leg tell on you, and believed it."
+            },
+            {
+                text: "Snap 'I'm FINE' at whoever asked, louder than the question needed.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You turned a kind question into a small confrontation."
             }
         ],
         glitch: {
@@ -306,6 +396,16 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 15}, mask: {op: "subtract", value: 5}, child: {op: "add", value: 15}},
                 log: "You let your immune system have the meeting instead of you."
+            },
+            {
+                text: "Cancel your plans for the week and just wait it out alone.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You disappeared into the couch and let the world go on without you."
             }
         ],
         glitch: {
@@ -368,6 +468,16 @@ const CONTENT_EVENTS_BODY = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You gave the restlessness an actual job to do."
+            },
+            {
+                text: "Excuse yourself to the bathroom until the urge passes.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You left the room rather than sit with the fidget."
             }
         ],
         glitch: {

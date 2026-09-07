@@ -32,6 +32,16 @@ const CONTENT_EVENTS_HOME = [
                     rep: {op: "add", value: 25}
                 },
                 log: "Avoidance achieved. The tension is stored in your jaw."
+            },
+            {
+                text: "Ask, calmly, 'hey, everything okay?' and actually wait for the answer.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You asked instead of assuming or hiding."
             }
         ],
         glitch: {
@@ -72,6 +82,16 @@ const CONTENT_EVENTS_HOME = [
                     rep: {op: "add", value: 10}
                 },
                 log: "A tactical retreat from a sink."
+            },
+            {
+                text: "Say 'I'll get to it tonight' and actually mean it, no sighing required.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You did the small thing without turning it into a referendum."
             }
         ],
         glitch: {
@@ -112,6 +132,26 @@ const CONTENT_EVENTS_HOME = [
                     rep: {op: "add", value: 5}
                 },
                 log: "You de-escalated with punctuation."
+            },
+            {
+                text: "Type a short, honest correction and actually send it.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You corrected the record once and stopped carrying it."
+            },
+            {
+                text: "Reply with the actual, unedited version of what happened.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 15},
+                    child: {op: "add", value: 3},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You picked the fight the group chat had been avoiding for years. Secretly, they are all grateful."
             }
         ],
         glitch: {
@@ -152,6 +192,16 @@ const CONTENT_EVENTS_HOME = [
                     rep: {op: "subtract", value: 15}
                 },
                 log: "Twenty minutes of quiet did not, in fact, kill you."
+            },
+            {
+                text: "Snap 'okay, what is it then' into the silence.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You forced the silence to become an argument instead. Because it was literally nothing, before."
             }
         ],
         glitch: {
@@ -192,6 +242,16 @@ const CONTENT_EVENTS_HOME = [
                     child: {op: "add", value: 10}
                 },
                 log: "You stopped staring at a doorknob that isn't yours to turn."
+            },
+            {
+                text: "Send one more message demanding to know why they haven't answered.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You turned the silence into a second, angrier message."
             }
         ],
         glitch: {
@@ -232,6 +292,16 @@ const CONTENT_EVENTS_HOME = [
                     child: {op: "subtract", value: 10}
                 },
                 log: "You let a real question evaporate into weather talk."
+            },
+            {
+                text: "Stay warm but ask a real, gentle question: 'Are you okay right now?'",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 10}
+                },
+                log: "You met the smallness with steadiness instead of performance."
             }
         ],
         glitch: {
@@ -422,6 +492,16 @@ const CONTENT_EVENTS_HOME = [
                     child: {op: "add", value: 10}
                 },
                 log: "You used your words instead of a sticky note war. You both get pizza later and use paper plates."
+            },
+            {
+                text: "Take the post-it down and pretend you never saw it.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You removed the evidence instead of addressing the message."
             }
         ],
         glitch: {
@@ -462,6 +542,16 @@ const CONTENT_EVENTS_HOME = [
                     child: {op: "add", value: 10}
                 },
                 log: "Not every wall's noise is yours to carry."
+            },
+            {
+                text: "Grab your stuff and go sit somewhere else in the apartment entirely.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You relocated instead of just tuning it out."
             }
         ],
         glitch: {
@@ -502,6 +592,16 @@ const CONTENT_EVENTS_HOME = [
                     rep: {op: "add", value: 5}
                 },
                 log: "You talked yourself out of a want that was real, and into being a doormat."
+            },
+            {
+                text: "Mention it once, lightly, and let it go either way.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You said the true thing and didn't need it to land a certain way."
             }
         ],
         glitch: {
@@ -592,6 +692,16 @@ const CONTENT_EVENTS_HOME = [
                     rep: {op: "add", value: 5}
                 },
                 log: "You denied yourself a temperature change just to keep the peace."
+            },
+            {
+                text: "Bring it up out loud and actually agree on a number together.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You turned a silent war into one two-minute conversation."
             }
         ],
         glitch: {
@@ -682,6 +792,16 @@ const CONTENT_EVENTS_HOME = [
                     child: {op: "add", value: 10}
                 },
                 log: "One picture doesn't get to outvote your memory."
+            },
+            {
+                text: "Take a different route down the hall so you stop passing it.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You rerouted your whole day around one photograph."
             }
         ],
         glitch: {
@@ -872,6 +992,16 @@ const CONTENT_EVENTS_HOME = [
                     rep: {op: "add", value: 5}
                 },
                 log: "You argued with your own feelings and lost. Now you're sad, hungry, and the drawer is still dirty."
+            },
+            {
+                text: "Put the drawer back exactly as it was and avoid that drawer for months.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 10},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You closed the drawer on more than just the card."
             }
         ],
         glitch: {
@@ -1012,6 +1142,16 @@ const CONTENT_EVENTS_HOME = [
                     child: {op: "subtract", value: 10}
                 },
                 log: "You let a wall become a symbol instead of just a wall."
+            },
+            {
+                text: "Say honestly you wish you'd been asked, and that you'll get used to it either way.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You named the actual feeling instead of performing or burying it."
             }
         ],
         glitch: {
@@ -1090,6 +1230,16 @@ const CONTENT_EVENTS_HOME = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You made the number smaller by making it real instead of avoided."
+            },
+            {
+                text: "Pick up an extra shift so you don't have to actually look at the budget.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You outran the number instead of facing it."
             }
         ],
         glitch: {
@@ -1118,6 +1268,16 @@ const CONTENT_EVENTS_HOME = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "Turns out asking a real question gets you a real answer."
+            },
+            {
+                text: "Call and immediately demand to speak to a supervisor.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You went in swinging before anyone explained anything."
             }
         ],
         glitch: {
@@ -1180,6 +1340,16 @@ const CONTENT_EVENTS_HOME = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You closed the leak instead of just being mad about the water."
+            },
+            {
+                text: "Close the banking app and decide to deal with it 'this weekend.'",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You postponed eight months into a ninth."
             }
         ],
         glitch: {

@@ -54,6 +54,16 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 5}},
                 log: "You separated the wait from the person now trying to fix it."
+            },
+            {
+                text: "Hang up and decide the problem can just stay unsolved.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "Forty minutes on hold, zero minutes of resolution."
             }
         ],
         glitch: {
@@ -82,6 +92,16 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "A stranger's small kindness got all the way in, for once."
+            },
+            {
+                text: "Deflect hard: 'you don't even know me,' more defensive than it needed to be.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You picked a fight with a compliment."
             }
         ],
         glitch: {
@@ -178,6 +198,16 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 5}},
                 log: "You asked for the right thing without turning it into a scene."
+            },
+            {
+                text: "Leave without saying anything and just order somewhere else next time.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You solved it by never coming back."
             }
         ],
         glitch: {
@@ -240,6 +270,16 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 5}, child: {op: "add", value: 5}},
                 log: "You named the awkward thing out loud and it immediately stopped being awkward."
+            },
+            {
+                text: "Say, too sharply, 'you can walk ahead, you know.'",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You turned an empty hallway into a small skirmish."
             }
         ],
         glitch: {
@@ -268,6 +308,16 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You gave the wait exactly the amount of your life it was going to take anyway."
+            },
+            {
+                text: "Step out of line and decide to just come back another day.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You spent forty minutes to leave with nothing, on purpose this time."
             }
         ],
         glitch: {
@@ -296,6 +346,16 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You told the truth to a room of strangers deciding your next two weeks. It felt strange, but fine."
+            },
+            {
+                text: "Loudly announce, to the whole room, exactly how inconvenient this is.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You made your one grievance everyone else's problem too."
             }
         ],
         glitch: {
@@ -324,6 +384,16 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 10}},
                 log: "You asked for what you needed from a stranger you'll know for eighteen more minutes."
+            },
+            {
+                text: "Answer in short, clipped non-answers until they get the hint.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You made the silence adversarial instead of just asking for it."
             }
         ],
         glitch: {
@@ -414,6 +484,16 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You gave a stranger's rough flight the space to just be theirs."
+            },
+            {
+                text: "Put your hood up, close your eyes, and mentally leave row fourteen entirely.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You checked out rather than sit with it."
             }
         ],
         glitch: {
@@ -504,6 +584,16 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 5}},
                 log: "You solved the actual problem instead of winning the argument about it."
+            },
+            {
+                text: "Just drive off and circle the lot again rather than deal with it.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You left the standoff to whoever wanted it more."
             }
         ],
         glitch: {
@@ -566,6 +656,16 @@ const CONTENT_EVENTS_PUBLIC = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 5}},
                 log: "You turned a bad wait into a slightly less bad one by just being a person about it."
+            },
+            {
+                text: "Give up your spot entirely and just hold it until you get home.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You left the line and the problem both unsolved."
             }
         ],
         glitch: {

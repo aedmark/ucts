@@ -72,6 +72,16 @@ const CONTENT_EVENTS_SELF = [
                     mask: {op: "subtract", value: 5}
                 },
                 log: "You addressed yourself like a person worth addressing. Because you are."
+            },
+            {
+                text: "Glare back at it like the reflection started this.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You picked a fight with your own face."
             }
         ],
         glitch: {
@@ -148,6 +158,16 @@ const CONTENT_EVENTS_SELF = [
                     mask: {op: "add", value: 0}
                 },
                 log: "You out-argued your own nervous system and won. You sleep in victory."
+            },
+            {
+                text: "Argue back at 3 AM brain, out loud, like it's a person you can win against.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 3},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You picked a fight with your own nervous system. It doesn't lose."
             }
         ],
         glitch: {
@@ -188,6 +208,16 @@ const CONTENT_EVENTS_SELF = [
                     mask: {op: "add", value: 0}
                 },
                 log: "You survived free time without earning it first. You didn't explode."
+            },
+            {
+                text: "Get irritated at yourself for not being productive on your day off.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You turned rest into something to be mad about."
             }
         ],
         glitch: {
@@ -228,6 +258,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "You proved the thing wasn't actually dead, just resting."
+            },
+            {
+                text: "Get angry at the project for not finishing itself.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You picked a fight with a folder."
             }
         ],
         glitch: {
@@ -308,6 +348,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "You let three minutes of sound be exactly as small as it actually was."
+            },
+            {
+                text: "Change the playlist entirely so it can't happen again today.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You rerouted around three seconds of feeling."
             }
         ],
         glitch: {
@@ -398,6 +448,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "You caught a pattern mid-motion, which is most of the work. Keep going."
+            },
+            {
+                text: "Change the subject in your head immediately and think about literally anything else.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You outran the resemblance instead of looking at it."
             }
         ],
         glitch: {
@@ -438,6 +498,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "You separated the message from the messenger you inherited it from."
+            },
+            {
+                text: "Turn on something loud enough to drown the thought out entirely.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You muted it instead of naming it."
             }
         ],
         glitch: {
@@ -528,6 +598,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "You caught the echo without deciding it was proof of anything permanent."
+            },
+            {
+                text: "Change the subject out loud before anyone, including you, can dwell on it.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You talked past the sentence instead of sitting with it."
             }
         ],
         glitch: {
@@ -668,6 +748,16 @@ const CONTENT_EVENTS_SELF = [
                     child: {op: "add", value: 15}
                 },
                 log: "You forgave a person for not having information they didn't learn yet."
+            },
+            {
+                text: "Close the old photo album and don't open that folder again for a while.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You put ten years back in a drawer."
             }
         ],
         glitch: {

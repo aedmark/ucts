@@ -32,6 +32,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     rep: {op: "add", value: 15}
                 },
                 log: "You punished yourself for a stranger's existence."
+            },
+            {
+                text: "Say 'excuse me' at a normal volume and just wait.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You asked for the small thing you truly wanted."
             }
         ],
         glitch: {
@@ -68,6 +78,16 @@ const CONTENT_EVENTS_SOCIAL = [
                 tag: "flight",
                 effects: {mask: {op: "add", value: 0}, child: {op: "add", value: 10}, rep: {op: "add", value: 10}},
                 log: "You successfully removed the object of your pain. Until you get up again."
+            },
+            {
+                text: "Say plainly, 'that landed differently than I think you meant it to.'",
+                tag: "secure",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You said the true thing instead of performing okay-ness."
             }
         ],
         glitch: {
@@ -108,6 +128,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 5}
                 },
                 log: "You extended trust without an audit."
+            },
+            {
+                text: "Stop texting first for a while and see if they notice.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You ran a quiet experiment instead of just asking."
             }
         ],
         glitch: {
@@ -148,6 +178,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     mask: {op: "add", value: 0}
                 },
                 log: "You built a case against your own face. You won... but also... lost?"
+            },
+            {
+                text: "Leave it up. Let one bad angle be one bad angle.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You let a photo just be a photo."
             }
         ],
         glitch: {
@@ -198,6 +238,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     rep: {op: "subtract", value: 8}
                 },
                 log: "You called out the silence instead of just enduring it. The doors open two floors later. Not soon enough for either of you."
+            },
+            {
+                text: "Pull out your phone and disappear into it until the doors open.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You left the elevator before you actually left the elevator."
             }
         ],
         glitch: {
@@ -288,6 +338,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     rep: {op: "add", value: 10}
                 },
                 log: "You showed up as the version of you that RSVPs on time. You have fun, anyway."
+            },
+            {
+                text: "Go, stay an hour, and leave honestly whenever you're done.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You showed up for part of it and let that be enough."
             }
         ],
         glitch: {
@@ -378,6 +438,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     rep: {op: "add", value: 5}
                 },
                 log: "You applauded harder than you felt to hide what you felt."
+            },
+            {
+                text: "Feel the sting, let it be small, and enjoy the wedding anyway.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You let it hurt a little without needing it to mean everything."
             }
         ],
         glitch: {
@@ -518,6 +588,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "You didn't need to manage the whole room to survive; they left before they even saw you."
+            },
+            {
+                text: "Make sure they see you having a visibly better time than them.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You turned the whole party into a performance for one person."
             }
         ],
         glitch: {
@@ -558,6 +638,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "subtract", value: 15}
                 },
                 log: "One sentence got more airtime in your head than the whole party. It's all you remember."
+            },
+            {
+                text: "Say 'thanks, I feel good these days' and let that be the whole sentence.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You took the compliment at face value and moved on."
             }
         ],
         glitch: {
@@ -598,6 +688,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 5}
                 },
                 log: "A half-known person got a half-committed, perfectly adequate wave."
+            },
+            {
+                text: "Wave back too hard on purpose, daring them to make it weirder.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You escalated an awkward wave into a small standoff."
             }
         ],
         glitch: {
@@ -638,6 +738,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "subtract", value: 10}
                 },
                 log: "You let a bill you didn't agree with become a slow-burn grudge."
+            },
+            {
+                text: "Say, easily, 'I'll just cover my part' and hand over the exact amount.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You solved the math without making it a whole thing."
             }
         ],
         glitch: {
@@ -728,6 +838,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "subtract", value: 10}
                 },
                 log: "Another conversation stayed exactly as deep as the last one. This is fine."
+            },
+            {
+                text: "Ask one real question, gently, and see if they take it.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You offered an exit from small talk, no pressure either way."
             }
         ],
         glitch: {
@@ -868,6 +988,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "Jealousy, acknowledged, took up less room than it usually does. You all go out for drinks later."
+            },
+            {
+                text: "Make a pointed comment about how much they've been hanging out lately.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You let the jealousy out sideways, at them. Now they feel guilty for making a new friend."
             }
         ],
         glitch: {
@@ -908,6 +1038,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "subtract", value: 10}
                 },
                 log: "A fifth 'sometime' joined the pile of the first four. Nice collection!"
+            },
+            {
+                text: "Say, honestly, 'I'd actually like that! When's good for you?' and mean it.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You turned a script into an actual invitation."
             }
         ],
         glitch: {
@@ -948,11 +1088,21 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "Most laughter in a crowded room has nothing to do with you. Unless you're doing something funny."
+            },
+            {
+                text: "Walk over and ask, pointed, if something's funny.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You turned a guess into a confrontation. You look unhinged and very un-funny."
             }
         ],
         glitch: {
             text: "Walk over and ask, directly, if it's about you.",
-            log: "It was not about you...Well, it is *now*... but it wasn't, then Thank God. That could have been embarrassing."
+            log: "It was not about you. Good, because that could have been embarrassing!"
         }
     },
     {
@@ -1088,6 +1238,16 @@ const CONTENT_EVENTS_SOCIAL = [
                     child: {op: "add", value: 10}
                 },
                 log: "The message turned out to be smaller than the dread around it."
+            },
+            {
+                text: "Delete it unheard and text 'sorry, missed your call!' instead.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You skipped the message entirely and called it handled."
             }
         ],
         glitch: {
@@ -1206,6 +1366,16 @@ const CONTENT_EVENTS_SOCIAL = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 8}},
                 log: "You separated the moment from the pattern instead of dumping both at once."
+            },
+            {
+                text: "Just stop making plans with them for a while, no explanation.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You solved it by quietly opting out."
             }
         ],
         glitch: {
@@ -1234,6 +1404,16 @@ const CONTENT_EVENTS_SOCIAL = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 3}, child: {op: "add", value: 8}},
                 log: "You named exactly what you needed instead of quietly enduring the wrong thing."
+            },
+            {
+                text: "Change the subject fast before they can add point four.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You dodged the advice instead of naming what you needed."
             }
         ],
         glitch: {

@@ -42,6 +42,16 @@ const CONTENT_EVENTS_WORK = [
                     rep: {op: "subtract", value: 8}
                 },
                 log: "You picked a fight with a comma and, somehow, won."
+            },
+            {
+                text: "Close the laptop and go for a walk before you can send a second, worse email.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You put physical distance between yourself and send."
             }
         ],
         glitch: {
@@ -82,6 +92,16 @@ const CONTENT_EVENTS_WORK = [
                     rep: {op: "subtract", value: 10}
                 },
                 log: "You accepted love. It hurt less than you feared."
+            },
+            {
+                text: "Change the subject immediately to something, anything, else.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You routed around the compliment instead of receiving it."
             }
         ],
         glitch: {
@@ -122,6 +142,16 @@ const CONTENT_EVENTS_WORK = [
                     rep: {op: "subtract", value: 10}
                 },
                 log: "You chose logic. Your amygdala chose to ignore it."
+            },
+            {
+                text: "Knock and ask, directly, if this is about you.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 3},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You confronted the closed door instead of guessing at it."
             }
         ],
         glitch: {
@@ -162,6 +192,16 @@ const CONTENT_EVENTS_WORK = [
                     rep: {op: "subtract", value: 10}
                 },
                 log: "You chose chaos over shame. Bold move with your charisma levels."
+            },
+            {
+                text: "Send one short, unbothered follow-up and let it be a normal mistake.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You let a typo of an email be exactly that small."
             }
         ],
         glitch: {
@@ -202,6 +242,16 @@ const CONTENT_EVENTS_WORK = [
                     rep: {op: "subtract", value: 15}
                 },
                 log: "It was never about you. It was about the parking lot construction."
+            },
+            {
+                text: "Walk in already defensive, ready to argue your case before they've said anything.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You picked a fight with a meeting that hadn't started yet."
             }
         ],
         glitch: {
@@ -242,6 +292,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "subtract", value: 10}
                 },
                 log: "You Sherlocked your way to a panic attack with zero evidence."
+            },
+            {
+                text: "Let it sit, and trust that no reply yet doesn't mean no reply ever.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You let the silence be neutral instead of a verdict."
             }
         ],
         glitch: {
@@ -332,6 +392,26 @@ const CONTENT_EVENTS_WORK = [
                     rep: {op: "add", value: 10}
                 },
                 log: "You built a case for a trial nobody scheduled."
+            },
+            {
+                text: "Ask calmly what specifically they mean, and actually listen to the answer.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You asked instead of pre-defending."
+            },
+            {
+                text: "Nod along and change the subject to a project update instead.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You steered the meeting away from the actual question."
             }
         ],
         glitch: {
@@ -422,6 +502,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "add", value: 10}
                 },
                 log: "You told a true, small, unremarkable thing."
+            },
+            {
+                text: "Snap back that you were literally just handling something else.",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You turned a ping into a small defense."
             }
         ],
         glitch: {
@@ -462,6 +552,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "subtract", value: 15}
                 },
                 log: "You watched the thread instead of joining it."
+            },
+            {
+                text: "Message your manager directly, briefly, with the actual context.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You handled it directly instead of performing it for an audience."
             }
         ],
         glitch: {text: "Reply-All to the entire company. Let everyone share in this learning experience.", log: "Democracy, but for blame. Nobody wins but nobody loses, either. Except maybe some brain cells."}
@@ -549,6 +649,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "add", value: 10}
                 },
                 log: "You let an unfinished sentence stay unfinished."
+            },
+            {
+                text: "Send a message first: 'Are you typing a novel or a reply over there?'",
+                tag: "fight",
+                effects: {
+                    mask: {op: "subtract", value: 10},
+                    child: {op: "add", value: 0},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You forced the dots into an actual sentence. A very snarky sentence. The dots stopped. Now you get no reply at all."
             }
         ],
         glitch: {
@@ -589,6 +699,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "subtract", value: 10}
                 },
                 log: "The fire kept burning with nobody assigned to it. Insurance won't cover it."
+            },
+            {
+                text: "Note the gap calmly and ask, next time, for a heads-up before someone's out.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You addressed the process, not the person."
             }
         ],
         glitch: {
@@ -679,6 +799,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "subtract", value: 15}
                 },
                 log: "You orbited the work without landing on it. Nothing gets done."
+            },
+            {
+                text: "Reply with what's actually achievable by Friday, and what isn't.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You answered with the truth instead of a reflex."
             }
         ],
         glitch: {
@@ -809,6 +939,16 @@ const CONTENT_EVENTS_WORK = [
                     child: {op: "subtract", value: 10}
                 },
                 log: "You absorbed the extra work rather than the friction. Nobody learns anything."
+            },
+            {
+                text: "Reply plainly: 'that didn't actually answer it... Can you take one more look?'",
+                tag: "secure",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You named the gap without the passive-aggression."
             }
         ],
         glitch: {
@@ -849,6 +989,16 @@ const CONTENT_EVENTS_WORK = [
                     rep: {op: "subtract", value: 5}
                 },
                 log: "You checked the claim against the evidence. You get lunch together and have a good time."
+            },
+            {
+                text: "Knock, go in, and say the thing calmly.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You tested the door and used it like it was meant to be used."
             }
         ],
         glitch: {
@@ -939,6 +1089,16 @@ const CONTENT_EVENTS_WORK = [
                     rep: {op: "add", value: 10}
                 },
                 log: "You narrated a calm you weren't actually experiencing, accomplishing nothing."
+            },
+            {
+                text: "Wait it out and use the extra two minutes to actually breathe.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "add", value: 0},
+                    child: {op: "add", value: 5},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You let the delay be a delay, not an emergency."
             }
         ],
         glitch: {
@@ -1029,6 +1189,16 @@ const CONTENT_EVENTS_WORK = [
                     rep: {op: "add", value: 5}
                 },
                 log: "You let the mistake pass to keep things smooth."
+            },
+            {
+                text: "Reply lightly noting the mix-up and answer your own actual question.",
+                tag: "secure",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "add", value: 10},
+                    rep: {op: "subtract", value: 5}
+                },
+                log: "You corrected the record without making it a whole thing."
             }
         ],
         glitch: {
@@ -1219,6 +1389,16 @@ const CONTENT_EVENTS_WORK = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 10}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You turned a number in a spreadsheet into a plan."
+            },
+            {
+                text: "Close the spreadsheet, close the tab, and try hard not to think about the number.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You filed it away instead of looking at it."
             }
         ],
         glitch: {
@@ -1309,6 +1489,16 @@ const CONTENT_EVENTS_WORK = [
                 tag: "secure",
                 effects: {rep: {op: "subtract", value: 8}, mask: {op: "add", value: 0}, child: {op: "add", value: 8}},
                 log: "You looked for what survives instead of just what died."
+            },
+            {
+                text: "Close the laptop and go get coffee before you have to think about it at all.",
+                tag: "flight",
+                effects: {
+                    mask: {op: "subtract", value: 5},
+                    child: {op: "subtract", value: 5},
+                    rep: {op: "add", value: 0}
+                },
+                log: "You stepped away before the news could land."
             }
         ],
         glitch: {

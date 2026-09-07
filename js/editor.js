@@ -134,7 +134,7 @@ function buildConfigSection() {
     }
     const arcadeNote = document.createElement('p');
     arcadeNote.className = "editor-note";
-    arcadeNote.textContent = "Arcade Mode Starting Stats — each stat is rolled independently in this range at the start of an arcade run, instead of using Starting Repression/Mask/Inner Child above. Keep the ranges comparable in size (Repression's danger direction is inverted — a higher roll is closer to its 100 cap, so a narrower gap to 100 there matches a narrower gap to 0 for Mask/Inner Child).";
+    arcadeNote.textContent = "Arcade Mode Starting Stats";
     wrap.appendChild(arcadeNote);
 
     const arcadeGrid = document.createElement('div');
@@ -160,7 +160,7 @@ function buildConfigSection() {
     if (!cfg.statLabels) cfg.statLabels = {repression: "Repression Level", mask: "Social Mask", child: "Inner Child"};
     const labelNote = document.createElement('p');
     labelNote.className = "editor-note";
-    labelNote.textContent = "Bar Display Names — shown on the stats panel and in choice hints. Doesn't change how repression/mask/child work.";
+    labelNote.textContent = "Bar Display Names";
     wrap.appendChild(labelNote);
 
     const labelGrid = document.createElement('div');
@@ -186,7 +186,7 @@ function buildConfigSection() {
     if (!cfg.splash) cfg.splash = {title: "", intro: ""};
     const splashNote = document.createElement('p');
     splashNote.className = "editor-note";
-    splashNote.textContent = "Splash Screen — shown once before the run starts. Leave blank to fall back to the game's own title and a generic prompt.";
+    splashNote.textContent = "Splash Screen";
     wrap.appendChild(splashNote);
 
     const splashTitleInput = document.createElement('input');
@@ -202,7 +202,7 @@ function buildConfigSection() {
     const splashIntroArea = document.createElement('textarea');
     splashIntroArea.rows = 3;
     splashIntroArea.className = "editor-input";
-    splashIntroArea.placeholder = "Splash intro text — a blank line starts a new paragraph";
+    splashIntroArea.placeholder = "Splash intro text";
     splashIntroArea.value = cfg.splash.intro;
     splashIntroArea.oninput = () => {
         cfg.splash.intro = splashIntroArea.value;
@@ -317,7 +317,7 @@ function buildMechanismsSection() {
     wrap.appendChild(title);
     const note = document.createElement('p');
     note.className = "editor-note";
-    note.textContent = "The five response identities (fawn/flight/fight/freeze/secure) are fixed — the engine and the Field Log both depend on them. Rename their display name and retune what they do once unlocked.";
+    note.textContent = "The five response identities (fawn/flight/fight/freeze/secure) are fixed";
     wrap.appendChild(note);
 
     Object.entries(editorDraft.mechanisms).forEach(([tag, mech]) => {
@@ -379,7 +379,7 @@ function buildFailureEndingsSection() {
     wrap.appendChild(title);
     const note = document.createElement('p');
     note.className = "editor-note";
-    note.textContent = "Shown the instant a stat crosses its loss threshold (repression ≥ 100, mask ≤ 0, child ≤ 0) — unlike Survival Endings below, there's no condition list to write. Each is a pool of variants rather than one fixed line: the game picks one at random each time that stat breaks, so repeated runs don't show the identical text every time. Keep at least one variant per stat.";
+    note.textContent = "Shown the instant a stat crosses its loss threshold";
     wrap.appendChild(note);
 
     if (!editorDraft.failureEndings) editorDraft.failureEndings = {};
@@ -477,7 +477,7 @@ function buildEndingsSection() {
     wrap.appendChild(title);
     const note = document.createElement('p');
     note.className = "editor-note";
-    note.textContent = "Evaluated top to bottom. First ending whose conditions all match wins. An ending with no conditions always matches — keep one at the bottom as a fallback. Each ending is a pool of variants, same idea as Failure Endings: the game picks one at random each time that ending is reached, so replaying into the same stat-shape doesn't always print the identical line. Keep at least one variant per ending.";
+    note.textContent = "Evaluated top to bottom. First ending whose conditions all match wins.";
     wrap.appendChild(note);
 
     editorDraft.endings.forEach(normalizeEditorEndingVariants);

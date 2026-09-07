@@ -46,6 +46,12 @@ Each turn carries a small chance (15% by default) of a fourth choice — a wildc
 
 Survive a standard run once and a harder New Game+ mode unlocks permanently: double the turns, and every stat swing — including mechanism modifiers — scaled up. Your nervous system has been here before; it doesn't get an easier version of the same problem.
 
+## Case Files
+
+A persistent, cross-run record of every ending and coping mechanism you've ever actually seen — separate from any one playthrough, and untouched by restarting, losing, or switching modes. Open it from the 🗂 button in the header, the splash screen, or the end screen.
+
+Every survival ending's variants (72 of them — nine stat-shapes times eight variants each), every failure ending's variants (30 — ten per stat), and all five coping mechanisms start out as sealed, numbered file tabs. The moment you actually see one in a run, it flips over for good: real title, real description, always readable from here on. It doesn't change anything about how a run plays — it's purely a record of what's already happened to you — but it means there's always something concrete left to still be missing, even after your fifth or fifteenth run. Survival endings are labeled "Case #1" through "Case #9" by file order, not by whatever stat shape earns them; the game is exactly as quiet about that here as it is everywhere else.
+
 ## Run Seeds
 
 Every run has a seed — a short string that drives every random draw made during it (which events show up, the wildcard's roll, a timed-choice timeout) through a seeded generator instead of raw randomness. Leave the splash screen's seed field blank for a fresh random one each time, or set it yourself: type a shared seed to compare runs with someone else, or hit the 📅 button for that day's challenge seed, the same for everyone who plays it that day. The end screen shows whatever seed a run used and offers a **Replay Seed** button to run it back identically, next to the normal (freshly seeded) restart.

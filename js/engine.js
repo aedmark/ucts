@@ -114,8 +114,10 @@ function failureEndings() {
     };
 }
 
-function pickFailureEnding(pool) {
-    return pool[Math.floor(state.rng() * pool.length)];
+function pickFailureEnding(pool, statKey) {
+    const idx = Math.floor(state.rng() * pool.length);
+    if (statKey) recordFailureDiscovered(statKey, idx);
+    return pool[idx];
 }
 
 const elEventDisplay = document.getElementById('event-display');
@@ -498,6 +500,7 @@ function trackMechanism(tag) {
     s.count++;
     if (s.count >= content.config.unlockThreshold) {
         s.unlocked = true;
+        recordMechanismDiscovered(tag);
         logAction(`COPING MECHANISM ACQUIRED: "${mech.name}." This will not be undone.`);
         renderMechanisms(true);
     }
@@ -590,11 +593,14 @@ function normalizeEndingVariants(ending) {
 function getSurvivalEnding() {
     const content = getContent();
     const stats = {repression: state.repression, mask: state.mask, child: state.child};
-    const match = content.endings.find(e => (e.conditions || []).every(c => evalCondition(c, stats)))
-        || content.endings[content.endings.length - 1];
+    const foundIndex = content.endings.findIndex(e => (e.conditions || []).every(c => evalCondition(c, stats)));
+    const slotIndex = foundIndex !== -1 ? foundIndex : content.endings.length - 1;
+    const match = content.endings[slotIndex];
 
     const variants = normalizeEndingVariants(match);
-    const picked = variants[Math.floor(state.rng() * variants.length)];
+    const variantIndex = Math.floor(state.rng() * variants.length);
+    const picked = variants[variantIndex];
+    recordSurvivalDiscovered(slotIndex, variantIndex);
 
     let desc = picked.desc;
     const unlockedNames = Object.entries(mechanismState)
@@ -609,17 +615,17 @@ function getSurvivalEnding() {
 function checkGameEnd() {
     const fe = failureEndings();
     if (state.repression >= 100) {
-        const e = pickFailureEnding(fe.repression);
+        const e = pickFailureEnding(fe.repression, 'repression');
         endGame(e.title, e.desc);
         return true;
     }
     if (state.mask <= 0) {
-        const e = pickFailureEnding(fe.mask);
+        const e = pickFailureEnding(fe.mask, 'mask');
         endGame(e.title, e.desc);
         return true;
     }
     if (state.child <= 0) {
-        const e = pickFailureEnding(fe.child);
+        const e = pickFailureEnding(fe.child, 'child');
         endGame(e.title, e.desc);
         return true;
     }

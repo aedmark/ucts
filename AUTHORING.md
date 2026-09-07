@@ -77,6 +77,14 @@ Don't restate "you unlocked these coping mechanisms" in a variant's `desc` — t
 
 A broad, easily-satisfied condition placed early (e.g. a single `repression >= 70`) will out-compete narrower, more specific endings placed after it, since evaluation stops at the first match — if your richer endings never seem to show up, check whether something earlier in the list is catching runs that were meant to reach them.
 
+### Case Files (how your endings interact with the player's archive)
+
+Case Files — the persistent, cross-run record described in the README — isn't something you author directly, but every pack you write feeds it, so it's worth knowing how. The game tracks, forever (in the player's own `localStorage`, never sent anywhere), which specific variant of which specific ending they've ever seen, plus which of the five coping mechanisms they've ever unlocked. A survival ending's variants are tracked by their position in that ending's `variants` array; a failure ending's variants by position in `failureEndings.<stat>`; mechanisms by their tag. None of this reads or depends on your `title`/`desc` text itself — only on *how many* variants exist in each pool and what the five mechanism keys are.
+
+That has one real consequence for pack authors: **changing the number of variants in a survival ending, a failure ending, or reordering/adding/removing endings changes the shape the archive is keyed against**, and the game detects that automatically and resets the player's Case Files progress rather than risk pointing old discoveries at the wrong entries. Adding a new variant to an existing pool, or a new ending slot, counts as a shape change same as removing one — either way, everyone's archive starts over. Editing a variant's `title` or `desc` text *without* changing how many variants exist anywhere does not reset anything; the archive doesn't care what the words say, only how many slots there are. If you're maintaining a pack players return to, batch pool-size changes together rather than trickling them out, so you're not resetting the archive every release.
+
+The in-game archive numbers survival endings as "Case #1" through "Case #*N*" by their order in the `endings` array, and failure endings by their actual stat label (whatever `config.statLabels` says) — it never shows or implies the conditions that earned them, same as everywhere else in the game.
+
 ### Events
 
 This is the actual content — the scenarios players click through. Each event has:

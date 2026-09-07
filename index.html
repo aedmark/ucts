@@ -14,6 +14,9 @@
     <header class="app-header">
         <div class="row">
             <h1 id="game-title" class="app-title">Unresolved Childhood Trauma Sim</h1>
+            <button id="codex-btn" onclick="openCodex()" title="Case Files" aria-label="Case Files"
+                    class="icon-btn codex-icon">🗂
+            </button>
             <button id="help-btn" onclick="toggleHelp(true)" title="How this works" aria-label="How this works"
                     class="icon-btn">?
             </button>
@@ -196,6 +199,7 @@
             <button id="end-ngplus-btn" onclick="startGame(true)" class="hidden end-btn ngplus">Extended Therapy ▶
             </button>
             <button onclick="startGame(false, null, true)" class="end-btn arcade">Arcade Mode ▶</button>
+            <button onclick="openCodex()" class="end-btn codex">Case Files 🗂</button>
         </div>
 
         <div id="share-panel" class="hidden share-panel">
@@ -207,6 +211,14 @@
             <p id="end-share-status" class="end-share-status"></p>
             <textarea id="end-share-text" class="hidden share-textarea" readonly rows="4"></textarea>
         </div>
+    </div>
+
+    <div id="codex-screen" class="hidden overlay overlay-codex">
+        <h2 class="overlay-heading">Case Files</h2>
+        <p id="codex-progress" class="codex-progress"></p>
+        <p id="codex-detail" class="hidden codex-detail"></p>
+        <div id="codex-body" class="codex-body"></div>
+        <button onclick="closeCodex()" class="overlay-close-btn">Close</button>
     </div>
 
     <div id="splash-screen" class="hidden overlay overlay-splash">
@@ -233,6 +245,7 @@
             <button id="splash-start-btn" onclick="dismissSplash()" class="end-btn">Start</button>
             <button id="splash-arcade-btn" onclick="dismissSplash(true)" class="end-btn arcade">Arcade Mode ▶</button>
         </div>
+        <button type="button" onclick="openCodex()" class="splash-codex-link">🗂 View Case Files</button>
     </div>
 
 </main>
@@ -247,6 +260,7 @@
 <script src="js/events/public.js"></script>
 <script src="js/content-events.js"></script>
 <script src="js/content.js"></script>
+<script src="js/codex.js"></script>
 <script src="js/engine.js"></script>
 <script src="js/field-log.js"></script>
 <script src="js/main.js"></script>

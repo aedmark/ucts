@@ -1,4 +1,4 @@
-# Unresolved Childhood Trauma Simulator
+# Trauma Response Simulator
 
 A turn-based browser toy about the five ways people actually cope with a bad moment — dressed up as a CRT-terminal therapy simulator. Every event is a small, absurdly specific bad moment (a typo in an email to your boss, a sigh from the next room, your own reflection not looking like you for a second), and every choice you make is quietly one of five trauma responses, whether you meant it to be or not.
 
@@ -67,7 +67,7 @@ The end screen has a **Share Result** button that opens a small panel with a cou
 - **Share / Save Image** renders a portrait result card (ending, stat bars, seed, coping mechanisms acquired) to a PNG. On a phone, this hands the image straight to your device's own share sheet — Instagram, X, Threads, Messages, whatever's installed — since that's the actual, real way to get an image onto any of those, rather than a handful of platform-specific buttons trying to guess which one you wanted. On desktop (no share sheet to hand off to) it just downloads the file.
 - **Copy Text** copies a plain-text version of the same result (bars rendered as block characters) to your clipboard, or reveals a pre-selected text box if clipboard access isn't available.
 
-An optional **Your Name** field on the splash screen (blank by default, remembered for next time) shows up on both: "*Name*'s U.C.T.S — *Ending*" in the text version, "Played by *Name*" under the title on the image card. Leave it blank and neither format mentions it.
+An optional **Your Name** field on the splash screen (blank by default, remembered for next time) shows up on both: "*Name*'s T.R.S — *Ending*" in the text version, "Played by *Name*" under the title on the image card. Leave it blank and neither format mentions it.
 
 ## The Field Log
 

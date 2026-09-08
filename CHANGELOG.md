@@ -1,6 +1,12 @@
 # Changelog
 
-All notable changes to the Unresolved Childhood Trauma Simulator are documented here.
+All notable changes to the Trauma Response Simulator (formerly Unresolved Childhood Trauma Simulator) are documented here.
+
+## [4.17.16] - 2026-09-08
+
+### Changed
+- **Renamed to Trauma Response Simulator (T.R.S, was U.C.T.S).** Drops "Unresolved Childhood" while keeping "Trauma" — feedback was that the full old name read as punching down on a real subject, and the goal here was to lose that without losing the bite or the accuracy: `fawn`/`flight`/`fight`/`freeze`/`secure` are, factually, trauma responses. Updated everywhere the old name or acronym appeared as product identity: page `<title>`s and headers in `index.html`/`editor.html`, the default content pack's `config.splash.title` (`content.js`), the in-game header text and share-card filename (`engine.js`), the splash-title fallback (`main.js`), and every mention in `README.md`/`AUTHORING.md`. Historical dated entries below are left as written — they're accurate to what shipped at the time.
+- **Deliberately not renamed**, each for a different reason: the `uct_*` `localStorage` key prefixes (`content.js`, `main.js`, `engine.js`, `field-log.js`, `codex.js`) — renaming these would silently orphan every existing player's save (Extended Therapy unlock, Arcade high score, custom content pack, Field Log, Case Files); the `aedmark.itch.io/trs` share-card link and the `github.com/aedmark/trs` repo link (`index.html`, `engine.js`) — both point to real external locations that would need their own rename first, or the links just 404; and `ucts.zip`, which is a build artifact regenerated through the normal export process rather than hand-edited.
 
 ## [4.17.15] - 2026-09-07
 
@@ -76,7 +82,7 @@ All notable changes to the Unresolved Childhood Trauma Simulator are documented 
 ### Changed
 - **Result card now matches the game's own case**, instead of floating as a plain dark rectangle. The image card is framed like the toy itself — cream plastic bezel, the rainbow corner ribbon, a dark LED screen inset for the actual ending/stats/mechanisms — plus denser spacing throughout (bigger type, thicker bars, tighter gaps) so a short result no longer leaves a large empty gap before the footer.
 - The corner ribbon went through a few passes to get right: color order corrected to run red-nearest-corner-to-blue-farthest (matching the real `.app::before` ribbon's direction), the card's own bezel stroke moved to draw *before* the ribbon instead of after (it was painting over the corner and hiding the innermost band), and the stripes' position/thickness tuned by sampling actual rendered pixel colors along the top and left edges rather than eyeballing screenshots — confirmed symmetric (both edges transition through all five colors at matching distances) rather than merely close.
-- The link on both share formats (text and image) now points to `aedmark.itch.io/ucts` instead of the GitHub repo, since that's where someone would actually go to play.
+- The link on both share formats (text and image) now points to `aedmark.itch.io/trs` instead of the GitHub repo, since that's where someone would actually go to play.
 
 ## [4.16.0] - 2026-09-05
 

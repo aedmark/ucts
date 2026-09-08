@@ -190,7 +190,7 @@ function buildShareText() {
     if (unlockedNames.length) {
         lines.push(`Coping Mechanisms: ${unlockedNames.join(', ')}`);
     }
-    lines.push('aedmark.itch.io/ucts');
+    lines.push('aedmark.itch.io/trs');
     return lines.join('\n');
 }
 
@@ -415,7 +415,7 @@ async function renderResultCanvas() {
 
     ctx.fillStyle = CANVAS_COLORS.ink;
     ctx.font = '22px "Space Mono", monospace';
-    ctx.fillText('aedmark.itch.io/ucts', W / 2, H - 55);
+    ctx.fillText('aedmark.itch.io/trs', W / 2, H - 55);
 
     return canvas;
 }
@@ -448,7 +448,7 @@ async function shareResultImage() {
     const canvas = await renderResultCanvas();
     const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
     if (!blob) return;
-    const filename = `ucts-result-${state.seed}.png`;
+    const filename = `trs-result-${state.seed}.png`;
     const file = new File([blob], filename, {type: 'image/png'});
 
     if (navigator.canShare && navigator.canShare({files: [file]})) {
@@ -920,7 +920,7 @@ function startGame(hard = false, seedOverride = null, arcade = false) {
     elEndMaskLabel.textContent = labels.mask;
     elEndChildLabel.textContent = labels.child;
 
-    elGameTitle.textContent = arcade ? "U.C.T.S :: ARCADE" : hard ? "U.C.T.S :: EXTENDED THERAPY" : "U.C.T.S";
+    elGameTitle.textContent = arcade ? "T.R.S :: ARCADE" : hard ? "T.R.S :: EXTENDED THERAPY" : "T.R.S";
     elObjectiveText.textContent = arcade
         ? `Objective: Survive as long as you can. Best: ${getArcadeHighScore()} turns.`
         : `Objective: Survive ${state.maxTurns} Turns`;

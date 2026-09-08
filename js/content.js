@@ -8,7 +8,7 @@ const DEFAULT_CONTENT = {
         },
         statLabels: {repression: "Repression Level", mask: "Social Mask", child: "Inner Child"},
         splash: {
-            title: "Unresolved Childhood Trauma Simulator",
+            title: "Trauma Response Simulator",
             intro: "You are about to have a very bad day. Every choice you make is quietly one of five ways people cope with stress and anxiety.\n\nYou won't know which one is which, or what it will cost you, until it's already happened."
         },
         maxTurns: 10,

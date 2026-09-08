@@ -98,7 +98,7 @@ function resetAllGameData() {
 function showSplash() {
     const content = getContent();
     const splash = (content.config && content.config.splash) || {};
-    elSplashTitle.textContent = splash.title || elGameTitle.textContent || "U.C.T. Simulator";
+    elSplashTitle.textContent = splash.title || elGameTitle.textContent || "Trauma Response Simulator";
 
     elSplashIntro.innerHTML = '';
     const intro = splash.intro || "Press Start when you're ready.";

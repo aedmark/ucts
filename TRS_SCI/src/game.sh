@@ -38,6 +38,7 @@
 
 // Game Scripts
 (define TITLESCREEN_SCRIPT	800)
+(define ENDING_ROOM			2)		/* rm002 -- dedicated room for the end-of-run message, entered via a scripted newRoom() from rm001's runShift once a stat hits a fatal threshold or the turn limit is reached */
 (define PRINTCHOICES_SCRIPT	100)
 (define WORKEVENTS_SCRIPT	101)
 (define WORKEVENTS1_SCRIPT	102)

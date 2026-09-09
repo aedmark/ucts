@@ -483,6 +483,80 @@ than trusting it literally.
        or re-entrancy concerns — but hasn't been visually confirmed to
        actually redraw correctly while a dialog is on-screen versus only
        updating once the dialog closes.
+- **Confirmed: "half a run" playtest, no heap error, with the `MAX_CHOICES=3`
+  cap live.** Then, at the user's suggestion, moved the end-of-run handling
+  into its own room — both a heap-hygiene move (a real room transition gets
+  the engine's normal room-to-room cleanup, unlike falling through inside
+  the same room's own turn loop) and a fix for the "falls through to
+  ordinary ego-walking after the run ends" rough edge flagged since item 2.
+  - **New file**: `TRS_SCI/src/rm002.sc` — a second room (`ENDING_ROOM = 2`,
+    defined in `game.sh`), minimal Rm boilerplate (positions ego, no
+    north/east/south/west neighbors — dead-end room, no restart flow yet),
+    reusing rm001's own background (`picture 1` — there's no pic resource
+    #2, and no art exists yet regardless, see item 5 below). Its `init()`
+    calls `printEnding()`, which is the **exact same** failure-threshold +
+    `printSurvivalEnding()` logic that used to live in `rm001.sc`'s
+    `runShift`, moved verbatim (same condition table/order, same one-
+    variant-per-pool scope cut noted earlier — nothing about the actual
+    ending logic changed, only where it runs).
+  - **`rm001.sc`'s `runShift`** now ends its turn loop with
+    `(send gRoom:newRoom(ENDING_ROOM))` instead of handling the ending
+    inline — a real, engine-native room transition. Confirmed this is the
+    same mechanism the stock template already uses for
+    TitleScreen→room1 (`(send gRoom:newRoom(INITROOMS_SCRIPT))` in
+    `TitleScreen.sc`), not something new/unproven.
+  - Final stat values are untouched by the transition (they're globals, not
+    room-local state) — rm002 just re-evaluates the same thresholds/
+    conditions against whatever `gRepression`/`gMask`/`gChild` already are.
+  - `game.ini` updated: `n002=rm002` added to `[Script]`. No new `[Pic]`
+    entry needed since `picture 1` reuses the existing resource.
+  - Ran the structural sanity check on both files — clean.
+    **Not yet compiled/playtested.**
+  - **User's stretch idea, explicitly not done, worth remembering**: "if we
+    were peachy keen we could make each question its own room, outright" —
+    i.e. one room per WORK event instead of per-chunk-script dispatch. Way
+    bigger change (34 rooms instead of 4 chunk scripts + 1 dispatcher),
+    not attempted this round — flagging in case heap pressure returns even
+    after this fix and that's the next lever to reach for.
+- **Started on item 5 (art) — a first-pass WORK-zone room background.**
+  User confirmed the game is fully working end to end (compiles, plays,
+  ends correctly via the new room), then asked to start on background art.
+  Researched the actual pipeline first: SCI Companion has a real, built-in
+  **Pic → Import Bitmap to Pic** feature (SCI0-specific — confirmed in the
+  bundled Help docs, `pics.html`, "Converting a bitmap to a vector drawing
+  (SCI0)") that auto-converts an ordinary image into SCI0's vector fill/line
+  pic commands, rather than requiring the vector tools to be used by hand
+  from scratch. Constraint to keep in mind for any future art: the
+  converted result must stay under 64000 bytes of vector commands, so
+  flatter/simpler source images convert far more cleanly than detailed ones.
+  - Generated `TRS_SCI/art/work_room_concept.png` (320×200, standard 16-
+    color IBM EGA palette, flat-shaded, no gradients/anti-aliasing — by
+    design, to match what the importer handles well): office cubicle/
+    terminal-desk scene — gray walls with a chair-rail seam, a cyan-paned
+    window, a brown filing cabinet, a brown desk with a CRT terminal
+    (glowing green screen lines) and keyboard, an office chair, and a
+    brown floor with perspective seam lines kept clear of the desk
+    footprint (an earlier draft had them cutting through the desk and
+    reading as noise — fixed before sending).
+  - Generator: `tools/gen-work-room-concept.py` (pure PIL/Pillow, not
+    integrated with the SCI0 script generator — this one produces a
+    bitmap for manual import, not compilable source). Re-run it after
+    editing to regenerate `TRS_SCI/art/work_room_concept.png` in place.
+  - **This is a first-pass concept, not final art** — user said their "art
+    skills are trash but I'm good at editing," so the expectation is
+    they'll refine this (either by editing the PNG directly, or by
+    touching up the vector result after SCI Companion's import/convert
+    step) rather than it being used as-is.
+  - **Not yet imported into SCI Companion or seen converted** — the
+    import/convert step is GUI-only in the Windows VM, same as compiling;
+    nothing here has been verified to actually survive that conversion
+    (palette mapping, fill-tool leaks around white-inclusive dithered
+    colors, and the 64000-byte ceiling are all real risks flagged in the
+    Help docs that haven't been checked against this specific image).
+  - Once a background pic exists for room 1 (rm001), reconsider whether
+    `rm002` should keep reusing `picture 1` (current placeholder) or get
+    its own distinct look — currently intentionally identical since
+    neither has real art yet.
 
 ## Not yet started (the actual remaining work)
 

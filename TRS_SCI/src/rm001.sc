@@ -21,6 +21,11 @@
 (use "jump")
 (use "dpath")
 (use "workevents")
+(use "homeevents")
+(use "socialevents")
+(use "selfevents")
+(use "bodyevents")
+(use "publicevents")
 /******************************************************************************/
 (instance public rm001 of Rm
 	(properties
@@ -84,13 +89,26 @@
          **************************************************/
   )
 	(method (runShift)
-		// Turn loop: fires a random WORK event each turn until a stat crosses
-		// its failure threshold or gMaxTurns is reached. No event picker
-		// weighting yet -- still only WORK-zone content exists, so
-		// zone-bias is moot -- see SESSION_HANDOFF.md item 2.
+		(var zone)
+		// Turn loop: fires a random event from a uniformly random zone --
+		// not yet weighted toward whichever zone matches the current
+		// worst stat like the original browser game does; that's still-
+		// not-built scope, see SESSION_HANDOFF.md item 2 -- each turn,
+		// until a stat crosses its failure threshold or gMaxTurns is
+		// reached. Add a new zone by adding one more (case N ...) here,
+		// bumping ZONE_COUNT in game.sh, and adding its EVENT_COUNT
+		// constant + (use "<zone>events") above.
 		= gTurn 1
 		(while((<= gTurn gMaxTurns) and (< gRepression 100) and (> gMask 0) and (> gChild 0))
-			DoWorkEvent(Random(0 33))
+			= zone Random(0 (- ZONE_COUNT 1))
+			(switch(zone)
+				(case 0 DoWorkEvent(Random(0 (- WORK_EVENT_COUNT 1))))
+				(case 1 DoHomeEvent(Random(0 (- HOME_EVENT_COUNT 1))))
+				(case 2 DoSocialEvent(Random(0 (- SOCIAL_EVENT_COUNT 1))))
+				(case 3 DoSelfEvent(Random(0 (- SELF_EVENT_COUNT 1))))
+				(case 4 DoBodyEvent(Random(0 (- BODY_EVENT_COUNT 1))))
+				(case 5 DoPublicEvent(Random(0 (- PUBLIC_EVENT_COUNT 1))))
+			)
 			ClampStats()
 			++gTurn
 		)

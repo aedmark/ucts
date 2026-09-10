@@ -47,13 +47,51 @@
 (define WORKEVENTS4_SCRIPT	105)
 (define MECHANISMS_SCRIPT	106)
 (define CASEFILES_SCRIPT	107)
+(define HOMEEVENTS_SCRIPT	108)
+(define HOMEEVENTS1_SCRIPT	109)
+(define HOMEEVENTS2_SCRIPT	110)
+(define HOMEEVENTS3_SCRIPT	111)
+(define HOMEEVENTS4_SCRIPT	112)
+(define SOCIALEVENTS_SCRIPT	113)
+(define SOCIALEVENTS1_SCRIPT	114)
+(define SOCIALEVENTS2_SCRIPT	115)
+(define SOCIALEVENTS3_SCRIPT	116)
+(define SOCIALEVENTS4_SCRIPT	117)
+(define SELFEVENTS_SCRIPT	118)
+(define SELFEVENTS1_SCRIPT	119)
+(define SELFEVENTS2_SCRIPT	120)
+(define SELFEVENTS3_SCRIPT	121)
+(define SELFEVENTS4_SCRIPT	122)
+(define BODYEVENTS_SCRIPT	123)
+(define BODYEVENTS1_SCRIPT	124)
+(define BODYEVENTS2_SCRIPT	125)
+(define BODYEVENTS3_SCRIPT	126)
+(define BODYEVENTS4_SCRIPT	127)
+(define PUBLICEVENTS_SCRIPT	128)
+(define PUBLICEVENTS1_SCRIPT	129)
+(define PUBLICEVENTS2_SCRIPT	130)
+(define PUBLICEVENTS3_SCRIPT	131)
+(define PUBLICEVENTS4_SCRIPT	132)
 
-// Case Files indices (gCaseFiles[N]) -- stable, cross-run discovery flags.
+// Case Files indices -- stable, cross-run discovery flags. Backed by 17
+// separate scalar globals (gCF0..gCF16 in Main.sc), not an array -- global
+// arrays declared in Main.sc aren't visible from other scripts via
+// (use "main") the way scalars are (see SESSION_HANDOFF.md). GetCaseFile/
+// SetCaseFile in casefiles.sc give array-like access over the scalars.
 // 0-8: survival endings, same order as rm002's printSurvivalEnding checks.
 // 9-11: failure endings (repression/mask/child, in that order).
 // 12-16: coping mechanisms, TAG_FAWN..TAG_SECURE offset by CASEFILE_MECH_BASE.
 (define CASEFILE_COUNT				17)
 (define CASEFILE_MECH_BASE			12)
+
+// T.R.S. per-zone event counts, for rm001's zone/event picker.
+(define WORK_EVENT_COUNT	34)
+(define HOME_EVENT_COUNT	32)
+(define SOCIAL_EVENT_COUNT	33)
+(define SELF_EVENT_COUNT	33)
+(define BODY_EVENT_COUNT	32)
+(define PUBLIC_EVENT_COUNT	32)
+(define ZONE_COUNT			6)		/* WORK, HOME, SOCIAL, SELF, BODY, PUBLIC -- rm001's zone picker does Random(0 ZONE_COUNT-1) */
 
 // T.R.S. coping-mechanism tags (choice.tag from the original js/content*.js)
 (define TAG_FAWN			0)

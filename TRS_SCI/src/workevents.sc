@@ -3,11 +3,12 @@
  ******************************************************************************
  workevents.sc
  GENERATED FILE — do not hand-edit. Produced by tools/gen-work-events.js.
- Dispatcher only: DoWorkEvent(index) is the public entry point other scripts
- call; the 34 WorkEvent<N> implementations live in workevents1.sc..workevents4.sc.
+ Dispatcher only: DoWorkEvent(index) is the public entry point other
+ scripts call; the WORK-zone events' implementations live in
+ workevents1.sc..workevents4.sc.
  Loads only the chunk script the requested index lives in, and disposes it
  again right after the call -- see the comment on genDispatcher() in
- tools/gen-work-events.js for why that's load-bearing, not just tidiness.
+ tools/lib/zone-events.js for why that's load-bearing, not just tidiness.
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")

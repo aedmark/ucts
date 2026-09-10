@@ -52,11 +52,13 @@
 	gMaxScore = 0			/* the maximum game score */
 	gOldScore				/* previous score */
 
-	gRepression = 40		/* T.R.S. stat: repression, loses at 100 */
-	gMask = 60				/* T.R.S. stat: social mask, loses at 0 */
-	gChild = 60				/* T.R.S. stat: inner child, loses at 0 */
+	gRepression = STARTING_REPRESSION	/* T.R.S. stat: repression, loses at 100 */
+	gMask = STARTING_MASK				/* T.R.S. stat: social mask, loses at 0 */
+	gChild = STARTING_CHILD			/* T.R.S. stat: inner child, loses at 0 */
 	gTurn = 1				/* T.R.S.: current turn number, 1-based */
-	gMaxTurns = 10			/* T.R.S.: survive this many turns to win (matches original's default maxTurns) */
+	gMaxTurns = DEFAULT_MAX_TURNS	/* T.R.S.: survive this many turns to win -- set per-run in rm001.sc's init() (DEFAULT_MAX_TURNS or HARD_MODE_TURNS depending on gHardMode) */
+	gHardMode = FALSE		/* T.R.S. Extended Therapy: TRUE for the rest of this run once chosen at rm001.sc's init() -- never persisted itself, see gNgPlusUnlocked below */
+	gNgPlusUnlocked = FALSE	/* T.R.S.: permanently TRUE once any standard-session run has ever survived. An in-memory mirror of gCF17/CASEFILE_NGPLUS (see gCF0..17 below) -- synced from it right after LoadCaseFiles() in Template:init(), and set directly by UnlockNgPlus() (casefiles.sc, alongside its own MarkCaseFile(CASEFILE_NGPLUS) call) purely so call sites can read a plain global instead of GetCaseFile(CASEFILE_NGPLUS) every time */
 
 	/* T.R.S. coping-mechanism tracking: count of same-tag choices made so
 	   far this run, and whether that mechanism has permanently unlocked
@@ -74,15 +76,18 @@
 	gSecureUnlocked = FALSE
 
 	/* T.R.S. Case Files: cross-run "have I ever seen this" record (endings
-	   + mechanisms). Persisted to disk -- see casefiles.sc. Each defaults
-	   to 0 (never seen); LoadCaseFiles() (called once from Template:init())
-	   overwrites these from disk if a save file already exists.
+	   + mechanisms, plus the unrelated Extended Therapy unlock flag riding
+	   along in slot 17 -- see game.sh). Persisted to disk -- see
+	   casefiles.sc. Each defaults to 0 (never seen); LoadCaseFiles()
+	   (called once from Template:init()) overwrites these from disk if a
+	   save file already exists.
 	   Individual scalars, not an array -- an earlier gCaseFiles[N] array
 	   global compiled but wasn't visible from other scripts via
 	   (use "main") the way scalar globals are (no working precedent for
 	   that anywhere in this codebase; see SESSION_HANDOFF.md). Indices
-	   0-8 survival endings, 9-11 failure endings, 12-16 mechanisms --
-	   same numbering casefiles.sc/mechanisms.sc/rm002.sc already use. */
+	   0-8 survival endings, 9-11 failure endings, 12-16 mechanisms, 17
+	   Extended Therapy unlock -- same numbering casefiles.sc/mechanisms.sc/
+	   rm002.sc already use. */
 	gCF0 = 0
 	gCF1 = 0
 	gCF2 = 0
@@ -100,6 +105,7 @@
 	gCF14 = 0
 	gCF15 = 0
 	gCF16 = 0
+	gCF17 = 0
 
 	gCurrentCursor			/* the number of the current cursor */
 	gNormalCursor = 999		/* the number of the normal cursor (ie. arrow) */
@@ -164,10 +170,15 @@
          ******************************/
 		= gVersion "1.0"
 
-		// Cross-run Case Files record (endings/mechanisms ever seen) --
-		// load once at boot; defaults to all-zero (gCaseFiles' declared
-		// initial state) if no save file exists yet.
+		// Cross-run Case Files record (endings/mechanisms ever seen, plus
+		// the Extended Therapy unlock flag in slot CASEFILE_NGPLUS -- see
+		// game.sh) -- load once at boot; defaults to all-zero (gCaseFiles'
+		// declared initial state) if no save file exists yet.
 		LoadCaseFiles()
+		// Mirror gCF17 into the plain gNgPlusUnlocked global every call
+		// site outside this file actually reads -- see its declaration
+		// above for why.
+		= gNgPlusUnlocked GetCaseFile(CASEFILE_NGPLUS)
 
 		// General initialization stuff
 	    = gVolume 15
@@ -205,7 +216,11 @@
 	
 		Load(rsCURSOR	gNormalCursor)
 		Load(rsCURSOR	gLoadingCursor)
-			
+
+		// Player portrait (view 801) -- see game.sh and
+		// mechanisms.sc's DrawPortraitMood().
+		Load(rsVIEW		PORTRAIT_VIEW)
+
 	    (if(HaveMouse())
 	    	(send gGame:setCursor(gNormalCursor SET_CURSOR_VISIBLE))
 		)(else
@@ -276,7 +291,11 @@
 
   			Load(rsCURSOR	gNormalCursor)
   			Load(rsCURSOR	gLoadingCursor)
-     
+
+  			// Player portrait (view 801) -- see game.sh and
+  			// mechanisms.sc's DrawPortraitMood().
+  			Load(rsVIEW		PORTRAIT_VIEW)
+
 			(super:newRoom(roomNum))
 			(if(< paramTotal 2)
 				= gDefaultPicAni Random(0 5)

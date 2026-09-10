@@ -844,11 +844,30 @@ sub-items under it are the real remaining scope, not bugs.
    - Real, discovered gotcha along the way: `sci.sh` **deliberately swaps**
      `fOPENFAIL`/`fOPENCREATE`'s numeric values for `SCI_0` vs `SCI_1_1`
      builds (`#ifdef SCI_0` block, comment: "have the wrong numbers... keep
-     that incorrect behavior here so as not to break old games"). Doesn't
+     that incorrect behavior here so as not to break old games"). ~~Doesn't
      affect us since we use the symbolic names (`fOPENFAIL`, `fCREATE`),
-     which the compiler resolves correctly for our SCI0 target either way —
-     but if literal `0`/`1`/`2` values ever show up hardcoded for file modes
-     anywhere, they're wrong for SCI0 and need to be the symbols instead.
+     which the compiler resolves correctly for our SCI0 target either way~~
+     — **CORRECTION, this conclusion was wrong and cost an entire debugging
+     session (New Game+ item below) to discover**: using the symbolic name
+     does NOT give you the behavior matching its English name. The swap
+     means `fOPENFAIL` (value 0 under SCI_0) actually triggers the kernel's
+     "open or create" behavior, and `fOPENCREATE` (value 1) actually
+     triggers "open or fail, abort if not possible" — confirmed via SCI
+     Companion's own bundled kernel docs
+     (`~/WebstormProjects/sci_companion/Help/Kernels/FOpen.html`, which
+     documents the two constants' *behavior* already reversed from their
+     *names* for exactly this reason) and via `sci.sh` itself. Practical
+     effect: any code using `fOPENFAIL` to safely open an *existing* file
+     for reading (the obviously-correct-looking choice, and what
+     `casefiles.sc`'s `LoadCaseFiles()` used from the moment it was
+     written) is actually invoking destructive create/reset-style
+     behavior, silently wiping the file's content immediately before ever
+     trying to read it. **`fOPENCREATE` is the one to use for that case,
+     despite how backwards it reads.** If literal `0`/`1`/`2` values ever
+     show up hardcoded for file modes anywhere, they're wrong for SCI0 and
+     need to be the symbols instead — but "use the symbol" is necessary,
+     not sufficient; make sure it's the *correct* one per this correction,
+     not just the one whose name matches what you want in English.
    - **Explicitly not built, by design**: any in-game Case Files *viewer* —
      the original has a whole gallery screen (flip-to-reveal file tabs,
      accessible from three different places). This port only has the
@@ -969,14 +988,32 @@ sub-items under it are the real remaining scope, not bugs.
      check on every new file — clean. **Confirmed compiled and operational
      by the user** — the full six-zone content port is playable end to
      end, in one build.
-   - **What's still not built, now that content-porting itself is done**:
-     zone-weighting (picking the zone that matches the player's current
-     worst stat, like the original does, instead of uniform-random —
-     item 2's last unaddressed piece); this doc's item 3 (coping
-     mechanisms/glitch/endings) already covers every zone equally since
+   - **Zone-weighting done** (item 2's last unaddressed piece), added to
+     `rm001.sc` right after the Case Files viewer: three new procedures,
+     `PickWorstStat()` (0=repression/1=mask/2=child, comparing
+     `gRepression` against `100-gMask`/`100-gChild` as integer "danger"
+     values — no floats needed since higher is worse for all three once
+     mask/child are inverted; ties favor the earlier stat, matching the
+     original's `Array.reduce` order exactly), `ZoneStatBias(zoneIndex)`
+     (same zone→stat mapping as the original's `content.js` `zones`
+     array — WORK/BODY→repression, SOCIAL/PUBLIC→mask, HOME/SELF→child),
+     and `PickZone()` (weighted pick: matching zones get integer weight 5
+     vs. 2 for others, same ratio as the original's `weakZoneWeight: 2.5`,
+     scaled since SCI0 arithmetic is integer-only; total weight is a
+     hardcoded 18 since exactly 2 of the 6 zones always match any given
+     worst stat — would need recomputing if that ever changes).
+     `runShift`'s zone pick changed from `Random(0 ZONE_COUNT-1)` to
+     `PickZone()`, nothing else. **Deliberately not replicated**: the
+     original's "don't repeat an event already seen this run" pool —
+     that's a separate, meaningfully bigger feature (per-event seen-
+     tracking across all 196 events), out of scope for this pass. Ran the
+     structural sanity check — clean. **Not yet compiled/playtested.**
+   - **What's still not built**: this doc's item 3 (coping mechanisms/
+     glitch/endings) already covers every zone equally since
      `ApplyChoiceEffects`/`ApplyGlitch`/the ending system never cared which
-     zone an event came from. Also still open: item 5's remaining art
-     (stat gauges, player portrait).
+     zone an event came from — nothing left there. Still open: item 5's
+     remaining art (stat gauges, player portrait), and the "no-repeat"
+     event pool noted just above if it turns out to matter.
 7. ~~Case Files viewer~~ **Done.** User asked to tackle this right after
    all six zones were confirmed compiled/operational.
    - **First, found the actual file had been renamed**: `casefiles.sc` is
@@ -1004,12 +1041,29 @@ sub-items under it are the real remaining scope, not bugs.
      "N. `<title>`" — and shows it via a `Dialog` + `DText` header +
      `DSelector`, same nsTop-clamp-after-center() defensive pattern as
      `PrintChoices`).
-   - **One easy-to-miss detail caught by comparing against the working
-     `SRDialog` code line-by-line**: the stock save-list selector
-     explicitly sets `state(2)` — without that bit, `DSelector:handleEvent`'s
-     own `(& state 2)` check (gating whether it reports itself as the
-     dialog's claimed/focused control) would likely leave the list
-     inert. Added `state(2)` to match.
+   - **Real bug, from over-generalizing the `SRDialog` precedent**: first
+     version added `state(2)` on the selector (matching what the stock
+     save-list selector sets) and the user reported the dialog closing
+     the instant they clicked *anything*, including just scrolling ("goes
+     immediately to the bottom and then closes"). Root cause:
+     `DSelector:handleEvent` returns a truthy value (itself) exactly when
+     `(& state 2)` is set on a claimed event, and the base `Dialog:doit()`
+     loop (which `ShowCaseFiles` uses directly, via `(send hDialog:doit(NULL))`)
+     treats *any* truthy `handleEvent` return as "done, close the modal
+     loop" — that's correct for `DButton` (state defaults to `3` — clicking
+     a button *should* immediately close the dialog with its value) but
+     wrong for a browse-only list. `SRDialog` gets away with `state(2)`
+     on its own selector because it overrides `doit()` entirely with
+     custom logic that interprets that signal differently (which button
+     triggered it, double-click vs. an explicit OK) — borrowing the flag
+     without the logic that makes it safe was the mistake. **Fix**:
+     dropped `state(2)`; added `state(1)` instead (confirmed via `sci.sh`,
+     `TRUE = 1`) so the selector is still the dialog's initially-focused
+     control (arrow keys/Page Up/Down reach it) without the bit that
+     causes the auto-close. Bits 1 and 2 are independent — `DButton`'s
+     default `state = 3` sets both because buttons legitimately want both
+     behaviors at once; a plain `Dialog:doit()`-driven `DSelector` wants
+     only the first.
    - **Reachable via a new "Case Files" menu item** (`` `^f ``, added to
      the existing "Action" menu in `menubar.sc`, `MENU_CASEFILES = $306`
      in `game.sh`) rather than new UI chrome — works from anywhere the
@@ -1021,5 +1075,421 @@ sub-items under it are the real remaining scope, not bugs.
      flavor-text strings a *second* time purely for this screen — not
      worth the extra resident heap for what's fundamentally a reference
      screen. Revisit if it turns out to matter.
-   - Ran the structural sanity check — clean. **Not yet compiled/
-     playtested.**
+   - **Compiled and mostly working per the user** — reachable via the
+     menu, list displays and shows sealed-vs-discovered correctly. The
+     `state(2)`/auto-close bug above is what they found first; after that
+     fix, a second real bug surfaced (screenshot): scrolling to the
+     bottom of the list showed one garbled row plus several rows of
+     repeated "SSSSSSS" garbage past entry 17. **Root cause**: the local
+     `buf[544]` array isn't zero-initialized (leftover stack contents,
+     not blank) and `DSelector` has no concept of "17 entries, stop" —
+     its `advance()` just keeps scrolling as long as the *next* slot's
+     first byte is non-zero (`(while(amount and StrAt(cursor x)) ...)`),
+     so once scrolled past the last real entry it happily renders
+     whatever garbage bytes happen to follow in memory as more rows.
+     **Fix**: explicitly zero the entire 544-byte buffer before writing
+     the 17 real entries into it. Ran the structural sanity check on both
+     fixes — clean. **Confirmed fully working by the user** after this
+     second fix — scrolls cleanly, no garbling, closes only on Escape.
+     Case Files viewer is done.
+8. Player portrait — **plumbing done, art added, draw calls now live.**
+   User asked "what do you have in mind for the remaining art?" then
+   approved wiring the plumbing (view slot + threshold-based loop-swap
+   logic) first, leaving stat-meters as a "nice to have, not now."
+   - **Ruled out two existing classes first**: `Gauge` (`gauge.sc`) is
+     `of Dialog` — an interactive modal slider (speed/volume use it), not
+     a passive live meter, so unsuitable for a stat HUD without real
+     rework. `Prop` (`Feature.sc`, `of View`) exists in the stock template
+     but has zero instantiation examples anywhere in this codebase — no
+     proven pattern to copy, so skipped in favor of the simpler stateless
+     `DrawCel(view loop cel x y priority)` kernel call.
+   - **Constants added to `game.sh`**: `PORTRAIT_VIEW = 801` (800 is
+     already "Item - Test Object"), `PORTRAIT_X/Y` (4, 20 — an
+     unvalidated top-left-corner guess, clear of where centered dialogs
+     usually sit; move once real art exists and its actual size is
+     known), `PORTRAIT_MOOD_NEUTRAL/REPRESSION/MASK/CHILD` (0-3, doubling
+     as the art's loop numbers), `PORTRAIT_NEUTRAL_THRESHOLD = 60` (the
+     worst stat's "danger" must reach this before showing anything but
+     neutral — mild dips shouldn't change expression). `n801=Player
+     Portrait` added to `game.ini`'s `[View]` section so the resource
+     slot exists in SCI Companion even with no art behind it yet.
+   - **`ResCheck` (would let code detect "does this resource exist" and
+     skip the draw safely) turned out to be SCI1.1-only** — confirmed via
+     the bundled Help docs — so there was no safe way to guard a live
+     `Load`/`DrawCel` call against the not-yet-existing view 801 without
+     breaking the build in the meantime. Resolved by keeping the actual
+     resource-touching calls commented out until the user confirmed the
+     view 801 art existed, then uncommenting them (see below) rather than
+     ever having a call that could fail at runtime.
+   - **Avoided a repeat of the `casefiles.sc` circular-dependency saga**:
+     rather than a new `portrait.sc` needing `(use "main")` +
+     `(use "mechanisms")` while something in `Main.sc`/`mechanisms.sc`
+     would need `(use "portrait")` back — a brand-new circular pair, the
+     exact shape that caused that multi-round saga — the new
+     `PickWorstStat()` (moved out of `rm001.sc`, now shared) and
+     `DrawPortraitMood()` procedures both live directly in the
+     already-stable `mechanisms.sc`, called from inside
+     `ApplyChoiceEffects`/`ApplyGlitch` (which already call
+     `ClampStats()` after every stat change) and once each from
+     `rm001.sc`'s `init()` (initial mood before the turn loop starts) and
+     `rm002.sc`'s `init()` (final mood at the ending, added along with a
+     new `(use "mechanisms")` there). No new circular `(use ...)` pairs
+     introduced.
+   - **`Main.sc`**: `Load(rsVIEW PORTRAIT_VIEW)` added in both
+     `Template:init()` and `Template:newRoom()`, matching the existing
+     `Load(rsFONT ...)`/`Load(rsCURSOR ...)` pattern.
+   - Ran the structural sanity check on every touched file (`game.sh`,
+     `mechanisms.sc`, `rm001.sc`, `rm002.sc`, `Main.sc`) — clean, both in
+     the initial plumbing pass and after uncommenting the live calls.
+   - **User added the view 801 art**, then reported it "doesn't seem to
+     appear anywhere in-game" — expected, since the plumbing pass had
+     deliberately left the `Load`/`DrawCel` calls commented out. Fix:
+     uncommented the two `Load(rsVIEW PORTRAIT_VIEW)` lines in `Main.sc`
+     and the `DrawCel(PORTRAIT_VIEW mood 0 PORTRAIT_X PORTRAIT_Y -1)` call
+     inside `DrawPortraitMood()` in `mechanisms.sc`.
+   - **Confirmed working by the user on first try** (screenshot): portrait
+     renders cleanly in the top-left corner at the guessed `PORTRAIT_X`/
+     `PORTRAIT_Y` (4, 20), doesn't overlap the dialog box or menu bar, and
+     showed an appropriately grim expression at Repression 55/Mask 60/
+     Child 45 — the loop-number-to-mood mapping and position guess both
+     turned out correct with no adjustment needed.
+   - **Not actually done** — user's words: "it's not done because it
+     shouldn't just sit there like that all the time." Right now
+     `DrawCel` just paints it permanently in the corner every turn with no
+     erase/hide logic — fine as a functional proof but not the intended
+     presentation. **Deliberately deferred**: this is presentation polish
+     (when/how the portrait should show, hide, or transition), explicitly
+     set aside for a later session in favor of the new-game-plus and
+     clickable-office-objects work below.
+9. ~~New Game+ mode~~ **Done, not yet compiled/playtested.** User pointed
+   out this session's design source of truth: rather than inventing New
+   Game+ from scratch, the original browser game already has it, fully
+   implemented, under the name "Extended Therapy" — found and ported the
+   real spec instead of guessing:
+   - **Spec, straight from the blueprint** (`js/engine.js` lines 47-58,
+     616-635, 690-719; `js/content.js` lines 14-16): survive one standard
+     session and it unlocks permanently (`localStorage`-backed in the
+     original); once unlocked, every future run offers a choice between
+     Standard (`maxTurns: 10`) and Extended Therapy (`hardModeTurns: 20` —
+     double length) which also scales *every* stat swing — including
+     mechanism modifiers and the glitch wildcard, since the original's
+     `handleGlitchChoice` routes through the same `handleChoice` that
+     applies the multiplier — by `hardModeMultiplier: 1.25`. Starting stats
+     are unaffected. (The original also has a third `arcade` mode — infinite
+     turns, escalating multiplier every 10 turns, random starting stats —
+     genuinely separate from NG+/hard mode and never mentioned in this
+     project's scope; not ported, not asked for.)
+   - **Persistence**: new `gNgPlusUnlocked` global (`Main.sc`), loaded once
+     at boot (`Template:init()`, right next to `LoadCaseFiles()`) via new
+     `LoadNgPlusUnlocked()`/`SaveNgPlusUnlocked()`/`UnlockNgPlus()`
+     procedures in `CaseFiles.sc`. **Deliberately a separate file,
+     `TRSNGP.DAT`, not a new slot in the existing `gCaseFiles`/
+     `TRSCASE.DAT` array** — that machinery already had two real,
+     hard-won bug fixes (the `state(2)` auto-close bug, the unzeroed
+     `buf[544]` garbage-row bug, both above) and reusing it for one
+     unrelated boolean risked reopening either for no real benefit versus
+     just writing one more tiny, isolated `FOpen`/`FGets`/`FPuts`/`FClose`
+     pair matching the exact same proven shape.
+   - **The mode choice itself lives in `rm001.sc`'s `init()`**, not
+     `TitleScreen.sc` — deliberately. `menubar.sc`'s "Restart Game" calls
+     `(send gGame:restart())`, and `Main.sc`'s `GameIsRestarting()` check
+     sends a restart straight to `INITROOMS_SCRIPT` (`rm001`), skipping
+     `TitleScreen.sc` entirely. Putting the prompt on the title screen would
+     silently never fire on a restart; `rm001.sc`'s `init()` is the one
+     place every run actually passes through regardless of entry path. Only
+     asked when `gNgPlusUnlocked` (via `PrintChoices`, the existing
+     stacked-button dialog, two options, width 290 matching every generated
+     event's convention); otherwise defaults straight to Standard, same as
+     the original's hidden-until-unlocked button. Sets `gMaxTurns` from the
+     new `DEFAULT_MAX_TURNS`(10)/`HARD_MODE_TURNS`(20) constants
+     (`game.sh`) — `runShift`'s turn-loop condition already reads
+     `gMaxTurns` generically, so doubling turn count needed zero changes
+     there. Picking Extended Therapy also prints the original's own flavor
+     line verbatim ("Extended session initiated. Your nervous system has
+     been here before.") for blueprint fidelity.
+   - **The 1.25x stat-swing multiplier**: new `ScaleHardMode(delta)` in
+     `mechanisms.sc`, called on all three deltas in both
+     `ApplyChoiceEffects` (after the mechanism-modifier switch, before
+     adding to state — same order as the original's
+     `applyMechanismModifiers` → hard-mode-multiply → add-to-state) and
+     `ApplyGlitch`. SCI0 has no floats, so 1.25 = 5/4 via integer
+     multiply-then-divide with a rounding nudge (`+2` before dividing by 4)
+     rather than truncating. **Written to always divide a non-negative
+     numerator** (works on `Abs(delta)`, reapplies the sign after) rather
+     than dividing a negative value directly — there's no confirmed
+     precedent anywhere in this codebase for which way SCI0's `/` rounds
+     negative operands, and since about half of every delta this game
+     produces is negative, this was worth designing around rather than
+     gambling on, same caution as the if/else-chaining and switch-on-a-
+     variable calls made earlier this project (see the gotchas above).
+   - **Unlock trigger**: `rm002.sc`'s `printSurvivalEnding()` (survival-only
+     — failure endings never call it) now calls `UnlockNgPlus()` first,
+     guarded by `(if(not gHardMode) ...)` — matches the original's
+     `if (!state.hardMode) unlockNgPlus()` in `checkGameEnd()` exactly:
+     an Extended Therapy run surviving doesn't need to re-trigger anything,
+     it's already unlocked.
+   - Ran the structural sanity check (paired quotes, balanced parens
+     outside string literals, no stray non-ASCII in any new string literal)
+     across every touched file (`game.sh`, `Main.sc`, `CaseFiles.sc`,
+     `mechanisms.sc`, `rm001.sc`, `rm002.sc`) — clean, but **recreated the
+     exact `main`↔`casefiles` circular-dependency bootstrap failure from the
+     original Case Files saga (see above), first real compile attempt**:
+     new symbols landed on *both* sides of that circular `(use ...)` pair at
+     once -- `gHardMode`/`gNgPlusUnlocked` (new globals in `Main.sc`, which
+     `CaseFiles.sc`'s new procedures read) and `LoadNgPlusUnlocked` (new
+     procedure in `CaseFiles.sc`, which `Main.sc` calls). Neither side's
+     stale `.sco` had ever resolved the other's brand-new symbols, so both
+     failed circularly -- `Unknown procedure 'LoadNgPlusUnlocked'`/
+     `Undeclared identifier 'gNgPlusUnlocked'`/`'gHardMode'`, both sides
+     saying "did you forget to use X" despite already using it (the
+     tell-tale sign, same as last time -- it's a stale-`.sco` bootstrap
+     order problem, not a missing `(use ...)`). **Same fix, confirmed
+     necessary again**: comment out the `LoadNgPlusUnlocked()` call (line
+     175 of `Main.sc`) only, compile `Main.sc` alone (F8, succeeds --
+     `gHardMode`/`gNgPlusUnlocked` don't themselves depend on anything new
+     in `casefiles.sc`), compile `CaseFiles.sc` alone (F8, now resolves
+     against the freshly-updated `main.sco`), restore the line, then
+     Compile All (possibly a few rounds, per the usual batch-settling
+     behavior). **Not yet confirmed working after this fix** -- told to the
+     user, not yet re-attempted as of this doc's last edit.
+   - **Real bug, several rounds, root cause never actually identified —
+     `TRSNGP.DAT` wrote correctly but never read back correctly, and the
+     eventual fix was to stop using it, not to fix it.** After the
+     bootstrap fix above got everything compiling clean, the mode-choice
+     dialog still never appeared on any subsequent run. Diagnosed step by
+     step, each ruling out one theory:
+     - First suspected an unflushed write (DOSBox-X's mounted-drive cache
+       not syncing to the host before an abrupt window close) — real, but
+       a red herring: confirmed via a survive-then-clean-exit retest that
+       `TRSNGP.DAT` correctly held `1\n` on disk (verified directly by
+       reading the raw file bytes), yet the very next run still defaulted
+       to Standard with no dialog.
+     - Added a debug `FormatPrint` at the point `rm001.sc` checks
+       `gNgPlusUnlocked` — printed `0` even with the file confirmed correct
+       on disk. Instrumented `LoadNgPlusUnlocked()` itself with three debug
+       prints (`FOpen`'s return, the raw buffer content, the parsed
+       result): `FOpen` succeeded (valid handle), but the buffer came back
+       empty and parsed as `0` — meaning `FGets` itself wasn't reading the
+       file's actual content, despite `FOpen` proving the file existed and
+       was found.
+     - Suspected DOS file-handle reuse from opening `TRSCASE.DAT`
+       immediately before it (same handle number likely reused, possibly
+       retaining a stale/EOF-positioned read cursor) — tested by reordering
+       the two `Load*()` calls so `LoadNgPlusUnlocked()` ran first, with
+       nothing else touching file I/O beforehand. Identical result. Ruled
+       out.
+     - Suspected the exact bug class that already bit `ShowCaseFiles` once
+       this project (an uninitialized local array holding leftover stack
+       garbage from a prior call, not clean zeros) — added the same
+       explicit zero-the-buffer-first fix that worked there. Identical
+       result. Ruled out.
+     - Considered whether this was actually a *systemic* bug in the shared
+       `Load*()` pattern (never verified to round-trip through a genuinely
+       cold boot anywhere in this project before now) rather than something
+       new — tested by opening the already-working Case Files viewer on a
+       fresh boot, no gameplay first. **Disproved**: real previously-marked
+       entries showed correctly as discovered, not reverted to sealed —
+       `LoadCaseFiles()`/`FOpen`/`FGets` fundamentally do work correctly for
+       reading real persisted values back after a cold boot in general.
+       Whatever's actually different about a lone, standalone
+       `FOpen`/`FGets` call on its own dedicated file remains
+       **unexplained** — every theory that would distinguish it from
+       `LoadCaseFiles()`'s own reads was tested and ruled out.
+     - **Final fix: stopped trying to make the standalone file work, and
+       folded the flag into the already-proven `gCaseFiles` array instead.**
+       `CASEFILE_COUNT` bumped from 17 to 18 (`game.sh`); the new slot 17
+       (`CASEFILE_NGPLUS`) holds the unlock flag in `gCF17` (`Main.sc`), via
+       the exact same `GetCaseFile`/`SetCaseFile`/`LoadCaseFiles`/
+       `SaveCaseFiles` machinery already confirmed to round-trip correctly.
+       A new `VIEWABLE_CASEFILE_COUNT` (17) keeps `ShowCaseFiles()`'s viewer
+       scoped to just the real 17 case files, so slot 17 doesn't show up as
+       a bogus 18th entry with no title. `UnlockNgPlus()` (`CaseFiles.sc`)
+       now calls `MarkCaseFile(CASEFILE_NGPLUS)` instead of the deleted
+       `SaveNgPlusUnlocked()` — a small, harmless improvement over the
+       original's exact semantics: `MarkCaseFile` only actually writes to
+       disk the *first* time (vs. the original JS's unconditional write on
+       every survival), since the in-memory `gNgPlusUnlocked` mirror still
+       gets set every call regardless. `gNgPlusUnlocked` itself is now just
+       an in-memory convenience mirror of `gCF17`, synced once right after
+       `LoadCaseFiles()` in `Template:init()` — every other call site
+       (`rm001.sc`'s mode-choice check, `mechanisms.sc`'s `ScaleHardMode`,
+       `rm002.sc`'s unlock guard) reads the plain global exactly as before,
+       unchanged. `LoadNgPlusUnlocked`/`SaveNgPlusUnlocked`/the standalone
+       `TRSNGP.DAT` file are deleted/orphaned entirely.
+     - **Compile note**: this change touches both sides of the
+       `main`↔`casefiles` pair again, but asymmetrically this time — only
+       `CaseFiles.sc`'s new `case 17` branches need the brand-new `gCF17`
+       from `Main.sc`; nothing in `Main.sc` needs a new symbol back. Compile
+       `Main.sc` alone first (registers `gCF17`), then Compile All — the
+       harder two-sided bootstrap dance from before shouldn't be needed
+       this time.
+     - **Still failed after the array pivot — traced to the real root
+       cause and fixed. `LoadCaseFiles()`'s `FGets` read had never actually
+       worked, for any slot, this entire project's history — not just the
+       new one.** Proved this by dumping every one of the 18 parsed values
+       in a single consolidated debug dialog: every single index came back
+       `0`, including ones known to be `1` on disk. This meant the earlier
+       "Case Files persist correctly across sessions" confirmations
+       earlier in this doc were never actually observing a genuine disk
+       reload — almost certainly leftover in-memory state surviving
+       `Restart Game` (which apparently doesn't reset globals the way
+       assumed) within one continuous interpreter session, never
+       independently verified end to end before now.
+       - Ruled out a tooling artifact first: re-tested in real standalone
+         DOSBox-X (the documented workflow) instead of SCI Companion's
+         built-in playtest button, in case the IDE's integrated interpreter
+         had different/buggy file-I/O emulation. Identical failure in both
+         — a real bug in the compiled game, not a testing-tool quirk.
+       - Nearly went down a wrong path: found the stock, *unused*
+         `fileio.sc` `File` class calling `FGets` with only 2 arguments
+         (no handle) and, believing that meant our own 3-argument call was
+         wrong, changed `LoadCaseFiles()` to match. **This was a mistake —
+         it hung the game on boot** (black screen, stuck loading cursor).
+         Reverted it immediately. Checking SCI Companion's own bundled
+         kernel docs afterward (`Help/Kernels/FGets.html`) confirmed the
+         3-argument form was correct all along —
+         `FGets(buffer max [handle])`, with `handle` merely optional, not
+         wrong to include. The stock `fileio.sc` class turned out to be
+         unverified boilerplate (zero real usage anywhere in this
+         project), not a trustworthy reference — a costly reminder that
+         "it's in the stock template" isn't the same as "it's proven,"
+         unlike e.g. `DisposeLoad.sc`'s `paramTotal` pattern or the
+         `and`/`or`-chaining precedent, which *are* real, exercised code.
+       - **Actual root cause, found by reading SCI Companion's own bundled
+         `Help/Kernels/FOpen.html` and the real `sci.sh` directly**: the
+         long-known `fOPENFAIL`/`fOPENCREATE` swap (see the corrected
+         gotcha entry earlier in this doc) is not a harmless footnote —
+         `LoadCaseFiles()` had used `fOPENFAIL` to open `TRSCASE.DAT` for
+         reading since the day it was written, and that flag actually
+         triggers destructive create/reset-style kernel behavior under
+         SCI0, silently wiping the file immediately before the very next
+         line tried to read it back. Writes (`SaveCaseFiles()`'s `fCREATE`)
+         were never affected — a genuinely separate constant, not part of
+         the swap — which is exactly why every persistence bug this whole
+         debugging arc surfaced was one-directional: saves always looked
+         correct on disk, loads never worked.
+       - **Fix**: `LoadCaseFiles()` now opens with `fOPENCREATE` (the one
+         that actually means "open existing, abort if not possible" under
+         this swap) instead of `fOPENFAIL`, plus a more defensive
+         `(if(not hFile) return)` failure check (matching stock
+         `fileio.sc`'s own pattern) instead of `== -1`, since `NULL` is `0`
+         in this dialect and a failed open isn't guaranteed to specifically
+         return `-1`.
+       - **Confirmed fixed by the user** — screenshot shows the "New
+         Session" dialog rendering correctly (`Standard Session (10
+         turns)` / `Extended Therapy (20 turns, harder swings)`), reachable
+         after a real survived run and a restart, exactly as designed.
+         Portrait, status line, and background art all render correctly
+         alongside it. All temporary debug `FormatPrint`/dump
+         instrumentation added during this investigation (`rm001.sc`,
+         `Main.sc`, `CaseFiles.sc`) has been removed; structural sanity
+         check re-run clean across every touched file.
+       - **Confirmed: a full Extended Therapy run played start to finish
+         with no crashes.** Item 9 (New Game+ / Extended Therapy) is fully
+         done and playtested.
+   - **Not built, out of scope**: the original's `arcade` mode (see above);
+     rebalancing which content is *available* in Extended Therapy (the
+     original doesn't change available content either, only turns/
+     multiplier, so this matches); any UI indication of which mode is
+     currently active mid-run beyond the one-time flavor line (the original
+     shows `" (Extended Therapy)"` appended to a status/title element this
+     port's status line doesn't have room for or an equivalent of).
+10. **Clickable objects in the office room.** User's own examples: click
+    the filing cabinet to open the Case Files viewer (already built and
+    working — see item 7 — just needs a second entry point beyond the
+    `^f` menu item), click the computer to start a new game (there's no
+    restart-flow-from-within-a-room to hook yet either — see item 9's
+    "not built" note, item 2's still-missing "run over, restart?" flow,
+    and rm002's original "no restart flow yet" comment).
+    - **Filing cabinet → Case Files viewer: done, not yet
+      compiled/playtested.**
+      - **Real architectural finding, changed where this had to live**:
+        went looking for a click-to-trigger pattern to copy (`Feature`/
+        `Prop` in `Feature.sc` were the leading candidates, per the
+        earlier portrait-plumbing notes) and traced how a mouse click
+        actually flows through this engine first: `User:handleEvent`
+        forwards every event to `gGame:handleEvent` → `gRegions:
+        handleEvent` → the current room's own `handleEvent`
+        *unconditionally*, regardless of `ProgramControl()`'s
+        `canInput(FALSE)`/`canControl(FALSE)` (confirmed by reading
+        `User.sc`/`Game.sc` directly) — so a room-level click check
+        looked viable even with ego hidden and movement disabled.
+        **But**: `PrintChoices`' `Dialog:doit()` (`Controls.sc`) runs its
+        *own*, fully separate `Event:new()`/`handleEvent()` loop that only
+        ever dispatches to the dialog's own child controls (buttons) —
+        confirmed by reading it directly — and never forwards anything
+        back out to the room. Since `rm001.sc`'s entire `runShift()` turn
+        loop is one unbroken chain of these `PrintChoices` dialogs from
+        the moment `init()` runs until the room transitions away, **there
+        is no idle moment in `rm001` for a click to ever reach the room's
+        `handleEvent`** — user confirmed this directly by testing ("the
+        room isn't clickable until all the questions end"), which is what
+        settled it rather than more code-reading alone. **Fix**: the
+        hotspot lives in **`rm002`** (the ending room) instead — it's
+        genuinely idle once the ending prints, reuses the identical
+        background art (`picture 1`, same room), and fits the moment
+        better anyway (review the outcome, maybe check Case Files) than
+        mid-run ever would have.
+      - **Implementation**: `CABINET_X1/Y1/X2/Y2` (`game.sh`) — a
+        rectangle hand-estimated from a screenshot of the user's actual
+        room art (the gray 4-drawer cabinet at the room's right edge),
+        explicitly an **unvalidated guess**, same "guess now, adjust once
+        confirmed" approach already proven fine for `PORTRAIT_X/Y`.
+        `rm002.sc`'s `RoomScript:handleEvent` checks
+        `(send pEvent:type)==evMOUSEBUTTON` and the click coordinates
+        against that rectangle (same `nsLeft`/`nsTop`/`nsRight`/`nsBottom`
+        hit-test idiom already proven in `Controls.sc`'s own button
+        `check(pEvent)` method), and calls the already-working
+        `ShowCaseFiles()` (`casefiles.sc`, already `(use ...)`'d in
+        `rm002.sc`) if it hits. Written as nested single-condition `if`s
+        rather than one long `and`-chain — this codebase's only confirmed
+        `and`-chain precedent tops out at 4 terms, and this needed 5
+        (unclaimed, event type, 2 x-bounds, 2 y-bounds), so it's split
+        into two 2-term chains instead of gambling on an unverified
+        length, same caution as the hard-mode multiplier and zone-picker
+        `switch` decisions earlier in this doc.
+      - Ran the structural sanity check on both touched files (`game.sh`,
+        `rm002.sc`) — clean. **Confirmed working by the user on the first
+        try** — the guessed rectangle needed no adjustment; clicking the
+        cabinet in the ending room opens the Case Files viewer correctly.
+        Filing cabinet hotspot is done.
+    - **Computer → new game: done, confirmed working by the user.** User's
+      own call: instead of the "Restart Game" menu item's kernel-level
+      `RestartGame()` (a full VM reset), just do a plain
+      `(send gRoom:newRoom(INITROOMS_SCRIPT))` back to `rm001` and reset
+      per-run state manually, same as the engine already does for every
+      other room transition in this project.
+      - **Where the reset lives, and why**: rather than resetting stats/
+        mechanisms at the click site in `rm002.sc` (which would only cover
+        *this* entry path), the reset was added unconditionally to the top
+        of `rm001.sc`'s own `init()` — the one place every way of starting
+        a run already funnels through (title screen, the menu's
+        `RestartGame()`, and now this). Resets `gRepression`/`gMask`/
+        `gChild` to new `STARTING_REPRESSION`/`STARTING_MASK`/
+        `STARTING_CHILD` constants (`game.sh` — also backfilled into
+        `Main.sc`'s own initial globals, so there's exactly one place to
+        change starting stats, not two) and all 5 mechanism count/unlocked
+        pairs back to 0/`FALSE`. Deliberately does **not** touch
+        `gCF0..17`/`gNgPlusUnlocked` — those are the persistent, cross-run
+        record and must survive a new run starting, same reasoning as
+        everywhere else `MarkCaseFile`/`UnlockNgPlus` come up. For the two
+        pre-existing entry paths (fresh boot, kernel restart) this is a
+        harmless no-op, since those globals are already at these exact
+        values by the time `rm001:init()` runs either way — it's only
+        load-bearing for the new click path, since a plain `newRoom()`
+        doesn't touch globals at all. `gTurn`/`gHardMode`/`gMaxTurns`
+        already get freshly set every time `rm001:init()` runs regardless
+        (the turn-loop reset and the NG+ mode-choice logic just above),
+        so nothing extra needed there.
+      - **Computer hotspot**: `COMPUTER_X1/Y1/X2/Y2` (`game.sh`), another
+        unvalidated screenshot-based guess (the desk's monitor+keyboard),
+        same rectangle-hit-test idiom as the cabinet, added right below it
+        in `rm002.sc`'s `RoomScript:handleEvent`. No confirmation prompt
+        (unlike "Restart Game," which interrupts an active run and has
+        real progress to lose) — this is only ever reachable from the
+        already-ended state, nothing to accidentally lose.
+      - Ran the structural sanity check on every touched file (`game.sh`,
+        `Main.sc`, `rm001.sc`, `rm002.sc`) — clean. **Not yet
+        compiled/playtested** — needs the usual VM pass, plus the
+        computer's rectangle specifically needs the same "click it and
+        see" confirmation the cabinet already got.

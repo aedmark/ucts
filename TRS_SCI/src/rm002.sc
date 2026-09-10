@@ -28,6 +28,7 @@
 (use "obj")
 (use "inv")
 (use "casefiles")
+(use "mechanisms")
 /******************************************************************************/
 (instance public rm002 of Rm
 	(properties
@@ -58,6 +59,10 @@
 		// art -- hide ego outright instead, same call TitleScreen.sc
 		// already uses to keep ego off the title screen.
 		(send gEgo:hide())
+		// Final mood at the ending screen -- same threshold/worst-stat logic
+		// as rm001, just called once more here since stat values (and thus
+		// the computed mood) can't change further after this point.
+		DrawPortraitMood()
 
 		(self:printEnding())
 	)
@@ -95,6 +100,14 @@
 		(self:printSurvivalEnding())
 	)
 	(method (printSurvivalEnding)
+		// Matches js/engine.js's checkGameEnd(): a standard-session survival
+		// permanently unlocks Extended Therapy for all future runs -- an
+		// Extended Therapy run surviving doesn't re-trigger anything (it's
+		// already unlocked, and the original only calls this when
+		// `!state.hardMode` too).
+		(if(not gHardMode)
+			UnlockNgPlus()
+		)
 		// One representative title/desc per condition from the original's
 		// CONTENT_ENDINGS (js/content-endings.js) -- same condition table,
 		// same order (first match wins), just one flavor variant each
@@ -169,6 +182,42 @@
 	(properties)
 	(method (handleEvent pEvent)
         (super:handleEvent(pEvent))
+        // Clickable filing cabinet -> Case Files viewer (see game.sh for
+        // why this lives here and not rm001, and for the hotspot rectangle
+        // itself). Nested ifs rather than one long and-chain -- this
+        // codebase has no confirmed precedent for and-chains longer than
+        // 4 terms, and this needs 5 (unclaimed, click type, 2 x-bounds,
+        // 2 y-bounds), so it's split into two 2-term chains instead of
+        // gambling on an unverified length.
+        (if(not (send pEvent:claimed))
+            (if(== (send pEvent:type) evMOUSEBUTTON)
+                (if((>= (send pEvent:x) CABINET_X1) and (< (send pEvent:x) CABINET_X2))
+                    (if((>= (send pEvent:y) CABINET_Y1) and (< (send pEvent:y) CABINET_Y2))
+                        (send pEvent:claimed(TRUE))
+                        ShowCaseFiles()
+                    )
+                )
+            )
+        )
+        // Clickable computer -> starts a new run (rm001.sc's init() does
+        // the actual per-run state reset; this just triggers a plain
+        // room transition there, same newRoom() idiom runShift() already
+        // uses to leave rm001, just in reverse and without any VM-level
+        // RestartGame() -- see game.sh and rm001.sc). No confirmation
+        // prompt, unlike the "Restart Game" menu item -- that one
+        // interrupts a run already in progress and has real progress to
+        // lose; this is only ever clickable once a run has already ended,
+        // so there's nothing to accidentally lose by clicking it.
+        (if(not (send pEvent:claimed))
+            (if(== (send pEvent:type) evMOUSEBUTTON)
+                (if((>= (send pEvent:x) COMPUTER_X1) and (< (send pEvent:x) COMPUTER_X2))
+                    (if((>= (send pEvent:y) COMPUTER_Y1) and (< (send pEvent:y) COMPUTER_Y2))
+                        (send pEvent:claimed(TRUE))
+                        (send gRoom:newRoom(INITROOMS_SCRIPT))
+                    )
+                )
+            )
+        )
         (if(Said('look'))
             Print("You are in an empty room")
         )

@@ -100,20 +100,104 @@
 			)
 		)
 	)
+	= repDelta ScaleHardMode(repDelta)
+	= maskDelta ScaleHardMode(maskDelta)
+	= childDelta ScaleHardMode(childDelta)
 	= gRepression (+ gRepression repDelta)
 	= gMask (+ gMask maskDelta)
 	= gChild (+ gChild childDelta)
 	ClampStats()
+	DrawPortraitMood()
 )
 /******************************************************************************/
 (procedure public (ApplyGlitch logMsg)
 	// The glitch wildcard (matches js/engine.js's handleGlitchChoice):
 	// fully random effects each in [-25, 25], untagged -- never counts
-	// toward a coping-mechanism unlock.
-	= gRepression (+ gRepression (- Random(0 50) 25))
-	= gMask (+ gMask (- Random(0 50) 25))
-	= gChild (+ gChild (- Random(0 50) 25))
+	// toward a coping-mechanism unlock. handleGlitchChoice routes through
+	// the same handleChoice() as everything else in the original, so the
+	// Extended Therapy multiplier applies here too.
+	= gRepression (+ gRepression ScaleHardMode(- Random(0 50) 25))
+	= gMask (+ gMask ScaleHardMode(- Random(0 50) 25))
+	= gChild (+ gChild ScaleHardMode(- Random(0 50) 25))
 	ClampStats()
+	DrawPortraitMood()
 	Print(logMsg)
+)
+/******************************************************************************/
+(procedure public (ScaleHardMode delta)
+	// Extended Therapy's stat-swing multiplier (matches js/content.js's
+	// hardModeMultiplier: 1.25, applied in js/engine.js's handleChoice).
+	// SCI0 has no floats -- 1.25 = 5/4, applied as an integer
+	// multiply-then-divide with the +2 numerator nudge rounding to the
+	// nearest whole number instead of truncating (so e.g. a delta of 4
+	// scales to 5, not silently staying 4 via floor division). Deliberately
+	// works on the absolute value and reapplies the sign afterward rather
+	// than dividing a negative numerator directly -- this codebase has no
+	// confirmed precedent either way for how SCI0's "/" rounds negative
+	// operands, and this sidesteps needing one.
+	(var absDelta, scaled)
+	(if(not gHardMode)
+		return(delta)
+	)
+	(if(< delta 0)
+		= absDelta (- 0 delta)
+		= scaled (/ (+ (* absDelta HARD_MODE_MULT_NUM) 2) HARD_MODE_MULT_DEN)
+		return(- 0 scaled)
+	)
+	return(/ (+ (* delta HARD_MODE_MULT_NUM) 2) HARD_MODE_MULT_DEN)
+)
+/******************************************************************************/
+(procedure public (PickWorstStat)
+	// 0 = repression, 1 = mask, 2 = child. Matches the original's danger
+	// comparison (repression/100, (100-mask)/100, (100-child)/100) --
+	// mask/child inverted here into "danger" terms too so all three
+	// compare the same way (higher = worse), then compared as plain
+	// integers since SCI0 has no floats. Ties favor the earlier stat in
+	// the list (repression over mask, mask over child), matching the
+	// original's Array.reduce order exactly. Shared by rm001.sc's
+	// PickZone() (zone-weighting) and DrawPortraitMood() below -- lives
+	// here rather than in rm001.sc so both a room and this always-
+	// resident utility script can call it without a room depending on
+	// another room, or a new circular use-pair between scripts that have
+	// never bootstrapped each other before (see the casefiles.sc saga in
+	// SESSION_HANDOFF.md for why that's worth avoiding).
+	(var worst, worstDanger, dangerMask, dangerChild)
+	= worst 0
+	= worstDanger gRepression
+	= dangerMask (- 100 gMask)
+	(if(> dangerMask worstDanger)
+		= worst 1
+		= worstDanger dangerMask
+	)
+	= dangerChild (- 100 gChild)
+	(if(> dangerChild worstDanger)
+		= worst 2
+		= worstDanger dangerChild
+	)
+	return(worst)
+)
+/******************************************************************************/
+(procedure public (DrawPortraitMood)
+	// Player-portrait draw (see SESSION_HANDOFF.md). Loop numbers double
+	// as mood: 0 neutral, 1 repression, 2 mask, 3 child.
+	(var worst, worstDanger, dangerMask, dangerChild, mood)
+	= worst 0
+	= worstDanger gRepression
+	= dangerMask (- 100 gMask)
+	(if(> dangerMask worstDanger)
+		= worst 1
+		= worstDanger dangerMask
+	)
+	= dangerChild (- 100 gChild)
+	(if(> dangerChild worstDanger)
+		= worst 2
+		= worstDanger dangerChild
+	)
+	(if(< worstDanger PORTRAIT_NEUTRAL_THRESHOLD)
+		= mood PORTRAIT_MOOD_NEUTRAL
+	)(else
+		= mood (+ worst 1)
+	)
+	DrawCel(PORTRAIT_VIEW mood 0 PORTRAIT_X PORTRAIT_Y -1)
 )
 /******************************************************************************/

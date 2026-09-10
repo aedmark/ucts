@@ -13,15 +13,20 @@
  plain ASCII, one value per line, FOpen/FGets/FPuts/FClose via the
  template's fileio.sc.
 
- gCF0..gCF16 (declared in Main.sc, CASEFILE_COUNT = 17 of them) hold the
+ gCF0..gCF17 (declared in Main.sc, CASEFILE_COUNT = 18 of them) hold the
  in-memory discovery flags for this session -- individual scalar globals,
  not an array (see SESSION_HANDOFF.md for why). GetCaseFile/SetCaseFile
  below are the array-like accessors everything else in this file (and
  MarkCaseFile's callers in mechanisms.sc/rm002.sc) actually uses; nothing
- outside this file needs to know they're really 17 separate globals.
- LoadCaseFiles()/SaveCaseFiles() sync all 17 with TRSCASE.DAT (a bare
+ outside this file needs to know they're really 18 separate globals.
+ LoadCaseFiles()/SaveCaseFiles() sync all 18 with TRSCASE.DAT (a bare
  filename -- resolves relative to the game's own directory, same as the
- stock SRDialog code's own file access).
+ stock SRDialog code's own file access). Slot 17 (CASEFILE_NGPLUS) is the
+ unrelated Extended Therapy unlock flag, not a real case file -- riding
+ on this file/array purely because it's the one proven persistence
+ mechanism in this codebase (see game.sh); ShowCaseFiles()'s viewer stays
+ scoped to VIEWABLE_CASEFILE_COUNT (17) so it doesn't show up as a bogus
+ 18th entry.
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")
@@ -50,6 +55,7 @@
 		(case 14 return(gCF14))
 		(case 15 return(gCF15))
 		(case 16 return(gCF16))
+		(case 17 return(gCF17))
 	)
 	return(0)
 )
@@ -73,13 +79,32 @@
 		(case 14 = gCF14 value)
 		(case 15 = gCF15 value)
 		(case 16 = gCF16 value)
+		(case 17 = gCF17 value)
 	)
 )
 /******************************************************************************/
 (procedure public (LoadCaseFiles)
 	(var hFile, i, lineBuf[6])
-	= hFile FOpen("TRSCASE.DAT" fOPENFAIL)
-	(if(== hFile -1)
+	// Deliberately fOPENCREATE here, not fOPENFAIL -- see game.sh/
+	// SESSION_HANDOFF.md: SCI0's fOPENFAIL/fOPENCREATE numeric values
+	// are swapped from what their names suggest (confirmed via SCI
+	// Companion's own bundled FOpen.html kernel docs and sci.sh's
+	// #ifdef SCI_0 block) -- fOPENCREATE is the one that actually
+	// means "open existing, abort/fail if not possible", which is
+	// the safe read-only semantics this procedure needs. Using
+	// fOPENFAIL here (as this procedure did for this entire project
+	// up to this fix) actually invokes "open or create" behavior,
+	// which turns out to truncate/reset the file's content before
+	// this procedure ever gets to read it -- the real root cause of
+	// the New Game+ debugging saga above: every load was silently
+	// wiping TRSCASE.DAT immediately before trying to read it back.
+	= hFile FOpen("TRSCASE.DAT" fOPENCREATE)
+	// Checking truthiness rather than == -1 specifically, matching
+	// the stock fileio.sc File class's own defensive pattern -- NULL
+	// is 0 in this dialect (confirmed via sci.sh), and it's not
+	// certain a failed FOpen always returns -1 rather than NULL/0
+	// specifically.
+	(if(not hFile)
 		return
 	)
 	(for (= i 0) (< i CASEFILE_COUNT) (++i)
@@ -113,6 +138,23 @@
 		return(TRUE)
 	)
 	return(FALSE)
+)
+/******************************************************************************/
+(procedure public (UnlockNgPlus)
+	// Extended Therapy / New Game+ unlock flag (see game.sh's Extended
+	// Therapy block for why this rides on gCaseFiles/TRSCASE.DAT as slot
+	// CASEFILE_NGPLUS instead of its own file). Matches js/engine.js's
+	// unlockNgPlus() -- called from rm002.sc's printSurvivalEnding() exactly
+	// where the original calls it from checkGameEnd(). MarkCaseFile already
+	// gives the right semantics here: sets the slot and persists
+	// immediately, but only actually writes to disk the first time (a
+	// harmless, strictly cheaper divergence from the original's
+	// unconditional-every-survival localStorage write). gNgPlusUnlocked
+	// (the in-memory mirror everything else reads) still gets set every
+	// call regardless, matching the original's idempotent-either-way call
+	// site.
+	MarkCaseFile(CASEFILE_NGPLUS)
+	= gNgPlusUnlocked TRUE
 )
 /******************************************************************************/
 (procedure public (CaseFileTitle index)
@@ -159,10 +201,24 @@
 	// this screen, which isn't worth the extra resident heap for a
 	// browse-only reference screen -- can revisit if it's actually wanted.
 	(var hDialog, hSelector, hDText, buf[544], i, curY)
-	// 544 = CASEFILE_COUNT (17) * 32-byte stride; DSelector's `x` property
+	// 544 = VIEWABLE_CASEFILE_COUNT (17) * 32-byte stride; DSelector's `x`
+	// property
 	// is simultaneously the memory stride between entries AND the
 	// assumed max display width in characters, so it must match here.
-	(for (= i 0) (< i CASEFILE_COUNT) (++i)
+	// DSelector has no concept of "17 entries, then stop" -- advance()
+	// just keeps scrolling until a slot's first byte happens to be zero
+	// (see its (while(amount and StrAt(cursor x)) ...) loop). A local
+	// array here isn't zero-initialized (leftover stack garbage), so
+	// without explicitly clearing it first, scrolling past the last real
+	// entry reads that garbage as more rows -- confirmed in-game as
+	// corrupted text and repeated "SSSS" rows below entry 17.
+	(for (= i 0) (< i 544) (++i)
+		= buf[i] 0
+	)
+	// VIEWABLE_CASEFILE_COUNT (17), not the full CASEFILE_COUNT (18) --
+	// slot 17 is the Extended Therapy unlock flag, not a real case file,
+	// and has no title in CaseFileTitle() below to show anyway.
+	(for (= i 0) (< i VIEWABLE_CASEFILE_COUNT) (++i)
 		(if(GetCaseFile(i))
 			Format((+ @buf (* i 32)) "%d. %s" (+ i 1) CaseFileTitle(i))
 		)(else
@@ -192,7 +248,10 @@
 		x(32)
 		y(10)
 		font(SMALL_FONT)
-		state(2)
+		// state bit 1 (TRUE) makes this the dialog's initially-focused
+		// control so arrow keys/Page Up/Down reach it -- NOT bit 2, which
+		// is what actually caused the reported bug (see below).
+		state(1)
 		moveTo(4 curY)
 		setSize()
 	)

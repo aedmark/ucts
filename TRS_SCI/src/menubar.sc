@@ -16,6 +16,7 @@
 (use "gauge")
 (use "sound")
 (use "user")
+(use "casefiles")
 /******************************************************************************/
 (class TheMenuBar of MenuBar
 	(properties
@@ -41,7 +42,8 @@
 				"Inventory`^I:"+
 				"Retype`#3:"+
 				"--! :"+
-				"Colors`^c"
+				"Colors`^c:"+
+				"Case Files`^f"
 		)
 		AddMenu(
 			" Speed "
@@ -205,6 +207,9 @@
 			)
 			(case MENU_TOGGLESOUND
 				ToggleSound()
+			)
+			(case MENU_CASEFILES
+				ShowCaseFiles()
 			)
 		)
 	)

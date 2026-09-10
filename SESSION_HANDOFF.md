@@ -975,6 +975,51 @@ sub-items under it are the real remaining scope, not bugs.
      item 2's last unaddressed piece); this doc's item 3 (coping
      mechanisms/glitch/endings) already covers every zone equally since
      `ApplyChoiceEffects`/`ApplyGlitch`/the ending system never cared which
-     zone an event came from. Also still open: items 4's Case-Files
-     *viewer* (persistence itself is done), and item 5's remaining art
+     zone an event came from. Also still open: item 5's remaining art
      (stat gauges, player portrait).
+7. ~~Case Files viewer~~ **Done.** User asked to tackle this right after
+   all six zones were confirmed compiled/operational.
+   - **First, found the actual file had been renamed**: `casefiles.sc` is
+     now `CaseFiles.sc` on disk (capital case) — presumably from creating
+     it via SCI Companion's "New empty script" wizard to fix the earlier
+     registration saga. Matches this codebase's existing case-insensitive
+     `(use ...)` convention (`Door.sc`/`door`, etc.), not a problem, just
+     noting it so a future session doesn't go looking for the lowercase
+     name and conclude the file is missing. Also found and removed a
+     stray duplicate `(script 107)` line at the very top of the file
+     (ahead of the real `(script CASEFILES_SCRIPT)` a few lines down) —
+     harmless leftover from the wizard, presumably, from before the real
+     content got pasted in; cleaned up while already in the file.
+   - **Used `DSelector`** (the stock scrollable-list control the
+     Save/Restore dialogs already use), not a `PrintChoices`-style
+     stacked-button dialog — deliberately, since a fixed-size scrolling
+     viewport can't hit the dialog-height-overflow failure mode that's
+     bitten this project twice already, regardless of how many of the 17
+     entries there are. New procedures in `CaseFiles.sc`:
+     `CaseFileTitle(index)` (a switch returning each of the 17 titles,
+     duplicating strings already in `mechanisms.sc`/`rm002.sc` — no clean
+     way to share a string constant across scripts here, and each is
+     short) and `ShowCaseFiles()` (builds a 17-entry, 32-byte-stride
+     buffer — sealed entries read "N. ??? (sealed)", discovered ones read
+     "N. `<title>`" — and shows it via a `Dialog` + `DText` header +
+     `DSelector`, same nsTop-clamp-after-center() defensive pattern as
+     `PrintChoices`).
+   - **One easy-to-miss detail caught by comparing against the working
+     `SRDialog` code line-by-line**: the stock save-list selector
+     explicitly sets `state(2)` — without that bit, `DSelector:handleEvent`'s
+     own `(& state 2)` check (gating whether it reports itself as the
+     dialog's claimed/focused control) would likely leave the list
+     inert. Added `state(2)` to match.
+   - **Reachable via a new "Case Files" menu item** (`` `^f ``, added to
+     the existing "Action" menu in `menubar.sc`, `MENU_CASEFILES = $306`
+     in `game.sh`) rather than new UI chrome — works from anywhere the
+     menu bar is live, which includes the ending room (`rm002.sc` never
+     hides it), satisfying the original's "reachable from the end screen"
+     without any `rm002`-specific wiring.
+   - **Deliberate scope cut**: browse-only, no drill-down into a selected
+     entry's full description. That would mean duplicating all 17
+     flavor-text strings a *second* time purely for this screen — not
+     worth the extra resident heap for what's fundamentally a reference
+     screen. Revisit if it turns out to matter.
+   - Ran the structural sanity check — clean. **Not yet compiled/
+     playtested.**

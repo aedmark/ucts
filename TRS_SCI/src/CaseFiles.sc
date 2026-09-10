@@ -1,5 +1,3 @@
-(script 107)
-
 /******************************************************************************
  T.R.S. → SCI0 port
  ******************************************************************************
@@ -115,5 +113,101 @@
 		return(TRUE)
 	)
 	return(FALSE)
+)
+/******************************************************************************/
+(procedure public (CaseFileTitle index)
+	// Same 17 titles already used for the "COPING MECHANISM ACQUIRED"/
+	// ending Print() messages in mechanisms.sc/rm002.sc -- duplicated
+	// here rather than shared, there's no clean way to share a string
+	// constant across scripts in this language, and each is short.
+	(switch(index)
+		(case 0 return("The Powder Keg"))
+		(case 1 return("The Performer"))
+		(case 2 return("Radically Undone"))
+		(case 3 return("Raw Nerve"))
+		(case 4 return("Coasting on Empty"))
+		(case 5 return("Fragile Equilibrium"))
+		(case 6 return("Actually Okay"))
+		(case 7 return("The Long Fuse"))
+		(case 8 return("Functional Enough"))
+		(case 9 return("Panic Attack"))
+		(case 10 return("Social Exile"))
+		(case 11 return("Total Disassociation"))
+		(case 12 return("The Approval Loop"))
+		(case 13 return("The Exit Strategy"))
+		(case 14 return("Hair-Trigger"))
+		(case 15 return("The Void"))
+		(case 16 return("Earned Security"))
+	)
+	return("")
+)
+/******************************************************************************/
+(procedure public (ShowCaseFiles)
+	// Scope-cut viewer for the persistent cross-run record (see the file
+	// header) -- reachable any time via the "Case Files" menu item
+	// (menubar.sc), including from the ending room, since nothing hides
+	// the menu bar there. A DSelector (the stock scrollable list control
+	// Save/Restore already uses) rather than a plain PrintChoices-style
+	// dialog, specifically to avoid the dialog-height problems that hit
+	// this project twice already for tall multi-item dialogs -- a fixed-
+	// size scrolling viewport doesn't have that failure mode regardless
+	// of how many entries there are.
+	//
+	// v1 is browse-only: no drill-down into a selected entry's full
+	// description. That'd mean duplicating all 17 flavor-text strings a
+	// second time (once here, once in mechanisms.sc/rm002.sc) purely for
+	// this screen, which isn't worth the extra resident heap for a
+	// browse-only reference screen -- can revisit if it's actually wanted.
+	(var hDialog, hSelector, hDText, buf[544], i, curY)
+	// 544 = CASEFILE_COUNT (17) * 32-byte stride; DSelector's `x` property
+	// is simultaneously the memory stride between entries AND the
+	// assumed max display width in characters, so it must match here.
+	(for (= i 0) (< i CASEFILE_COUNT) (++i)
+		(if(GetCaseFile(i))
+			Format((+ @buf (* i 32)) "%d. %s" (+ i 1) CaseFileTitle(i))
+		)(else
+			Format((+ @buf (* i 32)) "%d. ??? (sealed)" (+ i 1))
+		)
+	)
+
+	= hDialog (Dialog:new())
+	(send hDialog:
+		window(gTheWindow)
+		name("CaseFilesD")
+		text("Case Files")
+	)
+	= hDText (DText:new())
+	(send hDText:
+		text("Every ending and coping mechanism you've ever discovered, across every run.")
+		font(gDefaultFont)
+		moveTo(4 4)
+		setSize(290)
+	)
+	(send hDialog:add(hDText))
+	= curY (+ (send hDText:nsBottom) 6)
+
+	= hSelector (DSelector:new())
+	(send hSelector:
+		text(@buf)
+		x(32)
+		y(10)
+		font(SMALL_FONT)
+		state(2)
+		moveTo(4 curY)
+		setSize()
+	)
+	(send hDialog:add(hSelector))
+
+	(send hDialog:
+		setSize()
+		center()
+	)
+	(if(< (send hDialog:nsTop) 2)
+		// Same defensive clamp as PrintChoices -- see SESSION_HANDOFF.md.
+		(send hDialog:moveTo( (send hDialog:nsLeft) 2 ))
+	)
+	(send hDialog:open(nwTITLE -1))
+	(send hDialog:doit(NULL))
+	(send hDialog:dispose())
 )
 /******************************************************************************/

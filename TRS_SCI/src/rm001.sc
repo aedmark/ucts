@@ -59,6 +59,12 @@
 		// Set up the ego
 		SetUpEgo()
 		(send gEgo:init())
+		// This room is a pure dialog-driven stat loop, no walking-around
+		// gameplay -- same reasoning as rm002, hide ego and take back
+		// control rather than leaving it visible/movable under the
+		// PlayerControl() SetUpEgo() grants by default.
+		ProgramControl()
+		(send gEgo:hide())
 
 		(self:runShift())
 

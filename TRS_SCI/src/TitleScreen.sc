@@ -53,12 +53,6 @@
         /**************************************************
          * Add the rest of your initialization stuff here *
          **************************************************/
-		Display(
-			"Intro/Opening Screen"
-			dsCOORD 90 80
-			dsCOLOUR clWHITE
-			dsBACKGROUND clTRANSPARENT
-		)
 	)
 )
 /******************************************************************************/

@@ -557,6 +557,110 @@ than trusting it literally.
     `rm002` should keep reusing `picture 1` (current placeholder) or get
     its own distinct look — currently intentionally identical since
     neither has real art yet.
+- **User went their own route on art and has both a room pic and a title
+  image they're happy with** (didn't end up using the generated concept
+  PNG/import pipeline above — their call, noted for the record in case a
+  future session wonders why that pipeline was never exercised).
+- **Fixed: ego visibly walking around during the ending room.** Once real
+  art made room 2 an actual visible scene (rather than blank), it became
+  obvious that `rm002`'s `init()` left ego under full player control —
+  `SetUpEgo()` calls `PlayerControl()` internally, and rm002 was calling it
+  the same way rm001 does, with nothing in the room to actually walk to or
+  interact with. **Fix**: added a `ProgramControl()` call right after
+  `SetUpEgo()`/`gEgo:init()` in `rm002.sc`, before `printEnding()` runs —
+  revokes movement input and clears any in-progress motion
+  (`canControl(FALSE)`, `canInput(FALSE)`, `setMotion(NULL)`, all inside
+  the stock `ProgramControl()` procedure already used elsewhere in the
+  template), leaving ego standing still rather than wandering over the
+  ending text. **Follow-up, same room**: user sent a screenshot — frozen
+  was an improvement but still read as broken with real art in place
+  (ego just standing there, visibly not part of the scene). Added
+  `(send gEgo:hide())` right after `ProgramControl()`, same call
+  `TitleScreen.sc` already uses to keep ego off the title screen — ego is
+  now fully invisible in the ending room, not just immobile.
+  **Then**: user pointed out ego shows up in `rm001` too, for the same
+  reason — it's a pure dialog-driven stat loop, no walking-around gameplay
+  exists there either, so the same `ProgramControl()` +
+  `(send gEgo:hide())` pair was added to `rm001.sc`'s `init()` (right after
+  `SetUpEgo()`/`gEgo:init()`, before `runShift()` runs). Ego is now hidden
+  and non-interactive in both rooms. Ran the sanity check on both files —
+  clean. **Not yet compiled/playtested.**
+- **Removed stock placeholder text overlaying the title screen.** User has
+  their own title art now; `TitleScreen.sc`'s `init()` had a leftover
+  `Display("Intro/Opening Screen" dsCOORD 90 80 ...)` call from the
+  original Brian Provinciano template, drawn directly on top of whatever
+  picture the room shows — harmless before real art existed, an obvious
+  eyesore once it did. Deleted the whole `Display(...)` call. Sanity check
+  clean. **Not yet compiled/playtested.** Left similar unfinished stock
+  placeholders alone since they weren't asked about — e.g. the "How To
+  Play" menu item still shows `<Put your how to play stuff here>`
+  (`menubar.sc`).
+- **Real bug, several rounds to actually fix: adding `casefiles.sc` hit TWO
+  separate, unrelated problems stacked on top of each other.** Worth
+  reading in full since a future zone's script will likely hit at least the
+  second one again.
+  - **Problem 1 (a red herring that ate two rounds): global arrays don't
+    export from `Main.sc` via `(use "main")`.** First compile after adding
+    Case Files failed hard: `Main.sc`'s `gCaseFiles[CASEFILE_COUNT]`
+    produced `Unknown variable 'gCaseFiles'` / `type 'int' cannot be
+    assigned to type 'Unknown-type'`. Blamed the `#define` used as the
+    array size at first (reasoning from `User.sc`'s `inputStr[51]` as "the
+    only working precedent uses a literal"), changed it to a literal
+    `gCaseFiles[17]`, reported it fixed. **It wasn't** — `inputStr[51]` was
+    never actually comparable, it's a **script-local** array inside
+    `User.sc` itself, not a `Main.sc` global; there's no real precedent
+    anywhere in this codebase for a *global array* being read from another
+    script. Rewrote to 17 separate scalars, `gCF0`..`gCF16` (the exact
+    pattern already proven solid for mechanism tracking), with
+    `GetCaseFile(index)`/`SetCaseFile(index value)` switch-based accessors
+    in `casefiles.sc` giving array-like semantics over them —
+    `LoadCaseFiles`/`SaveCaseFiles`/`MarkCaseFile` kept the same signatures,
+    so `mechanisms.sc`/`rm002.sc` needed zero edits. **This half was a red
+    herring** — the errors persisted afterward too, which is what proved it
+    wasn't actually the (or at least not the only) problem.
+  - **Problem 2 (the actual blocker on this file specifically)**:
+    `casefiles.sc` was never visible in SCI Companion's own Scripts
+    panel/project index at all, despite the `.sc` file existing on disk and
+    a correct `n107=CaseFiles` entry in `game.ini` — the user caught this
+    directly ("It does not show up in our scripts list... despite being in
+    the folder"), after which repeated file-timestamp/staleness theories
+    from this side turned out to be a distraction. **Root cause**: unlike
+    every earlier new script this session, this file was never created
+    *through* SCI Companion's own **New empty script** button (confirmed
+    via the bundled Help docs, `scripts.html`, "Adding a new room and other
+    scripts" — that's the actual, only documented way to add a script; no
+    "Add Existing Item" feature was ever real, that was this session's bad
+    guess). Attempting to create script 107 via that dialog then failed
+    with "already exists" (because `game.ini` already claimed the number)
+    while still not resolving the "missing from list" problem, because the
+    number being claimed in `game.ini` isn't the same thing as the script
+    being registered in whatever internal index the Scripts panel reads.
+  - **Once registered, a second, genuinely separate issue surfaced**:
+    `Main.sc` has `(use "casefiles")` (needed for its `LoadCaseFiles()`
+    call) while `casefiles.sc` has `(use "main")` (needed for `gCF0..16`) —
+    a real circular dependency between the two, unlike this codebase's
+    *other* stable circular pairs (`main`↔`controls`, `main`↔`obj`, etc.),
+    which have compiled successfully since long before this project ever
+    touched them. This new pair had never successfully bootstrapped even
+    once, so neither side could resolve the other's brand-new symbols.
+    **Fix that actually worked**: temporarily comment out both
+    `(use "casefiles")` and the `LoadCaseFiles()` call in `Main.sc`,
+    compile `Main.sc` alone (F8) to get a valid standalone `main.sco` with
+    `gCF0..16` finally registered, then compile `casefiles.sc` alone (F8,
+    now resolves fine against that valid `main.sco`), then restore both
+    lines in `Main.sc` and run Compile All. **Confirmed working end to
+    end** by the user after this sequence.
+  - **Lessons for later, both worth remembering for the next new zone's
+    script**: (1) any brand-new script file needs to be created via SCI
+    Companion's own **New empty script** button, not just written to disk
+    with a matching `game.ini` entry — that combination has worked for
+    every prior file this session except this one, so it's not a reliable
+    rule, just a common case; when a new file doesn't show up in the
+    Scripts panel despite existing on disk, this is the real gap, not a
+    stale-cache theory. (2) If a new script and `Main.sc` need each other
+    (a new circular pair, not one of the ones already proven stable), it
+    may need a manual bootstrap: temporarily break the cycle, compile each
+    side alone once, then restore it.
 
 ## Not yet started (the actual remaining work)
 
@@ -682,10 +786,72 @@ sub-items under it are the real remaining scope, not bugs.
      double-checking now that the project's been recreated from scratch,
      since that's the one thing standing between "one chunk resident at a
      time" and "all four accumulate again."
-4. Native SCI0 save/restore for in-progress runs, and a QFG-style external
-   file (via the template's existing `fileio.sc` `File` class, which wraps
-   `FOpen`/`FGets`/`FPuts`/`FClose`) for Case-Files-style cross-run unlock
-   persistence.
+4. ~~Native SCI0 save/restore + Case-Files-style cross-run persistence~~
+   **Done**, both halves:
+   - **Native save/restore for in-progress runs turned out to need zero new
+     code.** Went looking for `Save`/`Restore` instances to wire up and
+     initially couldn't find them (a bad grep — searched for
+     `(instance.*Save\b` which doesn't match `(class Save of SRDialog
+     ...)`). They're fully present: `syswindow.sc` already defines `Save`
+     and `Restore` as **classes** (not instances) built on the stock
+     `SRDialog` — sending `doit`/etc. straight to a class this way, using
+     the class's own baked-in property defaults as a de-facto singleton, is
+     a legitimate, working SCI idiom, not a shortcut. `menubar.sc`'s
+     `MENU_SAVE`/`MENU_RESTORE` already call `(send gGame:save())`/
+     `(send gGame:restore())`, which already route through this. Since
+     `SaveGame`/`RestoreGame` are full VM-heap snapshots (per the research
+     brief), every custom global we've added this whole project — stats,
+     turn counter, mechanism counts/unlocks, now `gCaseFiles` — gets
+     captured/restored automatically, no per-feature save code needed, ever.
+     **Not yet actually tested** — this needs the user to Save mid-run,
+     Restore, and confirm the stats/turn/mechanisms come back correctly,
+     but there's no reason to expect it doesn't already work.
+   - **Case Files cross-run persistence** — new file
+     [casefiles.sc](TRS_SCI/src/casefiles.sc) (script 107). Matches the
+     original browser game's actual "Case Files" feature (README.md: "a
+     persistent, cross-run record of every ending and coping mechanism
+     you've ever actually seen"), scoped down deliberately to fit what this
+     port already has: **12 ending slots** (9 survival + 3 failure, matching
+     our one-variant-per-pool ending set — not the original's 102 across
+     8-10 variants each) **+ 5 mechanism slots** = `gCaseFiles[17]` (new
+     global array in `Main.sc` — global arrays confirmed supported via
+     `name[N]` syntax in the `(local ...)` block, real stock precedent:
+     `User.sc`'s `inputStr[51]`). Persisted to a plain-text file,
+     `TRSCASE.DAT`, one `0`/`1` per line, via `FOpen`/`FGets`/`FPuts`/
+     `FClose` — same QFG-style pattern as the research brief, bare filename
+     (no path prefix needed; matches how the stock `SRDialog` code itself
+     opens files). `LoadCaseFiles()` runs once from `Template:init()` in
+     `Main.sc` (before the title screen), `SaveCaseFiles()` fires
+     immediately inside `MarkCaseFile(index)` the moment something is *newly*
+     discovered — `MarkCaseFile` returns `TRUE` exactly then, so callers
+     (the 12 ending branches in `rm002.sc`, the 5 mechanism-unlock branches
+     in `mechanisms.sc`) can decide whether to print a "Case Files: X,
+     filed." announcement, matching the existing mechanism-unlock-message
+     precedent rather than introducing new dialog machinery.
+   - Real, discovered gotcha along the way: `sci.sh` **deliberately swaps**
+     `fOPENFAIL`/`fOPENCREATE`'s numeric values for `SCI_0` vs `SCI_1_1`
+     builds (`#ifdef SCI_0` block, comment: "have the wrong numbers... keep
+     that incorrect behavior here so as not to break old games"). Doesn't
+     affect us since we use the symbolic names (`fOPENFAIL`, `fCREATE`),
+     which the compiler resolves correctly for our SCI0 target either way —
+     but if literal `0`/`1`/`2` values ever show up hardcoded for file modes
+     anywhere, they're wrong for SCI0 and need to be the symbols instead.
+   - **Explicitly not built, by design**: any in-game Case Files *viewer* —
+     the original has a whole gallery screen (flip-to-reveal file tabs,
+     accessible from three different places). This port only has the
+     persistence + discovery-tracking layer and a one-line announcement on
+     first discovery; there's no way to browse what's been found so far.
+     Worth doing eventually, not attempted this round.
+   - Ran the structural sanity check on all touched/new files
+     (`Main.sc`, `mechanisms.sc`, `rm002.sc`, `casefiles.sc`) — clean.
+     **Confirmed compiling and working** after the real fixes described
+     just below (script registration + circular-dependency bootstrap) —
+     this was a much bumpier road to a working build than the sanity
+     checks alone suggested, see those entries for the full story.
 5. Actual art: an EGA background pic for the "terminal" room, a player
    portrait view, stat-gauge views (the template's `gauge.sc` has a working
-   percentage-meter class already, unused so far).
+   percentage-meter class already, unused so far). **Partially done** — user
+   has created their own room background and title screen art (didn't end
+   up using the generated concept image/import pipeline from earlier in
+   this doc), and `game.ini` now has a `n000=Cave` pic entry from that work.
+   Stat-gauge views and a player portrait are still unbuilt.

@@ -46,6 +46,14 @@
 (define WORKEVENTS3_SCRIPT	104)
 (define WORKEVENTS4_SCRIPT	105)
 (define MECHANISMS_SCRIPT	106)
+(define CASEFILES_SCRIPT	107)
+
+// Case Files indices (gCaseFiles[N]) -- stable, cross-run discovery flags.
+// 0-8: survival endings, same order as rm002's printSurvivalEnding checks.
+// 9-11: failure endings (repression/mask/child, in that order).
+// 12-16: coping mechanisms, TAG_FAWN..TAG_SECURE offset by CASEFILE_MECH_BASE.
+(define CASEFILE_COUNT				17)
+(define CASEFILE_MECH_BASE			12)
 
 // T.R.S. coping-mechanism tags (choice.tag from the original js/content*.js)
 (define TAG_FAWN			0)

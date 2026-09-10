@@ -21,6 +21,7 @@
 (use "feature")
 (use "obj")
 (use "disposeload")
+(use "casefiles")
 /******************************************************************************
  * These are the global variables. You can access them from any script as long
  * as it "use"es this script
@@ -71,6 +72,34 @@
 	gFreezeUnlocked = FALSE
 	gSecureCount = 0
 	gSecureUnlocked = FALSE
+
+	/* T.R.S. Case Files: cross-run "have I ever seen this" record (endings
+	   + mechanisms). Persisted to disk -- see casefiles.sc. Each defaults
+	   to 0 (never seen); LoadCaseFiles() (called once from Template:init())
+	   overwrites these from disk if a save file already exists.
+	   Individual scalars, not an array -- an earlier gCaseFiles[N] array
+	   global compiled but wasn't visible from other scripts via
+	   (use "main") the way scalar globals are (no working precedent for
+	   that anywhere in this codebase; see SESSION_HANDOFF.md). Indices
+	   0-8 survival endings, 9-11 failure endings, 12-16 mechanisms --
+	   same numbering casefiles.sc/mechanisms.sc/rm002.sc already use. */
+	gCF0 = 0
+	gCF1 = 0
+	gCF2 = 0
+	gCF3 = 0
+	gCF4 = 0
+	gCF5 = 0
+	gCF6 = 0
+	gCF7 = 0
+	gCF8 = 0
+	gCF9 = 0
+	gCF10 = 0
+	gCF11 = 0
+	gCF12 = 0
+	gCF13 = 0
+	gCF14 = 0
+	gCF15 = 0
+	gCF16 = 0
 
 	gCurrentCursor			/* the number of the current cursor */
 	gNormalCursor = 999		/* the number of the normal cursor (ie. arrow) */
@@ -134,7 +163,12 @@
          * Set your game version here *
          ******************************/
 		= gVersion "1.0"
-		    
+
+		// Cross-run Case Files record (endings/mechanisms ever seen) --
+		// load once at boot; defaults to all-zero (gCaseFiles' declared
+		// initial state) if no save file exists yet.
+		LoadCaseFiles()
+
 		// General initialization stuff
 	    = gVolume 15
 	    DoSound(sndVOLUME gVolume)

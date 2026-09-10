@@ -20,6 +20,7 @@
 /******************************************************************************/
 (use "main")
 (use "controls")
+(use "casefiles")
 /******************************************************************************/
 (procedure public (ApplyChoiceEffects repDelta maskDelta childDelta tag)
 	(switch(tag)
@@ -32,6 +33,9 @@
 				(if(>= gFawnCount UNLOCK_THRESHOLD)
 					= gFawnUnlocked TRUE
 					Print("COPING MECHANISM ACQUIRED: The Approval Loop. This will not be undone.")
+					(if(MarkCaseFile(+ CASEFILE_MECH_BASE TAG_FAWN))
+						Print("Case Files: The Approval Loop, filed." #title "New Case File")
+					)
 				)
 			)
 		)
@@ -44,6 +48,9 @@
 				(if(>= gFlightCount UNLOCK_THRESHOLD)
 					= gFlightUnlocked TRUE
 					Print("COPING MECHANISM ACQUIRED: The Exit Strategy. This will not be undone.")
+					(if(MarkCaseFile(+ CASEFILE_MECH_BASE TAG_FLIGHT))
+						Print("Case Files: The Exit Strategy, filed." #title "New Case File")
+					)
 				)
 			)
 		)
@@ -56,6 +63,9 @@
 				(if(>= gFightCount UNLOCK_THRESHOLD)
 					= gFightUnlocked TRUE
 					Print("COPING MECHANISM ACQUIRED: Hair-Trigger. This will not be undone.")
+					(if(MarkCaseFile(+ CASEFILE_MECH_BASE TAG_FIGHT))
+						Print("Case Files: Hair-Trigger, filed." #title "New Case File")
+					)
 				)
 			)
 		)
@@ -68,6 +78,9 @@
 				(if(>= gFreezeCount UNLOCK_THRESHOLD)
 					= gFreezeUnlocked TRUE
 					Print("COPING MECHANISM ACQUIRED: The Void. This will not be undone.")
+					(if(MarkCaseFile(+ CASEFILE_MECH_BASE TAG_FREEZE))
+						Print("Case Files: The Void, filed." #title "New Case File")
+					)
 				)
 			)
 		)
@@ -80,6 +93,9 @@
 				(if(>= gSecureCount UNLOCK_THRESHOLD)
 					= gSecureUnlocked TRUE
 					Print("COPING MECHANISM ACQUIRED: Earned Security. This will not be undone.")
+					(if(MarkCaseFile(+ CASEFILE_MECH_BASE TAG_SECURE))
+						Print("Case Files: Earned Security, filed." #title "New Case File")
+					)
 				)
 			)
 		)

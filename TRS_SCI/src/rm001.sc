@@ -45,9 +45,6 @@
 		west 0
 	)
 	(method (init)
-		// TEMPORARY DEBUG INSTRUMENTATION -- remove once the one-room-per-
-		// event rewrite is confirmed working (see SESSION_HANDOFF.md).
-		DebugLog("DEBUG rm001 init ENTRY: heap=%u largest=%u" MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
 		// same in every script, starts things up
   		(super:init())
   		(self:setScript(RoomScript))

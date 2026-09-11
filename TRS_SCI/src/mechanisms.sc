@@ -322,13 +322,6 @@
 	// the same increment-check-branch logic rather than duplicating it.
 	++gTurn
 	ClampStats()
-	// TEMPORARY DEBUG: one clean reading per turn at the one choke point
-	// every event room now passes through -- replaces the old per-chunk
-	// instrumentation entirely now that there's no more dispatcher/chunk
-	// Load/DisposeScript cycle to bracket. Remove once the one-room-per-
-	// event rewrite is confirmed to actually avoid the fragmentation
-	// this replaced -- see SESSION_HANDOFF.md.
-	DebugLog("DEBUG EndTurn T%d: heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
 	(if((> gTurn gMaxTurns) or (>= gRepression 100) or (<= gMask 0) or (<= gChild 0))
 		(send gRoom:newRoom(ENDING_ROOM))
 		return

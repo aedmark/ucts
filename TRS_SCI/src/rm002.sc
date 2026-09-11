@@ -52,14 +52,6 @@
 		west 0
 	)
 	(method (init)
-		// TEMPORARY DEBUG INSTRUMENTATION -- remove once the cross-run
-		// heap-loss mystery is found (see SESSION_HANDOFF.md). Brackets
-		// the rm001->rm002 room transition -- Main.sc's Template:newRoom()
-		// (called via super:init() -> Rm:init() -> ... -> newRoom()) re-
-		// Load()s fonts/cursors/PORTRAIT_VIEW on every transition without
-		// ever disposing them; if that's not a true no-op on an
-		// already-resident resource, this is where it'd show up.
-		DebugLog("DEBUG rm002 init ENTRY: heap=%u largest=%u" MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
 		(super:init())
 		(self:setScript(RoomScript))
 
@@ -84,12 +76,6 @@
 		// any room background, including the ending room.
 
 		(self:printEnding())
-		// DEBUG: brackets printEnding() (UnlockNgPlus's CaseFileAccess
-		// load, the one ending pool's Load/Print/MarkCaseFile/Dispose
-		// cycle) -- compare against ENTRY above to isolate what the
-		// ending sequence itself costs, separate from the room
-		// transition that got us here.
-		DebugLog("DEBUG rm002 init EXIT: heap=%u largest=%u" MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
 	)
 	(method (printEnding)
 		// Full ending-variant port (see SESSION_HANDOFF.md, game.sh,

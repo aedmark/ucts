@@ -60,7 +60,6 @@
 	gMaxTurns = DEFAULT_MAX_TURNS	/* T.R.S.: survive this many turns to win -- set per-run in rm001.sc's init() (DEFAULT_MAX_TURNS or HARD_MODE_TURNS depending on gHardMode) */
 	gHardMode = FALSE		/* T.R.S. Extended Therapy: TRUE for the rest of this run once chosen at rm001.sc's init() -- never persisted itself, see gNgPlusUnlocked below */
 	gNgPlusUnlocked = FALSE	/* T.R.S.: permanently TRUE once any standard-session run has ever survived. An in-memory mirror of gCF17/CASEFILE_NGPLUS (see gCF0..17 below) -- synced from it right after LoadCaseFiles() in Template:init(), and set directly by UnlockNgPlus() (casefiles.sc, alongside its own MarkCaseFile(CASEFILE_NGPLUS) call) purely so call sites can read a plain global instead of GetCaseFile(CASEFILE_NGPLUS) every time */
-	gDebugLogFile = 0		/* T.R.S. TEMPORARY DEBUG: file handle for TRSDEBUG.LOG, opened once in Template:init(), written to by DebugLog() (Controls.sc). File-based instead of FormatPrint dialogs so (a) the log can be read directly off DOSBox-X's mounted C: drive with zero manual copying, and (b) it doesn't itself perturb the exact low-heap conditions being measured the way a dialog's own transient cost can -- see SESSION_HANDOFF.md. Remove once the heap-exhaustion investigation is done. */
 
 	/* T.R.S. coping-mechanism tracking: count of same-tag choices made so
 	   far this run, and whether that mechanism has permanently unlocked
@@ -285,19 +284,6 @@
 		Load(rsSCRIPT CASEFILEACCESS_SCRIPT)
 		= gNgPlusUnlocked GetCaseFile(CASEFILE_NGPLUS)
 		DisposeScript(CASEFILEACCESS_SCRIPT)
-
-		// TEMPORARY DEBUG: open once per boot, fCREATE (wipes any log from
-		// a previous session) -- see gDebugLogFile's declaration above and
-		// DebugLog() in Controls.sc. Left open for the whole session
-		// deliberately; there's no true append mode in SCI0's FOpen (only
-		// "create, destroying content" or "open existing"), so reopening
-		// per line would mean re-truncating. A failed FOpen (== -1) just
-		// leaves gDebugLogFile at 0, and DebugLog() no-ops on that rather
-		// than crashing.
-		= gDebugLogFile FOpen("TRSDEBUG.LOG" fCREATE)
-		(if(== gDebugLogFile -1)
-			= gDebugLogFile 0
-		)
 
 		// General initialization stuff
 	    = gVolume 15

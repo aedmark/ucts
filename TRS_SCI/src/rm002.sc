@@ -59,10 +59,9 @@
 		// art -- hide ego outright instead, same call TitleScreen.sc
 		// already uses to keep ego off the title screen.
 		(send gEgo:hide())
-		// Final mood at the ending screen -- same threshold/worst-stat logic
-		// as rm001, just called once more here since stat values (and thus
-		// the computed mood) can't change further after this point.
-		DrawPortraitMood()
+		// No portrait here -- user wants it visible only during actual
+		// play (inside PrintChoices' own dialog, printchoices.sc), not on
+		// any room background, including the ending room.
 
 		(self:printEnding())
 	)

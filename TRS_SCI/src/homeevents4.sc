@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start browsing apartments you can't\nafford, in a city you don't live in."
+		= glitchText "Start browsing apartments you can't afford, in a city you don't live in."
 	)
 	= choice PrintChoices(
 		"An envelope from the landlord. The number at the bottom is $200 more than last year, effective next month."
 		"The Rent Increase"
 		290
 		glitchText
-		"Set the letter on the counter and\ndon't look at the actual number\nagain for a week." 0
-		"Draft a furious response citing\nevery unfixed thing in the\napartment." 1
-		"Sit down and actually rework the\nbudget around the new number." 2
+		"Set the letter on the counter and don't look at the actual number again for a week." 0
+		"Draft a furious response citing every unfixed thing in the apartment." 1
+		"Sit down and actually rework the budget around the new number." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You've mentally moved to a lake house. Your higher rent is still due next month.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Unplug everything in the apartment\nout of spite."
+		= glitchText "Unplug everything in the apartment out of spite."
 	)
 	= choice PrintChoices(
 		"The electric bill arrives at nearly twice last month's number, with no explanation you can find."
 		"The Utility Bill That Doubled"
 		290
 		glitchText
-		"Set up autopay so you never have to\nactually look at the number again." 0
-		"Reread every line item like it's a\npuzzle with a solution." 1
-		"Call and actually ask what changed,\ninstead of guessing." 2
+		"Set up autopay so you never have to actually look at the number again." 0
+		"Reread every line item like it's a puzzle with a solution." 1
+		"Call and actually ask what changed, instead of guessing." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You now sit in the dark, on principle, having solved nothing.")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Buy something small and unnecessary\nout of pure defiance."
+		= glitchText "Buy something small and unnecessary out of pure defiance."
 	)
 	= choice PrintChoices(
 		"Your phone buzzes. Balance below zero. You do the math and know exactly which charge did it."
 		"The Overdraft Notification"
 		290
 		glitchText
-		"Text a family member asking, in a\nroundabout way, if they're doing\nokay 'financially, generally.'" 0
-		"Don't check the account again until\nthe fee posts." 1
-		"Move what you can, call the bank,\nand actually look at the number." 2
+		"Text a family member asking, in a roundabout way, if they're doing okay 'financially, generally.'" 0
+		"Don't check the account again until the fee posts." 1
+		"Move what you can, call the bank, and actually look at the number." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The balance is more negative. You feel powerful. Briefly.")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Audit every single subscription you\nhave in the middle of the night."
+		= glitchText "Audit every single subscription you have in the middle of the night."
 	)
 	= choice PrintChoices(
 		"A charge you don't recognize turns out to be a subscription you forgot to cancel eight months ago."
 		"The Forgotten Subscription Charge"
 		290
 		glitchText
-		"Decide it's not worth the hassle of\ncalling to complain." 0
-		"Call and argue for a full refund on\nprinciple." 1
-		"Cancel it, note the loss, and set a\nreminder to check for others." 2
+		"Decide it's not worth the hassle of calling to complain." 0
+		"Call and argue for a full refund on principle." 1
+		"Cancel it, note the loss, and set a reminder to check for others." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You found six more. You are now afraid of your own bank statement. And your goldfish-like memory.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Watch seventeen YouTube tutorials on\nfixing it yourself."
+		= glitchText "Watch seventeen YouTube tutorials on fixing it yourself."
 	)
 	= choice PrintChoices(
 		"The washing machine makes a sound it shouldn't and then stops entirely. The repair quote costs almost as much as a new one."
 		"The Broken Appliance No One Can Afford to Fix"
 		290
 		glitchText
-		"Leave the wet laundry in it for two\ndays while you decide what to do." 0
-		"Tell whoever asks that it's\n'basically fine, just being weird.'" 1
-		"Get a second quote and actually\ncompare the real numbers." 2
+		"Leave the wet laundry in it for two days while you decide what to do." 0
+		"Tell whoever asks that it's 'basically fine, just being weird.'" 1
+		"Get a second quote and actually compare the real numbers." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You now understand washing machine repair on a conceptual level. The machine remains tangibly broken.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Offer to lend double what they asked\nfor, out of guilt."
+		= glitchText "Offer to lend double what they asked for, out of guilt."
 	)
 	= choice PrintChoices(
 		"A family member asks to borrow money you don't really have room to lend, in a tone that makes it hard to say no."
 		"The Family Loan Request"
 		290
 		glitchText
-		"Say yes immediately and figure out\nthe math later." 0
-		"Say no bluntly, then feel terrible\nabout how it came out." 1
-		"Say what you can actually afford,\nclearly, without over-explaining." 2
+		"Say yes immediately and figure out the math later." 0
+		"Say no bluntly, then feel terrible about how it came out." 1
+		"Say what you can actually afford, clearly, without over-explaining." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Your bank account did not consent to this decision. You may never financially recover from this.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Propose settling it with a coin\nflip."
+		= glitchText "Propose settling it with a coin flip."
 	)
 	= choice PrintChoices(
 		"Whoever you live with wants to talk about the shared expenses again. The conversation you've both been avoiding for a month."
 		"The Split Bill Argument"
 		290
 		glitchText
-		"Say you're too tired to get into it\ntonight, again." 0
-		"Bring up every uneven expense from\nthe last six months at once." 1
-		"Actually sit down, split it fairly,\nand let the conversation be boring." 2
+		"Say you're too tired to get into it tonight, again." 0
+		"Bring up every uneven expense from the last six months at once." 1
+		"Actually sit down, split it fairly, and let the conversation be boring." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Nobody agreed to this. You flipped it anyway. Somehow it worked flawlessly, anyway.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Offer the pet seventeen different\nfoods in immediate succession."
+		= glitchText "Offer the pet seventeen different foods in immediate succession."
 	)
 	= choice PrintChoices(
 		"Your dog, or cat, walks right past a full food bowl for the second day in a row, and the vet visit you can't quite afford yet keeps not happening."
 		"The Pet Skipping Meals"
 		290
 		glitchText
-		"Tell yourself it's probably nothing\nand keep watching from across the\nroom." 0
-		"Post about it online and let\nstrangers' reassurance stand in for\nan actual appointment." 1
-		"Call and ask what a visit actually\ncosts, then book it anyway." 2
+		"Tell yourself it's probably nothing and keep watching from across the room." 0
+		"Post about it online and let strangers' reassurance stand in for an actual appointment." 1
+		"Call and ask what a visit actually costs, then book it anyway." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Nothing worked. You now have six open cans and one unimpressed animal.")

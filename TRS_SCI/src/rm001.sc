@@ -127,7 +127,11 @@
 			= gMaxTurns DEFAULT_MAX_TURNS
 		)
 
-		DrawPortraitMood()
+		// No DrawPortraitMood() call here anymore -- this room never has
+		// an idle moment to actually show it (the mode-choice dialog and
+		// then runShift()'s turn loop cover this spot immediately), and
+		// PrintChoices now shows the portrait live inside its own dialog
+		// instead. See mechanisms.sc/printchoices.sc.
 
 		(self:runShift())
 

@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Send the group a full, dramatic exit\nstatement the next morning."
+		= glitchText "Send the group a full, dramatic exit statement the next morning."
 	)
 	= choice PrintChoices(
 		"You said you were tired. You weren't tired. You just needed to be somewhere with fewer people in it."
 		"The Party You Left Early"
 		290
 		glitchText
-		"Send an apologetic follow-up text\nexplaining yourself." 0
-		"Lie awake replaying whether anyone\nnoticed you'd gone." 1
-		"Let leaving early just be a thing\nyou did. No debrief required." 2
+		"Send an apologetic follow-up text explaining yourself." 0
+		"Lie awake replaying whether anyone noticed you'd gone." 1
+		"Let leaving early just be a thing you did. No debrief required." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It reads like a press release nobody asked for.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Stand up and propose your own toast,\nentirely about yourself."
+		= glitchText "Stand up and propose your own toast, entirely about yourself."
 	)
 	= choice PrintChoices(
 		"A long, warm speech naming almost everyone important in the room. Almost."
 		"The Toast You Weren't Mentioned In"
 		290
 		glitchText
-		"Smile and clap while quietly\nre-ranking your own importance." 0
-		"Compliment the speech extra hard\nafterward." 1
-		"Let one omission be one omission,\nnot a verdict." 2
+		"Smile and clap while quietly re-ranking your own importance." 0
+		"Compliment the speech extra hard afterward." 1
+		"Let one omission be one omission, not a verdict." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It runs nine minutes. The room claps out of confusion, mostly.")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Invent an equally mysterious new\nfriend of your own to mention\nconstantly."
+		= glitchText "Invent an equally mysterious new friend of your own to mention constantly."
 	)
 	= choice PrintChoices(
 		"Your friend has a new person they mention constantly now. Inside jokes you're not part of. You're happy for them. Mostly."
 		"The New Best Friend"
 		290
 		glitchText
-		"Ask enthusiastic questions about the\nnew friend, overselling interest." 0
-		"Quietly pull back from making plans,\nwithout saying why." 1
-		"Name the feeling to yourself: a\nlittle jealous, and that's okay." 2
+		"Ask enthusiastic questions about the new friend, overselling interest." 0
+		"Quietly pull back from making plans, without saying why." 1
+		"Name the feeling to yourself: a little jealous, and that's okay." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Your new friend, 'Gary,' may not exist, but this plan works better than expected.")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Actually pull out a calendar and\ndemand a date, right now."
+		= glitchText "Actually pull out a calendar and demand a date, right now."
 	)
 	= choice PrintChoices(
 		"The fourth time this month someone's said it. Nobody, including you, has ever proposed an actual date."
 		"The 'We Should Hang Out Sometime' That Never Happens"
 		290
 		glitchText
-		"Say it back warmly, knowing it means\nnothing either time." 0
-		"Actually suggest a specific day and\ntime." 1
-		"Let the phrase pass, again,\nunchallenged." 2
+		"Say it back warmly, knowing it means nothing either time." 0
+		"Actually suggest a specific day and time." 1
+		"Let the phrase pass, again, unchallenged." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("A date gets picked. Everyone is stunned, including the calendar.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Walk over and ask, directly, if it's\nabout you."
+		= glitchText "Walk over and ask, directly, if it's about you."
 	)
 	= choice PrintChoices(
 		"A burst of laughter from a group nearby. You have no evidence it's about you. You're immediately certain it is."
 		"The Loud Laugh Across The Room"
 		290
 		glitchText
-		"Replay your last ten minutes of\nbehavior for embarrassing material." 0
-		"Change your position in the room,\njust in case." 1
-		"Let the laugh be about literally\nanything else. It probably is." 2
+		"Replay your last ten minutes of behavior for embarrassing material." 0
+		"Change your position in the room, just in case." 1
+		"Let the laugh be about literally anything else. It probably is." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It was not about you. Good, because that could have been embarrassing!")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Sit on the floor with great,\ntheatrical dignity instead."
+		= glitchText "Sit on the floor with great, theatrical dignity instead."
 	)
 	= choice PrintChoices(
 		"You go to sit down. 'Oh, that one's taken,' said kindly, but you're now standing in a room full of seated people."
 		"The Seat Saved For Someone Else"
 		290
 		glitchText
-		"Laugh it off and hover near the wall\ninstead." 0
-		"Stand there a beat too long, unsure\nwhat to do with your body." 1
-		"Ask, simply, if there's another seat\nopen." 2
+		"Laugh it off and hover near the wall instead." 0
+		"Stand there a beat too long, unsure what to do with your body." 1
+		"Ask, simply, if there's another seat open." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The floor, it turns out, has an excellent view.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Comment on every photo with a\nsingle, ominous 'interesting.'"
+		= glitchText "Comment on every photo with a single, ominous 'interesting.'"
 	)
 	= choice PrintChoices(
 		"The photos are already up. It looks like it was a good one. You didn't know it was happening."
 		"The Group Trip You Weren't Invited To"
 		290
 		glitchText
-		"Scroll through every photo,\ncataloging who's in how many." 0
-		"Like every photo enthusiastically,\nextra hearts included." 1
-		"Close the app. Ask yourself later,\ncalmly, if it's worth mentioning." 2
+		"Scroll through every photo, cataloging who's in how many." 0
+		"Like every photo enthusiastically, extra hearts included." 1
+		"Close the app. Ask yourself later, calmly, if it's worth mentioning." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Nobody knows what you meant. You are not entirely sure either. Regardless, it IS interesting.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply via a voicemail of your own,\nwithout listening to theirs first."
+		= glitchText "Reply via a voicemail of your own, without listening to theirs first."
 	)
 	= choice PrintChoices(
 		"A friend called instead of texting, which never happens. The voicemail icon has been sitting there for two hours."
 		"The Voicemail You Haven't Listened To"
 		290
 		glitchText
-		"Let it sit. Voicemails are for\npeople who don't need you to reply\nfast." 0
-		"Call back immediately, bracing\nyourself for bad news that might not\nbe there." 1
-		"Listen to it first. Then respond to\nwhat's actually there." 2
+		"Let it sit. Voicemails are for people who don't need you to reply fast." 0
+		"Call back immediately, bracing yourself for bad news that might not be there." 1
+		"Listen to it first. Then respond to what's actually there." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Two unheard voicemails now orbit each other, unopened, forever.")

@@ -31,9 +31,9 @@
 		"The Wake-Up Call"
 		290
 		glitchText
-		"Get up and scroll your phone until\nthe sky turns on again" 0
-		"Lie perfectly still and pretend this\nisn't happening." 1
-		"Get up, write down the one thing\nactually bothering you, and go back\nto bed." 2
+		"Get up and scroll your phone until the sky turns on again" 0
+		"Lie perfectly still and pretend this isn't happening." 1
+		"Get up, write down the one thing actually bothering you, and go back to bed." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Your shirts are now sorted by emotional association. Impressive. And unhelpful.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Buy a $40 mouthguard you will wear\nexactly once."
+		= glitchText "Buy a $40 mouthguard you will wear exactly once."
 	)
 	= choice PrintChoices(
 		"You catch yourself clenching your jaw so hard your teeth ache. You have no memory of starting."
 		"The Locked Jaw"
 		290
 		glitchText
-		"Force a smile until the muscles\nrelax on their own." 0
-		"Snap at the next person who asks you\na simple question." 1
-		"Actually stretch it out and breathe\nfor ten seconds." 2
+		"Force a smile until the muscles relax on their own." 0
+		"Snap at the next person who asks you a simple question." 1
+		"Actually stretch it out and breathe for ten seconds." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It's in a drawer now. You develop TNJ.")
@@ -94,15 +94,15 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Genuinely consider whether you're\nbeing paged by the universe."
+		= glitchText "Genuinely consider whether you're being paged by the universe."
 	)
 	= choice PrintChoices(
 		"You feel your phone buzz in your pocket. It's not there. You're not wearing anything with pockets."
 		"The Phantom Vibration"
 		290
 		glitchText
-		"Check anyway and feign shock when\nyou can't find your phone." 0
-		"Laugh it off and immediately forget\nit happened." 1
+		"Check anyway and feign shock when you can't find your phone." 0
+		"Laugh it off and immediately forget it happened." 1
 		"Notice it, name it, and let it pass." 2
 	)
 	(if(== choice GLITCH_CHOICE)
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Eat a mystery item from the back of\nthe freezer instead."
+		= glitchText "Eat a mystery item from the back of the freezer instead."
 	)
 	= choice PrintChoices(
 		"It's been hours since your lunch break. You still have not eaten. You only just now noticed the shaking."
 		"The Skipped Lunch"
 		290
 		glitchText
-		"Push through, you'll eat when this\nis 'actually done.'" 0
-		"Eat standing up over the sink in\nunder ninety seconds." 1
-		"Sit down and finally enjoy your\nmeal." 2
+		"Push through, you'll eat when this is 'actually done.'" 0
+		"Eat standing up over the sink in under ninety seconds." 1
+		"Sit down and finally enjoy your meal." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Unidentifiable but savory, slightly freezer-burned, and somehow the best part of your day.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Diagnose yourself with seven\nunrelated conditions via search\nengine."
+		= glitchText "Diagnose yourself with seven unrelated conditions via search engine."
 	)
 	= choice PrintChoices(
 		"A headache has been building behind your left eye since you woke up."
 		"The Tension Headache"
 		290
 		glitchText
-		"Apologize to it and keep working\nthrough the pain." 0
-		"Snap the laptop shut and lie in a\ndark room out of spite." 1
-		"Drink water, step outside, take a\nbreak." 2
+		"Apologize to it and keep working through the pain." 0
+		"Snap the laptop shut and lie in a dark room out of spite." 1
+		"Drink water, step outside, take a break." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("According to the internet, it's either dehydration or something terminal. No in-between.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Book a massage you will cancel twice\nand never reschedule."
+		= glitchText "Book a massage you will cancel twice and never reschedule."
 	)
 	= choice PrintChoices(
 		"Someone points out that you look really tense. You notice your shoulders are up to your ears."
 		"The Shoulders"
 		290
 		glitchText
-		"Laugh it off, drop them for exactly\nfour seconds." 0
-		"Get defensive about your own\nposture." 1
-		"Actually roll them out and admit\nyou're tensed up for no reason." 2
+		"Laugh it off, drop them for exactly four seconds." 0
+		"Get defensive about your own posture." 1
+		"Actually roll them out and admit you're tensed up for no reason." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It's the thought that counts. Your shoulders disagree.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Have a coworker read it out loud to\nyou instead."
+		= glitchText "Have a coworker read it out loud to you instead."
 	)
 	= choice PrintChoices(
 		"An email notification appears. Your stomach drops before your eyes even finish reading the subject line."
 		"The Stomach Drop"
 		290
 		glitchText
-		"Open it immediately, brace for\nimpact." 0
-		"Let it sit unread while your stomach\nkeeps dropping anyway." 1
-		"Take one breath, then open it at\nyour own pace." 2
+		"Open it immediately, brace for impact." 0
+		"Let it sit unread while your stomach keeps dropping anyway." 1
+		"Take one breath, then open it at your own pace." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Outsourcing Dread: an underrated coping strategy.")
@@ -269,7 +269,7 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Google your symptoms while your\nchest gets tighter reading the\nresults."
+		= glitchText "Google your symptoms while your chest gets tighter reading the results."
 	)
 	= choice PrintChoices(
 		"Your chest has felt tight since the second cup of coffee. It's been four hours."
@@ -277,8 +277,8 @@
 		290
 		glitchText
 		"Have a third cup, see what happens." 0
-		"Ignore it, it'll pass, it always\npasses." 1
-		"Switch to water and sit somewhere\nquiet for a minute." 2
+		"Ignore it, it'll pass, it always passes." 1
+		"Switch to water and sit somewhere quiet for a minute." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Peak efficiency: causing the exact symptom you were worried about.")

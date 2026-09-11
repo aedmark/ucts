@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Buy the extremely bitter anti-biting\nnail polish."
+		= glitchText "Buy the extremely bitter anti-biting nail polish."
 	)
 	= choice PrintChoices(
 		"You look down mid-meeting and realize you've bitten a nail down past comfortable. You don't remember starting."
 		"The Bitten Nails"
 		290
 		glitchText
-		"Hide your hands and keep going like\nnothing happened." 0
-		"Sit on your hands for the rest of\nthe meeting." 1
-		"Notice it, put your hands flat on\nthe table, and let it be a fact." 2
+		"Hide your hands and keep going like nothing happened." 0
+		"Sit on your hands for the rest of the meeting." 1
+		"Notice it, put your hands flat on the table, and let it be a fact." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You now know exactly how bitter it is. Repeatedly.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Turn the bouncing into a full drum\nsolo on the desk."
+		= glitchText "Turn the bouncing into a full drum solo on the desk."
 	)
 	= choice PrintChoices(
 		"Your leg has been bouncing under the desk for forty-five minutes. You only notice when someone asks if you're okay."
 		"The Restless Leg"
 		290
 		glitchText
-		"Say you're fine, laugh, keep\nbouncing." 0
+		"Say you're fine, laugh, keep bouncing." 0
 		"Get up and pace the hallway instead." 1
-		"Name it: 'I think I'm anxious about\nsomething.'" 2
+		"Name it: 'I think I'm anxious about something.'" 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Everyone in the room now knows exactly how you feel. Loudly.")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Self-medicate with four different\nremedies simultaneously."
+		= glitchText "Self-medicate with four different remedies simultaneously."
 	)
 	= choice PrintChoices(
 		"You've had the same low-grade cold for three weeks. It appeared right after things got hard and hasn't left since."
 		"The Cold That Won't Quit"
 		290
 		glitchText
-		"Power through, colds are for people\nwith time off." 0
-		"Blame the office AC loudly to anyone\nwho'll listen." 1
-		"Actually take the day, and actually\nrest on it." 2
+		"Power through, colds are for people with time off." 0
+		"Blame the office AC loudly to anyone who'll listen." 1
+		"Actually take the day, and actually rest on it." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You are now buzzing gently and no less congested. A wash.")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Convince yourself you're still\ndreaming for a solid ninety seconds."
+		= glitchText "Convince yourself you're still dreaming for a solid ninety seconds."
 	)
 	= choice PrintChoices(
 		"You wake up two hours late. Your alarm went off. You have no memory of turning it off."
 		"The Alarm You Don't Remember Silencing"
 		290
 		glitchText
-		"Rush out the door pretending this is\nfine and normal." 0
-		"Lie there a while longer, the day's\nalready ruined anyway." 1
-		"Get up slowly, text that you're\nlate, actually wake up first." 2
+		"Rush out the door pretending this is fine and normal." 0
+		"Lie there a while longer, the day's already ruined anyway." 1
+		"Get up slowly, text that you're late, actually wake up first." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You were not dreaming. You were extremely, demonstrably late.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Attempt to crack a joint that does\nnot, physiologically, crack."
+		= glitchText "Attempt to crack a joint that does not, physiologically, crack."
 	)
 	= choice PrintChoices(
 		"You've cracked your knuckles, neck, and back four times each in the last hour. It's becoming a whole thing."
 		"The Cracking Joints"
 		290
 		glitchText
-		"Keep doing it, quieter, so no one\nnotices." 0
-		"Crack something loudly on purpose,\nright at someone." 1
-		"Get up and actually move for a\nminute instead." 2
+		"Keep doing it, quieter, so no one notices." 0
+		"Crack something loudly on purpose, right at someone." 1
+		"Get up and actually move for a minute instead." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It did not crack. You will try again in eleven minutes.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Buy one of every single kind out of\nsheer decision fatigue."
+		= glitchText "Buy one of every single kind out of sheer decision fatigue."
 	)
 	= choice PrintChoices(
 		"You are standing in front of forty kinds of the same cereal and you cannot make your body pick one."
 		"The Overwhelm in the Cereal Aisle"
 		290
 		glitchText
-		"Grab the one closest to your hand\nand leave fast." 0
-		"Stand there until someone else's\ncart forces you to move." 1
-		"Breathe, pick the familiar one on\npurpose, keep walking." 2
+		"Grab the one closest to your hand and leave fast." 0
+		"Stand there until someone else's cart forces you to move." 1
+		"Breathe, pick the familiar one on purpose, keep walking." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You now own more cereal than a household requires. Problem technically solved.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Construct an elaborate, confident\nlie about how you got it."
+		= glitchText "Construct an elaborate, confident lie about how you got it."
 	)
 	= choice PrintChoices(
 		"You notice a bruise on your arm. You have absolutely no memory of how it got there."
 		"The Bruise You Don't Remember"
 		290
 		glitchText
-		"Cover it and move on, it's fine,\nyou're fine." 0
-		"Poke it a few times, oddly detached\nfrom the pain." 1
-		"Actually stop and wonder what's been\ngoing on with you lately." 2
+		"Cover it and move on, it's fine, you're fine." 0
+		"Poke it a few times, oddly detached from the pain." 1
+		"Actually stop and wonder what's been going on with you lately." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Nobody asked. You told them anyway. The story was *very* good.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Strike up a loud, urgent\nconversation about the weather."
+		= glitchText "Strike up a loud, urgent conversation about the weather."
 	)
 	= choice PrintChoices(
 		"The elevator doors close and your heart rate spikes for no reason you can name."
 		"The Racing Heart in the Elevator"
 		290
 		glitchText
-		"Smile at the stranger next to you\nlike everything's normal." 0
-		"Get out at the wrong floor just to\nescape the box." 1
-		"Count your breaths until the doors\nopen again." 2
+		"Smile at the stranger next to you like everything's normal." 0
+		"Get out at the wrong floor just to escape the box." 1
+		"Count your breaths until the doors open again." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Nobody wanted this conversation. It happened anyway. Heart rate: unchanged.")

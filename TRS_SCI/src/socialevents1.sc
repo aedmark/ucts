@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Ask them, with complete sincerity,\nfor their thoughts on oat milk."
+		= glitchText "Ask them, with complete sincerity, for their thoughts on oat milk."
 	)
 	= choice PrintChoices(
 		"Someone is standing exactly in front of the specific brand of oat milk you need. They are taking a very long time."
 		"The Grocery Store Aisle"
 		290
 		glitchText
-		"Pretend to look at regular milk\nuntil they leave." 0
-		"Say 'Excuse me' using a voice three\noctaves higher than normal." 1
-		"Abandon the oat milk. You didn't\ndeserve it anyway." 2
+		"Pretend to look at regular milk until they leave." 0
+		"Say 'Excuse me' using a voice three octaves higher than normal." 1
+		"Abandon the oat milk. You didn't deserve it anyway." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You now know more about oat milk than many food scientists. And have a new tennis partner.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply with a single, deeply dramatic\ntear emoji."
+		= glitchText "Reply with a single, deeply dramatic tear emoji."
 	)
 	= choice PrintChoices(
 		"A friend replied 'K.' to a vulnerable paragraph you sent them."
 		"The Unread Notification"
 		290
 		glitchText
-		"Start searching for a completely new\nfriend group." 0
-		"Send 4 memes immediately to lighten\nthe mood." 1
-		"Throw your phone into a soft pile of\nlaundry." 2
+		"Start searching for a completely new friend group." 0
+		"Send 4 memes immediately to lighten the mood." 1
+		"Throw your phone into a soft pile of laundry." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("They have not responded. The emoji stands alone, weeping into the void.")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply with forty exclamation points,\nunprompted, for no reason at all."
+		= glitchText "Reply with forty exclamation points, unprompted, for no reason at all."
 	)
 	= choice PrintChoices(
 		"Your friend's reply is just 'oh nice' where it used to be three exclamation points."
 		"The Uneven Text Energy"
 		290
 		glitchText
-		"Reread every message you've sent\nthem for the last month." 0
-		"Match their energy exactly, one for\none." 1
-		"Text them something low-stakes and\nlet it go." 2
+		"Reread every message you've sent them for the last month." 0
+		"Match their energy exactly, one for one." 1
+		"Text them something low-stakes and let it go." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You have single-handedly restored the energy. Possibly too much of it.")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Comment demanding a formal recount\nof the likes."
+		= glitchText "Comment demanding a formal recount of the likes."
 	)
 	= choice PrintChoices(
 		"You've been tagged. The angle is unkind. Twelve people have already liked it."
 		"The Group Photo"
 		290
 		glitchText
-		"Untag yourself and message the\nposter to take it down." 0
-		"Leave it up and never look at that\npost again." 1
-		"Zoom in and catalog every flaw for\nlater." 2
+		"Untag yourself and message the poster to take it down." 0
+		"Leave it up and never look at that post again." 1
+		"Zoom in and catalog every flaw for later." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The recount is denied. Someone photoshops a powdered wig on your head in said photo. Democracy has failed you again.")
@@ -164,15 +164,15 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start humming the elevator music,\nbadly, out loud."
+		= glitchText "Start humming the elevator music, badly, out loud."
 	)
 	= choice PrintChoices(
 		"Stuck in an elevator with a coworker for four floors. Neither of you has said anything for eleven seconds."
 		"The Small Talk Void"
 		290
 		glitchText
-		"Comment on the elevator's slowness\nlike it's breaking news." 0
-		"Stare at the floor numbers with\nreligious intensity." 1
+		"Comment on the elevator's slowness like it's breaking news." 0
+		"Stare at the floor numbers with religious intensity." 1
 		"Let the silence be silence." 2
 	)
 	(if(== choice GLITCH_CHOICE)
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Claim, boldly, that you were\nactually a time traveler that day."
+		= glitchText "Claim, boldly, that you were actually a time traveler that day."
 	)
 	= choice PrintChoices(
 		"Someone brings up a specific thing you said, off-hand, eight months ago. You have no memory of saying it."
 		"The Friend Who Remembers Everything"
 		290
 		glitchText
-		"Panic-scan your own memory for\ncontext you don't have." 0
-		"Agree enthusiastically, like you\nabsolutely remember." 1
-		"Say 'I don't actually remember that,\ntell me more,' and mean it." 2
+		"Panic-scan your own memory for context you don't have." 0
+		"Agree enthusiastically, like you absolutely remember." 1
+		"Say 'I don't actually remember that, tell me more,' and mean it." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("They seem to accept this explanation more readily than expected. Someone asks if you've ever met Elvis.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Show up in full costume, several\ngenres removed from the event's\ntheme."
+		= glitchText "Show up in full costume, several genres removed from the event's theme."
 	)
 	= choice PrintChoices(
 		"You said yes to something two weeks ago. It's tonight. Every fiber of you wants to cancel."
 		"The RSVP You Regret"
 		290
 		glitchText
-		"Draft a vague excuse about not\nfeeling well." 0
-		"Text 'actually can't make it' with\nzero elaboration and hit send." 1
-		"Go anyway. Perform enthusiasm you do\nnot currently possess." 2
+		"Draft a vague excuse about not feeling well." 0
+		"Text 'actually can't make it' with zero elaboration and hit send." 1
+		"Go anyway. Perform enthusiasm you do not currently possess." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You are the only knight at what turns out to be a beach party.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Order enough food for four and\nnarrate an imaginary dinner party."
+		= glitchText "Order enough food for four and narrate an imaginary dinner party."
 	)
 	= choice PrintChoices(
 		"You get to the restaurant first. You sit alone at a table for four, aware of exactly how alone you look."
 		"The Table for One"
 		290
 		glitchText
-		"Stare at your phone intensely so you\nlook busy, not waiting." 0
-		"Apologize to the host for taking up\na table for four." 1
-		"Sit there. Look around. Let it be\nfine." 2
+		"Stare at your phone intensely so you look busy, not waiting." 0
+		"Apologize to the host for taking up a table for four." 1
+		"Sit there. Look around. Let it be fine." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Your imaginary guests are excellent listeners and terrible tippers.")
@@ -304,16 +304,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Stand up anyway and deliver your own\nspeech, uninvited, mid-reception."
+		= glitchText "Stand up anyway and deliver your own speech, uninvited, mid-reception."
 	)
 	= choice PrintChoices(
 		"You've known the groom for a decade. Someone he met two years ago is giving the speech instead."
 		"The Best Man Speech You Weren't Asked to Give"
 		290
 		glitchText
-		"Smile through the whole thing while\ndoing quiet, silent math." 0
-		"Decide to bring it up with him,\ngently, another day." 1
-		"Clap the loudest and mean absolutely\nnone of it." 2
+		"Smile through the whole thing while doing quiet, silent math." 0
+		"Decide to bring it up with him, gently, another day." 1
+		"Clap the loudest and mean absolutely none of it." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The DJ, unsure what else to do, plays dramatic entrance music.")

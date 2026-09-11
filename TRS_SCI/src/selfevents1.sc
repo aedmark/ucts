@@ -24,7 +24,7 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Track down the exact cleaning\nproduct, immediately, mid-errand."
+		= glitchText "Track down the exact cleaning product, immediately, mid-errand."
 	)
 	= choice PrintChoices(
 		"You catch a whiff of a specific cleaning product that smells exactly like your childhood home."
@@ -33,7 +33,7 @@
 		glitchText
 		"Hold your breath until you pass out." 0
 		"Cry silently in a bathroom stall." 1
-		"Make a dark, self-deprecating joke\nto a coworker." 2
+		"Make a dark, self-deprecating joke to a coworker." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You now own four bottles of it. This is a lot of bottles.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Introduce yourself to the reflection\nlike you've never met."
+		= glitchText "Introduce yourself to the reflection like you've never met."
 	)
 	= choice PrintChoices(
 		"You catch your reflection in a dark window and don't recognize yourself for a full second."
 		"The Mirror"
 		290
 		glitchText
-		"Immediately look away and think\nabout anything else." 0
-		"Stare longer, looking for evidence\nof who you used to be." 1
-		"Say something kind to it, out loud,\neven though it's weird." 2
+		"Immediately look away and think about anything else." 0
+		"Stare longer, looking for evidence of who you used to be." 1
+		"Say something kind to it, out loud, even though it's weird." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("'Hi, I'm you.' The reflection does not seem convinced either.")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Write a formal reply to\nnineteen-year-old you, dated\nproperly."
+		= glitchText "Write a formal reply to nineteen-year-old you, dated properly."
 	)
 	= choice PrintChoices(
 		"You find something you wrote at nineteen. It is more honest than anything you've said out loud this year."
 		"The Old Journal Entry"
 		290
 		glitchText
-		"Close it immediately and never\nmention this happened." 0
-		"Feel a specific, targeted contempt\nfor who you used to be." 1
-		"Let it be true. You used to know\nsomething you forgot." 2
+		"Close it immediately and never mention this happened." 0
+		"Feel a specific, targeted contempt for who you used to be." 1
+		"Let it be true. You used to know something you forgot." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You have now started a pen-pal relationship with your past self. Neat!")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Get up and reorganize the spice\nrack, aggressively, at 3 AM."
+		= glitchText "Get up and reorganize the spice rack, aggressively, at 3 AM."
 	)
 	= choice PrintChoices(
 		"No reason. No noise. Just awake, and your brain has already opened seventeen tabs of decade-old conversations."
 		"The 3 AM Wake-Up"
 		290
 		glitchText
-		"Start drafting an apology text\nyou'll delete by morning." 0
-		"Get up and reorganize something\nsmall and physical." 1
-		"Name it: this is just cortisol, not\nprophecy." 2
+		"Start drafting an apology text you'll delete by morning." 0
+		"Get up and reorganize something small and physical." 1
+		"Name it: this is just cortisol, not prophecy." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The spices are now alphabetized. You are not more at peace, but the spices are.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Declare it a national holiday, just\nfor yourself, effective immediately."
+		= glitchText "Declare it a national holiday, just for yourself, effective immediately."
 	)
 	= choice PrintChoices(
 		"Nothing is scheduled. Nobody needs anything from you. This is, somehow, the hardest part of the week."
 		"The Empty Sunday"
 		290
 		glitchText
-		"Invent an urgent task to feel useful\nagain." 0
-		"Scroll until the day disappears\nwithout you in it." 1
-		"Sit with the unscheduled hour and\nlet it be boring." 2
+		"Invent an urgent task to feel useful again." 0
+		"Scroll until the day disappears without you in it." 1
+		"Sit with the unscheduled hour and let it be boring." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Attendance is mandatory. You are the only attendee.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Finish it in one unhinged,\ncaffeinated burst, right now."
+		= glitchText "Finish it in one unhinged, caffeinated burst, right now."
 	)
 	= choice PrintChoices(
 		"A project, a hobby, a draft you were once genuinely excited about sits untouched in a folder you avoid opening."
 		"The Unfinished Thing"
 		290
 		glitchText
-		"Open the folder, look at it, close\nit again without touching anything." 0
-		"Start something new and shinier\ninstead." 1
-		"Open it. Change one small thing.\nClose it again." 2
+		"Open the folder, look at it, close it again without touching anything." 0
+		"Start something new and shinier instead." 1
+		"Open it. Change one small thing. Close it again." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It is done. It is also, somehow, about cats now.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Say it out loud again, three more\ntimes, increasingly loudly."
+		= glitchText "Say it out loud again, three more times, increasingly loudly."
 	)
 	= choice PrintChoices(
 		"You catch yourself thinking something kind about your own work, unprompted, and immediately feel weird about it."
 		"The Accidental Self-Compliment"
 		290
 		glitchText
-		"Correct yourself internally: find\nthe flaw, restore the natural order." 0
-		"Change the subject in your own head\nimmediately." 1
-		"Let the thought stand. Don't correct\nit. Just let it be true for a\nsecond." 2
+		"Correct yourself internally: find the flaw, restore the natural order." 0
+		"Change the subject in your own head immediately." 1
+		"Let the thought stand. Don't correct it. Just let it be true for a second." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The dog looks concerned. The compliment stands.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Play it on full volume and have a\nsmall, unscheduled concert."
+		= glitchText "Play it on full volume and have a small, unscheduled concert."
 	)
 	= choice PrintChoices(
 		"Three seconds of a song you haven't heard in years, and your chest does something you didn't authorize."
 		"The Song That Still Does This To You"
 		290
 		glitchText
-		"Skip it immediately and pretend you\ndidn't feel that." 0
-		"Get irritated that a song still has\nthis much power over you." 1
-		"Let it play. Feel whatever it wants\nyou to feel." 2
+		"Skip it immediately and pretend you didn't feel that." 0
+		"Get irritated that a song still has this much power over you." 1
+		"Let it play. Feel whatever it wants you to feel." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The neighbors have opinions. You have zero regrets.")
@@ -304,16 +304,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Interview the photo directly, out\nloud, like a documentary subject."
+		= glitchText "Interview the photo directly, out loud, like a documentary subject."
 	)
 	= choice PrintChoices(
 		"You're smiling in it. You don't remember if you were actually happy or just good at looking like it, even then."
 		"The Childhood Photo You Can't Place A Feeling On"
 		290
 		glitchText
-		"Stare at it longer, trying to force\na memory that isn't there." 0
-		"Decide it must have been a happy\nday. Move on quickly." 1
-		"Let 'I don't know how I felt' be a\ncomplete, acceptable answer." 2
+		"Stare at it longer, trying to force a memory that isn't there." 0
+		"Decide it must have been a happy day. Move on quickly." 1
+		"Let 'I don't know how I felt' be a complete, acceptable answer." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The photo declines to comment... Which is ironic, since they're worth a thousand words each, minimum.")

@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Get out of the car and offer to play\nrock paper scissors."
+		= glitchText "Get out of the car and offer to play rock paper scissors."
 	)
 	= choice PrintChoices(
 		"You both saw the spot at the same time. Neither of you has backed down, and there is now a small line of cars forming behind you both."
 		"The Parking Lot Standoff"
 		290
 		glitchText
-		"Wave them through with a big smile\neven though you got there first." 0
-		"Rev the engine and hold your ground\nuntil they give up." 1
-		"Point them to the spot you can see\nopen two rows down instead." 2
+		"Wave them through with a big smile even though you got there first." 0
+		"Rev the engine and hold your ground until they give up." 1
+		"Point them to the spot you can see open two rows down instead." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You always play rock first. This time, you didn't. And you lost.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Model the outfit for the entire\nwaiting area whether they asked or\nnot."
+		= glitchText "Model the outfit for the entire waiting area whether they asked or not."
 	)
 	= choice PrintChoices(
 		"Three angles of unflattering light and a mirror that doesn't care about your feelings. Someone outside asks how it's going in there."
 		"The Fitting Room Mirror"
 		290
 		glitchText
-		"Call out 'great, thanks!' before\nyou've even looked down." 0
-		"Stand very still and stare until the\nmoment passes on its own." 1
-		"Say 'still deciding' and actually\ntake a second to decide." 2
+		"Call out 'great, thanks!' before you've even looked down." 0
+		"Stand very still and stare until the moment passes on its own." 1
+		"Say 'still deciding' and actually take a second to decide." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You received two genuine compliments and one very confused nod. Worth it.")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start a betting pool on how long the\nline will actually take."
+		= glitchText "Start a betting pool on how long the line will actually take."
 	)
 	= choice PrintChoices(
 		"There's one working stall, a line of eight, and someone near the front who is very audibly running out of patience with the wait."
 		"The Restroom Line"
 		290
 		glitchText
-		"Let three people cut ahead of you so\nno one thinks you mind." 0
-		"Loudly point out that this line has\nnot moved once in ten minutes." 1
-		"Hold your spot, wait it out, and\nmake small talk with the person next\nto you." 2
+		"Let three people cut ahead of you so no one thinks you mind." 0
+		"Loudly point out that this line has not moved once in ten minutes." 1
+		"Hold your spot, wait it out, and make small talk with the person next to you." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You won four dollars. The line still has not moved. Worth it.")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Introduce yourself as if this were\nthe first time you've ever met."
+		= glitchText "Introduce yourself as if this were the first time you've ever met."
 	)
 	= choice PrintChoices(
 		"Someone waves at you like they know you well. You have absolutely no idea who this is, and they are now three feet away and closing."
 		"The Face You Can't Place"
 		290
 		glitchText
-		"Fake total recognition and hope\ncontext clues fill in the blanks." 0
-		"Suddenly find your phone extremely\nurgent and duck the interaction." 1
-		"Admit you're blanking and ask them\nto remind you how you know each\nother." 2
+		"Fake total recognition and hope context clues fill in the blanks." 0
+		"Suddenly find your phone extremely urgent and duck the interaction." 1
+		"Admit you're blanking and ask them to remind you how you know each other." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It was, in fact, the first time. You had actually never met this person.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Ask if you can hand out flyers too.\nYou don't know what they're for."
+		= glitchText "Ask if you can hand out flyers too. You don't know what they're for."
 	)
 	= choice PrintChoices(
 		"A stranger presses a flyer into your hand on the sidewalk and watches, expectantly, to see what you'll do with it."
 		"The Flyer Someone Hands You"
 		290
 		glitchText
-		"Take it, thank them warmly, and hold\nonto it for three more blocks before\ntossing it." 0
-		"Speed up before they can even fully\nextend their arm." 1
-		"Say 'no thanks' and keep walking at\nyour normal pace." 2
+		"Take it, thank them warmly, and hold onto it for three more blocks before tossing it." 0
+		"Speed up before they can even fully extend their arm." 1
+		"Say 'no thanks' and keep walking at your normal pace." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You now work here, apparently, for the next twenty minutes and zero dollars.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start narrating the argument quietly\nto yourself like a nature\ndocumentary."
+		= glitchText "Start narrating the argument quietly to yourself like a nature documentary."
 	)
 	= choice PrintChoices(
 		"Two strangers are having a very loud, very personal fight three feet from where you're standing, and there's nowhere to look that isn't at them."
 		"The Argument You Overheard"
 		290
 		glitchText
-		"Step in and try to smooth things\nover between two people you've never\nmet." 0
-		"Stand frozen, unsure whether moving\nwill make it worse." 1
-		"Quietly step away and let it be\ntheir business, not yours." 2
+		"Step in and try to smooth things over between two people you've never met." 0
+		"Stand frozen, unsure whether moving will make it worse." 1
+		"Quietly step away and let it be their business, not yours." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("One of them heard you. You have made an enemy and, somehow, also a fan.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Walk them there yourself, twelve\nfull blocks out of your way."
+		= glitchText "Walk them there yourself, twelve full blocks out of your way."
 	)
 	= choice PrintChoices(
 		"Someone stops you on the street, clearly lost, and you're maybe seventy percent sure you know the way they need to go."
 		"The Stranger Asking For Directions"
 		290
 		glitchText
-		"Give confident, detailed directions\ndespite the seventy percent\nconfidence." 0
-		"Say you're not sure and hurry off\nbefore they can ask a follow-up." 1
-		"Say what you actually know and what\nyou don't, and point them toward\nsomeone who might know more." 2
+		"Give confident, detailed directions despite the seventy percent confidence." 0
+		"Say you're not sure and hurry off before they can ask a follow-up." 1
+		"Say what you actually know and what you don't, and point them toward someone who might know more." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You are now further from your destination than they were from theirs. You made a friend, sort of.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Ask if they want to just come get\nlunch with you instead."
+		= glitchText "Ask if they want to just come get lunch with you instead."
 	)
 	= choice PrintChoices(
 		"Someone asks if you have any spare change, right as you're fumbling for your keys and trying not to make eye contact."
 		"The Person Asking For Change"
 		290
 		glitchText
-		"Hand over more than you meant to and\napologize for not having more than\nthat." 0
-		"Say 'sorry, not today' and keep\nwalking without slowing down." 1
-		"Say no if you mean no, or give what\nyou can if you mean yes, and mean it\neither way." 2
+		"Hand over more than you meant to and apologize for not having more than that." 0
+		"Say 'sorry, not today' and keep walking without slowing down." 1
+		"Say no if you mean no, or give what you can if you mean yes, and mean it either way." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You had lunch with a total stranger and heard a genuinely wild story. You paid. Worth it.")

@@ -1489,7 +1489,232 @@ sub-items under it are the real remaining scope, not bugs.
         real progress to lose) — this is only ever reachable from the
         already-ended state, nothing to accidentally lose.
       - Ran the structural sanity check on every touched file (`game.sh`,
-        `Main.sc`, `rm001.sc`, `rm002.sc`) — clean. **Not yet
-        compiled/playtested** — needs the usual VM pass, plus the
-        computer's rectangle specifically needs the same "click it and
-        see" confirmation the cabinet already got.
+        `Main.sc`, `rm001.sc`, `rm002.sc`) — clean. **Confirmed working by
+        the user** — clicking the computer correctly starts a fresh run.
+        Item 10 (clickable office objects) is fully done: both hotspots
+        confirmed working.
+11. **Portrait shown inside the event dialog itself, not just the room
+    background — done, not yet compiled/playtested.** User's own
+    observation: the background-corner portrait (item 8) is barely ever
+    actually visible during real play, since a `PrintChoices` dialog
+    covers that exact spot on almost every turn. Wrote a whole tutorial
+    on control-screen hotspots (see `docs/sci0-control-screen-hotspots.md`)
+    right before this came up — unrelated feature, same session.
+    - **Real, proven precedent found and reused, not invented**: the stock
+      `Print()` kernel wrapper (`Controls.sc`) already supports an
+      `#icon` option that does exactly this — embeds a `DIcon` (a real
+      dialog child control wrapping a view/loop/cel, sized via
+      `CelWide`/`CelHigh`) at the dialog's top-left, then positions the
+      message `DText` to its right instead of at the dialog's left edge.
+      This project's own inventory `Iitem:showSelf` (`Main.sc`) already
+      uses this via `Print(description #title objectName #icon view loop
+      cel)`. `PrintChoices` is a hand-built custom dialog, not a call
+      through `Print()` itself, so it needed the same `DIcon`+`DText`
+      layout built by hand rather than getting it for free — but it's the
+      identical, already-proven mechanism, not a new one.
+    - **Refactor**: `mechanisms.sc`'s `DrawPortraitMood()` split into a new
+      `GetPortraitMood()` (returns the mood integer, 0-3) plus a thin
+      `DrawPortraitMood()` that just calls it and draws to the background
+      as before — so `PrintChoices` (`printchoices.sc`) can ask for the
+      current mood directly without duplicating the worst-stat comparison
+      logic a second time. New `(use "mechanisms")` in `printchoices.sc`
+      — a one-way addition (`mechanisms.sc` calls nothing in
+      `printchoices.sc`), so not circular, and every event chunk that
+      calls `PrintChoices` already has `(use "mechanisms")` itself anyway,
+      so no new heap-residency risk either.
+    - **Layout**: `hIcon` (`DIcon:new()`, `view(PORTRAIT_VIEW)
+      loop(GetPortraitMood()) cel(0)`) placed at `(4 4)` inside the
+      dialog; `hDText` moved to start at `hIcon:nsRight + 4` instead of
+      `4`, and its wrap width reduced by that same amount (`width -
+      (hIcon:nsRight + 4)`) so the dialog's total width stays within the
+      same budget as before rather than growing past the icon's footprint
+      — the icon's actual width comes from `CelWide` at runtime, not a
+      guessed constant, so this doesn't depend on knowing the portrait
+      art's exact pixel size in advance. Buttons still start at `x=4`
+      (full width, unaffected) at whichever of the icon's or text's
+      bottom edge ends up lower. `PrintChoices`'s own external signature
+      is unchanged — none of the 196 generated per-event calls needed any
+      changes.
+    - **Real risk, flagged, not yet resolved by testing**: narrowing the
+      description's wrap width means more text wraps onto more lines than
+      before, which could push already-borderline-tall events back toward
+      the vertical-overflow class of bug this project hit twice already
+      (the reason the `nsTop` clamp and `SMALL_FONT` buttons exist at
+      all). Specifically worth testing against the two previously-
+      identified tallest events ("The Typo" and "The Performance Review
+      Buzzword," both WORK zone) once compiled, not just a random turn —
+      if either overflows again, the next lever is probably shrinking the
+      description font too (flagged but untouched back when `SMALL_FONT`
+      buttons were the fix, see the tall-dialog entries above).
+    - **Follow-up, same conversation**: user pointed out the old
+      background-corner `DrawPortraitMood()` calls are now pure dead
+      weight during real gameplay — removed the ones in
+      `ApplyChoiceEffects`/`ApplyGlitch` (`mechanisms.sc`) and the initial
+      one in `rm001.sc`'s `init()`. **Deliberately kept** the one in
+      `rm002.sc`'s `init()` — the ending room has no dialog covering that
+      spot, so it's the only thing that actually shows the portrait there,
+      not a duplicate. The `DrawPortraitMood()` procedure itself is
+      unchanged and still live for that one call site.
+    - Ran the structural sanity check on every touched file
+      (`mechanisms.sc`, `printchoices.sc`, `rm001.sc`) — clean.
+    - **Real bug found on first compile/playtest: a choice button's own
+      width pushed the whole dialog border out of bounds on the right**
+      (screenshot: a SOCIAL-zone "standup meeting divorce" event, not
+      either of the two events already flagged as tall-dialog risks —
+      this is a wider-reaching issue than just those two). Root cause,
+      confirmed by reading the stock `DButton:setSize()` in `Controls.sc`
+      directly: it calls `TextSize(@rect text font)` with **no width
+      limit at all** — button width has always been whatever the longest
+      already-`\n`-embedded line (from the generator's
+      `BUTTON_WRAP_LEN = 36` chars/line) happens to measure in
+      `SMALL_FONT` pixels, uncapped, then rounded up to the next 16px
+      multiple. The description text has respected a width cap
+      (`DText:setSize(width)`) this whole project; buttons never did —
+      this was presumably always a latent risk, just not exposed until
+      this specific event's longest line happened to be wide enough
+      in practice. Unrelated to the portrait icon itself (checked the
+      math: the description's own worst-case width is actually very
+      slightly *smaller* now than before the icon was added, not larger).
+      **Fix**: new `SizeButtonToWidth(hButton maxWidth)` in
+      `printchoices.sc` — the same computation as stock
+      `DButton:setSize()` (the `+2` padding, the round-up-to-16px step),
+      but calling `TextSize` with the same `maxWidth` (the `width`
+      parameter `PrintChoices` already takes) the description text uses,
+      instead of leaving it unconstrained. Applied to both the regular
+      choice buttons and the glitch button. Confirmed the `setSize()`-
+      then-`moveTo()` call order is safe by reading `Control:moveTo()`
+      directly — it shifts all four bounds by a delta, so computing
+      size before position (same order the original code already used)
+      correctly preserves the computed width/height. Trade-off, flagged
+      honestly: forcing a narrower cap means an overly-long button line
+      wraps into more (shorter) lines instead of one wide one, trading
+      horizontal safety for a bit more vertical growth — the other axis
+      this project has already hit twice. Ran the structural sanity check
+      again after this fix — clean. **Not yet compiled/playtested.**
+    - **Portrait size**: user asked about shrinking the in-dialog portrait
+      to help with the same overflow. Not a code fix — SCI0 has no
+      runtime sprite-scaling kernel call (that's a later-SCI/VGA-era
+      feature), so the rendered size is whatever the `PORTRAIT_VIEW`
+      cel's actual art is. The icon's layout math already reads its real
+      dimensions via `CelWide`/`CelHigh` at runtime, so a smaller
+      re-imported cel would just work with zero code changes if the user
+      resizes the source art in SCI Companion's View editor.
+    - **Scrollable dialog considered, deliberately not attempted**: user
+      floated a scrollbar as an alternative if width/wrapping tuning
+      isn't enough. Genuinely possible — this project already has a
+      proven scrolling control, `DSelector` (`ShowCaseFiles()`'s viewer)
+      — but it's a single-line list-item selector, not a multi-line
+      wrapped-button layout, so adopting it for `PrintChoices` would mean
+      redesigning the whole choice-rendering/selection model, not adding
+      a scrollbar to the existing one. Deferred until it's clear the
+      simpler fixes (button width cap, portrait resize) aren't enough.
+    - **Follow-up, same conversation**: user wants the portrait visible
+      only during actual play, full stop — removed the last remaining
+      background-corner call (`rm002.sc`'s `init()`). With that gone,
+      `DrawPortraitMood()` (the background-draw wrapper, distinct from
+      `GetPortraitMood()`, which `printchoices.sc` still uses and keeps)
+      had zero call sites left anywhere in the project, so deleted the
+      now-fully-dead procedure itself rather than leaving it as unused
+      code. `PORTRAIT_X`/`PORTRAIT_Y` (`game.sh`) are consequently unused
+      too, but left defined — a `#define` costs nothing at compile time,
+      so there's no cleanup benefit to removing them, and they're ready
+      if a background draw is ever wanted again. Updated the now-stale
+      `DrawPortraitMood()` references in a couple of `Main.sc` comments
+      (near the `Load(rsVIEW PORTRAIT_VIEW)` calls, which are still
+      correct and unchanged — `printchoices.sc`'s `DIcon` still needs the
+      view resident) to point at `GetPortraitMood()`/`DIcon` instead. Ran
+      the structural sanity check on every touched file (`mechanisms.sc`,
+      `rm002.sc`, `game.sh`, `Main.sc`) — clean.
+    - **Follow-up, same conversation: the button-width fix above was too
+      conservative.** User's first compile/playtest of it showed buttons
+      wrapping well before they needed to, leaving visible dead space
+      between the text and the dialog's own right border (screenshot).
+      Root cause: `SizeButtonToWidth` had reused the description's own
+      `width` parameter (290) as the button cap too — but that value is
+      calibrated for the description+icon pairing specifically (they
+      share horizontal space), while buttons start back at the dialog's
+      full left edge below both and don't compete with the icon at all,
+      so they can safely run wider. **Fix**: new `BUTTON_MAX_WIDTH` (306,
+      `game.sh`) — a real, independent cap that only has to stay under
+      the 320px screen after centering, decoupled from whatever the
+      description/icon combination needs. Both `SizeButtonToWidth` call
+      sites in `printchoices.sc` now use it instead of `width`. Ran the
+      structural sanity check again — clean.
+    - **Follow-up, same conversation: the actual root cause of the wasted
+      space was upstream of anything in `printchoices.sc` — the content
+      generator, not the engine.** Second playtest with the wider button
+      cap still showed short, centered lines with dead space either side
+      (screenshot) — user's own sharp diagnosis: "could this be related
+      to how the SCI engine chunks/tokenizes text?" Correct instinct,
+      wrong layer: `tools/lib/zone-events.js`'s `wrapButtonText()`
+      (`BUTTON_WRAP_LEN = 36` characters/line) has always pre-wrapped
+      every choice/glitch string with hardcoded `\n` breaks *at content-
+      generation time*, baked directly into each generated `.sc` file's
+      string literals — completely independent of whatever width the
+      button actually renders at. `TextSize()` (and thus
+      `SizeButtonToWidth`) respects existing `\n`s as hard breaks and only
+      adds *more* wrapping on top if a segment between them is itself too
+      wide; it can't undo or reflow around breaks that already exist. So
+      widening `BUTTON_MAX_WIDTH` genuinely widened the button's
+      bounding box, but every line inside it was still capped at its old
+      36-character segment, rendered centered with growing margins on
+      both sides as the box got wider than the text needed.
+      **Fix**: removed `wrapButtonText()`/`BUTTON_WRAP_LEN` from the
+      generator entirely — choice and glitch text now go through plain
+      `sciString()` (the ASCII-safety/escaping pass, unchanged) with no
+      pre-wrapping at all, emitted as a single unbroken line. Wrapping is
+      now handled *only* by `SizeButtonToWidth`'s real, pixel-accurate
+      `TextSize()` call at render time — the exact same mechanism the
+      description text has always used via `DText:setSize(width)`, so
+      buttons and description now share one consistent, width-aware
+      wrapping approach instead of two different ones (a fixed
+      character-count guess vs. real font metrics). Regenerated all six
+      zones (`node tools/gen-<zone>-events.js` for work/home/social/self/
+      body/public) — all 30 output files (5 per zone: 1 dispatcher + 4
+      chunks) written successfully, chunk sizes actually shrank slightly
+      (~10-11.7KB, comfortably under the ~16KB ceiling) since dropping the
+      `\n` escapes removes a couple bytes per choice. Spot-checked the
+      exact event from the user's screenshot (`socialevents4.sc`,
+      "Keep scrolling well past the point...") — confirmed it's now a
+      single unbroken line with no embedded `\n`. Ran the full structural
+      sanity check (paired quotes, balanced parens outside string
+      literals, no *new* non-ASCII — the header-comment arrow/em-dash
+      already established as harmless in every prior generation round is
+      still present and still fine) across all 30 regenerated files —
+      clean. Bonus, not yet confirmed: since text now wraps at its real
+      available width instead of an artificially narrow guess, dialogs
+      should generally end up *shorter* too (fewer, fuller lines per
+      button), which should help rather than hurt the vertical-overflow
+      risk this project has fought twice already. **Not yet
+      compiled/playtested** — this is the largest-blast-radius change in
+      this whole thread (all 196 events regenerated), worth a thorough
+      pass: the previously-flagged tallest events ("The Typo," "The
+      Performance Review Buzzword") plus a general spot-check across a
+      few zones, not just the one event already confirmed by inspection.
+    - **Follow-up, same conversation: `BUTTON_MAX_WIDTH` (306) was itself
+      still too generous — real bug, confirmed via screenshot ("The
+      Unfinished Thing"), dialog escaping both screen edges at once** (a
+      too-wide dialog, once centered, pushes nsLeft negative while also
+      overflowing nsRight — explains why it affects both sides
+      simultaneously, not just the right). Root cause this time, found by
+      actually reading `DText:setSize()` for comparison: unlike `DText`
+      (a clean `nsRight = nsLeft + measuredWidth`, capped exactly by its
+      width parameter, no adjustment), the stock `DButton:setSize()` that
+      `SizeButtonToWidth` mirrors adds `+2` padding and then rounds the
+      *result* up to the next multiple of 16 — a step the first fix
+      didn't account for. Worst case at 306: `306 + 2 = 308`, which rounds
+      up to `320`, the full screen width, before even adding the button's
+      own 4px left margin. **Fix**: `BUTTON_MAX_WIDTH` lowered to 286 —
+      chosen so the worst-case *rounded* result lands exactly on 288
+      (`286 + 2 = 288`, already a multiple of 16, so no further rounding
+      applies), comfortably clear of the 320px screen with room to spare
+      for the dialog's own border chrome on top. Documented the full
+      worked-through math directly in `game.sh`'s comment so a future
+      width adjustment doesn't have to re-derive it from scratch. Ran the
+      structural sanity check again — clean.
+    - **Confirmed generally working by the user** after this third round
+      of width tuning (uncapped → 306 → 286) — "behaving much more
+      nicely." User mentioned unspecified remaining edge cases without
+      detail; not yet identified/reproduced, worth asking about
+      specifically next session if they resurface rather than assuming
+      this is fully closed out.

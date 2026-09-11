@@ -101,17 +101,19 @@
 (define PUBLIC_EVENT_COUNT	32)
 (define ZONE_COUNT			6)
 
-// Player portrait -- plumbing only, no art yet (see SESSION_HANDOFF.md).
-// View 801 is a placeholder number (800 is already "Item - Test Object");
-// draw with DrawCel(PORTRAIT_VIEW mood 0 PORTRAIT_X PORTRAIT_Y -1) any time
-// the mood might have changed -- DrawPortraitMood() in mechanisms.sc does
-// this already. Loop numbers = mood: 0 neutral, 1 repression/anxious,
-// 2 mask/exposed, 3 child/numb -- whichever stat is currently worst, once
-// it's bad enough to actually show (PORTRAIT_NEUTRAL_THRESHOLD), matching
-// the same "danger" comparison PickWorstStat() already does for zone
-// weighting. Position is an unvalidated guess (top-left corner, clear of
-// where centered dialogs usually sit) -- move once real art exists and
-// its actual size is known.
+// Player portrait (see SESSION_HANDOFF.md). View 801 is a placeholder
+// number (800 is already "Item - Test Object"). Shown only inside
+// PrintChoices' own dialog (printchoices.sc, via GetPortraitMood() below
+// + a DIcon control) -- deliberately not drawn on any room background
+// (not rm001, where a PrintChoices dialog covers that spot almost every
+// turn anyway, and not rm002 either, per the user: only show it during
+// actual play). PORTRAIT_X/Y are therefore currently unused -- left
+// defined (free at compile time either way) in case a background draw
+// is ever wanted again. Loop numbers = mood: 0 neutral, 1
+// repression/anxious, 2 mask/exposed, 3 child/numb -- whichever stat is
+// currently worst, once it's bad enough to actually show
+// (PORTRAIT_NEUTRAL_THRESHOLD), matching the same "danger" comparison
+// PickWorstStat() already does for zone weighting.
 (define PORTRAIT_VIEW				801)
 (define PORTRAIT_X					4)
 (define PORTRAIT_Y					20)
@@ -157,6 +159,28 @@
 (define UNLOCK_THRESHOLD	3)		/* same-tag choices before a mechanism unlocks */
 (define GLITCH_CHANCE_PCT	15)		/* out of 100, matching glitchChance: 0.15 */
 (define GLITCH_CHOICE		99)
+
+// PrintChoices' own choice-button width ceiling (printchoices.sc's
+// SizeButtonToWidth). Deliberately separate from the description text's
+// own width parameter (baked into each generated event as a literal --
+// see tools/lib/zone-events.js's DESC_WIDTH) -- that cap has to leave room
+// for the portrait icon sitting beside the description, but buttons start
+// back at the dialog's full left edge below both, so they can safely use
+// more of the screen.
+//
+// NOT simply "whatever's safely under 320" -- SizeButtonToWidth mirrors
+// stock DButton:setSize()'s own math exactly, which (unlike DText's own
+// setSize(), a clean nsLeft + measuredWidth with no adjustment) adds +2
+// padding and then rounds the result UP to the next multiple of 16. A
+// first attempt at 306 was confirmed too generous by the user (dialog
+// escaping both screen edges) -- worst case, 306 + 2 = 308, which rounds
+// UP to 320, the full screen width, before even adding the button's own
+// 4px left margin. This value instead targets a worst-case ROUNDED
+// result of 288 (306 - 20 = 286; 286 + 2 = 288, already a multiple of
+// 16, so it doesn't round up further) -- comfortably clear of the 320px
+// screen even after the button's own margin and whatever the dialog's
+// border chrome adds on top.
+(define BUTTON_MAX_WIDTH	286)
 
 // Extended Therapy / New Game+ (matches js/content.js's maxTurns: 10,
 // hardModeTurns: 20, hardModeMultiplier: 1.25, and js/engine.js's

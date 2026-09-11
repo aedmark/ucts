@@ -24,15 +24,15 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Ask your manager to list, out loud,\nevery mistake you've made this\nquarter."
+		= glitchText "Ask your manager to list, out loud, every mistake you've made this quarter."
 	)
 	= choice PrintChoices(
 		"Your manager says the presentation went great. You spend the next hour building a case for why she's wrong."
 		"The Imposter Spiral"
 		290
 		glitchText
-		"Deflect the compliment immediately\nand list everyone else who helped." 0
-		"Reread your own slides looking for\nthe mistake everyone's too polite to\nmention." 1
+		"Deflect the compliment immediately and list everyone else who helped." 0
+		"Reread your own slides looking for the mistake everyone's too polite to mention." 1
 		"Say 'thank you' and let it be true." 2
 	)
 	(if(== choice GLITCH_CHOICE)
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply-all to the rumor thread with a\nsingle question mark."
+		= glitchText "Reply-all to the rumor thread with a single question mark."
 	)
 	= choice PrintChoices(
 		"A screenshot from an anonymous coworker forum is going around. It names your department. Nobody official has said a word."
 		"The Layoff Rumor"
 		290
 		glitchText
-		"Refresh your email every four\nminutes for the rest of the day." 0
-		"Close every work tab and watch\nsomething mindless until it's time\nto log off." 1
-		"Update your resume calmly, then\nclose the laptop for the night." 2
+		"Refresh your email every four minutes for the rest of the day." 0
+		"Close every work tab and watch something mindless until it's time to log off." 1
+		"Update your resume calmly, then close the laptop for the night." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Forty people saw it. Nobody answered. You have created a new, smaller panic.")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Casually ask three more coworkers\nwhat they make."
+		= glitchText "Casually ask three more coworkers what they make."
 	)
 	= choice PrintChoices(
 		"A spreadsheet gets shared by accident. Someone with two fewer years than you makes more."
 		"The Salary You Found Out"
 		290
 		glitchText
-		"Draft a furious email to HR and send\nit before you can think twice." 0
-		"Decide you're probably not\nremembering your own worth\ncorrectly, and let it go." 1
-		"Write down exactly what you'd ask\nfor and schedule the actual\nconversation." 2
+		"Draft a furious email to HR and send it before you can think twice." 0
+		"Decide you're probably not remembering your own worth correctly, and let it go." 1
+		"Write down exactly what you'd ask for and schedule the actual conversation." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You now know everyone's salary, yet still cannot grasp your own self-worth. Progress?")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start a betting pool on how long the\nmandate really lasts."
+		= glitchText "Start a betting pool on how long the mandate really lasts."
 	)
 	= choice PrintChoices(
 		"An all-staff email announces four days in office starting next month. Your commute is about to double."
 		"The Return-to-Office Mandate"
 		290
 		glitchText
-		"Reply to the announcement thread\nwith an enthusiastic 'Exciting\nnews!!'" 0
-		"Don't say anything. Just stare at\nthe new calendar for a while." 1
-		"Block out the commute time and start\nplanning around the real cost." 2
+		"Reply to the announcement thread with an enthusiastic 'Exciting news!!'" 0
+		"Don't say anything. Just stare at the new calendar for a while." 1
+		"Block out the commute time and start planning around the real cost." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You are up eleven dollars and strangely invested in a policy you hate.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Send the recruiter a reply arguing\nyour own case, after the decision's\nalready final."
+		= glitchText "Send the recruiter a reply arguing your own case, after the decision's already final."
 	)
 	= choice PrintChoices(
 		"The recruiter finally writes back. 'We've decided to move forward with other candidates at this time.'"
 		"The Rejection Email"
 		290
 		glitchText
-		"Reread the email six times looking\nfor a hidden opening." 0
-		"Close the tab, close the laptop, and\ndo literally anything else." 1
-		"Let yourself be disappointed for a\nminute, then ask for feedback\nanyway." 2
+		"Reread the email six times looking for a hidden opening." 0
+		"Close the tab, close the laptop, and do literally anything else." 1
+		"Let yourself be disappointed for a minute, then ask for feedback anyway." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It changed nothing. For a brief moment, you feel like you really accomplished something.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Frame the cancellation email and\nhang it somewhere you'll see it\ndaily."
+		= glitchText "Frame the cancellation email and hang it somewhere you'll see it daily."
 	)
 	= choice PrintChoices(
 		"Three months of work gets killed in a two-line message. 'Deprioritizing this for now.'"
 		"The Project That Got Cancelled"
 		290
 		glitchText
-		"Point out, at length, exactly how\nmuch time this wasted." 0
-		"Reply 'Totally understand, happy to\npivot!' before you've processed it\nat all." 1
-		"Ask what, if anything, from the work\ncan be reused elsewhere." 2
+		"Point out, at length, exactly how much time this wasted." 0
+		"Reply 'Totally understand, happy to pivot!' before you've processed it at all." 1
+		"Ask what, if anything, from the work can be reused elsewhere." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It is, unexpectedly, a little bit funny now.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Overshare something of your own in\nreturn, just to even the score."
+		= glitchText "Overshare something of your own in return, just to even the score."
 	)
 	= choice PrintChoices(
 		"Someone uses your two-minute standup slot to tell the whole team about their divorce."
 		"The Oversharing Coworker"
 		290
 		glitchText
-		"Nod along and offer sympathetic\nfollow-up questions you don't have\ntime for." 0
-		"Suddenly remember an urgent message\nyou have to go check." 1
-		"Say gently that you hope they're\nokay, and steer the meeting back on\ntrack." 2
+		"Nod along and offer sympathetic follow-up questions you don't have time for." 0
+		"Suddenly remember an urgent message you have to go check." 1
+		"Say gently that you hope they're okay, and steer the meeting back on track." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The meeting is now forty minutes long and everyone knows too much about the both of you.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply-all asking everyone else what\nthey got."
+		= glitchText "Reply-all asking everyone else what they got."
 	)
 	= choice PrintChoices(
 		"The open enrollment email arrives. This year's raise, after inflation, comes out to functionally nothing."
 		"The Raise That Wasn't"
 		290
 		glitchText
-		"Do the math four different ways\nhoping for a different number." 0
-		"Thank your manager for the raise in\nthe team channel anyway." 1
-		"Note the real number down and start\npricing out what a market-rate offer\nlooks like." 2
+		"Do the math four different ways hoping for a different number." 0
+		"Thank your manager for the raise in the team channel anyway." 1
+		"Note the real number down and start pricing out what a market-rate offer looks like." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Nobody answers. Somehow the silence answers anyway.")

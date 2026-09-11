@@ -20,7 +20,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const BUTTON_WRAP_LEN = 36; // matches the hand-tuned "The Typo" precedent (WORK event 0)
 const DESC_WIDTH = 290; // DText width (px) passed to PrintChoices; kernel TextSize() wraps within it, so widening is safe as long as it stays under the 320px screen (DText starts at x=4)
 const CHUNK_COUNT = 4;
 // Deliberate scope cut to fix a recurring heap-space exhaustion: cap every
@@ -68,19 +67,6 @@ function sciString(s) {
 	return s;
 }
 
-function wrapButtonText(text, maxLineLen) {
-	const words = sciString(text).split(' ');
-	const lines = [];
-	let cur = '';
-	for (const w of words) {
-		if (cur === '') cur = w;
-		else if (cur.length + 1 + w.length <= maxLineLen) cur += ' ' + w;
-		else { lines.push(cur); cur = w; }
-	}
-	if (cur) lines.push(cur);
-	return lines.join('\\n');
-}
-
 const TAG_CONSTANTS = { fawn: 'TAG_FAWN', flight: 'TAG_FLIGHT', fight: 'TAG_FIGHT', freeze: 'TAG_FREEZE', secure: 'TAG_SECURE' };
 
 function signedDelta(effect) {
@@ -90,12 +76,18 @@ function signedDelta(effect) {
 function genEventProcedure(procName, index, event) {
 	const desc = sciString(event.desc);
 	const title = sciString(event.title);
-	const glitchText = wrapButtonText(event.glitch.text, BUTTON_WRAP_LEN);
+	const glitchText = sciString(event.glitch.text);
 	const glitchLog = sciString(event.glitch.log);
 	const choices = event.choices.slice(0, MAX_CHOICES);
 
+	// No pre-wrapping here anymore -- PrintChoices' own SizeButtonToWidth
+	// (printchoices.sc) now wraps button text at render time using the
+	// actual font metrics via TextSize(), the same mechanism the
+	// description text has always used, instead of a fixed
+	// character-per-line guess that ignored the button's real rendered
+	// width (BUTTON_WRAP_LEN, removed -- see SESSION_HANDOFF.md).
 	const choiceParams = choices
-		.map((c, i) => `\t\t"${wrapButtonText(c.text, BUTTON_WRAP_LEN)}" ${i}`)
+		.map((c, i) => `\t\t"${sciString(c.text)}" ${i}`)
 		.join('\n');
 
 	const cases = choices

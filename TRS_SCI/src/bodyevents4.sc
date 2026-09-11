@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start reorganizing your phone's apps\nby color."
+		= glitchText "Start reorganizing your phone's apps by color."
 	)
 	= choice PrintChoices(
 		"It's 2 AM. Your body is exhausted. Your brain has opened fourteen tabs and refuses to close any of them."
 		"The Insomnia Loop"
 		290
 		glitchText
-		"Keep lying there, perfectly still,\nwilling sleep to just happen." 0
-		"Give up and scroll your phone until\nyour eyes finally give out first." 1
-		"Get up, write down whatever's\nlooping, and try again without it in\nyour head." 2
+		"Keep lying there, perfectly still, willing sleep to just happen." 0
+		"Give up and scroll your phone until your eyes finally give out first." 1
+		"Get up, write down whatever's looping, and try again without it in your head." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Your home screen has never looked better. You are still awake.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Overcorrect by hugging everyone in\nthe room, unprompted."
+		= glitchText "Overcorrect by hugging everyone in the room, unprompted."
 	)
 	= choice PrintChoices(
 		"Someone reaches out for a hug, or just to touch your arm, and your whole body stiffens for a second before you can stop it."
 		"The Flinch"
 		290
 		glitchText
-		"Force the hug to look natural and\nhope nobody noticed the flinch." 0
-		"Get through the contact by mentally\nleaving the room while your body\nstays in it." 1
-		"Let the flinch happen and just say,\nlightly, 'sorry, jumpy today.'" 2
+		"Force the hug to look natural and hope nobody noticed the flinch." 0
+		"Get through the contact by mentally leaving the room while your body stays in it." 1
+		"Let the flinch happen and just say, lightly, 'sorry, jumpy today.'" 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Several people are now confused but more fulfilled. Your arms are tired.")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Diagnose yourself with something\ndramatic via a search engine"
+		= glitchText "Diagnose yourself with something dramatic via a search engine"
 	)
 	= choice PrintChoices(
 		"A dull ache starts behind your eyes around hour six of sustained screen time, and it isn't going anywhere."
 		"The Strain Headache"
 		290
 		glitchText
-		"Push through it and keep working\nlike the headache isn't happening." 0
-		"Snap the laptop shut harder than\nnecessary and complain to whoever's\nnearby." 1
-		"Actually step away for ten whole\nminutes." 2
+		"Push through it and keep working like the headache isn't happening." 0
+		"Snap the laptop shut harder than necessary and complain to whoever's nearby." 1
+		"Actually step away for ten whole minutes." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The internet has once again ruined your day. You are tired, not sick.")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Immediately open a second bag out of\npure defiance."
+		= glitchText "Immediately open a second bag out of pure defiance."
 	)
 	= choice PrintChoices(
 		"You look down and an entire bag of something is gone. You don't remember deciding to eat any of it."
 		"The Bag You Don't Remember Opening"
 		290
 		glitchText
-		"Laugh it off if anyone mentions it\nand change the subject fast." 0
-		"Say nothing to anyone, including\nyourself, and just move on like it\ndidn't happen." 1
-		"Notice, without judgment, that you\nmight be stressed about something\nspecific." 2
+		"Laugh it off if anyone mentions it and change the subject fast." 0
+		"Say nothing to anyone, including yourself, and just move on like it didn't happen." 1
+		"Notice, without judgment, that you might be stressed about something specific." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Neither bag solved anything. Both are now empty.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Set a recurring hourly alarm labeled\n'BREATHE.'"
+		= glitchText "Set a recurring hourly alarm labeled 'BREATHE.'"
 	)
 	= choice PrintChoices(
 		"You catch yourself mid-email, barely breathing, jaw clenched, for who knows how long."
 		"The Shallow Breathing Mid-Task"
 		290
 		glitchText
-		"Notice it, feel briefly alarmed, and\nkeep typing exactly the same way." 0
-		"Apologize to no one in particular\nfor being 'a little tense today.'" 1
-		"Stop, take three actual breaths, and\nunclench your shoulders on purpose." 2
+		"Notice it, feel briefly alarmed, and keep typing exactly the same way." 0
+		"Apologize to no one in particular for being 'a little tense today.'" 1
+		"Stop, take three actual breaths, and unclench your shoulders on purpose." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It will go off in the middle of a meeting later. This is fine.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Drink a fourth coffee and decide\nthis will definitely be the one that\nworks."
+		= glitchText "Drink a fourth coffee and decide this will definitely be the one that works."
 	)
 	= choice PrintChoices(
 		"You slept eight hours. You wake up exactly as tired as when you laid down, if not more so."
 		"The Exhaustion Sleep Didn't Fix"
 		290
 		glitchText
-		"Push through the day on caffeine and\nsheer stubbornness." 0
-		"Tell everyone who asks that you're\n'just a little tired, no big deal.'" 1
-		"Actually cancel one non-essential\nthing today to protect what's left\nof your energy." 2
+		"Push through the day on caffeine and sheer stubbornness." 0
+		"Tell everyone who asks that you're 'just a little tired, no big deal.'" 1
+		"Actually cancel one non-essential thing today to protect what's left of your energy." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It was not the one that worked. Your entire body is vibrating and still tired.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Blow on your hands dramatically like\nyou're in a survival documentary."
+		= glitchText "Blow on your hands dramatically like you're in a survival documentary."
 	)
 	= choice PrintChoices(
 		"Your hands have been cold for an hour, in a room that isn't. You notice it right as you're trying to sign something important."
 		"The Cold Hands"
 		290
 		glitchText
-		"Apologize for the shaky signature\nand joke about the room being cold." 0
-		"Just push through and hope no one\nnotices your hands." 1
-		"Pause, shake it out, and just wait\nuntil your hands actually feel\nsteady." 2
+		"Apologize for the shaky signature and joke about the room being cold." 0
+		"Just push through and hope no one notices your hands." 1
+		"Pause, shake it out, and just wait until your hands actually feel steady." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It didn't warm anything up. It did get a laugh.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Answer with a completely unrelated\nfact about your day instead."
+		= glitchText "Answer with a completely unrelated fact about your day instead."
 	)
 	= choice PrintChoices(
 		"Someone asks if you're okay, and your throat closes around the answer before you can decide what it actually is."
 		"The Tight Throat"
 		290
 		glitchText
-		"Force out a bright 'I'm fine!'\nbefore the tightness can turn into\nanything else." 0
-		"Say nothing and just nod until the\nmoment passes on its own." 1
-		"Say 'actually, not really' and let\nthe sentence stop there for now." 2
+		"Force out a bright 'I'm fine!' before the tightness can turn into anything else." 0
+		"Say nothing and just nod until the moment passes on its own." 1
+		"Say 'actually, not really' and let the sentence stop there for now." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Nobody knows what just happened, including you. The moment is over, at least.")

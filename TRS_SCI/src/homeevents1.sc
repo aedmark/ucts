@@ -24,15 +24,15 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Sigh back, louder, escalating into a\nfull operatic aria."
+		= glitchText "Sigh back, louder, escalating into a full operatic aria."
 	)
 	= choice PrintChoices(
 		"Your partner sighs audibly in the other room. You have absolutely zero context for why."
 		"The Sigh"
 		290
 		glitchText
-		"Assume it's your fault and quietly\nclean the kitchen." 0
-		"Ask aggressively, 'IS SOMETHING\nWRONG?!'" 1
+		"Assume it's your fault and quietly clean the kitchen." 0
+		"Ask aggressively, 'IS SOMETHING WRONG?!'" 1
 		"Put on noise-canceling headphones." 2
 	)
 	(if(== choice GLITCH_CHOICE)
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Build an elaborate dish-based\nsculpture instead of washing them."
+		= glitchText "Build an elaborate dish-based sculpture instead of washing them."
 	)
 	= choice PrintChoices(
 		"Your partner says 'hey, whenever you get a chance' about the dishes. Their tone was completely neutral."
 		"The Dishes in the Sink"
 		290
 		glitchText
-		"Do the dishes at 11 PM, narrating\nyour resentment internally while\nsighing externally, and heavily." 0
-		"Say 'I was GOING to' with more heat\nthan the sentence needed." 1
-		"Leave the room to 'find something'\nfor four minutes. Flee state." 2
+		"Do the dishes at 11 PM, narrating your resentment internally while sighing externally, and heavily." 0
+		"Say 'I was GOING to' with more heat than the sentence needed." 1
+		"Leave the room to 'find something' for four minutes. Flee state." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It's actually kind of impressive. It does not count as washing them, though.")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply only in cryptic, unrelated\nfortune-cookie wisdom."
+		= glitchText "Reply only in cryptic, unrelated fortune-cookie wisdom."
 	)
 	= choice PrintChoices(
 		"Your aunt just brought up something from Thanksgiving 2019. Nobody asked."
 		"The Family Group Chat"
 		290
 		glitchText
-		"Mute the chat and pretend your phone\nis broken." 0
-		"Draft a measured correction, then\ndelete it three times." 1
-		"Send a single laughing emoji and\nnothing else." 2
+		"Mute the chat and pretend your phone is broken." 0
+		"Draft a measured correction, then delete it three times." 1
+		"Send a single laughing emoji and nothing else." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("'The sink remembers what the heart forgets.' Nobody asked. Nobody replies.")
@@ -129,7 +129,7 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start narrating the drive like a\nhushed golf commentator."
+		= glitchText "Start narrating the drive like a hushed golf commentator."
 	)
 	= choice PrintChoices(
 		"Twenty minutes home. Nobody has said anything since you left. You are replaying the entire evening."
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Send one more message: just a\nsingle, staring emoji."
+		= glitchText "Send one more message: just a single, staring emoji."
 	)
 	= choice PrintChoices(
 		"You sent a long message to a parent, explaining how you actually feel. Marked read. Nothing since."
 		"The Left-On-Read Text"
 		290
 		glitchText
-		"Open your messages to literally\nanyone else and get absorbed in\nsomething safer." 0
-		"Reread your message eleven times,\nhunting for the sentence that broke\nit." 1
-		"Send nothing else. Let the silence\nbelong to them, not you." 2
+		"Open your messages to literally anyone else and get absorbed in something safer." 0
+		"Reread your message eleven times, hunting for the sentence that broke it." 1
+		"Send nothing else. Let the silence belong to them, not you." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The read receipt updates. The silence gets a face now.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Answer back in an equally strange,\nunexplained voice of your own."
+		= glitchText "Answer back in an equally strange, unexplained voice of your own."
 	)
 	= choice PrintChoices(
 		"Your parent picks up sounding smaller than you remember. You don't know why yet."
 		"The Different Voice on the Phone"
 		290
 		glitchText
-		"Immediately go bright and cheerful\nto lift the mood before you've even\nasked what's wrong." 0
-		"Ask, flatly, exactly what's going\non. No preamble." 1
-		"Say 'oh, okay' and let the\nconversation drift somewhere safer." 2
+		"Immediately go bright and cheerful to lift the mood before you've even asked what's wrong." 0
+		"Ask, flatly, exactly what's going on. No preamble." 1
+		"Say 'oh, okay' and let the conversation drift somewhere safer." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Neither of you addresses it. Some things stay sacred and weird.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Hold a tiny, formal funeral for the\nleftovers."
+		= glitchText "Hold a tiny, formal funeral for the leftovers."
 	)
 	= choice PrintChoices(
 		"You made extra on purpose, left a note. It's still in the fridge, exactly where you left it."
 		"The Leftover They Didn't Eat"
 		290
 		glitchText
-		"Eat it yourself and say nothing\nabout the note." 0
-		"Leave it in there for three more\ndays, unable to deal with it." 1
-		"Ask, simply, if they want any\nleftovers before you eat the rest." 2
+		"Eat it yourself and say nothing about the note." 0
+		"Leave it in there for three more days, unable to deal with it." 1
+		"Ask, simply, if they want any leftovers before you eat the rest." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Several words were said. None of them were 'I'm sorry.'")
@@ -269,15 +269,15 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Slide a folded paper airplane of\nconcern underneath it."
+		= glitchText "Slide a folded paper airplane of concern underneath it."
 	)
 	= choice PrintChoices(
 		"It's usually open. Tonight it's closed, and you don't know why."
 		"The Closed Bedroom Door"
 		290
 		glitchText
-		"Stand outside it for a full minute,\ndeciding nothing." 0
-		"Knock and immediately apologize for\nwhatever it is." 1
+		"Stand outside it for a full minute, deciding nothing." 0
+		"Knock and immediately apologize for whatever it is." 1
 		"Knock. Ask if everything is okay." 2
 	)
 	(if(== choice GLITCH_CHOICE)

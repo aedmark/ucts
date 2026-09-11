@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply in fluent, unhinged\ninterpretive dance. Over email.\nSomehow."
+		= glitchText "Reply in fluent, unhinged interpretive dance. Over email. Somehow."
 	)
 	= choice PrintChoices(
 		"You sent an email to your boss with a minor typo. Your brain immediately interprets this as a fatal error that will result in death or financial ruin."
 		"The Typo"
 		290
 		glitchText
-		"Send a frantic three-paragraph\napology." 0
-		"Stare at the wall and dissociate for\n20 minutes." 1
-		"Tell yourself 'it's just a typo'\nwhile sweating profusely." 2
+		"Send a frantic three-paragraph apology." 0
+		"Stare at the wall and dissociate for 20 minutes." 1
+		"Tell yourself 'it's just a typo' while sweating profusely." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("HR has several follow-up questions. So does everyone else. Nobody's mad, though.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Announce, loudly, that you accept\nthis compliment on behalf of all of\nhumanity."
+		= glitchText "Announce, loudly, that you accept this compliment on behalf of all of humanity."
 	)
 	= choice PrintChoices(
 		"A coworker tells you that you did a 'really great job' on the presentation. It sounds sincere."
 		"The Compliment"
 		290
 		glitchText
-		"Deflect immediately and credit the\nteam." 0
-		"Assume they are setting you up for a\nmassive failure later and prepare a\ndefense." 1
-		"Say 'Thank you' and let the\ndiscomfort burn your throat." 2
+		"Deflect immediately and credit the team." 0
+		"Assume they are setting you up for a massive failure later and prepare a defense." 1
+		"Say 'Thank you' and let the discomfort burn your throat." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Someone starts a slow clap. It does not catch on.")
@@ -94,7 +94,7 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Slide a note under the door reading\nonly: 'I KNOW.'"
+		= glitchText "Slide a note under the door reading only: 'I KNOW.'"
 	)
 	= choice PrintChoices(
 		"You walk past a conference room where two managers are talking. They look at you and the door slowly closes."
@@ -102,8 +102,8 @@
 		290
 		glitchText
 		"Begin packing up your desk mentally." 0
-		"Work at 300% capacity for the next\nfour hours." 1
-		"Remind yourself you are an adult and\nthis is fine." 2
+		"Work at 300% capacity for the next four hours." 1
+		"Remind yourself you are an adult and this is fine." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You know nothing. The door remains closed. Deeply satisfying anyway.")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply-all a third time, this one\nentirely in Comic Sans and\nindecipherable."
+		= glitchText "Reply-all a third time, this one entirely in Comic Sans and indecipherable."
 	)
 	= choice PrintChoices(
 		"You meant to reply privately with a joke about the meeting length. You did not reply privately."
 		"The Reply-All"
 		290
 		glitchText
-		"Immediately close your laptop and\ncompose a new identity." 0
-		"Send a follow-up message that says\n'ignore that. lol.'" 1
-		"Own it. Reply-all again with an\narticle about workplace\ninefficiency.'" 2
+		"Immediately close your laptop and compose a new identity." 0
+		"Send a follow-up message that says 'ignore that. lol.'" 1
+		"Own it. Reply-all again with an article about workplace inefficiency.'" 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Comic Sans has never been used with such menace.")
@@ -164,15 +164,15 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Show up in full riot gear, 'just in\ncase.'"
+		= glitchText "Show up in full riot gear, 'just in case.'"
 	)
 	= choice PrintChoices(
 		"'Quick Chat' with your manager. No agenda. Fifteen minutes from now."
 		"The Calendar Invite"
 		290
 		glitchText
-		"Spend the fifteen minutes drafting a\nresignation letter." 0
-		"Ask a coworker if they've heard\nanything. They haven't." 1
+		"Spend the fifteen minutes drafting a resignation letter." 0
+		"Ask a coworker if they've heard anything. They haven't." 1
 		"Walk in assuming it's fine." 2
 	)
 	(if(== choice GLITCH_CHOICE)
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Send a single, unprompted photo of a\nraccoon looking concerned."
+		= glitchText "Send a single, unprompted photo of a raccoon looking concerned."
 	)
 	= choice PrintChoices(
 		"Seen 3:12 PM. It is now 6:47 PM. No reply."
 		"The Read Receipt"
 		290
 		glitchText
-		"Send a second message: 'no worries\njust following up!'" 0
-		"Close Slack and refuse to open it\nuntil tomorrow." 1
-		"Assume you've been quietly deleted\nfrom their mind." 2
+		"Send a second message: 'no worries just following up!'" 0
+		"Close Slack and refuse to open it until tomorrow." 1
+		"Assume you've been quietly deleted from their mind." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The raccoon says what you cannot. Which is nothing of importance.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Lean in. Claim the typo was\navant-garde on purpose."
+		= glitchText "Lean in. Claim the typo was avant-garde on purpose."
 	)
 	= choice PrintChoices(
 		"You meant to type something professional. Autocorrect had other plans. It has already been sent."
 		"The Autocorrect Betrayal"
 		290
 		glitchText
-		"Send six frantic follow-ups\nexplaining what you meant." 0
-		"Screenshot it, close the laptop,\nstare at the wall." 1
-		"Let the typo be funny. It's kind of\nfunny." 2
+		"Send six frantic follow-ups explaining what you meant." 0
+		"Screenshot it, close the laptop, stare at the wall." 1
+		"Let the typo be funny. It's kind of funny." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You have accidentally invented a new art movement and the accountants are fond of you, now.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Respond back at them entirely in\nweaponized corporate buzzwords."
+		= glitchText "Respond back at them entirely in weaponized corporate buzzwords."
 	)
 	= choice PrintChoices(
 		"Your manager says 'let's discuss your growth areas' in a tone that reveals absolutely nothing."
 		"The Performance Review Buzzword"
 		290
 		glitchText
-		"Mentally practice your groveling\ntechnique to beg for your job back." 0
-		"Walk in and ask directly what\n'growth areas' means, specifically." 1
-		"Prepare a mental defense file of\nevery accomplishment from the last\nthree years." 2
+		"Mentally practice your groveling technique to beg for your job back." 0
+		"Walk in and ask directly what 'growth areas' means, specifically." 1
+		"Prepare a mental defense file of every accomplishment from the last three years." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You have synergized so hard the meeting ended early out of confusion. Nobody dares to circle back.")
@@ -304,16 +304,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Stand up and simply read the email\naloud instead."
+		= glitchText "Stand up and simply read the email aloud instead."
 	)
 	= choice PrintChoices(
 		"Forty-five minutes, twelve people, and the entire message could have fit in three sentences (in an email)."
 		"The Meeting That Did Not Need To Be"
 		290
 		glitchText
-		"Nod along and add a supportive\n'great point' to three different\ntangents." 0
-		"Mentally exit the call and return\nonly when your name is said." 1
-		"Ask, once, if this could be a\ntwo-line message next time." 2
+		"Nod along and add a supportive 'great point' to three different tangents." 0
+		"Mentally exit the call and return only when your name is said." 1
+		"Ask, once, if this could be a two-line message next time." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The meeting ends four seconds later. Nobody claps, but you think they maybe want to.")

@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply with the same screenshot,\ncircled in red, underlined in red,\nand highlighted in red."
+		= glitchText "Reply with the same screenshot, circled in red, underlined in red, and highlighted in red."
 	)
 	= choice PrintChoices(
 		"Someone replies to your third follow-up with 'per my last email' and a screenshot of an answer that was not, in fact, an answer."
 		"The 'Per My Last Email'"
 		290
 		glitchText
-		"Reply quoting the exact unanswered\nquestion, again." 0
-		"Apologize for 'missing' the answer\nthat wasn't there." 1
-		"Close the thread and decide to just\nfigure it out yourself." 2
+		"Reply quoting the exact unanswered question, again." 0
+		"Apologize for 'missing' the answer that wasn't there." 1
+		"Close the thread and decide to just figure it out yourself." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You have made your point. Several points, actually. All very helpful.")
@@ -59,15 +59,15 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Bring a tiny gift as tribute, like\nvisiting a shrine."
+		= glitchText "Bring a tiny gift as tribute, like visiting a shrine."
 	)
 	= choice PrintChoices(
 		"Your manager says 'my door is always open' during a meeting. Their door has, notably, never once been open."
 		"The Open Door Policy"
 		290
 		glitchText
-		"File it away as one more thing you\nwon't actually bring up." 0
-		"Nod like the sentence was true and\nuseful." 1
+		"File it away as one more thing you won't actually bring up." 0
+		"Nod like the sentence was true and useful." 1
 		"Test it. Walk over and knock." 2
 	)
 	(if(== choice GLITCH_CHOICE)
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Comment using only a single, deeply\nambiguous emoji."
+		= glitchText "Comment using only a single, deeply ambiguous emoji."
 	)
 	= choice PrintChoices(
 		"A peer from two roles ago just posted 'excited to announce' a title you quietly wanted for yourself."
 		"The LinkedIn Congrats"
 		290
 		glitchText
-		"Like the post and write a warm,\nspecific comment." 0
-		"Close the app. Reopen it four\nminutes later." 1
-		"Feel the envy, don't perform past\nit, close the app anyway." 2
+		"Like the post and write a warm, specific comment." 0
+		"Close the app. Reopen it four minutes later." 1
+		"Feel the envy, don't perform past it, close the app anyway." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Seventeen people have now liked your emoji. Nobody knows what it means. Least of all you.")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start a spontaneous printer-line\ntrivia night to pass the time."
+		= glitchText "Start a spontaneous printer-line trivia night to pass the time."
 	)
 	= choice PrintChoices(
 		"You're fourth in line at the printer, running late, and the person ahead of you is scrolling their phone between pages."
 		"The Printer Line"
 		290
 		glitchText
-		"Stand there, saying nothing, doing\nthe math on how late you'll be." 0
-		"Ask, politely but directly, if you\ncan jump in for one page." 1
-		"Wait it out and tell yourself it's\nfine, it's fine, it's fine." 2
+		"Stand there, saying nothing, doing the math on how late you'll be." 0
+		"Ask, politely but directly, if you can jump in for one page." 1
+		"Wait it out and tell yourself it's fine, it's fine, it's fine." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Nobody knew this much about the printer. Nobody wanted to.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Take a bow for the growing audience\nbehind you."
+		= glitchText "Take a bow for the growing audience behind you."
 	)
 	= choice PrintChoices(
 		"Your badge doesn't scan. Three times in a row. There's a line building behind you now."
 		"The Badge Scan Fail"
 		290
 		glitchText
-		"Apologize to everyone behind you\nindividually." 0
-		"Freeze up completely, badge in hand,\nbrain empty except for the intense\npanic that you've been fired." 1
-		"Step aside, let people pass, try\nagain without an audience." 2
+		"Apologize to everyone behind you individually." 0
+		"Freeze up completely, badge in hand, brain empty except for the intense panic that you've been fired." 1
+		"Step aside, let people pass, try again without an audience." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Someone starts filming. This will outlive your employment here.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply fully in character as the\nother person."
+		= glitchText "Reply fully in character as the other person."
 	)
 	= choice PrintChoices(
 		"You get an email addressed to someone else's name, clearly copy-pasted from a different, more glowing thread."
 		"The Wrong Name in the Email"
 		290
 		glitchText
-		"Assume you're actually being\ncompared unfavorably to that person." 0
-		"Reply, lightly, pointing out the\nname mismatch." 1
-		"Ignore it and answer as if it were\naddressed to you correctly." 2
+		"Assume you're actually being compared unfavorably to that person." 0
+		"Reply, lightly, pointing out the name mismatch." 1
+		"Ignore it and answer as if it were addressed to you correctly." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You are now, professionally speaking, someone else. It's going well.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply instantly with 'Your wish is\nmy command, Master.'"
+		= glitchText "Reply instantly with 'Your wish is my command, Master.'"
 	)
 	= choice PrintChoices(
 		"A message lands in your inbox at 5:58 PM, two minutes before you were going to log off. It starts with 'quick question.'"
 		"The End-of-Day Ping"
 		290
 		glitchText
-		"Stay online another forty-five\nminutes to answer it fully." 0
-		"Reply first thing tomorrow, on\npurpose." 1
-		"Stare at the message, unable to\ndecide, until it's 7 PM anyway." 2
+		"Stay online another forty-five minutes to answer it fully." 0
+		"Reply first thing tomorrow, on purpose." 1
+		"Stare at the message, unable to decide, until it's 7 PM anyway." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("This was not the reassurance they were hoping for. You never hear from them again.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply with an equally cryptic single\nword of your own."
+		= glitchText "Reply with an equally cryptic single word of your own."
 	)
 	= choice PrintChoices(
 		"You send a detailed update. The reply is a single word: 'Noted.'"
 		"The Manager's One-Word Reply"
 		290
 		glitchText
-		"Reread the word eleven times,\nhunting for a tone that isn't there." 0
-		"Send a follow-up asking if\neverything's okay." 1
-		"Take the word at face value and move\non with your day." 2
+		"Reread the word eleven times, hunting for a tone that isn't there." 0
+		"Send a follow-up asking if everything's okay." 1
+		"Take the word at face value and move on with your day." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("A one-word war has begun. Nobody will walk away alive.")

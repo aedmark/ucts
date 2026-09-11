@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply with a single dramatic\nmovie-trailer voice line."
+		= glitchText "Reply with a single dramatic movie-trailer voice line."
 	)
 	= choice PrintChoices(
 		"Four words. No context. Sent an hour ago, and you've only just seen it."
 		"The 'We Need To Talk' Text"
 		290
 		glitchText
-		"Spend the hour composing worst-case\nscenarios instead of replying." 0
-		"Reply with three apologies before\nyou know what for." 1
-		"Reply: 'Okay. I'm here when you're\nready.'" 2
+		"Spend the hour composing worst-case scenarios instead of replying." 0
+		"Reply with three apologies before you know what for." 1
+		"Reply: 'Okay. I'm here when you're ready.'" 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("'In a world where nobody explains anything...'")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Cover the entire kitchen in post-its\nof your own."
+		= glitchText "Cover the entire kitchen in post-its of your own."
 	)
 	= choice PrintChoices(
 		"'Please rinse dishes before leaving in sink :)'\n\n\n The smiley face is doing a lot of unpaid emotional labor."
 		"The Passive-Aggressive Post-it"
 		290
 		glitchText
-		"Rinse everything in the house\npreemptively for a week." 0
-		"Leave a post-it back, on a clean\ndish and slightly too pointed." 1
-		"Just talk to your roommate about it,\nout loud, later." 2
+		"Rinse everything in the house preemptively for a week." 0
+		"Leave a post-it back, on a clean dish and slightly too pointed." 1
+		"Just talk to your roommate about it, out loud, later." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The kitchen now resembles a ransom note made of passively aggressive politeness.")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Knock back in a rhythm, just to see\nif they knock again."
+		= glitchText "Knock back in a rhythm, just to see if they knock again."
 	)
 	= choice PrintChoices(
 		"You can hear your neighbors arguing again, muffled but unmistakable, through a wall that was not built for privacy."
 		"The Wall Between Apartments"
 		290
 		glitchText
-		"Turn up the TV as loud as you can\nand hope they can heart it." 0
-		"Consider, seriously, banging on the\nwall. Do nothing instead." 1
-		"Put on headphones and let it be\nsomeone else's problem." 2
+		"Turn up the TV as loud as you can and hope they can heart it." 0
+		"Consider, seriously, banging on the wall. Do nothing instead." 1
+		"Put on headphones and let it be someone else's problem." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("A wall-based friendship begins, tentatively, in Morse-adjacent taps.")
@@ -129,7 +129,7 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Launch a full forensic\ninvestigation, complete with a\nlabeled evidence board."
+		= glitchText "Launch a full forensic investigation, complete with a labeled evidence board."
 	)
 	= choice PrintChoices(
 		"The thing you were saving for tomorrow is gone. No note, no explanation."
@@ -137,8 +137,8 @@
 		290
 		glitchText
 		"Ask, directly, who ate it." 0
-		"Say nothing and quietly recalculate\nyour whole week's meals." 1
-		"Decide it's fine, you didn't really\nneed it anyway." 2
+		"Say nothing and quietly recalculate your whole week's meals." 1
+		"Decide it's fine, you didn't really need it anyway." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You have connected several pieces of red string to absolutely nothing helpful.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Answer your own question instead, at\ngreat length, to the room."
+		= glitchText "Answer your own question instead, at great length, to the room."
 	)
 	= choice PrintChoices(
 		"You asked. They said 'fine' and kept scrolling. That was ten minutes ago."
 		"The Unanswered 'How Was Your Day'"
 		290
 		glitchText
-		"Sit in the same room in total\nsilence, waiting for more." 0
-		"Fill the silence with details about\nyour own day, unprompted." 1
-		"Let 'fine' be enough for now. Try\nagain later." 2
+		"Sit in the same room in total silence, waiting for more." 0
+		"Fill the silence with details about your own day, unprompted." 1
+		"Let 'fine' be enough for now. Try again later." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The room does not respond either. Hurtful, but fair.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Install a tiny sign declaring the\nthermostat a neutral zone."
+		= glitchText "Install a tiny sign declaring the thermostat a neutral zone."
 	)
 	= choice PrintChoices(
 		"It's been adjusted three times today. Nobody has said a word about it out loud."
 		"The Thermostat War"
 		290
 		glitchText
-		"Set it where you want it and leave a\nnote explaining why." 0
-		"Just wear a sweater and say nothing,\nforever. Probably." 1
-		"Leave it wherever they last set it,\nevery time." 2
+		"Set it where you want it and leave a note explaining why." 0
+		"Just wear a sweater and say nothing, forever. Probably." 1
+		"Leave it wherever they last set it, every time." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Switzerland would be proud. (Nobody honors the treaty).")
@@ -234,15 +234,15 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start a dramatic heist-movie-style\nplan to retrieve it."
+		= glitchText "Start a dramatic heist-movie-style plan to retrieve it."
 	)
 	= choice PrintChoices(
 		"You lent it three weeks ago. You need it now. Asking for it back feels, somehow, enormously selfish."
 		"The Borrowed Thing, Not Returned"
 		290
 		glitchText
-		"Buy a replacement instead of asking\nfor it back." 0
-		"Ask for it back with four qualifiers\nand two apologies." 1
+		"Buy a replacement instead of asking for it back." 0
+		"Ask for it back with four qualifiers and two apologies." 1
 		"Ask for it back plainly. It's yours." 2
 	)
 	(if(== choice GLITCH_CHOICE)
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Photobomb the memory. Mentally. With\nyour current face."
+		= glitchText "Photobomb the memory. Mentally. With your current face."
 	)
 	= choice PrintChoices(
 		"It's on the hallway wall, everyone smiling, from a year you remember very differently than the picture suggests."
 		"The Photo From An Easier Year"
 		290
 		glitchText
-		"Stop and stare at it longer than you\nmeant to, every time." 0
+		"Stop and stare at it longer than you meant to, every time." 0
 		"Consider taking it down. Don't, yet." 1
-		"Let the photo be a photo, not a\nverdict on the year." 2
+		"Let the photo be a photo, not a verdict on the year." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Past-you and present-you now occupy the same photograph, spiritually. So there.")

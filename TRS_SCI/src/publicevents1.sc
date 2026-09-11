@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Ask the cashier how THEIR day is\ngoing, in aggressive detail."
+		= glitchText "Ask the cashier how THEIR day is going, in aggressive detail."
 	)
 	= choice PrintChoices(
 		"You're barely holding it together behind a very calm face. The cashier asks how your day is going. "
 		"The Checkout Line"
 		290
 		glitchText
-		"Say 'great, thanks!' with way more\nenthusiasm than you actually have." 0
-		"Give a flat, one-word answer and\nstare at the card reader." 1
-		"Be honest and let it be a real, if\nbrief, answer." 2
+		"Say 'great, thanks!' with way more enthusiasm than you actually have." 0
+		"Give a flat, one-word answer and stare at the card reader." 1
+		"Be honest and let it be a real, if brief, answer." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("They were not prepared for this. Neither were you.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Ask to speak to the hold music's\nmanager."
+		= glitchText "Ask to speak to the hold music's manager."
 	)
 	= choice PrintChoices(
 		"Forty minutes on hold, then a real person finally picks up, and you have to sound pleasant immediately."
 		"The Customer Service Call"
 		290
 		glitchText
-		"Apologize for 'bothering them'\nbefore you've even explained the\nproblem." 0
-		"Let all forty minutes of frustration\nout on the person who just picked\nup." 1
-		"Take a breath, state the problem\nplainly, and stay civil." 2
+		"Apologize for 'bothering them' before you've even explained the problem." 0
+		"Let all forty minutes of frustration out on the person who just picked up." 1
+		"Take a breath, state the problem plainly, and stay civil." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("There is no such position. You asked anyway. You were put on hold again.\n\n\n Close enough.")
@@ -94,15 +94,15 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Ask them to write the compliment\ndown so you can frame it."
+		= glitchText "Ask them to write the compliment down so you can frame it."
 	)
 	= choice PrintChoices(
 		"Someone in line says, out of nowhere, that they like your energy today. You will never see them again."
 		"The Compliment From A Stranger You'll Never See Again"
 		290
 		glitchText
-		"Say a fast 'thanks' and physically\nspeed up to end the interaction." 0
-		"Freeze up and say nothing until they\nlook away, confused." 1
+		"Say a fast 'thanks' and physically speed up to end the interaction." 0
+		"Freeze up and say nothing until they look away, confused." 1
 		"Say thank you and let it land." 2
 	)
 	(if(== choice GLITCH_CHOICE)
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Loudly announce to the whole bus\nthat you're not crying it's just\nallergies."
+		= glitchText "Loudly announce to the whole bus that you're not crying it's just allergies."
 	)
 	= choice PrintChoices(
 		"It hits you three stops from home and there is nowhere to put it. Everyone very pointedly looks at their phones."
 		"The Public Cry On The Bus"
 		290
 		glitchText
-		"Smile at the person next to you like\neverything's fine, tears and all." 0
-		"Stare straight ahead and let it\nhappen without acknowledging it at\nall." 1
-		"Let it happen, wipe your face when\nit passes, and don't apologize for\nit." 2
+		"Smile at the person next to you like everything's fine, tears and all." 0
+		"Stare straight ahead and let it happen without acknowledging it at all." 1
+		"Let it happen, wipe your face when it passes, and don't apologize for it." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Nobody asked. Several people now have to carry a bit of something from you they didn't want.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Answer with a completely unrelated\nchildhood memory instead."
+		= glitchText "Answer with a completely unrelated childhood memory instead."
 	)
 	= choice PrintChoices(
 		"The interviewer asks you to describe your biggest weakness, and you have exactly one chance to answer this well."
 		"The Interview With A Stranger Who Holds All The Cards"
 		290
 		glitchText
-		"Give the fake answer everyone knows\nis fake because it's clearly a\nhumblebrag in jackass clothing." 0
-		"Blank out and give a rambling\nnon-answer that goes nowhere." 1
-		"Give an actual, specific weakness\nand what you're doing about it." 2
+		"Give the fake answer everyone knows is fake because it's clearly a humblebrag in jackass clothing." 0
+		"Blank out and give a rambling non-answer that goes nowhere." 1
+		"Give an actual, specific weakness and what you're doing about it." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The interviewer is now taking very different notes than they were a minute ago.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Decide this is a sign and order\nsomething you've never tried."
+		= glitchText "Decide this is a sign and order something you've never tried."
 	)
 	= choice PrintChoices(
 		"The order that arrives is not, in any respect, the order you placed. Correcting it means being 'A Problem' in front of everyone in line."
 		"The Wrong Order"
 		290
 		glitchText
-		"Eat it anyway and never mention it\nto anyone." 0
-		"Send it back loudly enough that the\nwhole counter hears the complaint." 1
-		"Quietly flag the mistake and ask for\nit to be corrected." 2
+		"Eat it anyway and never mention it to anyone." 0
+		"Send it back loudly enough that the whole counter hears the complaint." 1
+		"Quietly flag the mistake and ask for it to be corrected." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("It's fine. Not what you wanted. An acceptable plot twist regardless.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Answer with something completely\nunhinged just to see what happens."
+		= glitchText "Answer with something completely unhinged just to see what happens."
 	)
 	= choice PrintChoices(
 		"The facilitator goes around the circle. You have about ten seconds to decide what a room full of near-strangers gets to know about you."
 		"The Icebreaker"
 		290
 		glitchText
-		"Give the safest, most forgettable\nanswer possible." 0
-		"Go completely blank when it's your\nturn and stall for time." 1
-		"Say something small but actually\ntrue instead of the safe version." 2
+		"Give the safest, most forgettable answer possible." 0
+		"Go completely blank when it's your turn and stall for time." 1
+		"Say something small but actually true instead of the safe version." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The circle is now unsettled. You have made an impression. Possibly a good one; it's too early to tell.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Strike up a completely unnecessary\nfull conversation for the rest of\nthe hallway."
+		= glitchText "Strike up a completely unnecessary full conversation for the rest of the hallway."
 	)
 	= choice PrintChoices(
 		"They held the door. You said thanks. Now you're both walking the exact same direction down an empty hallway, well past the point where silence is normal."
 		"The Person Who Held The Door"
 		290
 		glitchText
-		"Suddenly develop an urgent need to\ncheck your phone until they're gone." 0
-		"Keep walking in dead silence and\nhope the hallway ends soon." 1
-		"Just laugh and say 'well, this is a\nlong hallway.'" 2
+		"Suddenly develop an urgent need to check your phone until they're gone." 0
+		"Keep walking in dead silence and hope the hallway ends soon." 1
+		"Just laugh and say 'well, this is a long hallway.'" 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You now know a stranger's opinion on parking garages. Neither of you asked for this, but someone needed it all the same.")

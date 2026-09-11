@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Call back using a dramatically\ndifferent, unexplained voice."
+		= glitchText "Call back using a dramatically different, unexplained voice."
 	)
 	= choice PrintChoices(
 		"Two missed calls and a voicemail you haven't pressed play on yet."
 		"The Missed Call From Mom"
 		290
 		glitchText
-		"Let the voicemail sit unheard for\nthe rest of the day." 0
-		"Call back immediately, bracing for\nwhatever it is." 1
-		"Listen to the voicemail first. Then\ndecide." 2
+		"Let the voicemail sit unheard for the rest of the day." 0
+		"Call back immediately, bracing for whatever it is." 1
+		"Listen to the voicemail first. Then decide." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You are now, for reasons unclear, doing a full Irish accent.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Build a small, dignified pillow fort\nin the empty space and watch Netflix\nin it."
+		= glitchText "Build a small, dignified pillow fort in the empty space and watch Netflix in it."
 	)
 	= choice PrintChoices(
 		"They're traveling this week. The apartment is exactly the same size and feels twice as big."
 		"The Empty Side Of The Bed"
 		290
 		glitchText
-		"Leave the TV on all night just to\nfill the quiet." 0
-		"Text constant updates about your\nevening, needing the thread to stay\nbusy." 1
-		"Let the apartment be quiet. It's\ntemporary." 2
+		"Leave the TV on all night just to fill the quiet." 0
+		"Text constant updates about your evening, needing the thread to stay busy." 1
+		"Let the apartment be quiet. It's temporary." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The fort has excellent structural integrity and zero strategic purpose. ")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Shake the envelope and try to guess\nthe contents like a game show."
+		= glitchText "Shake the envelope and try to guess the contents like a game show."
 	)
 	= choice PrintChoices(
 		"A letter arrives from someone you haven't spoken to in years. You've been staring at the envelope, unopened, for ten minutes."
 		"The Return Address You Don't Recognize"
 		290
 		glitchText
-		"Put it in a drawer. Deal with it\n'later.'" 0
-		"Open it and immediately plan an\napologetic, generous reply." 1
-		"Open it. Read it. Feel whatever you\nfeel." 2
+		"Put it in a drawer. Deal with it 'later.'" 0
+		"Open it and immediately plan an apologetic, generous reply." 1
+		"Open it. Read it. Feel whatever you feel." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You have guessed 'ferret' three times. You weren't even close.")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Attempt to forge a matching\nhandwriting style for your own notes\nfrom now on."
+		= glitchText "Attempt to forge a matching handwriting style for your own notes from now on."
 	)
 	= choice PrintChoices(
 		"You found it while cleaning out a drawer. The handwriting stops you cold for a second you didn't expect."
 		"The Recipe Card In Her Handwriting"
 		290
 		glitchText
-		"Put it back exactly where it was and\nclose the drawer." 0
-		"Make the recipe tonight. Let it mean\nwhatever it means." 1
-		"Get frustrated at how much a card\ncan do to you." 2
+		"Put it back exactly where it was and close the drawer." 0
+		"Make the recipe tonight. Let it mean whatever it means." 1
+		"Get frustrated at how much a card can do to you." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Your grocery lists now look faintly, movingly ancestral.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Redraw the seating chart yourself,\nexiling the two feuding relatives to\nthe garage."
+		= glitchText "Redraw the seating chart yourself, exiling the two feuding relatives to the garage."
 	)
 	= choice PrintChoices(
 		"You've been placed, again, between the two relatives most likely to start a debate over the mashed potatoes."
 		"The Holiday Seating Chart"
 		290
 		glitchText
-		"Prepare a mental list of neutral\ntopics to redirect toward." 0
-		"Accept your fate and mentally leave\nthe table early." 1
-		"Re-assign yourself to the kids table\nand enjoy yourself." 2
+		"Prepare a mental list of neutral topics to redirect toward." 0
+		"Accept your fate and mentally leave the table early." 1
+		"Re-assign yourself to the kids table and enjoy yourself." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The garage now has better conversation than the dining room.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Leap up and greet them in full\ndetective-noir monologue."
+		= glitchText "Leap up and greet them in full detective-noir monologue."
 	)
 	= choice PrintChoices(
 		"Someone's home later than expected. You're awake now, doing math you don't want to be doing."
 		"The Sound Of The Garage Door At 2 AM"
 		290
 		glitchText
-		"Lie perfectly still, pretending to\nbe asleep, wide awake." 0
-		"Get up and greet them cheerfully,\nhiding that you were worried." 1
-		"Ask in the morning if everything's\nokay." 2
+		"Lie perfectly still, pretending to be asleep, wide awake." 0
+		"Get up and greet them cheerfully, hiding that you were worried." 1
+		"Ask in the morning if everything's okay." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("'You've got some explaining to do! At 2 AM! ...In this economy!'")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start referring to the wall as 'the\nincident' from now on."
+		= glitchText "Start referring to the wall as 'the incident' from now on."
 	)
 	= choice PrintChoices(
 		"You come home to a wall that's a different color than it was this morning. Nobody mentioned it was happening."
 		"The New Paint Color They Didn't Ask About"
 		290
 		glitchText
-		"Say you love it, immediately, before\nyou've decided if you do." 0
-		"Ask why you weren't part of the\nconversation." 1
-		"Say nothing and just quietly start\ndisliking the room." 2
+		"Say you love it, immediately, before you've decided if you do." 0
+		"Ask why you weren't part of the conversation." 1
+		"Say nothing and just quietly start disliking the room." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The wall is aware of its new title. It does not react.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Narrate the empty apartment like a\nnature documentary."
+		= glitchText "Narrate the empty apartment like a nature documentary."
 	)
 	= choice PrintChoices(
 		"Everyone's finally gone. The apartment is quiet in a way that feels, for one disorienting second, like something's wrong."
 		"The Silence After The Front Door Closes"
 		290
 		glitchText
-		"Immediately turn on background noise\nto fill the silence." 0
-		"Start texting people to check if\neveryone got home okay." 1
-		"Let the silence be silence for a\nminute before doing anything." 2
+		"Immediately turn on background noise to fill the silence." 0
+		"Start texting people to check if everyone got home okay." 1
+		"Let the silence be silence for a minute before doing anything." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("'And here, in its natural habitat, the human finally exhales.'")

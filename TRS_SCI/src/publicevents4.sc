@@ -24,16 +24,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Push every button on the panel, just\nto see what happens."
+		= glitchText "Push every button on the panel, just to see what happens."
 	)
 	= choice PrintChoices(
 		"It's a short ride, but the silence with the one other passenger has gone on for one floor too long to still feel normal."
 		"The Silent Elevator"
 		290
 		glitchText
-		"Say something bright and pointless\njust to fill the air." 0
-		"Study the floor numbers with the\nintensity of someone defusing a\nbomb." 1
-		"Let the silence just be a normal,\nunremarkable silence." 2
+		"Say something bright and pointless just to fill the air." 0
+		"Study the floor numbers with the intensity of someone defusing a bomb." 1
+		"Let the silence just be a normal, unremarkable silence." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You are now stopping on every floor. The other passenger has begun to visibly reconsider their life choices.")
@@ -59,16 +59,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Take a bow, as if the drop were a\nrehearsed part of the show."
+		= glitchText "Take a bow, as if the drop were a rehearsed part of the show."
 	)
 	= choice PrintChoices(
 		"It hit the floor loudly and rolled somewhere. Multiple strangers definitely saw. You have to decide how big a deal this is."
 		"The Thing You Dropped In Public"
 		290
 		glitchText
-		"Laugh it off way harder than it\ndeserves so no one thinks you're\nbothered." 0
-		"Grab it fast and pretend it never\nhappened at all." 1
-		"Pick it up, shrug, and move on\nwithout narrating it." 2
+		"Laugh it off way harder than it deserves so no one thinks you're bothered." 0
+		"Grab it fast and pretend it never happened at all." 1
+		"Pick it up, shrug, and move on without narrating it." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Someone actually clapped. You are now a performance artist.")
@@ -94,16 +94,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Ask an employee, with real hope, if\nyou can still buy your two items\noutside."
+		= glitchText "Ask an employee, with real hope, if you can still buy your two items outside."
 	)
 	= choice PrintChoices(
 		"It goes off while you're two items into your shopping list, and everyone has to decide, together, how seriously to take it."
 		"The Fire Alarm Mid-Errand"
 		290
 		glitchText
-		"Apologize to the employee at the\ndoor like the alarm is somehow your\nfault." 0
-		"Sprint outside faster than the\nactual emergency protocol requires." 1
-		"Walk out calmly with everyone else\nand wait for the all-clear." 2
+		"Apologize to the employee at the door like the alarm is somehow your fault." 0
+		"Sprint outside faster than the actual emergency protocol requires." 1
+		"Walk out calmly with everyone else and wait for the all-clear." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("They said no. You asked again. They said no again, more slowly.")
@@ -129,16 +129,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Applaud their confidence and ask for\ntips on doing it yourself."
+		= glitchText "Applaud their confidence and ask for tips on doing it yourself."
 	)
 	= choice PrintChoices(
 		"Someone just walked straight past eleven people, including you, and set their items down at the front like it's nothing."
 		"The Line-Cutter"
 		290
 		glitchText
-		"Say nothing and let it happen so you\ndon't have to be The Person Who Says\nSomething." 0
-		"Call it out loudly enough that the\nwhole line hears you." 1
-		"Say, calmly, that the line ends back\nthere." 2
+		"Say nothing and let it happen so you don't have to be The Person Who Says Something." 0
+		"Call it out loudly enough that the whole line hears you." 1
+		"Say, calmly, that the line ends back there." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("They actually gave you a few. You will never use them. You appreciate them anyway.")
@@ -164,16 +164,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Ask the room, out loud, if anyone\nelse wants to talk about what's on\nthe TV."
+		= glitchText "Ask the room, out loud, if anyone else wants to talk about what's on the TV."
 	)
 	= choice PrintChoices(
 		"The TV is playing something no one chose, at a volume no one agreed to, and everyone is very carefully not looking at each other."
 		"The Waiting Room"
 		290
 		glitchText
-		"Smile blandly at anyone who glances\nyour way, just in case." 0
-		"Stare at your phone so hard you\ncould probably describe none of\nwhat's on it later." 1
-		"Just sit there, bored, and let the\nboredom be boring." 2
+		"Smile blandly at anyone who glances your way, just in case." 0
+		"Stare at your phone so hard you could probably describe none of what's on it later." 1
+		"Just sit there, bored, and let the boredom be boring." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("One person, astonishingly, did. You now have opinions about a show you weren't watching an hour ago.")
@@ -199,16 +199,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Try to upstage the performer\nentirely."
+		= glitchText "Try to upstage the performer entirely."
 	)
 	= choice PrintChoices(
 		"They've locked eyes with you specifically, mid-act, in front of a small crowd, and are clearly hoping you'll play along."
 		"The Street Performer's Eye Contact"
 		290
 		glitchText
-		"Go along with whatever bit they're\ndoing, way past your comfort line." 0
-		"Break eye contact and walk fast, out\nof the crowd entirely." 1
-		"Play along a little, on your own\nterms, and enjoy it." 2
+		"Go along with whatever bit they're doing, way past your comfort line." 0
+		"Break eye contact and walk fast, out of the crowd entirely." 1
+		"Play along a little, on your own terms, and enjoy it." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("The crowd's attention has shifted to you completely. The performer looks personally betrayed.")
@@ -234,16 +234,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Lean all the way in and give them a\nfull store tour anyway."
+		= glitchText "Lean all the way in and give them a full store tour anyway."
 	)
 	= choice PrintChoices(
 		"You're wearing a shirt that happens to be the same color as the store's uniform, and a stranger is now approaching you with a question and a basket."
 		"The 'Do You Work Here?' Moment"
 		290
 		glitchText
-		"Try your best to actually help them\nfind what they need." 0
-		"Say nothing and duck around the next\naisle before they finish the\nsentence." 1
-		"Say 'sorry, I don't work here, but I\nthink it's in aisle six.'" 2
+		"Try your best to actually help them find what they need." 0
+		"Say nothing and duck around the next aisle before they finish the sentence." 1
+		"Say 'sorry, I don't work here, but I think it's in aisle six.'" 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("You just gave a stranger better customer service than most actual employees. No one paid you. You feel weirdly great about it.")
@@ -269,16 +269,16 @@
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Take a bow for the sneeze, like it\nwas the whole point of coming today."
+		= glitchText "Take a bow for the sneeze, like it was the whole point of coming today."
 	)
 	= choice PrintChoices(
 		"It happens right in the middle of a silence you did not create and loud enough that it may as well have been an announcement."
 		"The Sneeze In The Quiet Room"
 		290
 		glitchText
-		"Apologize three separate times to\nthree separate directions." 0
-		"Freeze completely and hope everyone\njust forgets it happened." 1
-		"Say a quiet 'excuse me' and let the\nroom move on, because it will." 2
+		"Apologize three separate times to three separate directions." 0
+		"Freeze completely and hope everyone just forgets it happened." 1
+		"Say a quiet 'excuse me' and let the room move on, because it will." 2
 	)
 	(if(== choice GLITCH_CHOICE)
 		ApplyGlitch("Someone actually said 'bless you' with real enthusiasm. A win, of sorts, for the sneeze.")

@@ -218,7 +218,7 @@
 		Load(rsCURSOR	gLoadingCursor)
 
 		// Player portrait (view 801) -- see game.sh and
-		// mechanisms.sc's DrawPortraitMood().
+		// printchoices.sc's GetPortraitMood()/DIcon usage.
 		Load(rsVIEW		PORTRAIT_VIEW)
 
 	    (if(HaveMouse())
@@ -293,7 +293,7 @@
   			Load(rsCURSOR	gLoadingCursor)
 
   			// Player portrait (view 801) -- see game.sh and
-  			// mechanisms.sc's DrawPortraitMood().
+  			// printchoices.sc's GetPortraitMood()/DIcon usage.
   			Load(rsVIEW		PORTRAIT_VIEW)
 
 			(super:newRoom(roomNum))

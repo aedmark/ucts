@@ -107,7 +107,11 @@
 	= gMask (+ gMask maskDelta)
 	= gChild (+ gChild childDelta)
 	ClampStats()
-	DrawPortraitMood()
+	// No DrawPortraitMood() call here anymore -- PrintChoices now shows
+	// the portrait live inside its own dialog (printchoices.sc), computed
+	// fresh via GetPortraitMood() on every call, so a background redraw
+	// here would just be a duplicate immediately hidden by that same
+	// dialog on the very next turn.
 )
 /******************************************************************************/
 (procedure public (ApplyGlitch logMsg)
@@ -120,7 +124,6 @@
 	= gMask (+ gMask ScaleHardMode(- Random(0 50) 25))
 	= gChild (+ gChild ScaleHardMode(- Random(0 50) 25))
 	ClampStats()
-	DrawPortraitMood()
 	Print(logMsg)
 )
 /******************************************************************************/
@@ -177,10 +180,13 @@
 	return(worst)
 )
 /******************************************************************************/
-(procedure public (DrawPortraitMood)
-	// Player-portrait draw (see SESSION_HANDOFF.md). Loop numbers double
-	// as mood: 0 neutral, 1 repression, 2 mask, 3 child.
-	(var worst, worstDanger, dangerMask, dangerChild, mood)
+(procedure public (GetPortraitMood)
+	// Loop numbers double as mood: 0 neutral, 1 repression, 2 mask,
+	// 3 child. Split out of DrawPortraitMood() below so PrintChoices
+	// (printchoices.sc) can also ask for the current mood directly, to
+	// show the portrait inside the event dialog itself rather than only
+	// on the room background (see SESSION_HANDOFF.md).
+	(var worst, worstDanger, dangerMask, dangerChild)
 	= worst 0
 	= worstDanger gRepression
 	= dangerMask (- 100 gMask)
@@ -194,10 +200,8 @@
 		= worstDanger dangerChild
 	)
 	(if(< worstDanger PORTRAIT_NEUTRAL_THRESHOLD)
-		= mood PORTRAIT_MOOD_NEUTRAL
-	)(else
-		= mood (+ worst 1)
+		return(PORTRAIT_MOOD_NEUTRAL)
 	)
-	DrawCel(PORTRAIT_VIEW mood 0 PORTRAIT_X PORTRAIT_Y -1)
+	return(+ worst 1)
 )
 /******************************************************************************/

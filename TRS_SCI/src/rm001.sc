@@ -75,6 +75,10 @@
   		= gFreezeUnlocked FALSE
   		= gSecureCount 0
   		= gSecureUnlocked FALSE
+  		// No-repeat event pool (mechanisms.sc) -- gSeenEvent persists for
+  		// the whole session once mechanisms.sc first loads, so it needs
+  		// the same explicit per-run reset as the mechanism counts above.
+  		ResetSeenEvents()
 
   		// Check which room ego came from and position it
   		(switch(gPreviousRoomNumber)

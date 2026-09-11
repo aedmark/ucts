@@ -22,6 +22,26 @@
 (use "controls")
 (use "casefiles")
 /******************************************************************************/
+// No-repeat event pool (game.sh has the full rationale) -- one flag per
+// event across all 196, indexed by room number minus 200 (WORK_ROOM_BASE,
+// always the lowest of the six *_ROOM_BASE constants, so every room
+// 200-395 maps to a unique 0-195 slot with no extra lookup needed).
+// Script-level local, not a per-call procedure local -- same idiom
+// CaseFiles.sc's own buf[3424] uses, though at 196 bytes this is nowhere
+// near the size that mattered there. Lives in mechanisms.sc (already
+// always-resident) rather than as a Main.sc global specifically because
+// it's only ever touched from here (GoToNextEvent()/ResetSeenEvents()),
+// and a 196-element array declared in Main.sc's globals block wouldn't
+// even be visible from another script the way scalars are anyway (see
+// SESSION_HANDOFF.md's Case Files array-vs-scalar saga). Persists for
+// the whole session once mechanisms.sc first loads, so ResetSeenEvents()
+// must be called explicitly at the start of every run (rm001.sc's init(),
+// alongside the other per-run resets like gFawnCount) or "seen" state
+// would wrongly carry over from a previous run in the same session.
+(local
+	gSeenEvent[TOTAL_EVENT_COUNT]
+)
+/******************************************************************************/
 (procedure public (ApplyChoiceEffects repDelta maskDelta childDelta tag)
 	(switch(tag)
 		(case TAG_FAWN
@@ -267,6 +287,17 @@
 	return(0)
 )
 /******************************************************************************/
+(procedure public (ResetSeenEvents)
+	// Clears the no-repeat pool -- called once per run (rm001.sc's
+	// init(), alongside the other per-run resets like gFawnCount) since
+	// gSeenEvent otherwise persists for the whole session once
+	// mechanisms.sc first loads.
+	(var i)
+	(for (= i 0) (< i TOTAL_EVENT_COUNT) (++i)
+		= gSeenEvent[i] FALSE
+	)
+)
+/******************************************************************************/
 (procedure public (GoToNextEvent)
 	// Picks a zone-weighted random event (PickZone() + a uniform index
 	// within that zone) and transitions straight to its room --
@@ -277,34 +308,54 @@
 	// script-numbers comment for why that was necessary). Called once
 	// from rm001.sc's init() (the very first event of a run) and again
 	// from EndTurn() below every time a turn continues.
-	(var zone, index)
-	= zone PickZone()
-	(switch(zone)
-		(case 0
-			= index Random(0 (- WORK_EVENT_COUNT 1))
-			(send gRoom:newRoom(+ WORK_ROOM_BASE index))
+	//
+	// No-repeat pool (matches js/engine.js's pickWeightedEvent() -- see
+	// game.sh for the simplification from its exact 3-tier fallback to
+	// one bounded retry loop): re-picks a fresh zone+index each attempt
+	// (not just a fresh index within the same zone) so the zone weighting
+	// itself is never skewed by which zone happened to collide first,
+	// and gives up after MAX_EVENT_PICK_RETRIES attempts and accepts
+	// whatever was last picked rather than looping forever.
+	(var zone, index, roomNum, tries)
+	= tries 0
+	(while(1)
+		= zone PickZone()
+		(switch(zone)
+			(case 0
+				= index Random(0 (- WORK_EVENT_COUNT 1))
+				= roomNum (+ WORK_ROOM_BASE index)
+			)
+			(case 1
+				= index Random(0 (- HOME_EVENT_COUNT 1))
+				= roomNum (+ HOME_ROOM_BASE index)
+			)
+			(case 2
+				= index Random(0 (- SOCIAL_EVENT_COUNT 1))
+				= roomNum (+ SOCIAL_ROOM_BASE index)
+			)
+			(case 3
+				= index Random(0 (- SELF_EVENT_COUNT 1))
+				= roomNum (+ SELF_ROOM_BASE index)
+			)
+			(case 4
+				= index Random(0 (- BODY_EVENT_COUNT 1))
+				= roomNum (+ BODY_ROOM_BASE index)
+			)
+			(case 5
+				= index Random(0 (- PUBLIC_EVENT_COUNT 1))
+				= roomNum (+ PUBLIC_ROOM_BASE index)
+			)
 		)
-		(case 1
-			= index Random(0 (- HOME_EVENT_COUNT 1))
-			(send gRoom:newRoom(+ HOME_ROOM_BASE index))
+		(if(not gSeenEvent[(- roomNum 200)])
+			break
 		)
-		(case 2
-			= index Random(0 (- SOCIAL_EVENT_COUNT 1))
-			(send gRoom:newRoom(+ SOCIAL_ROOM_BASE index))
-		)
-		(case 3
-			= index Random(0 (- SELF_EVENT_COUNT 1))
-			(send gRoom:newRoom(+ SELF_ROOM_BASE index))
-		)
-		(case 4
-			= index Random(0 (- BODY_EVENT_COUNT 1))
-			(send gRoom:newRoom(+ BODY_ROOM_BASE index))
-		)
-		(case 5
-			= index Random(0 (- PUBLIC_EVENT_COUNT 1))
-			(send gRoom:newRoom(+ PUBLIC_ROOM_BASE index))
+		++tries
+		(if(>= tries MAX_EVENT_PICK_RETRIES)
+			break
 		)
 	)
+	= gSeenEvent[(- roomNum 200)] TRUE
+	(send gRoom:newRoom(roomNum))
 )
 /******************************************************************************/
 (procedure public (EndTurn)

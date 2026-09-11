@@ -2603,3 +2603,373 @@ sub-items under it are the real remaining scope, not bugs.
       for this investigation -- just play, and whoever has access to
       this repo can read `TRS_SCI/TRSDEBUG.LOG` directly after a crash
       (or even mid-session) to see the full checkpoint trail.
+    - **Confirmed: the one-room-per-event rewrite fully fixed the heap
+      problem.** User's `TRSDEBUG.LOG` from a real play session: fresh
+      boot heap nearly doubled (20158 vs. the old ~10500-10682, from
+      `CaseFiles.sc` no longer being permanently resident plus the old
+      dispatcher system's own baseline cost being gone). Run 1 (11
+      turns, ended via a threshold) settled into a tight ~17270-17470
+      band after the first couple turns' one-time costs, no downward
+      trend. Run 2 -- started via the clickable computer in the *same*
+      session, the exact scenario that originally surfaced the cross-run
+      heap-loss investigation -- showed `rm001 init ENTRY`=17624, not a
+      big drop, and then a full 21-turn Extended Therapy session
+      bouncing between 17236 and 17474 the entire way through: flat, no
+      trend, for the whole run. `rm002 init ENTRY`/`EXIT` were identical
+      both times (17112->17112) -- the ending sequence has perfect heap
+      recovery too now. This confirms the diagnosis: it really was
+      allocator-level fragmentation from the manual Load/Dispose
+      chunk-cycling, and one-room-per-event eliminated it rather than
+      just reducing its blast radius the way smaller chunks did.
+    - **Debug instrumentation fully removed, and a DisposeScript audit
+      run across the whole codebase per the user's request.** Removed:
+      `DebugLog` (`Controls.sc`), `gDebugLogFile` (`Main.sc`, both its
+      global declaration and its `FOpen("TRSDEBUG.LOG" fCREATE)` boot-
+      time open), and every call site (`rm001.sc`, `rm002.sc`,
+      `mechanisms.sc`'s `EndTurn()`). Confirmed via grep: zero remaining
+      references to `DebugLog`/`gDebugLogFile`/`TRSDEBUG` anywhere.
+      **Audit**: checked every `.sc` file for (1) a script disposing its
+      own script constant (would mean disposing code while it's still
+      on the call stack) -- an automated pass mapping each file's own
+      `(script X)` declaration against every `DisposeScript(...)` call
+      inside it found zero matches; (2) whether any of the
+      always-resident core scripts (`mechanisms.sc`, `printchoices.sc`,
+      `Main.sc`, `Controls.sc`) are ever disposed by anything -- never;
+      (3) whether every `Load(rsSCRIPT ...)` has a reachable matching
+      `DisposeScript(...)`. The third check's raw per-file counts looked
+      mismatched at first for `CaseFiles.sc` (3 Loads/4 Disposes) and
+      `rm002.sc` (5 Loads/13 Disposes), but tracing both by hand showed
+      the same legitimate pattern each time: one `Load` shared across
+      several mutually-exclusive branches, each with its own
+      `DisposeScript` on its way out (e.g. `MarkCaseFile`'s single
+      `Load` has two branches, only one of which ever runs per call;
+      `printSurvivalEnding`'s one `Load` covers 9 ending branches). Every
+      actual runtime code path loads once and disposes exactly once.
+      Also confirmed the 196 event rooms contain zero `Load`/
+      `DisposeScript` calls at all -- the engine's own room-transition
+      cleanup handles them entirely now, which was the whole point of
+      the rewrite. **No changes needed** -- the codebase passed clean.
+    - **Stat gauges added** (the next backlog item picked up after the
+      heap saga closed out). Investigated the stock template's `Gauge`
+      class (`gauge.sc`) first, re-confirming the portrait feature's
+      earlier finding: it's a full interactive modal dialog (up/down/OK/
+      normal/cancel buttons) for adjusting a value like volume, not a
+      passive display -- genuinely unsuitable for a live stat HUD as-is.
+      But its `update()` method has the reusable piece: it builds a
+      plain string of block characters (code 6 = filled, code 7 = empty)
+      and shows it via an ordinary `DText` -- a passive text-based bar
+      graph technique, independent of the rest of the interactive
+      dialog. Reused just that technique rather than adapting the whole
+      class.
+      - New constants in `game.sh`: `GAUGE_SEGMENTS` (10, each segment =
+        10% of a stat's 0-100 range), `GAUGE_BUF_SIZE` (41, matching
+        `gauge.sc`'s own `strGauge[41]` sizing convention), and the two
+        block-character codes as named constants
+        (`GAUGE_CHAR_FILLED`/`GAUGE_CHAR_EMPTY` = 6/7) instead of magic
+        numbers.
+      - New `AppendGaugeBar(buf pos statValue)` and
+        `BuildStatGauges(buf)` in `mechanisms.sc` (already always-
+        resident, already holds all the other stat-formatting logic like
+        `GetPortraitMood()`). `AppendGaugeBar` appends one bar and
+        returns the position just past it, so `BuildStatGauges` can
+        chain "R:" + bar + " M:" + bar + " C:" + bar into one buffer
+        without any of the three pieces needing to know the others'
+        lengths in advance -- same `Format((+ buf offset) ...)` pointer-
+        arithmetic pattern already proven in `ShowCaseFiles()`. Shows
+        raw stat values, matching the status line's own existing
+        convention (not "danger"-adjusted like the portrait mood is).
+      - `printchoices.sc`: `PrintChoices` now builds the gauge line
+        fresh on every call (so it always reflects the current stats)
+        and shows it as one more `DText` row, positioned right below the
+        description/portrait row and above the buttons.
+        **Deliberately uses `gDefaultFont`, not `SMALL_FONT`** -- `Gauge`
+        class's own proven usage of these exact block-character codes
+        renders them in font 0/`gDefaultFont` specifically; nothing in
+        this codebase establishes that `SMALL_FONT` has glyphs at those
+        same codes, and guessing wrong here would silently render
+        garbage/blank where the bars should be. Costs a bit more height
+        than `SMALL_FONT` would have, accepted deliberately rather than
+        gambling on an unverified font.
+      - Ran the structural sanity check on all three touched files
+        (`game.sh`, `mechanisms.sc`, `printchoices.sc`) -- clean.
+      - **Real, flagged risk, not yet resolved by testing**: this adds
+        a new row to every single `PrintChoices` dialog in the game (all
+        196 events plus the NG+ mode-choice dialog), on top of a project
+        that has hit genuine dialog-height-overflow bugs twice already
+        (the `nsTop` clamp and `SMALL_FONT` buttons both exist because of
+        it). The `nsTop`-clamp safety net still applies regardless, so
+        this shouldn't be able to produce the same *garbled-screen*
+        failure mode again, but it's worth specifically re-checking the
+        previously-flagged tallest events ("The Typo," "The Performance
+        Review Buzzword") once compiled, not just a random turn. **Not
+        yet compiled/playtested.**
+    - **Real bug, caught immediately from a screenshot: the in-dialog
+      gauge rendered as just "R:" with nothing after it, not even the
+      " M:"/" C:" that should have followed.** Confirmed via the
+      screenshot, not just inspection — this wasn't merely "wrong glyph
+      shape," the entire rest of the line vanished after the first bar.
+      Root cause: `GAUGE_CHAR_FILLED`/`GAUGE_CHAR_EMPTY` (6/7) are in the
+      ASCII *control-character* range, not printable glyphs -- whatever
+      this project's actual compiled font resource has at those code
+      points (if anything), the text renderer evidently treats them as
+      control bytes and stops processing the string there, rather than
+      drawing an undefined-glyph placeholder. `Gauge`'s own stock usage
+      of these exact codes (gauge.sc) may have relied on a specific
+      1990s font resource having custom block glyphs at 6/7 -- this
+      project's SCI-Companion-compiled font doesn't have (or doesn't
+      render) whatever `Gauge` was originally built against.
+      **User's own call, and a better design on two counts, not just a
+      workaround**: move the gauges to the **status line** instead of
+      inside every `PrintChoices` dialog. This (1) sidesteps the
+      dialog-height-overflow risk that had been flagged as a real
+      concern the moment the in-dialog version was built, and (2) is
+      actually *more* visible -- confirmed via the user's own screenshot
+      that the status line stays visible above an open `PrintChoices`
+      dialog, not covered by it, so gauges there are visible
+      essentially all the time, not just while one specific dialog
+      happens to be open.
+      **Fixes applied**:
+      - `game.sh`: `GAUGE_CHAR_FILLED`/`GAUGE_CHAR_EMPTY` switched from
+        6/7 to plain printable ASCII, 35/46 (`'#'`/`'.'`) -- safe in any
+        font, already proven throughout this entire codebase.
+        `GAUGE_SEGMENTS` shrunk from 10 to 8 and `GAUGE_BUF_SIZE`
+        removed entirely (no longer needed, see below) -- sized to fit
+        the status line's own fixed `strBuf[41]` (Game.sc's `SL:doit()`):
+        `"T.R.S. R:" + 8 bars + " M:" + 8 bars + " C:" + 8 bars` = 39
+        chars + a NUL = 40, one byte to spare.
+      - **`AppendGaugeBar`/`BuildStatGauges` moved from `mechanisms.sc`
+        to `Main.sc`**, not left where they were first written --
+        calling them from `Main.sc`'s `statusCode:doit()` (the only
+        caller now that the in-dialog version is gone) would have
+        required `Main.sc` to `(use "mechanisms")`, but `mechanisms.sc`
+        already `(use "main")` -- a brand-new circular pair, the exact
+        shape that needed the special bootstrap dance (temporarily
+        comment out the call, compile each side alone, restore, Compile
+        All) for `casefiles.sc`/`casefileaccess.sc` earlier in this
+        project. Not worth risking again for two small procedures with
+        a single caller when moving them avoids the issue entirely --
+        `gRepression`/`gMask`/`gChild` are Main.sc's own globals anyway,
+        needing no cross-script access once they live there. Confirmed
+        via grep: `Main.sc` still has zero `(use "mechanisms")`.
+      - `printchoices.sc`: fully reverted to its pre-gauge state (the
+        `hGauge`/`gaugeBuf` locals and the new `DText` row removed).
+      - **`Main.sc`'s `statusCode:doit()` now builds
+        `"T.R.S. " + BuildStatGauges(...)`** instead of the old numeric
+        `Format(param1 " T.R.S.     Repression: %d  Mask: %d  Child: %d ")`.
+        **Bonus fix, found while replacing this**: the old numeric
+        format could reach 51 characters at 3-digit stat values (e.g.
+        Repression at exactly 100, a real, reachable in-game value)
+        against `SL:doit()`'s fixed `strBuf[41]` -- a genuine stack
+        buffer overflow that had simply never been exercised by the
+        specific value combinations tested so far. The gauge format is
+        fixed-length (always exactly 39 chars + NUL) regardless of stat
+        value, so this class of bug can't recur here.
+      - Ran the structural sanity check on all four touched files
+        (`game.sh`, `mechanisms.sc`, `printchoices.sc`, `Main.sc`) --
+        clean. Confirmed via grep: zero remaining references to
+        `GAUGE_BUF_SIZE`/`hGauge`/`gaugeBuf`, `AppendGaugeBar`/
+        `BuildStatGauges` each defined exactly once (now in `Main.sc`),
+        `Main.sc` has no new circular `(use ...)`.
+      **Not yet compiled/playtested.**
+    - **Same exact symptom recurred after the status-line move: a
+      screenshot showed "T.R.S. R:" and then nothing -- no bar, no
+      " M:"/" C:" either, despite already having switched to plain
+      printable ASCII.** This ruled out the "control-character codes"
+      theory from the previous entry -- the truncation was never about
+      glyphs at all. Investigated hard but could **not conclusively
+      root-cause it**: traced the byte-offset math by hand (confirmed
+      correct -- "T.R.S. R:" is exactly 9 characters, each bar section's
+      `Format()`/loop offsets line up with no gaps or overlaps), checked
+      whether `Format(buf "literal-only-string")` with zero extra args
+      is valid (confirmed via SCI Companion's own kernel docs -- yes,
+      `Format(destString formatString)` is a documented, valid form),
+      and checked whether `identifier[compound-expression]` bracket
+      syntax is proven elsewhere (yes -- `printchoices.sc`'s own
+      `params[+ paramCnt 1]`, in the very file this whole feature is
+      adjacent to). None of these individually explained the failure.
+      **The one thing both the broken block-character version and the
+      broken plain-ASCII version had in common**: both built the string
+      via helper procedures (`AppendGaugeBar`/`BuildStatGauges`) that
+      received the destination buffer as a *parameter* and did further
+      pointer arithmetic on it *inside a different procedure* than the
+      one that originally received it from `SL:doit()`. Nothing else in
+      this codebase's proven, working buffer-building code
+      (`CaseFiles.sc`'s `ShowCaseFiles()`) does this -- it always
+      computes each `Format()` destination offset directly at the call
+      site from its own script-level `@buf`, never threading a buffer
+      through a chain of procedure calls for further arithmetic
+      elsewhere. Since two independent attempts both used that one
+      untested pattern and both failed the same way, it's the leading
+      suspect -- but this is circumstantial, not a confirmed root cause;
+      genuinely might be something else entirely that happened to
+      correlate.
+      **Fix**: rewrote `statusCode:doit()` (`Main.sc`) to do everything
+      inline, directly on `param1`, with no helper procedures and no
+      buffer ever passed as an argument -- every `Format()` call computes
+      its own offset directly (`(+ param1 17)`, `(+ param1 28)`, matching
+      `ShowCaseFiles()`'s exact style) and every bar-character write goes
+      through a precomputed local (`= idx (+ 9 i)` before `= param1[idx]
+      ...`, avoiding even a compound expression inside the brackets,
+      belt-and-suspenders on top of the `params[+ paramCnt 1]` precedent
+      already confirming that part works). Removed the now-unused
+      `AppendGaugeBar`/`BuildStatGauges` procedures entirely. Verified
+      the offset arithmetic by hand and via a byte-counting script:
+      `"T.R.S. R:"` = 9 chars, bars/labels land at 9-16, 17-19, 20-27,
+      28-30, 31-38, final NUL at 39 -- 40 bytes total, still one byte
+      under `strBuf[41]`. Ran the structural sanity check on `Main.sc`
+      -- clean. Confirmed via grep: zero remaining references to
+      `AppendGaugeBar`/`BuildStatGauges` outside one explanatory comment.
+      **Not yet compiled/playtested** -- if this *still* shows the same
+      truncation, the parameter-passing theory is wrong and the real
+      cause lies elsewhere (worth trying at that point: a debug
+      `FormatPrint`/log reading back individual bytes of `param1` right
+      after each write, to see whether the bytes are actually wrong in
+      memory or whether this is a `DrawStatus`-side rendering issue
+      instead of a string-building one).
+    - **Same symptom a third time -- "T.R.S. R:" and nothing else --
+      even with the fully-inlined, no-parameter-passing version above.**
+      This actually narrows things down usefully: it rules out the
+      "computed pointer threaded through a nested procedure call" theory
+      from the previous entry, since this version never does that at
+      all. Whatever's wrong is specific to something both this version
+      and the previous one still share: writing individual bar
+      characters via plain bracket-assignment (`= param1[idx] value`).
+      **New, more targeted theory**: noticed that the stock `Gauge`
+      class's own `update()` method (`gauge.sc`) -- the ONLY other place
+      in this entire codebase that sets individual characters in a
+      string one at a time -- deliberately uses the `StrAt()` KERNEL
+      call (`StrAt(@strGauge i 6)`), never bracket-assignment, for
+      exactly this task. `StrAt(aString index [replacement])`'s own
+      kernel doc frames it as THE way to get-or-set a single character
+      in a string -- which would be redundant if plain
+      `arr[i] = value` already did this reliably. Leading theory:
+      bracket-assignment on something used as a *string* (as opposed to
+      a `rect[4]`-style array of coordinate values, or `hButtons[6]`-
+      style array of object references, both of which legitimately need
+      16-bit-per-element storage) may write a 16-bit word per element
+      rather than an 8-bit byte in this dialect, planting a stray zero
+      byte right after the first character written and NUL-terminating
+      the string there -- consistent with every symptom seen so far,
+      across three different structural attempts, all of which used
+      bracket-assignment for the per-character writes. Still
+      circumstantial (not empirically confirmed byte-for-byte), but it's
+      the first theory that actually distinguishes what's failed from
+      what's worked: `Format()` (used for the multi-character labels,
+      which have rendered correctly every single time) is a kernel call
+      doing real byte-level C-string formatting internally, completely
+      separate from whatever bracket-assignment does.
+      **Fix**: rewrote every individual-character write in
+      `statusCode:doit()` to use `StrAt(param1 index char)` instead of
+      `= param1[index] char` -- labels still go through `Format()` as
+      before (unchanged, already proven). Ran the structural sanity
+      check on `Main.sc` -- clean.
+      **User's own explicit fallback, worth remembering if this also
+      fails**: revert to the original numeric status line format
+      (fixing its real 3-digit/`strBuf[41]` overflow risk found along the
+      way regardless) and skip the bar-gauge visual entirely, or dress
+      the numbers up with plain ASCII decoration instead of a true bar
+      (e.g. brackets/dividers) rather than continuing to chase this.
+      **Not yet compiled/playtested** -- this is the last attempt before
+      that fallback.
+    - **Confirmed fixed.** User's screenshot: status line reads
+      `T.R.S. R:........ M:######... C:########.` -- all three bars
+      rendering correctly, no truncation. `StrAt()` was the real fix;
+      the "bracket-assignment on a string-typed buffer writes a 16-bit
+      word instead of an 8-bit byte" theory is the best explanation
+      found, though never verified at the raw-byte level -- what matters
+      is `StrAt()` is now the confirmed-correct tool any future
+      character-by-character string-building in this codebase should
+      reach for, not bracket-assignment (`arr[i] = value` is still fine
+      for genuine word arrays like `rect[4]`/`hButtons[6]`, and for
+      values that are always zero like `ShowCaseFiles()`'s zero-fill
+      loop, where a word-vs-byte stride mismatch is invisible). Stat
+      gauges feature is done: status line shows live text-bar gauges for
+      Repression/Mask/Child, `PrintChoices` dialogs are unchanged (no
+      new height risk), and the real latent `strBuf[41]` overflow bug in
+      the old numeric format is fixed as a side effect.
+    - **User's own follow-up call: dropped the bar-gauge visual entirely
+      in favor of the original numbers, just quantified with a "%" sign
+      and pipe-separated** (`"T.R.S. REP:40%|MASK:60%|CHILD:60%"`,
+      matching their own requested style, tightened to fit the buffer --
+      their exact example, with full padding/spacing, measured at 56
+      characters worst-case, well past `strBuf[41]`). The bar-gauge work
+      wasn't wasted, though -- it's what found and fixed the `StrAt()`-
+      vs-bracket-assignment bug, which mattered again immediately here.
+      **New wrinkle, avoided rather than risked**: a literal `"%"`
+      character has never appeared in a `Format()` format string
+      anywhere in this codebase, and since `%` is `Format()`'s own
+      specifier marker, placing one directly after a `%d` (as
+      `"%d%%|..."`-style C-printf escaping might require, or might not
+      -- genuinely untested either way in this dialect) risked being
+      misread as an invalid specifier rather than literal text. Sidestepped
+      the whole question: `Format()` renders each number alone (no `%`
+      in its format string at all), `StrLen()` finds exactly where that
+      number's variable-width output (1-3 digits) ended, and `StrAt()`
+      -- now confirmed correct from the bar-gauge fix -- appends the `%`
+      and a fresh NUL terminator right after, chaining forward from each
+      new length. Removed the now-fully-unused `GAUGE_SEGMENTS`/
+      `GAUGE_CHAR_FILLED`/`GAUGE_CHAR_EMPTY` constants from `game.sh`,
+      replaced with a consolidated comment documenting the whole
+      bar-gauge dead-end (all three failed attempts plus the fix) so a
+      future session doesn't rediscover any of it the hard way. Worst
+      case (all three stats at 100) is 36 characters + NUL = 37,
+      comfortably under `strBuf[41]` -- the original numeric format this
+      replaces could reach 51 at the same worst case, so that latent
+      overflow stays fixed regardless of which display style wins.
+      **Not yet compiled/playtested in this exact form** -- the bar-gauge
+      version was the one actually confirmed rendering correctly (the
+      "is this how you planned on it looking" exchange); this numeric-
+      with-percent version reuses that same proven `StrAt()`-based
+      foundation but is itself a new arrangement (different literal
+      text, an added `StrLen()` call, three chained `Format()` calls
+      instead of one), so it still needs its own compile/playtest pass
+      before calling the stat-display feature done.
+12. **No-repeat event pool -- built.** Checked first whether the
+    one-room-per-event rewrite had accidentally fixed this (it hadn't --
+    `GoToNextEvent()` was still pure `Random()`, no tracking at all).
+    Read the original browser game's actual algorithm
+    (`js/engine.js`'s `pickWeightedEvent()`) before porting rather than
+    guessing: a `seenEventTitles` Set filters the *whole* event pool
+    (not per-zone) down to unseen events first, falls back to "just not
+    the immediately-preceding title" if that's ever empty, then finally
+    "anything" if even that's empty; reset to empty at the start of each
+    run.
+    - **Deliberately simplified from the original's 3-tier fallback to
+      one bounded retry loop** (`game.sh` has the full rationale): a run
+      is only ever 10-20 turns against 196 total events, so "every event
+      already seen this run" can never actually happen -- replicating
+      those extra tiers exactly would be dead code. `GoToNextEvent()`
+      (mechanisms.sc) now re-picks a fresh zone+index (not just a fresh
+      index within the same zone -- keeps the zone weighting itself from
+      ever being skewed by whichever zone happened to collide first)
+      until it lands on an unseen room, giving up after
+      `MAX_EVENT_PICK_RETRIES` (30, pure insurance, never expected to
+      matter in practice) and accepting a repeat rather than looping
+      forever.
+    - **New script-level local in `mechanisms.sc`**: `gSeenEvent
+      [TOTAL_EVENT_COUNT]` (196 bytes, one flag per event) -- indexed by
+      `roomNum - 200` (`WORK_ROOM_BASE`, always the lowest of the six
+      `*_ROOM_BASE` constants), so every room 200-395 maps to a unique
+      0-195 slot with no separate lookup table needed. Lives in
+      `mechanisms.sc` rather than as a `Main.sc` global specifically
+      because it's only ever touched from `GoToNextEvent()`/
+      `ResetSeenEvents()`, both in the same file, and (per the Case
+      Files array-vs-scalar saga earlier in this project) a global array
+      declared in `Main.sc` wouldn't even be visible from another script
+      the way scalars are. Verified `TOTAL_EVENT_COUNT` (196) three ways:
+      matches the sum of the six per-zone `*_EVENT_COUNT` constants,
+      matches the room range size (395-200+1), and matches what the
+      one-room-per-event rewrite actually generated.
+    - New `ResetSeenEvents()` (mechanisms.sc), called once from
+      `rm001.sc`'s per-run reset block (alongside `gFawnCount` etc.) --
+      `gSeenEvent` persists for the whole session once `mechanisms.sc`
+      first loads, so it needs the same explicit per-run clearing every
+      other per-run counter already gets.
+    - This is plain integer-array read/write (`FALSE`/`TRUE` flags), not
+      a string being built character-by-character -- the `StrAt()`-vs-
+      bracket-assignment lesson from the stat-gauge saga doesn't apply
+      here; `hButtons[buttonCnt]`/`rect[4]`-style bracket indexing is the
+      right tool for this and already proven throughout this codebase.
+    - Ran the structural sanity check across all 244 `.sc` files in
+      `TRS_SCI/src` -- clean. Confirmed `ResetSeenEvents()` is called
+      exactly once, from `rm001.sc`. **Not yet compiled/playtested.**

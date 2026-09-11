@@ -522,7 +522,45 @@
 (instance statusCode  of Code
 	(properties)
  	(method (doit param1)
-  		Format(param1 " T.R.S.     Repression: %d  Mask: %d  Child: %d " gRepression gMask gChild)
+ 		// Numbers-with-percent-signs, pipe-separated -- user's own call
+ 		// after seeing the bar-gauge version and preferring the original
+ 		// numeric readout, just quantified ("T.R.S. REP:40%|MASK:60%|
+ 		// CHILD:60%"). See game.sh's stat-gauges block for the fuller
+ 		// history of the bar-gauge attempts this replaces.
+ 		//
+ 		// Deliberately does NOT put a literal "%" character inside a
+ 		// Format() format string -- that's never been done anywhere in
+ 		// this codebase, and since "%" is Format()'s own specifier
+ 		// marker, an unescaped one sitting right after a "%d" (as
+ 		// "40%|..." would need) risks being misread as the start of a
+ 		// new, invalid specifier rather than a literal character. Safer,
+ 		// fully-proven alternative: Format() renders each number alone
+ 		// (no "%" in its format string at all), StrLen() finds exactly
+ 		// where that number's variable-width output (1-3 digits) ended,
+ 		// and StrAt() -- already confirmed as the correct way to write a
+ 		// single byte into a string in this dialect, see the bar-gauge
+ 		// history -- appends the "%" and a fresh NUL terminator right
+ 		// after. Repeated 3 times, chaining forward from each new length.
+ 		//
+ 		// Worst case ("T.R.S. REP:100%|MASK:100%|CHILD:100%", all three
+ 		// stats at 100) is 36 characters + a NUL = 37, comfortably under
+ 		// SL:doit()'s fixed strBuf[41] (Game.sc) -- unlike the original
+ 		// numeric format this replaces, which could reach 51 characters
+ 		// at the same worst case, a real latent buffer overflow that
+ 		// just never got exercised by the specific values tested so far.
+ 		(var len)
+ 		Format(param1 "T.R.S.     REP:%d " gRepression)
+ 		= len StrLen(param1)
+ 		StrAt(param1 len 37)			/* '%' */
+ 		StrAt(param1 (+ len 1) 0)		/* re-terminate after it */
+ 		Format((+ param1 (+ len 1)) " |  MASK:%d " gMask)
+ 		= len StrLen(param1)
+ 		StrAt(param1 len 37)
+ 		StrAt(param1 (+ len 1) 0)
+ 		Format((+ param1 (+ len 1)) " |  CHILD:%d" gChild)
+ 		= len StrLen(param1)
+ 		StrAt(param1 len 37)
+ 		StrAt(param1 (+ len 1) 0)
  	)
 )
 /******************************************************************************/

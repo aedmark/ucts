@@ -131,6 +131,27 @@
 (define PUBLIC_EVENT_COUNT	32)
 (define ZONE_COUNT			6)
 
+// No-repeat event pool (matches js/engine.js's pickWeightedEvent(): a
+// seenEventTitles Set filters out any event already shown this run,
+// falling back to "just not the immediately-preceding one" if that pool
+// is ever exhausted, then finally "anything" -- see mechanisms.sc's
+// GoToNextEvent()/ResetSeenEvents()). TOTAL_EVENT_COUNT (196) must equal
+// the sum of the six *_EVENT_COUNT constants above and match the room
+// range 200-395 exactly (WORK_ROOM_BASE is always 200, so a room number
+// minus 200 is already the flat 0-195 "seen" index with no extra
+// mapping needed). The original's two extra fallback tiers (all-seen ->
+// avoid-immediate-repeat -> anything) are deliberately simplified to one
+// bounded retry loop instead: with a run only ever 10-20 turns against
+// 196 total events, "every event already seen this run" can never
+// actually happen, so replicating those tiers exactly would be dead
+// code. MAX_EVENT_PICK_RETRIES is pure insurance against a pick landing
+// on an already-seen event by chance -- comfortably enough attempts to
+// almost always succeed well before the cap (a 20-turn run leaves ~90%
+// of all events still unseen even near the very end), with no risk of
+// an infinite loop if it's somehow never satisfied.
+(define TOTAL_EVENT_COUNT		196)
+(define MAX_EVENT_PICK_RETRIES	30)
+
 // One-room-per-event (see the freed-script-numbers comment above for why):
 // each of the 196 events is its own room, script number
 // <ZONE>_ROOM_BASE + localIndex (0-based, matching the EVENT_COUNT
@@ -170,6 +191,30 @@
 (define PORTRAIT_MOOD_MASK			2)
 (define PORTRAIT_MOOD_CHILD		3)
 (define PORTRAIT_NEUTRAL_THRESHOLD	60)
+
+// Status line stat readout history (Main.sc's statusCode) -- several
+// dead ends worth not repeating, see SESSION_HANDOFF.md for the full
+// story: (1) text-bar gauges using the stock Gauge class's block-
+// character codes (gauge.sc's update(), char 6/7) rendered as a blank/
+// truncated line -- those codes are in the ASCII control-character
+// range, not printable glyphs, and this project's compiled font doesn't
+// have (or render) whatever Gauge's original stock usage assumed;
+// (2) switching to plain ASCII ('#'/'.') for the same bar approach,
+// built via bracket-assignment (`= buf[i] value`) into a buffer received
+// as a parameter, hit the exact same truncation -- root cause turned out
+// to be bracket-assignment itself, which most likely writes a 16-bit
+// word per element rather than an 8-bit byte for a buffer typed this
+// way, planting a stray zero byte (a premature NUL) right after the
+// first character written. Fixed by switching to the StrAt() KERNEL
+// call for every single-character write instead -- confirmed the
+// correct, dialect-proper way to set one byte in a string (it's exactly
+// what Gauge's own update() used all along, just never adopted here
+// until this cost three rounds to learn). (3) the working bar-gauge
+// version was then dropped anyway, per the user's own preference, in
+// favor of the current numbers-with-percent-signs format -- see
+// Main.sc's statusCode:doit() for why that one deliberately avoids
+// putting a literal "%" inside a Format() format string (untested,
+// avoidable risk) in favor of StrLen()+StrAt() to append it afterward.
 
 // Clickable office scenery (rm002.sc only -- see SESSION_HANDOFF.md for why
 // rm001 can't host these: its whole turn loop is one chain of blocking

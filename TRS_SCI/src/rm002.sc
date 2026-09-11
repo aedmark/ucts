@@ -29,6 +29,9 @@
 (use "inv")
 (use "casefiles")
 (use "mechanisms")
+(use "endingcontent1")
+(use "endingcontent2")
+(use "endingcontent3")
 /******************************************************************************/
 (instance public rm002 of Rm
 	(properties
@@ -66,34 +69,22 @@
 		(self:printEnding())
 	)
 	(method (printEnding)
+		// Full ending-variant port (see SESSION_HANDOFF.md, game.sh,
+		// tools/gen-endings.js): each PrintFailureEndingN()/
+		// PrintSurvivalEndingN() (endingcontent1-3.sc) now picks one of
+		// several real flavor variants at random and marks the matching
+		// flat Case Files slot itself -- this method just decides WHICH
+		// pool applies, exactly the same condition table/order as before.
 		(if(>= gRepression 100)
-			Print(
-				"Your repression hit 100%. The dam broke. You are currently sobbing in a supply closet."
-				#title "Panic Attack"
-			)
-			(if(MarkCaseFile(9))
-				Print("Case Files: Panic Attack, filed." #title "New Case File")
-			)
+			PrintFailureEnding0()
 			return
 		)
 		(if(<= gMask 0)
-			Print(
-				"Your mask dropped to 0%. You finally said exactly what you thought. You are now unemployed and friendless, but free."
-				#title "Social Exile"
-			)
-			(if(MarkCaseFile(10))
-				Print("Case Files: Social Exile, filed." #title "New Case File")
-			)
+			PrintFailureEnding1()
 			return
 		)
 		(if(<= gChild 0)
-			Print(
-				"Your inner child hit 0%. You are now a hollow shell operating purely on muscle memory. You feel nothing."
-				#title "Total Disassociation"
-			)
-			(if(MarkCaseFile(11))
-				Print("Case Files: Total Disassociation, filed." #title "New Case File")
-			)
+			PrintFailureEnding2()
 			return
 		)
 		(self:printSurvivalEnding())
@@ -107,73 +98,43 @@
 		(if(not gHardMode)
 			UnlockNgPlus()
 		)
-		// One representative title/desc per condition from the original's
-		// CONTENT_ENDINGS (js/content-endings.js) -- same condition table,
-		// same order (first match wins), just one flavor variant each
-		// instead of the original's 8 per pool, to keep this well within
-		// the per-script memory budget. Conditions matched via a flat
-		// sequence of early-return ifs rather than a chained else-if --
-		// see SESSION_HANDOFF.md's if/else gotcha for why.
+		// Same condition table/order as the original's CONTENT_ENDINGS
+		// (js/content-endings.js, first match wins) -- matched via a flat
+		// sequence of early-return ifs rather than a chained else-if, see
+		// SESSION_HANDOFF.md's if/else gotcha for why.
 		(if(>= gRepression 70)
-			Print("You didn't explode. You just got very, very good at ticking." #title "The Powder Keg")
-			(if(MarkCaseFile(0))
-				Print("Case Files: The Powder Keg, filed." #title "New Case File")
-			)
+			PrintSurvivalEnding0()
 			return
 		)
 		(if((>= gMask 85) and (<= gChild 25))
-			Print("Nobody has seen the real you in years, including you." #title "The Performer")
-			(if(MarkCaseFile(1))
-				Print("Case Files: The Performer, filed." #title "New Case File")
-			)
+			PrintSurvivalEnding1()
 			return
 		)
 		(if((>= gChild 75) and (<= gMask 40))
-			Print("You stopped hiding. It cost you more than you expected, but you kept yourself." #title "Radically Undone")
-			(if(MarkCaseFile(2))
-				Print("Case Files: Radically Undone, filed." #title "New Case File")
-			)
+			PrintSurvivalEnding2()
 			return
 		)
 		(if((<= gMask 25) and (>= gChild 25))
-			Print("You stopped filtering. Everything's a little too loud and a little too close to the surface right now." #title "Raw Nerve")
-			(if(MarkCaseFile(3))
-				Print("Case Files: Raw Nerve, filed." #title "New Case File")
-			)
+			PrintSurvivalEnding3()
 			return
 		)
 		(if((>= gMask 41) and (<= gChild 25))
-			Print("You looked fine all day. You have no real idea what was actually fueling that." #title "Coasting on Empty")
-			(if(MarkCaseFile(4))
-				Print("Case Files: Coasting on Empty, filed." #title "New Case File")
-			)
+			PrintSurvivalEnding4()
 			return
 		)
 		(if((<= gRepression 30) and (>= gMask 40) and (<= gMask 70) and (>= gChild 40) and (<= gChild 70))
-			Print("Nothing is fixed. Nothing is on fire. This might be what okay feels like." #title "Fragile Equilibrium")
-			(if(MarkCaseFile(5))
-				Print("Case Files: Fragile Equilibrium, filed." #title "New Case File")
-			)
+			PrintSurvivalEnding5()
 			return
 		)
 		(if((<= gRepression 30) and (>= gMask 60) and (>= gChild 60))
-			Print("Not surviving. Not performing. Just, for once, actually okay. You can tell the difference from the inside." #title "Actually Okay")
-			(if(MarkCaseFile(6))
-				Print("Case Files: Actually Okay, filed." #title "New Case File")
-			)
+			PrintSurvivalEnding6()
 			return
 		)
 		(if((>= gRepression 31) and (<= gRepression 69) and (>= gMask 40) and (>= gChild 40))
-			Print("You're carrying more than you'd like to admit, and carrying it fine, for now." #title "The Long Fuse")
-			(if(MarkCaseFile(7))
-				Print("Case Files: The Long Fuse, filed." #title "New Case File")
-			)
+			PrintSurvivalEnding7()
 			return
 		)
-		Print("You made it to tomorrow. Good job." #title "Functional Enough")
-		(if(MarkCaseFile(8))
-			Print("Case Files: Functional Enough, filed." #title "New Case File")
-		)
+		PrintSurvivalEnding8()
 	)
 )
 /******************************************************************************/

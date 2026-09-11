@@ -22,6 +22,7 @@
 (use "obj")
 (use "disposeload")
 (use "casefiles")
+(use "casefileaccess")
 /******************************************************************************
  * These are the global variables. You can access them from any script as long
  * as it "use"es this script
@@ -75,19 +76,18 @@
 	gSecureCount = 0
 	gSecureUnlocked = FALSE
 
-	/* T.R.S. Case Files: cross-run "have I ever seen this" record (endings
-	   + mechanisms, plus the unrelated Extended Therapy unlock flag riding
-	   along in slot 17 -- see game.sh). Persisted to disk -- see
-	   casefiles.sc. Each defaults to 0 (never seen); LoadCaseFiles()
-	   (called once from Template:init()) overwrites these from disk if a
-	   save file already exists.
+	/* T.R.S. Case Files: cross-run "have I ever seen this" record (every
+	   ending VARIANT, mechanisms, plus the unrelated Extended Therapy
+	   unlock flag riding along in slot 107 -- see game.sh's full index
+	   scheme). Persisted to disk -- see casefiles.sc. Each defaults to 0
+	   (never seen); LoadCaseFiles() (called once from Template:init())
+	   overwrites these from disk if a save file already exists.
 	   Individual scalars, not an array -- an earlier gCaseFiles[N] array
 	   global compiled but wasn't visible from other scripts via
 	   (use "main") the way scalar globals are (no working precedent for
-	   that anywhere in this codebase; see SESSION_HANDOFF.md). Indices
-	   0-8 survival endings, 9-11 failure endings, 12-16 mechanisms, 17
-	   Extended Therapy unlock -- same numbering casefiles.sc/mechanisms.sc/
-	   rm002.sc already use. */
+	   that anywhere in this codebase; see SESSION_HANDOFF.md). 108 of them
+	   now (was 18) after the full ending-variant port -- see game.sh for
+	   the index ranges, tools/gen-endings.js for how 0-101 get generated. */
 	gCF0 = 0
 	gCF1 = 0
 	gCF2 = 0
@@ -106,6 +106,96 @@
 	gCF15 = 0
 	gCF16 = 0
 	gCF17 = 0
+	gCF18 = 0
+	gCF19 = 0
+	gCF20 = 0
+	gCF21 = 0
+	gCF22 = 0
+	gCF23 = 0
+	gCF24 = 0
+	gCF25 = 0
+	gCF26 = 0
+	gCF27 = 0
+	gCF28 = 0
+	gCF29 = 0
+	gCF30 = 0
+	gCF31 = 0
+	gCF32 = 0
+	gCF33 = 0
+	gCF34 = 0
+	gCF35 = 0
+	gCF36 = 0
+	gCF37 = 0
+	gCF38 = 0
+	gCF39 = 0
+	gCF40 = 0
+	gCF41 = 0
+	gCF42 = 0
+	gCF43 = 0
+	gCF44 = 0
+	gCF45 = 0
+	gCF46 = 0
+	gCF47 = 0
+	gCF48 = 0
+	gCF49 = 0
+	gCF50 = 0
+	gCF51 = 0
+	gCF52 = 0
+	gCF53 = 0
+	gCF54 = 0
+	gCF55 = 0
+	gCF56 = 0
+	gCF57 = 0
+	gCF58 = 0
+	gCF59 = 0
+	gCF60 = 0
+	gCF61 = 0
+	gCF62 = 0
+	gCF63 = 0
+	gCF64 = 0
+	gCF65 = 0
+	gCF66 = 0
+	gCF67 = 0
+	gCF68 = 0
+	gCF69 = 0
+	gCF70 = 0
+	gCF71 = 0
+	gCF72 = 0
+	gCF73 = 0
+	gCF74 = 0
+	gCF75 = 0
+	gCF76 = 0
+	gCF77 = 0
+	gCF78 = 0
+	gCF79 = 0
+	gCF80 = 0
+	gCF81 = 0
+	gCF82 = 0
+	gCF83 = 0
+	gCF84 = 0
+	gCF85 = 0
+	gCF86 = 0
+	gCF87 = 0
+	gCF88 = 0
+	gCF89 = 0
+	gCF90 = 0
+	gCF91 = 0
+	gCF92 = 0
+	gCF93 = 0
+	gCF94 = 0
+	gCF95 = 0
+	gCF96 = 0
+	gCF97 = 0
+	gCF98 = 0
+	gCF99 = 0
+	gCF100 = 0
+	gCF101 = 0
+	gCF102 = 0
+	gCF103 = 0
+	gCF104 = 0
+	gCF105 = 0
+	gCF106 = 0
+	gCF107 = 0
 
 	gCurrentCursor			/* the number of the current cursor */
 	gNormalCursor = 999		/* the number of the normal cursor (ie. arrow) */

@@ -4,29 +4,33 @@
  casefiles.sc
  Cross-run "Case Files" persistence (matches the original browser game's
  Case Files feature, README.md: "a persistent, cross-run record of every
- ending and coping mechanism you've ever actually seen"). Scope cut from
- the original: no in-game gallery/viewer screen yet, and this SCI0 port
- only has 9 survival + 3 failure endings (one flavor variant each, not the
- original's 8-10 per pool -- see SESSION_HANDOFF.md), so there are 12
- ending slots here instead of 102. Still a real external file, following
- the same QFG-style pattern documented in docs/SCI0-research-findings.md:
- plain ASCII, one value per line, FOpen/FGets/FPuts/FClose via the
- template's fileio.sc.
+ ending and coping mechanism you've ever actually seen"). Full ending-
+ variant port (see SESSION_HANDOFF.md): tracks discovery per VARIANT now
+ (all 9 survival pools x 8 variants + 3 failure pools x 10 variants = 102
+ total), matching the original's actual "collect every ending" mechanic --
+ not just per ending CONDITION like this port's earlier one-variant-per-
+ pool scope cut did. Still a real external file, following the same
+ QFG-style pattern documented in docs/SCI0-research-findings.md: plain
+ ASCII, one value per line, FOpen/FGets/FPuts/FClose via the template's
+ fileio.sc.
 
- gCF0..gCF17 (declared in Main.sc, CASEFILE_COUNT = 18 of them) hold the
+ gCF0..gCF107 (declared in Main.sc, CASEFILE_COUNT = 108 of them) hold the
  in-memory discovery flags for this session -- individual scalar globals,
  not an array (see SESSION_HANDOFF.md for why). GetCaseFile/SetCaseFile
- below are the array-like accessors everything else in this file (and
- MarkCaseFile's callers in mechanisms.sc/rm002.sc) actually uses; nothing
- outside this file needs to know they're really 18 separate globals.
- LoadCaseFiles()/SaveCaseFiles() sync all 18 with TRSCASE.DAT (a bare
- filename -- resolves relative to the game's own directory, same as the
- stock SRDialog code's own file access). Slot 17 (CASEFILE_NGPLUS) is the
- unrelated Extended Therapy unlock flag, not a real case file -- riding
- on this file/array purely because it's the one proven persistence
- mechanism in this codebase (see game.sh); ShowCaseFiles()'s viewer stays
- scoped to VIEWABLE_CASEFILE_COUNT (17) so it doesn't show up as a bogus
- 18th entry.
+ (casefileaccess.sc, split out separately -- see its own header) are the
+ array-like accessors everything else (including MarkCaseFile below)
+ actually uses; nothing outside casefileaccess.sc needs to know they're
+ really 108 separate globals. LoadCaseFiles()/SaveCaseFiles() sync all 108 with
+ TRSCASE.DAT (a bare filename -- resolves relative to the game's own
+ directory, same as the stock SRDialog code's own file access). Slot 107
+ (CASEFILE_NGPLUS) is the unrelated Extended Therapy unlock flag, not a
+ real case file -- riding on this file/array purely because it's the one
+ proven persistence mechanism in this codebase (see game.sh); ShowCaseFiles()'s
+ viewer stays scoped to VIEWABLE_CASEFILE_COUNT (107) so it doesn't show
+ up as a bogus 108th entry. See game.sh for the full index scheme
+ (0-71 survival variants, 72-101 failure variants, 102-106 mechanisms,
+ 107 NG+) and tools/gen-endings.js for how the 102 ending-variant slots'
+ content actually gets generated.
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")
@@ -35,52 +39,16 @@
 /******************************************************************************/
 (use "main")
 (use "controls")
+(use "casefileaccess")
+(use "casefiletitles")
 /******************************************************************************/
-(procedure public (GetCaseFile index)
-	(switch(index)
-		(case 0 return(gCF0))
-		(case 1 return(gCF1))
-		(case 2 return(gCF2))
-		(case 3 return(gCF3))
-		(case 4 return(gCF4))
-		(case 5 return(gCF5))
-		(case 6 return(gCF6))
-		(case 7 return(gCF7))
-		(case 8 return(gCF8))
-		(case 9 return(gCF9))
-		(case 10 return(gCF10))
-		(case 11 return(gCF11))
-		(case 12 return(gCF12))
-		(case 13 return(gCF13))
-		(case 14 return(gCF14))
-		(case 15 return(gCF15))
-		(case 16 return(gCF16))
-		(case 17 return(gCF17))
-	)
-	return(0)
-)
-/******************************************************************************/
-(procedure public (SetCaseFile index value)
-	(switch(index)
-		(case 0 = gCF0 value)
-		(case 1 = gCF1 value)
-		(case 2 = gCF2 value)
-		(case 3 = gCF3 value)
-		(case 4 = gCF4 value)
-		(case 5 = gCF5 value)
-		(case 6 = gCF6 value)
-		(case 7 = gCF7 value)
-		(case 8 = gCF8 value)
-		(case 9 = gCF9 value)
-		(case 10 = gCF10 value)
-		(case 11 = gCF11 value)
-		(case 12 = gCF12 value)
-		(case 13 = gCF13 value)
-		(case 14 = gCF14 value)
-		(case 15 = gCF15 value)
-		(case 16 = gCF16 value)
-		(case 17 = gCF17 value)
-	)
+// Script-level local, not a per-call procedure local -- see
+// ShowCaseFiles() below and SESSION_HANDOFF.md. Same declaration idiom
+// User.sc's own inputStr[51] already uses for a script-local array (a
+// (local ...) block right after the (use ...) list, not inside any one
+// procedure/method).
+(local
+	buf[3424]
 )
 /******************************************************************************/
 (procedure public (LoadCaseFiles)
@@ -157,33 +125,6 @@
 	= gNgPlusUnlocked TRUE
 )
 /******************************************************************************/
-(procedure public (CaseFileTitle index)
-	// Same 17 titles already used for the "COPING MECHANISM ACQUIRED"/
-	// ending Print() messages in mechanisms.sc/rm002.sc -- duplicated
-	// here rather than shared, there's no clean way to share a string
-	// constant across scripts in this language, and each is short.
-	(switch(index)
-		(case 0 return("The Powder Keg"))
-		(case 1 return("The Performer"))
-		(case 2 return("Radically Undone"))
-		(case 3 return("Raw Nerve"))
-		(case 4 return("Coasting on Empty"))
-		(case 5 return("Fragile Equilibrium"))
-		(case 6 return("Actually Okay"))
-		(case 7 return("The Long Fuse"))
-		(case 8 return("Functional Enough"))
-		(case 9 return("Panic Attack"))
-		(case 10 return("Social Exile"))
-		(case 11 return("Total Disassociation"))
-		(case 12 return("The Approval Loop"))
-		(case 13 return("The Exit Strategy"))
-		(case 14 return("Hair-Trigger"))
-		(case 15 return("The Void"))
-		(case 16 return("Earned Security"))
-	)
-	return("")
-)
-/******************************************************************************/
 (procedure public (ShowCaseFiles)
 	// Scope-cut viewer for the persistent cross-run record (see the file
 	// header) -- reachable any time via the "Case Files" menu item
@@ -196,28 +137,46 @@
 	// of how many entries there are.
 	//
 	// v1 is browse-only: no drill-down into a selected entry's full
-	// description. That'd mean duplicating all 17 flavor-text strings a
-	// second time (once here, once in mechanisms.sc/rm002.sc) purely for
-	// this screen, which isn't worth the extra resident heap for a
-	// browse-only reference screen -- can revisit if it's actually wanted.
-	(var hDialog, hSelector, hDText, buf[544], i, curY)
-	// 544 = VIEWABLE_CASEFILE_COUNT (17) * 32-byte stride; DSelector's `x`
-	// property
-	// is simultaneously the memory stride between entries AND the
-	// assumed max display width in characters, so it must match here.
-	// DSelector has no concept of "17 entries, then stop" -- advance()
+	// description. That'd mean duplicating all 107 flavor-text strings a
+	// second time (once here, once in endingcontent1-3.sc/mechanisms.sc)
+	// purely for this screen, which isn't worth the extra resident heap
+	// for a browse-only reference screen -- can revisit if it's actually
+	// wanted.
+	(var hDialog, hSelector, hDText, i, curY)
+	// buf is a SCRIPT-level local (declared once near the top of this
+	// file), not a per-call procedure local here -- real bug, confirmed
+	// the hard way: declaring 3424 bytes as this procedure's own (var
+	// ...) compiled fine but crashed at runtime the instant this ran
+	// ("you did something we didn't expect"), while the exact same size
+	// as a script-level local (same idiom User.sc's own inputStr[51]
+	// already uses) works. SCI0's per-call procedure-local space is
+	// evidently far smaller than the general 64KB heap, a limit this
+	// project hadn't hit before (544 bytes, the pre-ending-port size, was
+	// apparently still safely within it).
+	// 3424 = VIEWABLE_CASEFILE_COUNT (107) * 32-byte stride; DSelector's
+	// `x` property is simultaneously the memory stride between entries AND
+	// the assumed max display width in characters, so it must match here.
+	// DSelector has no concept of "N entries, then stop" -- advance()
 	// just keeps scrolling until a slot's first byte happens to be zero
 	// (see its (while(amount and StrAt(cursor x)) ...) loop). A local
 	// array here isn't zero-initialized (leftover stack garbage), so
 	// without explicitly clearing it first, scrolling past the last real
 	// entry reads that garbage as more rows -- confirmed in-game as
-	// corrupted text and repeated "SSSS" rows below entry 17.
-	(for (= i 0) (< i 544) (++i)
+	// corrupted text and repeated "SSSS" rows below the last entry, back
+	// when this had only 17 entries total.
+	(for (= i 0) (< i 3424) (++i)
 		= buf[i] 0
 	)
-	// VIEWABLE_CASEFILE_COUNT (17), not the full CASEFILE_COUNT (18) --
-	// slot 17 is the Extended Therapy unlock flag, not a real case file,
+	// VIEWABLE_CASEFILE_COUNT (107), not the full CASEFILE_COUNT (108) --
+	// slot 107 is the Extended Therapy unlock flag, not a real case file,
 	// and has no title in CaseFileTitle() below to show anyway.
+	// CaseFileTitle() lives in casefiletitles.sc, explicitly Load()ed
+	// here and DisposeScript()ed right after -- its 107-case switch is
+	// only ever needed for this one screen, and staying permanently
+	// resident the way casefileaccess.sc used to (before this fix)
+	// contributed to a real heap-exhaustion bug -- see
+	// SESSION_HANDOFF.md.
+	Load(rsSCRIPT CASEFILETITLES_SCRIPT)
 	(for (= i 0) (< i VIEWABLE_CASEFILE_COUNT) (++i)
 		(if(GetCaseFile(i))
 			Format((+ @buf (* i 32)) "%d. %s" (+ i 1) CaseFileTitle(i))
@@ -225,6 +184,7 @@
 			Format((+ @buf (* i 32)) "%d. ??? (sealed)" (+ i 1))
 		)
 	)
+	DisposeScript(CASEFILETITLES_SCRIPT)
 
 	= hDialog (Dialog:new())
 	(send hDialog:

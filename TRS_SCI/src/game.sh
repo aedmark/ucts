@@ -72,25 +72,42 @@
 (define PUBLICEVENTS2_SCRIPT	130)
 (define PUBLICEVENTS3_SCRIPT	131)
 (define PUBLICEVENTS4_SCRIPT	132)
+(define ENDINGCONTENT1_SCRIPT	133)
+(define ENDINGCONTENT2_SCRIPT	134)
+(define ENDINGCONTENT3_SCRIPT	135)
+(define CASEFILEACCESS_SCRIPT	136)
+(define CASEFILETITLES_SCRIPT	137)
 
-// Case Files indices -- stable, cross-run discovery flags. Backed by 18
-// separate scalar globals (gCF0..gCF17 in Main.sc), not an array -- global
+// Case Files indices -- stable, cross-run discovery flags. Backed by 108
+// separate scalar globals (gCF0..gCF107 in Main.sc), not an array -- global
 // arrays declared in Main.sc aren't visible from other scripts via
 // (use "main") the way scalars are (see SESSION_HANDOFF.md). GetCaseFile/
 // SetCaseFile in casefiles.sc give array-like access over the scalars.
-// 0-8: survival endings, same order as rm002's printSurvivalEnding checks.
-// 9-11: failure endings (repression/mask/child, in that order).
-// 12-16: coping mechanisms, TAG_FAWN..TAG_SECURE offset by CASEFILE_MECH_BASE.
-// 17: Extended Therapy / New Game+ unlock flag (CASEFILE_NGPLUS) -- not a
+//
+// Full ending-variant port (see SESSION_HANDOFF.md): tracks discovery per
+// VARIANT now, matching the original browser game's actual "collect every
+// ending you've ever seen" mechanic, not just per ending CONDITION like
+// this port's earlier one-variant-per-pool scope cut did.
+// 0-71: the 9 survival pools x 8 variants each (tools/gen-endings.js's
+//       PrintSurvivalEnding0..8, endingcontent1.sc/endingcontent2.sc) --
+//       pool N occupies indices (N*8)..(N*8+7), same pool order as
+//       rm002.sc's printSurvivalEnding threshold checks.
+// 72-101: the 3 failure pools x 10 variants each (PrintFailureEnding0..2,
+//       repression/mask/child in that order, endingcontent3.sc) -- pool N
+//       occupies indices (72+N*10)..(72+N*10+9).
+// 102-106: coping mechanisms, TAG_FAWN..TAG_SECURE offset by
+//       CASEFILE_MECH_BASE (unchanged content, just renumbered to make
+//       room for the 90 new ending-variant slots above).
+// 107: Extended Therapy / New Game+ unlock flag (CASEFILE_NGPLUS) -- not a
 // real "case file" (ending/mechanism), riding on this array purely because
 // it's the one proven, working cross-run persistence mechanism in this
 // codebase (see game.sh's Extended Therapy block below for why a separate
 // standalone file was tried first and abandoned). VIEWABLE_CASEFILE_COUNT
-// keeps ShowCaseFiles' viewer to just the real 17 case files.
-(define CASEFILE_COUNT				18)
-(define VIEWABLE_CASEFILE_COUNT	17)
-(define CASEFILE_MECH_BASE			12)
-(define CASEFILE_NGPLUS			17)
+// keeps ShowCaseFiles' viewer to everything except that one flag.
+(define CASEFILE_COUNT				108)
+(define VIEWABLE_CASEFILE_COUNT	107)
+(define CASEFILE_MECH_BASE			102)
+(define CASEFILE_NGPLUS			107)
 
 // T.R.S. per-zone event counts, for rm001's zone/event picker.
 (define WORK_EVENT_COUNT	34)

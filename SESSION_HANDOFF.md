@@ -1718,3 +1718,230 @@ sub-items under it are the real remaining scope, not bugs.
       detail; not yet identified/reproduced, worth asking about
       specifically next session if they resurface rather than assuming
       this is fully closed out.
+12. **Full ending-variant content port — done, not yet compiled/
+    playtested.** User asked to pick up the deliberate one-variant-per-
+    pool scope cut flagged since item 3 (9 survival + 3 failure endings
+    with one flavor variant each, vs. the original's 8-10 per pool, 102
+    total). This is the single largest, most interconnected change in
+    this whole project's history — worth reading in full if picking this
+    back up.
+    - **Real scope decision, put to the user before writing any code**:
+      the original's Case Files feature tracks discovery *per variant*
+      (matches README.md's actual "collect every ending you've ever seen"
+      claim), not just per condition. Matching that exactly meant
+      expanding Case Files from 18 scalar slots to 108 (~90 new globals)
+      against SCI0's hard 256-global ceiling — Main.sc already declared
+      87 before this. User chose the full per-variant port over a
+      cheaper, lower-fidelity "content variety only, still 12 slots"
+      alternative. Final global count: 87 → ~195 (108 gCF scalars + the
+      rest), comfortably under 256 but a large, deliberate commitment of
+      the remaining budget.
+    - **New flat Case Files index scheme** (`game.sh`, `CASEFILE_COUNT`
+      18 → 108): 0-71 = 9 survival pools × 8 variants (pool N = indices
+      `N*8`..`N*8+7`, same pool order as `rm002.sc`'s existing threshold
+      checks); 72-101 = 3 failure pools × 10 variants, repression/mask/
+      child order (pool N = indices `72+N*10`..`72+N*10+9`); 102-106 =
+      the 5 coping mechanisms (renumbered from 12-16, `CASEFILE_MECH_BASE`
+      12 → 102 — `mechanisms.sc` already referenced this constant rather
+      than hardcoding the numbers, so it needed **zero code changes** for
+      the renumbering to take effect); 107 = the Extended Therapy flag
+      (`CASEFILE_NGPLUS` 17 → 107). `VIEWABLE_CASEFILE_COUNT` 17 → 107.
+    - **New generator, `tools/gen-endings.js`**, reusing the same
+      `new Function(src + 'return X')` trick `zone-events.js` uses to load
+      `js/content-endings.js` (a bare `const X = [...]`, not JSON). Emits
+      `PrintSurvivalEnding0..8()` and `PrintFailureEnding0..2()` — each
+      picks a random variant (`Random(0 N-1)`), switches on it to
+      `Print()` that variant's title+desc, then `MarkCaseFile()`s the
+      matching flat index with an inline announcement. Title strings are
+      duplicated inline per case (for the `Print` call's own `#title`)
+      rather than looked up from a shared helper — deliberately matches
+      this codebase's own established "duplicate short strings across
+      scripts, there's no clean way to share them" precedent
+      (`CaseFileTitle`'s own header comment already says this) rather
+      than introducing a new cross-script dependency for a marginal
+      benefit.
+      - **Extracted `sciString()` into a new shared module,
+        `tools/lib/sci-string.js`**, before writing the new generator —
+        it was previously private to `zone-events.js`, and duplicating
+        that carefully-tuned escaping logic (transliteration table,
+        illegal-character checks, embedded-newline handling, all
+        hard-won per the WORK/HOME-zone bugs earlier in this project)
+        for a second consumer risked exactly the kind of subtle drift
+        this project has been bitten by before. Verified the refactor
+        is behavior-preserving: regenerated WORK zone before and after,
+        diffed, byte-identical.
+      - **Real bug caught by the generator's own safety check on first
+        run**: one failure-ending description has a literal embedded
+        `"fine"` (`js/content-endings.js`) — `sciString()` correctly,
+        deliberately rejects embedded double quotes (there's no way to
+        escape one inside a SCI0 `""`-string, confirmed the hard way
+        earlier in this project via `mechanisms.sc`). Rather than editing
+        the shared source file (used by the browser version too, whose
+        HTML rendering has no such restriction) or softening `sciString`
+        itself for every caller, added a generator-local
+        `endingText()` wrapper in `gen-endings.js` that transliterates
+        straight double quotes to single quotes first — preserves the
+        emphasis/scare-quote intent, unlike `mechanisms.sc`'s original
+        fix for a similar case (which just dropped the quotes entirely).
+      - **Output size forced a 3-way split**: all 72 survival variants in
+        one file measured ~20.5KB, well past the ~16KB practical ceiling
+        that's forced chunking everywhere else in this project. Split
+        into `endingcontent1.sc` (survival pools 0-4, ~11.9KB),
+        `endingcontent2.sc` (survival pools 5-8, ~9.6KB), `endingcontent3.sc`
+        (all 3 failure pools, ~9.1KB) — three new script numbers,
+        `ENDINGCONTENT1/2/3_SCRIPT` = 133/134/135. Since an ending only
+        ever fires once per room visit (not per-turn like the 196 WORK/
+        HOME/etc. events), these don't need the aggressive
+        `Load`/`DisposeScript`-per-call dispatcher pattern the zone-event
+        chunks use — they just stay resident once loaded, same as
+        `mechanisms.sc`/`casefiles.sc` already do.
+    - **`CaseFiles.sc` itself also had to be split** — adding the 90 new
+      `GetCaseFile`/`SetCaseFile` cases plus expanding `CaseFileTitle` to
+      107 titles pushed it to ~20.1KB. Split into `CaseFiles.sc`
+      (`LoadCaseFiles`/`SaveCaseFiles`/`MarkCaseFile`/`UnlockNgPlus`/
+      `ShowCaseFiles`, ~9.4KB) and a new `CaseFileAccess.sc`
+      (`GetCaseFile`/`SetCaseFile`/`CaseFileTitle`, ~12KB, new script
+      number `CASEFILEACCESS_SCRIPT` = 136). **Checked for circularity
+      before splitting, not after**: `CaseFileAccess.sc`'s three
+      procedures are pure lookups against `gCF0..gCF107` (`Main.sc`) —
+      they call nothing in `CaseFiles.sc`, so `CaseFiles.sc` needing
+      `(use "casefileaccess")` is one-way, not a new circular pair like
+      the `main`↔`casefiles` saga earlier in this project. Generated the
+      new switch-case bodies (108/108/107 cases) programmatically and
+      spliced them into place rather than hand-typing — the volume alone
+      made hand-typing a real transcription-error risk.
+    - **`Main.sc`**: `gCF0..gCF17` → `gCF0..gCF107` (108 scalar globals,
+      generated and spliced in, all defaulting to 0 as before).
+    - **`rm002.sc`**: `printEnding()`/`printSurvivalEnding()` keep the
+      *exact same* condition table, order, and early-return structure as
+      before (proven correct, deliberately untouched) — each branch now
+      just calls the matching `PrintFailureEndingN()`/
+      `PrintSurvivalEndingN()` instead of an inline `Print()` +
+      `MarkCaseFile()` pair. Added `(use "endingcontent1")`,
+      `(use "endingcontent2")`, `(use "endingcontent3")`.
+    - **`game.ini`**: 4 new `[Script]` entries (`n133`-`n136`) for the
+      four new files, matching the established naming convention.
+    - **Real, not-yet-resolved risk, flagged rather than guessed at**:
+      `ShowCaseFiles`'s local display buffer grew from `buf[544]` (17
+      entries × 32-byte stride) to `buf[3424]` (107 entries) — by far the
+      largest local array anywhere in this project. Nothing in this
+      codebase's history suggests a per-procedure local-variable size
+      ceiling distinct from the general heap/segment limits, but this is
+      genuinely untested territory; worth specifically confirming the
+      Case Files viewer still opens and scrolls cleanly, not just that
+      individual endings print correctly.
+    - **Also worth specifically testing, beyond "does it compile"**:
+      that a survival/failure ending actually shows a *different* variant
+      across multiple runs (confirming the `Random()` selection and
+      switch dispatch are wired correctly per pool); that the Case Files
+      viewer's title list grows correctly as different specific variants
+      get discovered (not just the same slot re-marked); and the usual
+      "new batch of interdependent new scripts may need 2-3 rounds of
+      Compile All" behavior already documented above, likely compounded
+      here since four brand-new files landed at once. **Also**: if any
+      of the four new files (`endingcontent1-3.sc`, `CaseFileAccess.sc`)
+      don't show up in SCI Companion's own Scripts panel despite existing
+      on disk with a correct `game.ini` entry, that's the known
+      `casefiles.sc`-registration gotcha from earlier in this project —
+      use SCI Companion's own "New empty script" button rather than
+      assuming the file is broken.
+    - Ran the structural sanity check (paired quotes, balanced parens
+      outside string literals, no unexpected non-ASCII) across every
+      touched/created file (`endingcontent1.sc`, `endingcontent2.sc`,
+      `endingcontent3.sc`, `CaseFileAccess.sc`, `CaseFiles.sc`, `Main.sc`,
+      `game.sh`, `rm002.sc`) — clean.
+    - **Real bug, first compile attempt: `Main.sc` missing `(use
+      "casefileaccess")`.** `GetCaseFile` moved out of `casefiles.sc` into
+      the new `CaseFileAccess.sc` during the size-driven split above, but
+      `Main.sc`'s own direct call to it (`= gNgPlusUnlocked
+      GetCaseFile(CASEFILE_NGPLUS)`, the NG+ mirror sync in
+      `Template:init()`) was missed when updating use-lists — it still
+      only had `(use "casefiles")`. Fixed by adding
+      `(use "casefileaccess")` to `Main.sc`.
+    - **This creates a genuinely new circular pair, flagged preemptively
+      rather than waiting for a second error**: `Main.sc` now needs
+      `GetCaseFile` from `CaseFileAccess.sc`, and `CaseFileAccess.sc`
+      needs `gCF0..gCF107` from `Main.sc` — both sides have brand-new
+      symbols the other has never resolved before, the same shape as the
+      original `main`↔`casefiles` bootstrap saga. Told the user to try a
+      plain Compile All first, and gave the same known fix as a fallback
+      if it throws a "did you forget to use X" error on either side
+      (stale-`.sco` symptom, not a real missing `use`): comment out the
+      `GetCaseFile(...)` line in `Main.sc`, compile `Main.sc` alone
+      (registers `gCF0..gCF107`), compile `CaseFileAccess.sc` alone
+      (resolves against the fresh `main.sco`), restore the line, Compile
+      All. **Not yet confirmed which path was actually needed.**
+    - **Real bug, compiled clean but heap-exhausted after one turn.**
+      Root cause: `Main.sc` calling `GetCaseFile()` directly at boot (the
+      NG+ mirror sync) meant the *entire* `CaseFileAccess.sc` (~12KB,
+      `GetCaseFile`/`SetCaseFile`/`CaseFileTitle` all together) became
+      permanently resident for the whole game session — scripts auto-load
+      on call but never auto-unload, the same gotcha that originally
+      forced the WORK-zone event chunking. Before this session,
+      `GetCaseFile` lived inside the already-always-resident
+      `casefiles.sc`, so calling it from `Main.sc` cost nothing extra;
+      splitting it out into a new file made that same call newly
+      expensive. Compounding it: `CaseFileTitle`'s switch alone grew from
+      17 to 107 cases (~4.9KB) as part of the ending-variant port, and it
+      is *only* ever needed by the rarely-opened Case Files viewer, not
+      during normal turn-by-turn play at all.
+      **Fix**: split `CaseFileTitle` out yet again into its own script,
+      `CaseFileTitles.sc` (`CASEFILETITLES_SCRIPT` = 137, confirmed it has
+      no other callers besides `ShowCaseFiles` first) — `ShowCaseFiles()`
+      now explicitly `Load(rsSCRIPT CASEFILETITLES_SCRIPT)`s it right
+      before its title-lookup loop and `DisposeScript()`s it right after,
+      the exact same idiom `workevents.sc`'s `DoWorkEvent()` dispatcher
+      already uses for the per-zone chunks. `CaseFileAccess.sc` shrank
+      back down to just `GetCaseFile`/`SetCaseFile` (~7.4KB) — still
+      permanently resident (needed by `MarkCaseFile` during real
+      gameplay, not just at boot), but roughly half its previous size.
+      Net new permanent heap cost from this whole ending-variant port is
+      now ~9KB (`CaseFiles.sc` + `CaseFileAccess.sc` combined, up from a
+      ~7-8KB single file pre-port) rather than the ~20KB it briefly was.
+      Ran the structural sanity check on all four touched/created files
+      (`CaseFiles.sc`, `CaseFileAccess.sc`, `CaseFileTitles.sc`,
+      `game.sh`) — clean.
+      **Honest expectation-setting**: this should meaningfully help, but
+      given the heap was already tight enough to need the `MAX_CHOICES=3`
+      cap before any of this session's changes, a ~9KB *permanent*
+      increase might not be fully absorbed — worth specifically retesting
+      whether it now survives more than one turn, not assuming this is
+      the complete fix. If heap exhaustion persists, escalation levers in
+      order of preference, per the user's own suggestion to consider
+      spreading things across more rooms if needed: (1) more per-zone
+      event chunks (currently 4 per zone, could go to 5-6, cheap and
+      mechanical, no content loss, same lever already flagged earlier in
+      this doc); (2) the user's own "peachy keen" stretch idea from
+      earlier in this doc, one room per event instead of chunk-loaded
+      dispatch, a much bigger architectural change; (3) revisiting
+      `MAX_CHOICES` or ending-variant-count as a last resort, actual
+      content loss unlike the other two.
+    - **Confirmed: the heap fix above worked** — user got through a full
+      run clean. **New real bug, immediately on opening Case Files: "you
+      did something we didn't expect"** (a generic SCI0 runtime-fault
+      trap). Root cause: `ShowCaseFiles()`'s `buf[3424]` was declared as
+      the procedure's own `(var ...)` — a per-call local. Confirmed via
+      `User.sc`'s own `inputStr[51]` precedent (a *script-level*
+      `(local ...)` array, declared once near the top of the file, not
+      inside any procedure) that SCI0's per-call procedure-local space is
+      evidently far smaller than the general 64KB heap — a distinct limit
+      this project hadn't hit before, since the pre-ending-port buffer
+      (544 bytes, for 17 entries) was apparently still safely within it,
+      and 3424 bytes (107 entries) was not. This was explicitly flagged
+      as an untested risk when the buffer was first sized up — flagging
+      paid off in finding it fast, not in preventing it.
+      **Fix**: moved `buf[3424]` out of `ShowCaseFiles`'s own `(var ...)`
+      list into a script-level `(local buf[3424])` block near the top of
+      `CaseFiles.sc` (same declaration idiom as `User.sc`'s `inputStr`),
+      referenced by `ShowCaseFiles()` the exact same way (`buf[i]`/`@buf`)
+      as before — only the declaration's *location* changed, not any
+      usage syntax. The existing zero-fill loop at the top of
+      `ShowCaseFiles()` is now load-bearing in a slightly new way: since
+      the buffer persists across calls as a script-level local (rather
+      than getting fresh stack garbage each time), it's what clears
+      whatever the *previous* call left behind, not just whatever
+      happened to be on the stack. Ran the structural sanity check again
+      — clean. **Not yet compiled/playtested.**
+    - **Not yet compiled/playtested overall** — this is the biggest
+      single change of this entire project, worth a genuinely thorough VM
+      pass rather than a quick spot-check.

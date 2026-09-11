@@ -19,6 +19,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const { sciString } = require('./sci-string');
 
 const DESC_WIDTH = 290; // DText width (px) passed to PrintChoices; kernel TextSize() wraps within it, so widening is safe as long as it stays under the 320px screen (DText starts at x=4)
 const CHUNK_COUNT = 4;
@@ -29,43 +30,6 @@ const CHUNK_COUNT = 4;
 // Changes game balance (fewer options per event) -- accepted tradeoff,
 // content/balance to be revisited once the engine side is solid.
 const MAX_CHOICES = 3;
-
-// The compiled font only has glyphs for standard printable ASCII; a
-// non-ASCII byte (even a "harmless"-looking typographic dash or curly
-// quote) isn't a missing-glyph placeholder -- it gets read as raw control
-// bytes by the text renderer and corrupts the dialog (confirmed in-game:
-// an em dash in two WORK choices rendered as a blank line eating the word
-// before it). Transliterate the handful of typographic characters that
-// show up in prose text; throw on anything else so a future addition to
-// a zone's event file can't silently emit broken source.
-const ASCII_TRANSLITERATIONS = {
-	'—': '-', // em dash
-	'–': '-', // en dash
-	'‘': "'", '’': "'", // curly single quotes
-	'“': '"', '”': '"', // curly double quotes -- still rejected below if left in a string, see the "{}\\ check
-	'…': '...', // ellipsis
-};
-
-function sciString(s) {
-	s = s.replace(/[—–‘’“”…]/g, ch => ASCII_TRANSLITERATIONS[ch]);
-	if (/["{}\\]/.test(s)) {
-		throw new Error(`string contains a character the generator can't emit safely: ${JSON.stringify(s)}`);
-	}
-	// Real embedded newlines/tabs (from the original JS's own \n/\t literals
-	// -- e.g. a multi-paragraph desc -- evaluate to actual control
-	// characters, not the two-character sequences we want) need converting
-	// to SCI's own \n/\t escape sequences. Do this AFTER the raw-content
-	// checks above (so a literal backslash we're about to introduce here
-	// doesn't fight the backslash-rejection check) and BEFORE the
-	// printable-ASCII check below (a raw newline is a control character,
-	// not "non-ASCII", but still outside the safe printable range so it'd
-	// otherwise trip that check too).
-	s = s.replace(/\n/g, '\\n').replace(/\t/g, '\\t');
-	if (/[^\x20-\x7E]/.test(s)) {
-		throw new Error(`string contains a non-ASCII character with no known transliteration: ${JSON.stringify(s)}`);
-	}
-	return s;
-}
 
 const TAG_CONSTANTS = { fawn: 'TAG_FAWN', flight: 'TAG_FLIGHT', fight: 'TAG_FIGHT', freeze: 'TAG_FREEZE', secure: 'TAG_SECURE' };
 

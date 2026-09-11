@@ -11,9 +11,8 @@
  never open. Kept as its own script specifically so ShowCaseFiles() can
  Load(rsSCRIPT CASEFILETITLES_SCRIPT)/DisposeScript(...) it around just
  that one use, instead of paying its ~4.9KB permanently for the entire
- session -- same Load/DisposeScript idiom the WORK-zone (etc.) event
- chunks already use, see workevents.sc's DoWorkEvent() for the reference
- pattern.
+ session -- same Load/DisposeScript idiom used throughout this codebase
+ for anything that shouldn't stay permanently resident.
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")

@@ -1,0 +1,81 @@
+/******************************************************************************
+ T.R.S. → SCI0 port
+ ******************************************************************************
+ rm335.sc
+ GENERATED FILE — do not hand-edit. Produced by tools/gen-body-events.js from
+ the original js/events/body.js (BODY event 3). Re-run
+ that script after editing the source event data.
+
+ One room per event (see game.sh and SESSION_HANDOFF.md) -- this room IS
+ the event: shows its PrintChoices dialog, applies the chosen response's
+ effects, prints its log line, then hands off via EndTurn() (mechanisms.sc)
+ to either the next event's room or the ending room. No custom RoomScript
+ -- ego is hidden/program-controlled and there's nothing here to click or
+ "look" at, and Rm's own `script` property defaults to 0 (a valid,
+ handled no-script state) if never set.
+ ******************************************************************************/
+(include "sci.sh")
+(include "game.sh")
+/******************************************************************************/
+(script 335)
+/******************************************************************************/
+(use "main")
+(use "controls")
+(use "cycle")
+(use "game")
+(use "feature")
+(use "obj")
+(use "inv")
+(use "printchoices")
+(use "mechanisms")
+/******************************************************************************/
+(instance public rm335 of Rm
+	(properties
+		picture 1
+		north 0
+		east 0
+		south 0
+		west 0
+	)
+	(method (init)
+		(var choice, glitchText)
+		(super:init())
+		SetUpEgo()
+		(send gEgo:init())
+		ProgramControl()
+		(send gEgo:hide())
+		= glitchText NULL
+		(if(< Random(0 99) GLITCH_CHANCE_PCT)
+			= glitchText "Eat a mystery item from the back of the freezer instead."
+		)
+		= choice PrintChoices(
+			"It's been hours since your lunch break. You still have not eaten. You only just now noticed the shaking."
+			"The Skipped Lunch"
+			290
+			glitchText
+		"Push through, you'll eat when this is 'actually done.'" 0
+		"Eat standing up over the sink in under ninety seconds." 1
+		"Sit down and finally enjoy your meal." 2
+		)
+		(if(== choice GLITCH_CHOICE)
+			ApplyGlitch("Unidentifiable but savory, slightly freezer-burned, and somehow the best part of your day.")
+		)(else
+			(switch(choice)
+		(case 0
+			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
+			Print("You deferred a basic need to a deadline that keeps moving.")
+		)
+		(case 1
+			ApplyChoiceEffects(-10 -5 0 TAG_FLIGHT)
+			Print("Technically food. Technically eaten. Moving on. (Your colon hates you).")
+		)
+		(case 2
+			ApplyChoiceEffects(-10 0 15 TAG_SECURE)
+			Print("Wild concept: feeding yourself food when your body needs it because you matter.")
+		)
+			)
+		)
+		EndTurn()
+	)
+)
+/******************************************************************************/

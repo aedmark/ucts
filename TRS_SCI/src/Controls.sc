@@ -960,3 +960,32 @@
 	Print(@temps)
 )
 /******************************************************************************/
+// TEMPORARY DEBUG: same calling convention as FormatPrint above (drop-in
+// replacement -- swap the procedure name, keep the same args), but writes
+// a line to TRSDEBUG.LOG (gDebugLogFile, opened once in Main.sc's
+// Template:init()) instead of popping a Print() dialog. Two real reasons
+// for this over FormatPrint: (1) no more clicking through a dialog per
+// checkpoint -- the log can be read directly off DOSBox-X's mounted C:
+// drive, and (2) a raw file write should cost far less transient heap
+// than building/opening/rendering a whole dialog window, so it's less
+// likely to itself perturb the exact low-heap conditions under
+// investigation the way stacking up FormatPrint dialogs might have (see
+// SESSION_HANDOFF.md -- a previously rock-solid 10-turn run started
+// failing inconsistently on turn 1 again right after more FormatPrint
+// checkpoints were added back in, which points at the instrumentation
+// itself, not a real regression). No-ops safely if the file failed to
+// open (gDebugLogFile left at 0 by Template:init() in that case).
+(procedure public (DebugLog textorstring textid params)
+	(var temps[500])
+	(if(not gDebugLogFile)
+		return
+	)
+	(if(<u textorstring 1000)
+		Format(@temps textorstring textid rest params)
+	)(else
+	   Format(@temps rest textorstring)
+    )
+	FPuts(gDebugLogFile @temps)
+	FPuts(gDebugLogFile "\n")
+)
+/******************************************************************************/

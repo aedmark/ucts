@@ -1,0 +1,38 @@
+DEBUG rm001 init ENTRY: heap=20158 largest=20458
+DEBUG EndTurn T1: heap=18318 largest=18562
+DEBUG EndTurn T2: heap=17398 largest=17650
+DEBUG EndTurn T3: heap=17446 largest=17698
+DEBUG EndTurn T4: heap=17316 largest=17568
+DEBUG EndTurn T5: heap=17364 largest=17616
+DEBUG EndTurn T6: heap=17418 largest=17670
+DEBUG EndTurn T7: heap=17384 largest=17636
+DEBUG EndTurn T8: heap=17392 largest=17644
+DEBUG EndTurn T9: heap=17274 largest=17526
+DEBUG EndTurn T10: heap=17272 largest=17524
+DEBUG EndTurn T11: heap=17412 largest=17664
+DEBUG rm002 init ENTRY: heap=17112 largest=17408
+DEBUG rm002 init EXIT: heap=17112 largest=17364
+DEBUG rm001 init ENTRY: heap=17624 largest=17920
+DEBUG EndTurn T1: heap=17624 largest=17876
+DEBUG EndTurn T2: heap=17392 largest=17644
+DEBUG EndTurn T3: heap=17412 largest=17664
+DEBUG EndTurn T4: heap=17292 largest=17544
+DEBUG EndTurn T5: heap=17454 largest=17706
+DEBUG EndTurn T6: heap=17340 largest=17592
+DEBUG EndTurn T7: heap=17424 largest=17676
+DEBUG EndTurn T8: heap=17278 largest=17530
+DEBUG EndTurn T9: heap=17244 largest=17496
+DEBUG EndTurn T10: heap=17348 largest=17600
+DEBUG EndTurn T11: heap=17468 largest=17720
+DEBUG EndTurn T12: heap=17236 largest=17488
+DEBUG EndTurn T13: heap=17438 largest=17690
+DEBUG EndTurn T14: heap=17420 largest=17672
+DEBUG EndTurn T15: heap=17252 largest=17504
+DEBUG EndTurn T16: heap=17446 largest=17698
+DEBUG EndTurn T17: heap=17474 largest=17726
+DEBUG EndTurn T18: heap=17316 largest=17568
+DEBUG EndTurn T19: heap=17474 largest=17726
+DEBUG EndTurn T20: heap=17410 largest=17662
+DEBUG EndTurn T21: heap=17346 largest=17598
+DEBUG rm002 init ENTRY: heap=17112 largest=17408
+DEBUG rm002 init EXIT: heap=17112 largest=17364

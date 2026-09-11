@@ -1,0 +1,81 @@
+/******************************************************************************
+ T.R.S. → SCI0 port
+ ******************************************************************************
+ rm364.sc
+ GENERATED FILE — do not hand-edit. Produced by tools/gen-public-events.js from
+ the original js/events/public.js (PUBLIC event 0). Re-run
+ that script after editing the source event data.
+
+ One room per event (see game.sh and SESSION_HANDOFF.md) -- this room IS
+ the event: shows its PrintChoices dialog, applies the chosen response's
+ effects, prints its log line, then hands off via EndTurn() (mechanisms.sc)
+ to either the next event's room or the ending room. No custom RoomScript
+ -- ego is hidden/program-controlled and there's nothing here to click or
+ "look" at, and Rm's own `script` property defaults to 0 (a valid,
+ handled no-script state) if never set.
+ ******************************************************************************/
+(include "sci.sh")
+(include "game.sh")
+/******************************************************************************/
+(script 364)
+/******************************************************************************/
+(use "main")
+(use "controls")
+(use "cycle")
+(use "game")
+(use "feature")
+(use "obj")
+(use "inv")
+(use "printchoices")
+(use "mechanisms")
+/******************************************************************************/
+(instance public rm364 of Rm
+	(properties
+		picture 1
+		north 0
+		east 0
+		south 0
+		west 0
+	)
+	(method (init)
+		(var choice, glitchText)
+		(super:init())
+		SetUpEgo()
+		(send gEgo:init())
+		ProgramControl()
+		(send gEgo:hide())
+		= glitchText NULL
+		(if(< Random(0 99) GLITCH_CHANCE_PCT)
+			= glitchText "Ask the cashier how THEIR day is going, in aggressive detail."
+		)
+		= choice PrintChoices(
+			"You're barely holding it together behind a very calm face. The cashier asks how your day is going. "
+			"The Checkout Line"
+			290
+			glitchText
+		"Say 'great, thanks!' with way more enthusiasm than you actually have." 0
+		"Give a flat, one-word answer and stare at the card reader." 1
+		"Be honest and let it be a real, if brief, answer." 2
+		)
+		(if(== choice GLITCH_CHOICE)
+			ApplyGlitch("They were not prepared for this. Neither were you.")
+		)(else
+			(switch(choice)
+		(case 0
+			ApplyChoiceEffects(5 10 -8 TAG_FAWN)
+			Print("You performed 'great' for someone who will forget this conversation in four seconds.")
+		)
+		(case 1
+			ApplyChoiceEffects(10 0 -5 TAG_FREEZE)
+			Print("You disappeared into the transaction and let the small talk die there.")
+		)
+		(case 2
+			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
+			Print("You told a stranger a true thing instead of a convenient one. They gave you a sticker. ")
+		)
+			)
+		)
+		EndTurn()
+	)
+)
+/******************************************************************************/

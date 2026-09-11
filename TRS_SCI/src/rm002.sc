@@ -52,6 +52,14 @@
 		west 0
 	)
 	(method (init)
+		// TEMPORARY DEBUG INSTRUMENTATION -- remove once the cross-run
+		// heap-loss mystery is found (see SESSION_HANDOFF.md). Brackets
+		// the rm001->rm002 room transition -- Main.sc's Template:newRoom()
+		// (called via super:init() -> Rm:init() -> ... -> newRoom()) re-
+		// Load()s fonts/cursors/PORTRAIT_VIEW on every transition without
+		// ever disposing them; if that's not a true no-op on an
+		// already-resident resource, this is where it'd show up.
+		DebugLog("DEBUG rm002 init ENTRY: heap=%u largest=%u" MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
 		(super:init())
 		(self:setScript(RoomScript))
 
@@ -76,6 +84,12 @@
 		// any room background, including the ending room.
 
 		(self:printEnding())
+		// DEBUG: brackets printEnding() (UnlockNgPlus's CaseFileAccess
+		// load, the one ending pool's Load/Print/MarkCaseFile/Dispose
+		// cycle) -- compare against ENTRY above to isolate what the
+		// ending sequence itself costs, separate from the room
+		// transition that got us here.
+		DebugLog("DEBUG rm002 init EXIT: heap=%u largest=%u" MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
 	)
 	(method (printEnding)
 		// Full ending-variant port (see SESSION_HANDOFF.md, game.sh,
@@ -99,25 +113,36 @@
 		// (~9.1-11.9KB) that loading the one pool actually needed dragged
 		// in several dead ones too, on top of MarkCaseFile()'s own nested
 		// Load/DisposeScript of CASEFILEACCESS_SCRIPT firing while that
-		// whole bundle was still resident. Same Load/DisposeScript idiom
-		// workevents.sc's DoWorkEvent() already uses for the per-zone
-		// chunks.
+		// whole bundle was still resident.
+		// CASEFILES_SCRIPT (MarkCaseFile) now Load/DisposeScript wrapped
+		// around each branch too -- CaseFiles.sc was ~12KB and permanently
+		// resident from the moment anything ever called MarkCaseFile
+		// (mechanisms.sc's unlock branches, or here), a real, sizeable
+		// chunk of permanent baseline heap given how thin margins already
+		// are (see SESSION_HANDOFF.md). Same idiom as CASEFILEACCESS_SCRIPT
+		// and CASEFILETITLES_SCRIPT before it.
 		(if(>= gRepression 100)
+			Load(rsSCRIPT CASEFILES_SCRIPT)
 			Load(rsSCRIPT ENDINGFAILURE0_SCRIPT)
 			PrintFailureEnding0()
 			DisposeScript(ENDINGFAILURE0_SCRIPT)
+			DisposeScript(CASEFILES_SCRIPT)
 			return
 		)
 		(if(<= gMask 0)
+			Load(rsSCRIPT CASEFILES_SCRIPT)
 			Load(rsSCRIPT ENDINGFAILURE1_SCRIPT)
 			PrintFailureEnding1()
 			DisposeScript(ENDINGFAILURE1_SCRIPT)
+			DisposeScript(CASEFILES_SCRIPT)
 			return
 		)
 		(if(<= gChild 0)
+			Load(rsSCRIPT CASEFILES_SCRIPT)
 			Load(rsSCRIPT ENDINGFAILURE2_SCRIPT)
 			PrintFailureEnding2()
 			DisposeScript(ENDINGFAILURE2_SCRIPT)
+			DisposeScript(CASEFILES_SCRIPT)
 			return
 		)
 		(self:printSurvivalEnding())
@@ -128,6 +153,12 @@
 		// Extended Therapy run surviving doesn't re-trigger anything (it's
 		// already unlocked, and the original only calls this when
 		// `!state.hardMode` too).
+		// One Load(CASEFILES_SCRIPT) covers UnlockNgPlus() (which itself
+		// calls MarkCaseFile) AND whichever PrintSurvivalEndingN() branch
+		// fires below (each also calls MarkCaseFile for its own variant) --
+		// cheaper than disposing/reloading between the two, since both
+		// always happen together in this method.
+		Load(rsSCRIPT CASEFILES_SCRIPT)
 		(if(not gHardMode)
 			UnlockNgPlus()
 		)
@@ -139,53 +170,62 @@
 			Load(rsSCRIPT ENDINGSURVIVAL0_SCRIPT)
 			PrintSurvivalEnding0()
 			DisposeScript(ENDINGSURVIVAL0_SCRIPT)
+			DisposeScript(CASEFILES_SCRIPT)
 			return
 		)
 		(if((>= gMask 85) and (<= gChild 25))
 			Load(rsSCRIPT ENDINGSURVIVAL1_SCRIPT)
 			PrintSurvivalEnding1()
 			DisposeScript(ENDINGSURVIVAL1_SCRIPT)
+			DisposeScript(CASEFILES_SCRIPT)
 			return
 		)
 		(if((>= gChild 75) and (<= gMask 40))
 			Load(rsSCRIPT ENDINGSURVIVAL2_SCRIPT)
 			PrintSurvivalEnding2()
 			DisposeScript(ENDINGSURVIVAL2_SCRIPT)
+			DisposeScript(CASEFILES_SCRIPT)
 			return
 		)
 		(if((<= gMask 25) and (>= gChild 25))
 			Load(rsSCRIPT ENDINGSURVIVAL3_SCRIPT)
 			PrintSurvivalEnding3()
 			DisposeScript(ENDINGSURVIVAL3_SCRIPT)
+			DisposeScript(CASEFILES_SCRIPT)
 			return
 		)
 		(if((>= gMask 41) and (<= gChild 25))
 			Load(rsSCRIPT ENDINGSURVIVAL4_SCRIPT)
 			PrintSurvivalEnding4()
 			DisposeScript(ENDINGSURVIVAL4_SCRIPT)
+			DisposeScript(CASEFILES_SCRIPT)
 			return
 		)
 		(if((<= gRepression 30) and (>= gMask 40) and (<= gMask 70) and (>= gChild 40) and (<= gChild 70))
 			Load(rsSCRIPT ENDINGSURVIVAL5_SCRIPT)
 			PrintSurvivalEnding5()
 			DisposeScript(ENDINGSURVIVAL5_SCRIPT)
+			DisposeScript(CASEFILES_SCRIPT)
 			return
 		)
 		(if((<= gRepression 30) and (>= gMask 60) and (>= gChild 60))
 			Load(rsSCRIPT ENDINGSURVIVAL6_SCRIPT)
 			PrintSurvivalEnding6()
 			DisposeScript(ENDINGSURVIVAL6_SCRIPT)
+			DisposeScript(CASEFILES_SCRIPT)
 			return
 		)
 		(if((>= gRepression 31) and (<= gRepression 69) and (>= gMask 40) and (>= gChild 40))
 			Load(rsSCRIPT ENDINGSURVIVAL7_SCRIPT)
 			PrintSurvivalEnding7()
 			DisposeScript(ENDINGSURVIVAL7_SCRIPT)
+			DisposeScript(CASEFILES_SCRIPT)
 			return
 		)
 		Load(rsSCRIPT ENDINGSURVIVAL8_SCRIPT)
 		PrintSurvivalEnding8()
 		DisposeScript(ENDINGSURVIVAL8_SCRIPT)
+		DisposeScript(CASEFILES_SCRIPT)
 	)
 )
 /******************************************************************************/
@@ -205,7 +245,9 @@
                 (if((>= (send pEvent:x) CABINET_X1) and (< (send pEvent:x) CABINET_X2))
                     (if((>= (send pEvent:y) CABINET_Y1) and (< (send pEvent:y) CABINET_Y2))
                         (send pEvent:claimed(TRUE))
+                        Load(rsSCRIPT CASEFILES_SCRIPT)
                         ShowCaseFiles()
+                        DisposeScript(CASEFILES_SCRIPT)
                     )
                 )
             )

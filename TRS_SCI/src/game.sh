@@ -40,78 +40,30 @@
 (define TITLESCREEN_SCRIPT	800)
 (define ENDING_ROOM			2)
 (define PRINTCHOICES_SCRIPT	100)
-(define WORKEVENTS_SCRIPT	101)
-(define WORKEVENTS1_SCRIPT	102)
-(define WORKEVENTS2_SCRIPT	103)
-(define WORKEVENTS3_SCRIPT	104)
-(define WORKEVENTS4_SCRIPT	105)
+// 101-105, 108-132, 138-161 (WORKEVENTS/HOMEEVENTS/SOCIALEVENTS/SELFEVENTS/
+// BODYEVENTS/PUBLICEVENTS, dispatcher + 8 chunks each) are freed -- the
+// whole manual Load/DisposeScript chunk-cycling architecture they
+// implemented is GONE, replaced by one-room-per-event (WORK_ROOM_BASE
+// etc. below). Root cause it doesn't have: real, repeatable SCI0 heap
+// fragmentation confirmed via debug instrumentation -- the identical
+// Load-chunk/use-it/DisposeScript cycle sometimes fully reclaimed its
+// memory and sometimes didn't (e.g. one turn lost 0 bytes net, the very
+// next lost 4150, same code path) in a way that didn't correlate cleanly
+// with chunk size or call order. Splitting chunks smaller (this range's
+// own CHUNK_COUNT 4->8 fix) bought some headroom but couldn't eliminate
+// fragmentation itself. One-room-per-event sidesteps it entirely: the
+// engine's own native room-transition cleanup replaces every hand-rolled
+// Load/DisposeScript pair, and only ONE room's content is ever resident
+// at a time (no more dispatcher+chunk simultaneously loaded). See
+// SESSION_HANDOFF.md for the full investigation. Left unused rather than
+// reassigned, matching this project's own "fresh numbers, not a
+// renumbering" discipline.
 (define MECHANISMS_SCRIPT	106)
 (define CASEFILES_SCRIPT	107)
-(define HOMEEVENTS_SCRIPT	108)
-(define HOMEEVENTS1_SCRIPT	109)
-(define HOMEEVENTS2_SCRIPT	110)
-(define HOMEEVENTS3_SCRIPT	111)
-(define HOMEEVENTS4_SCRIPT	112)
-(define SOCIALEVENTS_SCRIPT	113)
-(define SOCIALEVENTS1_SCRIPT	114)
-(define SOCIALEVENTS2_SCRIPT	115)
-(define SOCIALEVENTS3_SCRIPT	116)
-(define SOCIALEVENTS4_SCRIPT	117)
-(define SELFEVENTS_SCRIPT	118)
-(define SELFEVENTS1_SCRIPT	119)
-(define SELFEVENTS2_SCRIPT	120)
-(define SELFEVENTS3_SCRIPT	121)
-(define SELFEVENTS4_SCRIPT	122)
-(define BODYEVENTS_SCRIPT	123)
-(define BODYEVENTS1_SCRIPT	124)
-(define BODYEVENTS2_SCRIPT	125)
-(define BODYEVENTS3_SCRIPT	126)
-(define BODYEVENTS4_SCRIPT	127)
-(define PUBLICEVENTS_SCRIPT	128)
-(define PUBLICEVENTS1_SCRIPT	129)
-(define PUBLICEVENTS2_SCRIPT	130)
-(define PUBLICEVENTS3_SCRIPT	131)
-(define PUBLICEVENTS4_SCRIPT	132)
-// 133-135 (ENDINGCONTENT1/2/3_SCRIPT) freed -- those 3 bundled-4-5-pools-
-// per-file scripts were replaced by the 12 one-pool-per-file
-// ENDINGSURVIVAL0-8_SCRIPT/ENDINGFAILURE0-2_SCRIPT below (real
-// heap-exhaustion fix, see SESSION_HANDOFF.md). Left unused rather than
-// reassigned, matching this project's own "fresh numbers, not a
-// renumbering" discipline used for the WORKEVENTS5-8_SCRIPT-style range
-// just below.
+// 133-135 (ENDINGCONTENT1/2/3_SCRIPT) also freed -- see CASEFILEACCESS_SCRIPT's
+// own history below; unrelated to the room-based rewrite above.
 (define CASEFILEACCESS_SCRIPT	136)
 (define CASEFILETITLES_SCRIPT	137)
-
-// Second half of each zone's chunk split (CHUNK_COUNT 4 -> 8 in
-// tools/lib/zone-events.js -- see SESSION_HANDOFF.md's heap-exhaustion
-// investigation). Fresh script numbers, not a renumbering of anything
-// above -- halves each chunk's compiled size (~6300-8300 bytes down to
-// roughly half that) so a chunk load still fits in the ~7100-7400 bytes
-// that's realistically left after a turn's own permanent heap cost.
-(define WORKEVENTS5_SCRIPT	138)
-(define WORKEVENTS6_SCRIPT	139)
-(define WORKEVENTS7_SCRIPT	140)
-(define WORKEVENTS8_SCRIPT	141)
-(define HOMEEVENTS5_SCRIPT	142)
-(define HOMEEVENTS6_SCRIPT	143)
-(define HOMEEVENTS7_SCRIPT	144)
-(define HOMEEVENTS8_SCRIPT	145)
-(define SOCIALEVENTS5_SCRIPT	146)
-(define SOCIALEVENTS6_SCRIPT	147)
-(define SOCIALEVENTS7_SCRIPT	148)
-(define SOCIALEVENTS8_SCRIPT	149)
-(define SELFEVENTS5_SCRIPT	150)
-(define SELFEVENTS6_SCRIPT	151)
-(define SELFEVENTS7_SCRIPT	152)
-(define SELFEVENTS8_SCRIPT	153)
-(define BODYEVENTS5_SCRIPT	154)
-(define BODYEVENTS6_SCRIPT	155)
-(define BODYEVENTS7_SCRIPT	156)
-(define BODYEVENTS8_SCRIPT	157)
-(define PUBLICEVENTS5_SCRIPT	158)
-(define PUBLICEVENTS6_SCRIPT	159)
-(define PUBLICEVENTS7_SCRIPT	160)
-(define PUBLICEVENTS8_SCRIPT	161)
 
 // One script per ending POOL (real heap-exhaustion fix -- see
 // SESSION_HANDOFF.md): rm002.sc's printEnding()/printSurvivalEnding()
@@ -169,7 +121,8 @@
 (define CASEFILE_MECH_BASE			102)
 (define CASEFILE_NGPLUS			107)
 
-// T.R.S. per-zone event counts, for rm001's zone/event picker.
+// T.R.S. per-zone event counts, for GoToNextEvent()'s zone/event picker
+// (mechanisms.sc).
 (define WORK_EVENT_COUNT	34)
 (define HOME_EVENT_COUNT	32)
 (define SOCIAL_EVENT_COUNT	33)
@@ -177,6 +130,24 @@
 (define BODY_EVENT_COUNT	32)
 (define PUBLIC_EVENT_COUNT	32)
 (define ZONE_COUNT			6)
+
+// One-room-per-event (see the freed-script-numbers comment above for why):
+// each of the 196 events is its own room, script number
+// <ZONE>_ROOM_BASE + localIndex (0-based, matching the EVENT_COUNT
+// constants above). Room numbers 200-395, a fresh, contiguous block clear
+// of every other range in this file (100s = content scripts, 800s =
+// title/menu, 973-999 = stock engine base scripts). Ranges, back to back
+// in zone order: WORK 200-233 (34), HOME 234-265 (32), SOCIAL 266-298
+// (33), SELF 299-331 (33), BODY 332-363 (32), PUBLIC 364-395 (32) -- 196
+// total. GoToNextEvent() computes the target room as
+// <ZONE>_ROOM_BASE + Random(0, <ZONE>_EVENT_COUNT - 1) and transitions
+// directly there; there is no more per-zone dispatcher script to Load.
+(define WORK_ROOM_BASE		200)
+(define HOME_ROOM_BASE		234)
+(define SOCIAL_ROOM_BASE	266)
+(define SELF_ROOM_BASE		299)
+(define BODY_ROOM_BASE		332)
+(define PUBLIC_ROOM_BASE	364)
 
 // Player portrait (see SESSION_HANDOFF.md). View 801 is a placeholder
 // number (800 is already "Item - Test Object"). Shown only inside

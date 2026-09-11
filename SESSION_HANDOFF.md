@@ -2335,3 +2335,271 @@ sub-items under it are the real remaining scope, not bugs.
       per-turn loop (turn 1 through 10, confirmed) and the failure mode
       that remained was isolated to a once-per-run code path that's now
       using the same small-chunk treatment as everything else.
+    - **Confirmed: a full standard (10-turn) run now survives start to
+      finish, including reaching a real survival ending, and the Case
+      Files viewer correctly shows all 107 slots with accurate
+      discovered/sealed state.** Both the `CHUNK_COUNT` fix and the
+      per-pool ending-content fix are working. User's own assessment,
+      exactly right: "a win, but not mission accomplished" -- flagged
+      Extended Therapy (`HARD_MODE_TURNS` = 20, double the standard
+      session) as the next likely place to run out, and started testing
+      it live, in the same play session (survive a standard run, then
+      use the clickable computer -- rm002.sc's `RoomScript` -- to start
+      a new run and pick Extended Therapy, rather than a fresh reboot).
+    - **New, more specific finding: a same-session second run starts
+      6576 bytes worse off than a fresh boot (4106 vs. 10682 free), and
+      Extended Therapy died mid-turn-3 from that reduced starting
+      point.** This is a different bug from anything fixed so far --
+      not a per-turn or per-ending cost, but a cost of the ROOM
+      TRANSITIONS themselves (rm001 -> rm002 at the first run's end,
+      then rm002 -> rm001 via the computer click to start the second).
+      Leading theory: `Main.sc`'s `Template:newRoom()` re-`Load()`s 4
+      fonts, 2 cursors, and `PORTRAIT_VIEW` on every room transition and
+      never disposes any of them -- if SCI0's `Load()` doesn't cleanly
+      no-op/ref-count an already-resident resource (unconfirmed either
+      way; the 4 fonts and 2 cursors are original, long-battle-tested
+      stock template code so a fundamental leak there seems unlikely,
+      but `PORTRAIT_VIEW` is this project's own addition and a more
+      plausible suspect), each transition could be paying for that
+      resource all over again with nothing to show for it.
+      **Real, useful finding along the way: repeat script loads look
+      free.** Turns 1-2 of the Extended Therapy run (BODY then WORK
+      zones) both round-tripped with **zero net heap cost** -- `heap`
+      returned to the exact same value (4106) after the full
+      Load-dialog-effects-log-Dispose cycle, not just "close to." This
+      strongly suggests the ~2000-3500-byte "permanent" loss measured
+      earlier isn't a per-*call* tax -- it's a one-time tax the first
+      time a given script is ever loaded in a play session (plausibly a
+      class-table or symbol-table entry that persists once created but
+      isn't re-created on repeat loads), and a script already touched
+      once (very likely for these two specific chunks, given they were
+      probably hit during the first run's own 10 turns) costs nothing
+      the second time. Good news for Extended Therapy's real odds, once
+      the starting-baseline problem is separately fixed -- a lot of what
+      a 20-turn run touches will be repeats from the first 10.
+      **New failure mode, not yet fully localized**: turn 3 (SELF zone)
+      crashed with "out of heap space" after the event's dialog was
+      answered and its log line printed, with **no debug dialog at all**
+      between that and the crash -- meaning it happened somewhere
+      inside `DoSelfEvent`'s own internal `DisposeScript()` call for the
+      inner content chunk (or the return path immediately after), not
+      at a point our then-current instrumentation could see (the
+      per-chunk `DEBUG_HEAP` checkpoints inside `genDispatcher()` had
+      been switched off after the earlier investigation). Checked for a
+      simpler explanation first -- an unusually large SELF chunk hiding
+      among the others -- and ruled it out: `wc -c` across all 48
+      zone-chunk files shows a tight 5.5-6.9KB band, no outliers.
+      **Re-enabled instrumentation for the next attempt**: flipped
+      `DEBUG_HEAP` back to `true` in
+      [tools/lib/zone-events.js](tools/lib/zone-events.js:120) and
+      regenerated all six zones, restoring the `post-switch pre-Dispose`/
+      `post-Dispose` checkpoints inside every zone dispatcher's inner
+      chunk handling. **Also added two new checkpoints specifically
+      bracketing the room transitions**, to separately chase the
+      6576-byte cross-run loss: `rm002.sc`'s `init()` now prints
+      `DEBUG rm002 init ENTRY` right at its very top (before
+      `super:init()` -- captures state right after the rm001->rm002
+      transition, including `Main.sc`'s font/cursor/view reloads) and
+      `DEBUG rm002 init EXIT` right after `(self:printEnding())` returns
+      (isolates the ending sequence's own cost, separate from the
+      transition that preceded it); `rm001.sc`'s `init()` now prints
+      `DEBUG rm001 init ENTRY` at its very top (captures state right
+      after the rm002->rm001 transition via the clickable computer).
+      Both files already had `(use "controls")` for `FormatPrint`, no
+      new dependencies needed. Ran the structural sanity check across
+      all 102 `.sc` files in `TRS_SCI/src` -- clean. **Not yet
+      compiled/playtested.** Next attempt should retry the exact same
+      scenario (survive a standard run, computer-click into Extended
+      Therapy) and send the readouts from `DEBUG rm002 init ENTRY`
+      onward through the crash -- this should show, in order: the
+      rm001->rm002 transition's own cost, the ending sequence's own
+      cost, the rm002->rm001 transition's own cost, and then (if it
+      gets that far again) the exact per-chunk boundary where turn 3
+      fails, all in one pass.
+    - **Root cause conclusively identified as SCI0 heap fragmentation,
+      not a fixable bug in our own code -- and the fix was a genuine
+      architectural rewrite, not another patch.** A clean file-log
+      readout (see the file-based-logging entry above) showed the exact
+      same Load-chunk/use-it/DisposeScript cycle, back-to-back, lose
+      4150 bytes net on one turn (BODYEVENTS3: chunk load -5928, inner
+      dispose recovered +0, outer dispatcher dispose recovered +1778,
+      total -4150) and lose *nothing* on the very next (SELFEVENTS2:
+      chunk load -2128, inner dispose +350, outer dispose +1778, total
+      -0 -- full recovery). Same code path, same operations, wildly
+      different outcomes. This doesn't correlate cleanly with chunk
+      size or call order -- textbook external fragmentation in a
+      1988-era heap allocator with no compaction, not a logic bug
+      reachable by inspecting our own script code further.
+    - **User's call, and the right one: "One room per event... makes it
+      scalable" for the architecture, plus shrink CaseFiles.sc's
+      permanent baseline while at it.** Two changes landed:
+      1. **CaseFiles.sc (~12KB) made Load/DisposeScript-scoped**, same
+         treatment CaseFileAccess.sc/CaseFileTitles.sc already got.
+         Every external call site wrapped: `Main.sc`'s boot-time
+         `LoadCaseFiles()`; `mechanisms.sc`'s 5 `MarkCaseFile()` calls
+         (one per coping-mechanism unlock branch); `rm002.sc`'s
+         `UnlockNgPlus()` + all 12 ending-pool branches (one
+         `Load(CASEFILES_SCRIPT)` covers `UnlockNgPlus()` and whichever
+         `PrintSurvivalEndingN()`/`PrintFailureEndingN()` branch fires,
+         since both always happen together and both call
+         `MarkCaseFile()`) + the clickable-cabinet `ShowCaseFiles()`
+         call; `menubar.sc`'s "Case Files" menu item's `ShowCaseFiles()`
+         call. `buf[3424]`'s script-level `(local ...)` declaration is
+         unaffected -- it's filled fresh on every `ShowCaseFiles()` call
+         regardless of whether the script was just reloaded. Frees
+         ~12KB of what had been permanent baseline heap for the entire
+         game session down to only the brief moments `CaseFiles.sc`'s
+         procedures actually run.
+      2. **One room per event -- the WORK/HOME/SOCIAL/SELF/BODY/PUBLIC
+         zone dispatcher+chunk architecture is gone entirely**, replaced
+         by 196 individual rooms, one per event, room numbers 200-395
+         (WORK 200-233, HOME 234-265, SOCIAL 266-298, SELF 299-331, BODY
+         332-363, PUBLIC 364-395 -- fresh numbers, the 54 old
+         WORKEVENTS/etc. constants in `game.sh` freed, not reassigned).
+         Each room's `init()` IS the event: shows the `PrintChoices`
+         dialog, rolls the glitch chance, applies effects/prints the log
+         line, then calls a new shared `EndTurn()` (mechanisms.sc) to
+         hand off. The engine's own native room-transition cleanup
+         replaces every hand-rolled `Load`/`DisposeScript` pair -- only
+         one room's content is ever resident at a time (no more
+         dispatcher+chunk simultaneously loaded), which is what actually
+         sidesteps the fragmentation above rather than just reducing its
+         blast radius the way smaller chunks did.
+         - `ZoneStatBias()`/`PickZone()` moved from `rm001.sc` into
+           `mechanisms.sc` (already always-resident) -- rm001 itself is
+           now a normal room that gets disposed like any other once a
+           run leaves it, but every one of the 196 event rooms needs to
+           pick+transition to the next event, so this logic can no
+           longer live in a room.
+         - New `GoToNextEvent()` (mechanisms.sc): `PickZone()` + a
+           uniform `Random()` within that zone, then
+           `(send gRoom:newRoom(+ <ZONE>_ROOM_BASE index))` -- directly
+           to the target room, no dispatcher script in between.
+         - New `EndTurn()` (mechanisms.sc): `++gTurn`, `ClampStats()`,
+           then the exact De Morgan negation of the old `runShift()`
+           while-loop guard (`(> gTurn gMaxTurns) or (>= gRepression
+           100) or (<= gMask 0) or (<= gChild 0)`) -- ends the run
+           (`newRoom(ENDING_ROOM)`) or calls `GoToNextEvent()`. Every
+           one of the 196 event rooms calls this once, at the very end
+           of its own `init()`; `rm001.sc` also calls it once, with
+           `gTurn` pre-set to 0, to bootstrap the very first turn
+           through the same logic rather than duplicating it. Also
+           carries one clean `DebugLog` heap reading per turn -- this
+           single choke point replaces ALL of the old per-chunk
+           instrumentation now that there's no chunk-load boundary left
+           to bracket.
+         - `rm001.sc` stripped down to just the per-run reset + Extended
+           Therapy mode-choice dialog + the `EndTurn()` bootstrap call --
+           `runShift()` or any turn-looping logic. It is never revisited
+           mid-run; event rooms transition directly to each other.
+         - **Generator rewritten**: `tools/lib/zone-events.js`'s
+           `genDispatcher()`/`genChunk()`/`chunk()` replaced by a single
+           `genEventRoom()` that emits one `(instance public rm<N> of Rm
+           ...)` file per event (no `CHUNK_COUNT` knob anymore -- there's
+           nothing left to chunk). Each room reuses `picture 1` (same as
+           `rm002`, no new art) and deliberately has **no** `RoomScript`/
+           `setScript()` -- confirmed via `Rm`'s own class definition
+           that `script` defaults to `0`, a valid no-op state, and none
+           of these rooms need custom click/"look" handling (ego is
+           hidden and program-controlled, same reasoning `rm001`/`rm002`
+           already established). All 6 `tools/gen-<zone>-events.js`
+           entry scripts updated to the new `{zoneLabel, roomBase}` opts
+           shape (dropped the now-meaningless `procName`/
+           `dispatchProcName`/`scriptConstPrefix`/`dispatcherScriptConst`/
+           `outPrefix`).
+         - **Real bug caught before it shipped**: the first generated
+           batch put `(var choice, glitchText)` after `(super:init())`/
+           `SetUpEgo()`/etc. instead of as the method's very first
+           statement -- every method/procedure in this codebase without
+           exception declares `(var ...)` first (confirmed via grep
+           across `Controls.sc`). Fixed in the generator template and
+           regenerated all 196 rooms.
+         - Deleted all 54 old dispatcher/chunk `.sc`+`.sco` files.
+           `game.sh`: removed the 54 freed constants (`WORKEVENTS_SCRIPT`
+           etc.), added `<ZONE>_ROOM_BASE` constants for all 6 zones.
+           `game.ini`: removed the 54 old `[Script]` entries, added 196
+           new `n200=rm200`..`n395=rm395` entries.
+         - Cleaned up two now-stale comments (`CaseFileTitles.sc`,
+           `rm002.sc`) that referenced `workevents.sc`'s `DoWorkEvent()`
+           as a pattern example -- that file no longer exists.
+      **Verification**: all 244 `.sc` files in `TRS_SCI/src` pass the
+      structural sanity check (balanced parens outside strings, paired
+      quotes); confirmed all 196 room numbers 200-395 present exactly
+      once with zero duplicates or gaps; zero duplicate script numbers
+      in `game.sh` or `game.ini`; every `game.ini` `[Script]` entry has
+      a matching on-disk file (only the 3 already-known, harmless
+      `CaseFiles.sc`-family case mismatches, plus a handful of
+      PascalCase stock files like `Main.sc`/`Controls.sc` that a
+      case-sensitive verification grep flags as false positives --
+      those files are untouched and have worked all project); grepped
+      for every old dispatch symbol (`DoWorkEvent` etc.,
+      `(use "workevents")` etc., `WORKEVENTS_SCRIPT` etc.) and found
+      zero remaining references outside two stale comments (now fixed).
+      **Not yet compiled/playtested.** This is the largest single
+      change this project has made -- 196 new room files plus a rewired
+      turn-loop -- so expect the usual "a batch of new interdependent
+      scripts needs 2-3 rounds of Compile All" behavior, likely more
+      pronounced at this scale. Worth testing, in order: (1) does a
+      standard 10-turn run complete cleanly (2) does the per-turn
+      `DebugLog` in `EndTurn()` show heap holding steady rather than
+      trending down turn over turn -- the real test of whether one-room-
+      per-event actually avoids the fragmentation this whole rewrite was
+      built to escape (3) Extended Therapy (20 turns) from a fresh boot
+      (4) Extended Therapy started via the clickable computer in the same
+      session as a prior run, the exact scenario that first surfaced the
+      cross-run heap-loss investigation.
+    - **Regression report from the user after the above instrumentation
+      pass: a fresh (first-round) run started failing again, and
+      inconsistently -- sometimes before event 1, sometimes on event 5.**
+      This is a meaningfully worse/different symptom than anything seen
+      before (a previously rock-solid 10-turn run suddenly failing on
+      turn 1, non-deterministically) -- strong evidence the debug
+      instrumentation itself was perturbing the exact low-heap
+      conditions being measured, not that real game logic regressed.
+      Every `FormatPrint`-based debug checkpoint pops a real dialog
+      (window, border, text) which costs some transient heap of its
+      own; stacking several of them right at the tightest moment in a
+      turn (chunk still loaded, about to dispose) could plausibly be
+      the actual straw that broke an otherwise-marginal load, which
+      would explain both the regression and its inconsistency (varies
+      by which specific event's chunk size is involved).
+      **Switched all debug output from `FormatPrint` dialogs to a file
+      log, `TRSDEBUG.LOG`**, for two independent reasons: (1) removes
+      the screenshot-per-checkpoint tedium entirely -- since DOSBox-X's
+      `MOUNT C "<path to TRS_SCI>"` maps the game's `C:` drive straight
+      to the `TRS_SCI/` folder on the host (confirmed: `TRSCASE.DAT`
+      already lands at `TRS_SCI/TRSCASE.DAT`, not `TRS_SCI/src/`), the
+      log file can be read directly off disk with no manual copying;
+      (2) a raw file write should cost far less transient heap than
+      building/opening/rendering a whole dialog window, making it much
+      less likely to itself perturb the measurement the way stacking up
+      `FormatPrint` dialogs apparently did.
+      **Implementation**: new global `gDebugLogFile` in `Main.sc` (0 by
+      default), opened once with `FOpen("TRSDEBUG.LOG" fCREATE)` in
+      `Template:init()` (wipes any log from a previous session on every
+      fresh boot; a failed open just leaves the handle at 0 rather than
+      crashing) -- exact same `FOpen`/`fCREATE` pattern already proven
+      working in `CaseFiles.sc`'s `SaveCaseFiles()`. New procedure
+      `DebugLog(textorstring textid params)` in
+      [Controls.sc](TRS_SCI/src/Controls.sc:964), a drop-in replacement
+      for `FormatPrint` with the identical calling convention (same
+      `Format()`-based dispatch logic) but writing to `gDebugLogFile`
+      via `FPuts` instead of popping a `Print()` dialog; no-ops silently
+      if the file failed to open. **Deliberately left the file open for
+      the whole session** rather than closing/reopening per line --
+      SCI0's `FOpen` has no true append mode (only "create, destroying
+      content" or "open existing," confirmed via SCI Companion's own
+      kernel docs), so reopening per line would mean re-truncating each
+      time; accepted the modest risk that the last line or two might be
+      lost to C-runtime file buffering on a hard crash, in exchange for
+      much simpler code. All 25 existing `FormatPrint("DEBUG ...")`
+      calls (22 in `rm001.sc`, 2 in `rm002.sc`, 2 in the shared generator
+      template `tools/lib/zone-events.js`) mechanically swapped to
+      `DebugLog(...)` via `sed` (identical arguments, name-only change)
+      and all six zones regenerated. Ran the structural sanity check
+      across all 102 `.sc` files -- clean; grepped for any remaining
+      `FormatPrint("DEBUG` -- none left anywhere. **Not yet
+      compiled/playtested.** Once compiled, no more screenshots needed
+      for this investigation -- just play, and whoever has access to
+      this repo can read `TRS_SCI/TRSDEBUG.LOG` directly after a crash
+      (or even mid-session) to see the full checkpoint trail.

@@ -1,0 +1,81 @@
+/******************************************************************************
+ T.R.S. → SCI0 port
+ ******************************************************************************
+ rm252.sc
+ GENERATED FILE — do not hand-edit. Produced by tools/gen-home-events.js from
+ the original js/events/home.js (HOME event 18). Re-run
+ that script after editing the source event data.
+
+ One room per event (see game.sh and SESSION_HANDOFF.md) -- this room IS
+ the event: shows its PrintChoices dialog, applies the chosen response's
+ effects, prints its log line, then hands off via EndTurn() (mechanisms.sc)
+ to either the next event's room or the ending room. No custom RoomScript
+ -- ego is hidden/program-controlled and there's nothing here to click or
+ "look" at, and Rm's own `script` property defaults to 0 (a valid,
+ handled no-script state) if never set.
+ ******************************************************************************/
+(include "sci.sh")
+(include "game.sh")
+/******************************************************************************/
+(script 252)
+/******************************************************************************/
+(use "main")
+(use "controls")
+(use "cycle")
+(use "game")
+(use "feature")
+(use "obj")
+(use "inv")
+(use "printchoices")
+(use "mechanisms")
+/******************************************************************************/
+(instance public rm252 of Rm
+	(properties
+		picture 1
+		north 0
+		east 0
+		south 0
+		west 0
+	)
+	(method (init)
+		(var choice, glitchText)
+		(super:init())
+		SetUpEgo()
+		(send gEgo:init())
+		ProgramControl()
+		(send gEgo:hide())
+		= glitchText NULL
+		(if(< Random(0 99) GLITCH_CHANCE_PCT)
+			= glitchText "Shake the envelope and try to guess the contents like a game show."
+		)
+		= choice PrintChoices(
+			"A letter arrives from someone you haven't spoken to in years. You've been staring at the envelope, unopened, for ten minutes."
+			"The Return Address You Don't Recognize"
+			290
+			glitchText
+		"Put it in a drawer. Deal with it 'later.'" 0
+		"Open it and immediately plan an apologetic, generous reply." 1
+		"Open it. Read it. Feel whatever you feel." 2
+		)
+		(if(== choice GLITCH_CHOICE)
+			ApplyGlitch("You have guessed 'ferret' three times. You weren't even close.")
+		)(else
+			(switch(choice)
+		(case 0
+			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
+			Print("You filed the unknown away instead of facing it.")
+		)
+		(case 1
+			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
+			Print("You started drafting amends before reading the actual letter.")
+		)
+		(case 2
+			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
+			Print("You let the envelope just be information.")
+		)
+			)
+		)
+		EndTurn()
+	)
+)
+/******************************************************************************/

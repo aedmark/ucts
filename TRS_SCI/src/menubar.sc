@@ -209,7 +209,9 @@
 				ToggleSound()
 			)
 			(case MENU_CASEFILES
+				Load(rsSCRIPT CASEFILES_SCRIPT)
 				ShowCaseFiles()
+				DisposeScript(CASEFILES_SCRIPT)
 			)
 		)
 	)

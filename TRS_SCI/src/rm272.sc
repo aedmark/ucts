@@ -1,0 +1,81 @@
+/******************************************************************************
+ T.R.S. → SCI0 port
+ ******************************************************************************
+ rm272.sc
+ GENERATED FILE — do not hand-edit. Produced by tools/gen-social-events.js from
+ the original js/events/social.js (SOCIAL event 6). Re-run
+ that script after editing the source event data.
+
+ One room per event (see game.sh and SESSION_HANDOFF.md) -- this room IS
+ the event: shows its PrintChoices dialog, applies the chosen response's
+ effects, prints its log line, then hands off via EndTurn() (mechanisms.sc)
+ to either the next event's room or the ending room. No custom RoomScript
+ -- ego is hidden/program-controlled and there's nothing here to click or
+ "look" at, and Rm's own `script` property defaults to 0 (a valid,
+ handled no-script state) if never set.
+ ******************************************************************************/
+(include "sci.sh")
+(include "game.sh")
+/******************************************************************************/
+(script 272)
+/******************************************************************************/
+(use "main")
+(use "controls")
+(use "cycle")
+(use "game")
+(use "feature")
+(use "obj")
+(use "inv")
+(use "printchoices")
+(use "mechanisms")
+/******************************************************************************/
+(instance public rm272 of Rm
+	(properties
+		picture 1
+		north 0
+		east 0
+		south 0
+		west 0
+	)
+	(method (init)
+		(var choice, glitchText)
+		(super:init())
+		SetUpEgo()
+		(send gEgo:init())
+		ProgramControl()
+		(send gEgo:hide())
+		= glitchText NULL
+		(if(< Random(0 99) GLITCH_CHANCE_PCT)
+			= glitchText "Show up in full costume, several genres removed from the event's theme."
+		)
+		= choice PrintChoices(
+			"You said yes to something two weeks ago. It's tonight. Every fiber of you wants to cancel."
+			"The RSVP You Regret"
+			290
+			glitchText
+		"Draft a vague excuse about not feeling well." 0
+		"Text 'actually can't make it' with zero elaboration and hit send." 1
+		"Go anyway. Perform enthusiasm you do not currently possess." 2
+		)
+		(if(== choice GLITCH_CHOICE)
+			ApplyGlitch("You are the only knight at what turns out to be a beach party.")
+		)(else
+			(switch(choice)
+		(case 0
+			ApplyChoiceEffects(10 -5 -5 TAG_FLIGHT)
+			Print("You built an exit out of half a lie. Nobody believes you.")
+		)
+		(case 1
+			ApplyChoiceEffects(-10 -15 10 TAG_FIGHT)
+			Print("You chose a white lie over a padded truth. You spend the night regretting it.")
+		)
+		(case 2
+			ApplyChoiceEffects(10 15 -20 TAG_FAWN)
+			Print("You showed up as the version of you that RSVPs on time. You have fun, anyway.")
+		)
+			)
+		)
+		EndTurn()
+	)
+)
+/******************************************************************************/

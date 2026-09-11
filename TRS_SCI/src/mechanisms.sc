@@ -33,9 +33,11 @@
 				(if(>= gFawnCount UNLOCK_THRESHOLD)
 					= gFawnUnlocked TRUE
 					Print("COPING MECHANISM ACQUIRED: The Approval Loop. This will not be undone.")
+					Load(rsSCRIPT CASEFILES_SCRIPT)
 					(if(MarkCaseFile(+ CASEFILE_MECH_BASE TAG_FAWN))
 						Print("Case Files: The Approval Loop, filed." #title "New Case File")
 					)
+					DisposeScript(CASEFILES_SCRIPT)
 				)
 			)
 		)
@@ -48,9 +50,11 @@
 				(if(>= gFlightCount UNLOCK_THRESHOLD)
 					= gFlightUnlocked TRUE
 					Print("COPING MECHANISM ACQUIRED: The Exit Strategy. This will not be undone.")
+					Load(rsSCRIPT CASEFILES_SCRIPT)
 					(if(MarkCaseFile(+ CASEFILE_MECH_BASE TAG_FLIGHT))
 						Print("Case Files: The Exit Strategy, filed." #title "New Case File")
 					)
+					DisposeScript(CASEFILES_SCRIPT)
 				)
 			)
 		)
@@ -63,9 +67,11 @@
 				(if(>= gFightCount UNLOCK_THRESHOLD)
 					= gFightUnlocked TRUE
 					Print("COPING MECHANISM ACQUIRED: Hair-Trigger. This will not be undone.")
+					Load(rsSCRIPT CASEFILES_SCRIPT)
 					(if(MarkCaseFile(+ CASEFILE_MECH_BASE TAG_FIGHT))
 						Print("Case Files: Hair-Trigger, filed." #title "New Case File")
 					)
+					DisposeScript(CASEFILES_SCRIPT)
 				)
 			)
 		)
@@ -78,9 +84,11 @@
 				(if(>= gFreezeCount UNLOCK_THRESHOLD)
 					= gFreezeUnlocked TRUE
 					Print("COPING MECHANISM ACQUIRED: The Void. This will not be undone.")
+					Load(rsSCRIPT CASEFILES_SCRIPT)
 					(if(MarkCaseFile(+ CASEFILE_MECH_BASE TAG_FREEZE))
 						Print("Case Files: The Void, filed." #title "New Case File")
 					)
+					DisposeScript(CASEFILES_SCRIPT)
 				)
 			)
 		)
@@ -93,9 +101,11 @@
 				(if(>= gSecureCount UNLOCK_THRESHOLD)
 					= gSecureUnlocked TRUE
 					Print("COPING MECHANISM ACQUIRED: Earned Security. This will not be undone.")
+					Load(rsSCRIPT CASEFILES_SCRIPT)
 					(if(MarkCaseFile(+ CASEFILE_MECH_BASE TAG_SECURE))
 						Print("Case Files: Earned Security, filed." #title "New Case File")
 					)
+					DisposeScript(CASEFILES_SCRIPT)
 				)
 			)
 		)
@@ -203,5 +213,126 @@
 		return(PORTRAIT_MOOD_NEUTRAL)
 	)
 	return(+ worst 1)
+)
+/******************************************************************************/
+// ZoneStatBias/PickZone/GoToNextEvent/EndTurn moved here from rm001.sc as
+// part of the one-room-per-event rewrite (see game.sh and
+// SESSION_HANDOFF.md) -- rm001 is no longer resident once a run leaves it
+// (a normal SCI room, disposed like any other on transition), but every
+// one of the 196 event rooms needs to pick+transition to the NEXT event
+// after its own turn resolves, so this logic has to live in an
+// always-resident script. Same reasoning PickWorstStat() above already
+// documents for why it isn't in rm001.sc either.
+(procedure public (ZoneStatBias zoneIndex)
+	// Same zone -> stat-bias mapping as the original's content.js `zones`
+	// array. Return value encoding matches PickWorstStat: 0=repression,
+	// 1=mask, 2=child.
+	(switch(zoneIndex)
+		(case 0 return(0))		/* WORK -> repression */
+		(case 1 return(2))		/* HOME -> child */
+		(case 2 return(1))		/* SOCIAL -> mask */
+		(case 3 return(2))		/* SELF -> child */
+		(case 4 return(0))		/* BODY -> repression */
+		(case 5 return(1))		/* PUBLIC -> mask */
+	)
+	return(-1)
+)
+/******************************************************************************/
+(procedure public (PickZone)
+	// Weighted zone selection matching the original's pickWeightedEvent():
+	// zones whose stat bias matches the current worst stat get extra
+	// weight (the original's weakZoneWeight is 2.5x; scaled here to
+	// integer weights 5 vs 2, same ratio, since SCI0 arithmetic is
+	// integer-only). With exactly 2 of the current 6 zones matching any
+	// given worst stat, total weight is always 4*2 + 2*5 = 18 -- if the
+	// zone/stat-bias mix ever changes this hardcoded 18 (and the Random
+	// bound below) would need recomputing.
+	// NOT replicated: the original's "don't repeat an event already seen
+	// this run" pool -- a separate, bigger feature (needs per-event seen-
+	// tracking across all 196 events), not attempted here.
+	(var worstStat, i, r, w)
+	= worstStat PickWorstStat()
+	= r Random(0 17)
+	(for (= i 0) (< i ZONE_COUNT) (++i)
+		(if(== ZoneStatBias(i) worstStat)
+			= w 5
+		)(else
+			= w 2
+		)
+		(if(< r w)
+			return(i)
+		)
+		= r (- r w)
+	)
+	return(0)
+)
+/******************************************************************************/
+(procedure public (GoToNextEvent)
+	// Picks a zone-weighted random event (PickZone() + a uniform index
+	// within that zone) and transitions straight to its room --
+	// <ZONE>_ROOM_BASE + localIndex (game.sh). No dispatcher script to
+	// Load anymore; the room IS the event, and the engine's own
+	// newRoom()/room-transition cleanup replaces the old manual
+	// Load/DisposeScript chunk-cycling entirely (see game.sh's freed-
+	// script-numbers comment for why that was necessary). Called once
+	// from rm001.sc's init() (the very first event of a run) and again
+	// from EndTurn() below every time a turn continues.
+	(var zone, index)
+	= zone PickZone()
+	(switch(zone)
+		(case 0
+			= index Random(0 (- WORK_EVENT_COUNT 1))
+			(send gRoom:newRoom(+ WORK_ROOM_BASE index))
+		)
+		(case 1
+			= index Random(0 (- HOME_EVENT_COUNT 1))
+			(send gRoom:newRoom(+ HOME_ROOM_BASE index))
+		)
+		(case 2
+			= index Random(0 (- SOCIAL_EVENT_COUNT 1))
+			(send gRoom:newRoom(+ SOCIAL_ROOM_BASE index))
+		)
+		(case 3
+			= index Random(0 (- SELF_EVENT_COUNT 1))
+			(send gRoom:newRoom(+ SELF_ROOM_BASE index))
+		)
+		(case 4
+			= index Random(0 (- BODY_EVENT_COUNT 1))
+			(send gRoom:newRoom(+ BODY_ROOM_BASE index))
+		)
+		(case 5
+			= index Random(0 (- PUBLIC_EVENT_COUNT 1))
+			(send gRoom:newRoom(+ PUBLIC_ROOM_BASE index))
+		)
+	)
+)
+/******************************************************************************/
+(procedure public (EndTurn)
+	// The one place every event room ends its own turn -- called at the
+	// very end of each of the 196 event rooms' init(), after their own
+	// PrintChoices/ApplyChoiceEffects/log-line logic has already run.
+	// Increments the turn counter, clamps stats (same as the old
+	// runShift() loop body did after every DoXEvent call), then checks
+	// the exact same end conditions the old while-loop guarded on
+	// (De Morgan's negation of "<= gTurn gMaxTurns and all three stats
+	// still alive"): if the run is over, hand off to the ending room
+	// exactly like the old runShift() did; otherwise pick and go to the
+	// next event. rm001.sc's init() also calls this once, with gTurn
+	// pre-set to 0, to uniformly bootstrap the very first turn through
+	// the same increment-check-branch logic rather than duplicating it.
+	++gTurn
+	ClampStats()
+	// TEMPORARY DEBUG: one clean reading per turn at the one choke point
+	// every event room now passes through -- replaces the old per-chunk
+	// instrumentation entirely now that there's no more dispatcher/chunk
+	// Load/DisposeScript cycle to bracket. Remove once the one-room-per-
+	// event rewrite is confirmed to actually avoid the fragmentation
+	// this replaced -- see SESSION_HANDOFF.md.
+	DebugLog("DEBUG EndTurn T%d: heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+	(if((> gTurn gMaxTurns) or (>= gRepression 100) or (<= gMask 0) or (<= gChild 0))
+		(send gRoom:newRoom(ENDING_ROOM))
+		return
+	)
+	GoToNextEvent()
 )
 /******************************************************************************/

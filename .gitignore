@@ -1,0 +1,7 @@
+# User's own working art/audio source folder -- not part of the
+# compiled game's source, managed manually. See SESSION_HANDOFF.md.
+TRS_SCI/art/
+
+# Zipped distribution builds, regenerated as needed (name varies --
+# seen as both TRS_SCI.zip and Archive.zip).
+TRS_SCI/*.zip

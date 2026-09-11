@@ -12,6 +12,87 @@ full original design), to **Sierra's SCI0 engine** (King's Quest IV / Space
 Quest III era, 1988-90, 320x200 EGA) as a genuine, real, compilable game —
 not a stylistic reskin.
 
+## Latest session summary (read this first)
+
+This session was dominated by a heap-exhaustion saga that ended in a real
+architectural rewrite, plus three smaller features landed afterward. Full
+blow-by-blow is in the numbered "Not yet started" list and the findings
+below it (search for "one-room-per-event" / "stat gauges" / "no-repeat
+event pool" / "Background music" to jump to each) — this is just the
+map.
+
+**Heap exhaustion: root-caused and fixed, not just patched.**
+Confirmed via debug instrumentation that the WORK/HOME/SOCIAL/SELF/
+BODY/PUBLIC zone dispatcher+chunk architecture (manual `Load`/
+`DisposeScript` cycling) suffered genuine SCI0 heap fragmentation — the
+identical load/use/dispose cycle sometimes fully reclaimed its memory
+and sometimes didn't, for reasons that never correlated cleanly with
+anything in our own code. Splitting chunks smaller bought some headroom
+but couldn't eliminate it. **Fix: one room per event** — all 196 events
+are now individual rooms (numbers 200-395), and the engine's own native
+room-transition cleanup replaced every hand-rolled dispose call
+entirely. Confirmed via the user's own `TRSDEBUG.LOG`: heap now holds
+flat across a full 21-turn Extended Therapy run with zero fragmentation
+trend, including the exact cross-run scenario (computer-click into a
+new run, same session) that used to lose thousands of bytes. Also
+shrank `CaseFiles.sc`'s permanent baseline (Load/Dispose-scoped now,
+like `CaseFileAccess.sc` already was) and removed all temporary debug
+instrumentation once the fix was confirmed. A DisposeScript audit
+across the whole codebase (self-disposal, always-resident scripts never
+disposed, every Load has a reachable Dispose) came back clean.
+
+**Stat gauges → status line.** Several rounds: block-character bars
+(gauge.sc's own technique) failed to render at all; switching to plain
+ASCII still failed identically; root cause turned out to be
+bracket-assignment (`arr[i] = value`) writing a 16-bit word instead of
+an 8-bit byte for a string-typed buffer — fixed by using `StrAt()`
+instead (confirmed correct, matches what `Gauge`'s own stock code
+already did). User then preferred the original numbers over bars, just
+quantified — final form is `T.R.S. REP:40%|MASK:60%|CHILD:60%` in the
+status line, built via `Format()` + `StrLen()` + `StrAt()` chained
+together (never puts a literal `%` inside a `Format()` string, since
+that's untested territory in this dialect and `%` is `Format()`'s own
+specifier marker). Bonus: fixed a real latent buffer overflow in the
+old numeric status line format that could hit 51 characters against a
+41-byte buffer at 3-digit stat values.
+
+**No-repeat event pool.** Ported from the original browser game's
+actual algorithm (`js/engine.js`'s `pickWeightedEvent()`), simplified
+from its 3-tier fallback to one bounded retry loop (a run is only ever
+10-20 turns against 196 events, so "everything's been seen" can never
+actually trigger the original's later fallback tiers). New
+`gSeenEvent[196]` in `mechanisms.sc`, reset per-run from `rm001.sc`.
+
+**Background music — groundwork laid, blocked on the user sourcing a
+MIDI file.** Real gap: itch.io copy claims period audio driver support
+the game never actually used. `gm.drv` (General MIDI) was already
+sitting unused in the project; switched `resource.cfg` to it, confirmed
+safe (nothing in this game's actual rooms uses the driver-dependent
+stock door sound effects). New sound resource `n003` (labeled `BGM`)
+registered in `game.ini`. Found and fixed a real bug in the stock
+template's own commented-out music-hookup code (it sat after a call
+that immediately transitions rooms, so it would have been dead code
+even uncommented) and wired a working version into `rm001.sc`. Waiting
+on the user to source a MIDI file (real licensing wrinkle surfaced:
+several "free MIDI" sites had redistribution restrictions incompatible
+with a published game) and import it via SCI Companion's Sound Editor.
+
+**None of this session's work is compiled/playtested yet** except what
+explicitly says otherwise above (the heap fix and stat gauges format
+*are* confirmed; no-repeat pool and music are not).
+
+**Explicitly next, per the user's own request**: revisit the Case
+Files viewer's deliberate browse-only scope cut (see item 7 below) —
+bring in full descriptions (not just titles) and some form of
+category/grouping (endings vs. mechanisms, or by pool) rather than a
+flat 107-entry list. Worth reading item 7's own scope-cut rationale
+first (duplicating 107 flavor-text strings a second time was the
+original concern) before designing the approach — that concern is
+somewhat eased now that `CaseFiles.sc` is Load/Dispose-scoped rather
+than permanently resident, but the same heap-fragmentation caution this
+whole session was about still applies to however this ends up loading
+that much text.
+
 ## Decisions already made (don't re-litigate these)
 
 - **Target**: late-SCI0 (Police Quest II / Larry 2-3 era UI conventions),
@@ -2924,7 +3005,7 @@ sub-items under it are the real remaining scope, not bugs.
       text, an added `StrLen()` call, three chained `Format()` calls
       instead of one), so it still needs its own compile/playtest pass
       before calling the stat-display feature done.
-12. **No-repeat event pool -- built.** Checked first whether the
+13. **No-repeat event pool -- built.** Checked first whether the
     one-room-per-event rewrite had accidentally fixed this (it hadn't --
     `GoToNextEvent()` was still pure `Random()`, no tracking at all).
     Read the original browser game's actual algorithm
@@ -2973,3 +3054,81 @@ sub-items under it are the real remaining scope, not bugs.
     - Ran the structural sanity check across all 244 `.sc` files in
       `TRS_SCI/src` -- clean. Confirmed `ResetSeenEvents()` is called
       exactly once, from `rm001.sc`. **Not yet compiled/playtested.**
+14. **Background music -- first real audio work this project has done.**
+    Started from a real gap: the itch.io store copy claims period-
+    accurate audio driver support (PC Speaker/Tandy/AdLib/Sound
+    Blaster/Roland MT-32/General MIDI via Sierra's own drivers) but the
+    game has never actually shipped any music. User will source a MIDI
+    file themselves (a real licensing wrinkle surfaced first --
+    Vivaldi's *Winter* the composition is unambiguously public domain,
+    but two "free MIDI" sites checked (kunstderfuge.com,
+    classicalmidi.co.uk) both had real redistribution restrictions that
+    would matter for a published game, and SCI0 can only play true MIDI
+    note-data, not digital audio recordings, which ruled out a couple of
+    otherwise-promising audio-recording sources too -- see the
+    conversation for the full research trail).
+    - **Researched SCI Companion's actual sound pipeline before touching
+      anything** (`Help/sounds.txt`): it has a real "Import MIDI"
+      feature in its Sound Editor (no MIDI authoring, but import of an
+      existing file is fully supported) -- the doc's own recommended
+      approach is import, enable every track for every device, and use
+      a General MIDI driver in `resource.cfg`.
+    - **Found the stock template already had inert, commented-out
+      hookup code** in both `TitleScreen.sc` and `rm001.sc` ("Set up the
+      room's music to play here", using `number(scriptNumber)`) --
+      genuine unused Brian Provinciano boilerplate, never activated
+      anywhere in this project before now.
+    - **Real bug caught before it shipped**: `rm001.sc`'s commented
+      block sat *after* the `= gTurn 0 / EndTurn()` call at the end of
+      `init()` -- but `EndTurn()` immediately triggers a room transition
+      to the first event room, so anything placed after it is dead code,
+      never reached. Moved the real, activated version earlier (right
+      after `ProgramControl()`/`gEgo:hide()`, before the NG+ mode-choice
+      dialog) so it actually executes. The old dead block deleted
+      entirely rather than left as confusing leftover boilerplate.
+    - **`gm.drv` (General MIDI driver) was already sitting in the
+      project's driver files, unused** -- `resource.cfg`'s `soundDrv`
+      was set to `STD.DRV`. Checked first whether anything in this
+      game's actual content depends on the current driver (the stock
+      `Door`/`AutoDoor` sound effects) -- confirmed via grep that
+      neither class is instantiated anywhere in any actual room
+      (`rm001`, `rm002`, or the 196 event rooms), so switching
+      `soundDrv` to `gm.drv` can't regress anything functional in this
+      specific game. Switched it.
+    - **`game.ini`**: new `[Sound]` entry, originally labeled
+      `n003=Vivaldi Winter`, renamed by the user afterward to
+      `n003=BGM` -- resource number 3 itself unchanged, just a cosmetic
+      label edit in `game.ini`, harmless. A fresh, previously-unused
+      sound resource number (900/1/2 already taken by `Score
+      Sound`/`Dummy`/`Death Sound`; sound resources have their own
+      numbering namespace, entirely separate from script
+      numbers, so no collision risk with anything in the 1-999 script
+      range either).
+    - **`rm001.sc`**: real, active
+      `(send gTheMusic: prevSignal(0) stop() number(3) loop(-1) play())`
+      call, `stop()` first so a restart (via the clickable computer, or
+      a previous run's still-playing track) always restarts cleanly
+      from the top rather than layering or silently no-op'ing. Since
+      `Sound` objects persist independently of room transitions once
+      started, this plays continuously through however many of the 196
+      event rooms a single run visits, with no further wiring needed
+      per-room. Ran the structural sanity check -- clean.
+    - **Deliberately not done**: `TitleScreen.sc` has the identical
+      commented-out block and could get the same treatment trivially if
+      ever wanted, but the user's ask was specifically "during the
+      game," not the title screen -- left alone rather than expanding
+      scope unprompted.
+    - **Remaining steps are GUI-only, same as compiling** -- the actual
+      MIDI import happens in SCI Companion's Sound Editor in the Windows
+      VM: create/select sound resource 3, use the "Import MIDI" toolbar
+      button, enable every track for every device per the doc's own
+      recommendation, save, then Compile All as usual. Also worth
+      checking once testing in DOSBox-X: DOSBox(-X)'s own MIDI output
+      needs to be configured separately from the SCI-side driver setup
+      (e.g. a soundfont for its software synth, or a working passthrough
+      device) -- getting `resource.cfg` right on the game side doesn't
+      guarantee DOSBox-X itself is set up to actually render General
+      MIDI sound; if nothing is audible after import, that's the first
+      place to check, separate from anything in the game project itself.
+      **Not yet compiled/playtested** -- blocked on the user sourcing
+      and importing the actual MIDI file.

@@ -110,6 +110,29 @@
 		ProgramControl()
 		(send gEgo:hide())
 
+		// Background music for the whole run (Vivaldi's "Winter", sound
+		// resource 3 -- see game.ini's [Sound] section and
+		// resource.cfg's soundDrv, switched to gm.drv/General MIDI
+		// specifically so this plays back with real instrument sound
+		// rather than through whatever STD.DRV's more limited default
+		// was). Moved here from the stock template's own commented-out
+		// placement (which sat AFTER the EndTurn() call below and so
+		// would never actually have run -- EndTurn() immediately
+		// transitions to the first event room). Sound objects persist
+		// independently of room transitions once started, so this plays
+		// continuously through however many event rooms a run visits;
+		// stop() first in case a previous run's music (or this same
+		// call, on a restart via the clickable computer) is still
+		// playing, so it always restarts cleanly from the top rather
+		// than layering or silently no-op'ing.
+		(send gTheMusic:
+			prevSignal(0)
+			stop()
+			number(3)
+			loop(-1)
+			play()
+		)
+
 		// Extended Therapy / New Game+ mode choice (matches js/engine.js's
 		// NG+ button, gated the same way -- only offered once a standard-
 		// session survival has ever unlocked it, see UnlockNgPlus() in
@@ -153,17 +176,6 @@
 		// room. rm001 itself is never revisited after this.
 		= gTurn 0
 		EndTurn()
-
-        /****************************************
-         * Set up the room's music to play here *
-         ****************************************/ /*
-		(send gTheMusic:
-			prevSignal(0)
-			stop()
-			number(scriptNumber)
-			loop(-1)
-			play()
-		)*/
 
         /**************************************************
          * Add the rest of your initialization stuff here *

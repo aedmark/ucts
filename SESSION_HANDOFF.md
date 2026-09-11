@@ -14,8 +14,26 @@ not a stylistic reskin.
 
 ## Latest session summary (read this first)
 
-This session was dominated by a heap-exhaustion saga that ended in a real
-architectural rewrite, plus three smaller features landed afterward. Full
+**This session (most recent): Case Files viewer grew descriptions and
+categories** (item 15 in the "Not yet started" list below, née "NEXT UP" —
+now done, not yet compiled/playtested). Full details at item 15 itself;
+short version: the viewer went from a flat 107-title browse-only list to
+a 3-category menu (Survival Endings / Failure Endings / Coping
+Mechanisms, matching the original browser game's own `js/codex.js`
+grouping) → a per-category scrolling list → a "View" button showing the
+full title+description (new generator
+[tools/gen-casefile-descriptions.js](tools/gen-casefile-descriptions.js),
+new Load/Dispose-scoped script `CaseFileDescriptions.sc`) or a sealed
+placeholder. Deliberately avoided a new 3-hop `(use ...)` script-
+dependency cycle by hand-rolling the category menu instead of reusing
+`PrintChoices()`. **Before compiling**: `CaseFileDescriptions.sc` needs
+creating via SCI Companion's "New empty script" wizard first — the
+`game.ini` entry alone was confirmed NOT sufficient for `CaseFiles.sc`
+itself, earlier in this project (see item 7's "Problem 2").
+
+**Previous session: dominated by a heap-exhaustion saga** that ended in a
+real architectural rewrite, plus three smaller features landed
+afterward. Full
 blow-by-blow is in the numbered "Not yet started" list and the findings
 below it (search for "one-room-per-event" / "stat gauges" / "no-repeat
 event pool" / "Background music" to jump to each) — this is just the
@@ -81,17 +99,9 @@ with a published game) and import it via SCI Companion's Sound Editor.
 explicitly says otherwise above (the heap fix and stat gauges format
 *are* confirmed; no-repeat pool and music are not).
 
-**Explicitly next, per the user's own request**: revisit the Case
-Files viewer's deliberate browse-only scope cut (see item 7 below) —
-bring in full descriptions (not just titles) and some form of
-category/grouping (endings vs. mechanisms, or by pool) rather than a
-flat 107-entry list. Worth reading item 7's own scope-cut rationale
-first (duplicating 107 flavor-text strings a second time was the
-original concern) before designing the approach — that concern is
-somewhat eased now that `CaseFiles.sc` is Load/Dispose-scoped rather
-than permanently resident, but the same heap-fragmentation caution this
-whole session was about still applies to however this ends up loading
-that much text.
+(What was "explicitly next" at the end of that session — revisiting the
+Case Files viewer's browse-only scope cut — is what this session's own
+summary above covers; see item 15.)
 
 ## Decisions already made (don't re-litigate these)
 
@@ -3144,11 +3154,10 @@ sub-items under it are the real remaining scope, not bugs.
       place to check, separate from anything in the game project itself.
       **Not yet compiled/playtested** -- blocked on the user sourcing
       and importing the actual MIDI file.
-15. **NEXT UP, per the user's own explicit request: revisit the Case
-    Files viewer's browse-only scope cut (item 7 above) -- bring in
-    full descriptions and some form of category/grouping.** Not started
-    yet; this section exists to set up the next session, not to
-    prescribe the design.
+15. ~~Revisit the Case Files viewer's browse-only scope cut~~ **Done,
+    not yet compiled/playtested.** Per the user's own explicit request
+    (item 7's scope cut). Below is the original planning note from when
+    this was queued up, followed by what actually got built.
     - **Current state**: `ShowCaseFiles()` (`CaseFiles.sc`) builds a
       flat, 107-entry `DSelector` list, one line each --
       `"N. <title>"` if discovered, `"N. ??? (sealed)"` if not.
@@ -3197,3 +3206,122 @@ sub-items under it are the real remaining scope, not bugs.
       header rows), or a genuinely separate mechanism (tabs, a
       zone-first picker before the list), is worth discussing before
       building either.
+    - **What actually got built (this session)**: checked the original
+      browser game's own Case Files UI first (`js/codex.js`, not
+      previously read closely) rather than guessing at its shape --
+      it groups into exactly three sections (Coping Mechanisms /
+      Survival Endings, sub-rowed per pool as "Case #1".."Case #9" /
+      Failure Endings, sub-rowed per stat), each tile opening a detail
+      view with title+desc if discovered or a sealed placeholder if
+      not, plus an overall "X / Y files opened" count. Asked the user
+      to pick a UI depth given three real options (flat-list-plus-
+      description / full nested category+pool+variant drill-down /
+      category-then-flat-list) -- they picked the middle ground:
+      **category menu (Survival Endings / Failure Endings / Coping
+      Mechanisms) → a DSelector list scoped to just that category
+      (same control as the original flat list, just windowed) → a
+      "View" button shows that entry's title+description, a sealed
+      entry shows "Sealed. Not yet discovered."** Not the original's
+      deeper per-pool "Case #1".."Case #9" sub-tabs -- flagged as the
+      more heap/dialog-nesting-risky option and the user didn't pick
+      it; revisit if it's actually wanted later.
+      - **Data**: new generator
+        [tools/gen-casefile-descriptions.js](tools/gen-casefile-descriptions.js)
+        (mirrors `gen-endings.js`'s own SURVIVAL_BASE/FAILURE_BASE/
+        mechanism-tag-order index layout, duplicated rather than shared
+        for the same reason `gen-endings.js` itself gives -- no clean
+        way to share a constant across two Node scripts here) reads
+        `js/content-endings.js` + `js/content-mechanisms.js` and emits
+        `TRS_SCI/src/CaseFileDescriptions.sc` (new script
+        `CASEFILEDESCRIPTIONS_SCRIPT = 138`, `game.ini`'s `n138` entry
+        added) -- a 107-case `CaseFileDescription(index)` switch,
+        Load/DisposeScript-scoped exactly like `CaseFileTitles.sc`'s own
+        `CaseFileTitle(index)`. Same straight-quote transliteration
+        `gen-endings.js`'s `endingText()` already uses (sciString()
+        correctly rejects embedded `"` outright). Generated file is
+        13,980 bytes -- comfortably under the ~16KB per-script ceiling,
+        no split needed (measured the raw description text first,
+        ~10KB across all 107 entries, before deciding this).
+      - **New verification script**,
+        [tools/verify-casefile-indices.js](tools/verify-casefile-indices.js):
+        since `CaseFileTitles.sc`'s 107 titles are hand-written (not
+        generated) and the new descriptions ARE generated from the same
+        source data independently, the two could silently drift apart
+        at some index if either ever changes -- this script recomputes
+        the same index layout from `content-endings.js`/
+        `content-mechanisms.js` and diffs the expected title order
+        against what's actually in `CaseFileTitles.sc`'s switch. Ran it
+        after generating: **all 107 indices confirmed matching.** Not
+        part of the build, just a dev-time check -- re-run after editing
+        either content-*.js file or regenerating descriptions.
+      - **UI**: `CaseFiles.sc`'s `ShowCaseFiles()` is now the category
+        menu (3 hand-rolled vertically-stacked `DButton`s, same
+        Dialog/DButton/DText primitives and nsTop-clamp-after-`center()`
+        defensive pattern already proven in this file and in
+        `PrintChoices`) dispatching to a new `ShowCaseFileCategory
+        (baseIndex count catTitle)`, which builds the same kind of
+        `DSelector` list the original single flat viewer used, just
+        windowed to one category's range, plus "View"/"Close" buttons.
+        New `game.sh` constants `CASEFILE_SURVIVAL_BASE/COUNT`,
+        `CASEFILE_FAILURE_BASE/COUNT`, `CASEFILE_MECH_COUNT` (reusing
+        the existing `CASEFILE_MECH_BASE`) name the three ranges instead
+        of hardcoding raw numbers at each call site.
+      - **Deliberately did NOT call `PrintChoices()` for the category
+        menu**, even though it's the codebase's own proven vertical-
+        button-stack helper built exactly for this: `PrintChoices.sc`
+        has `(use "mechanisms")`, and `mechanisms.sc` has
+        `(use "casefiles")` right back -- calling `PrintChoices()` from
+        `CaseFiles.sc` would open a brand-new 3-hop `(use ...)` cycle
+        (CaseFiles → PrintChoices → Mechanisms → CaseFiles) that's never
+        been compiled before. The existing 2-hop CaseFiles.sc/Main.sc
+        cycle already needed a manual bootstrap compile once (temporarily
+        break it, compile each side alone, restore -- see item 7's own
+        saga above); gambling a 3-hop one compiles clean on the first
+        try, with no way to test-compile from here, wasn't worth it when
+        hand-rolling ~30 extra lines using primitives this file already
+        uses avoids the risk entirely.
+      - **Selection mechanic**: `ShowCaseFileCategory`'s dialog stays
+        open across multiple "View" clicks (one `Dialog:open()`, then
+        `doit(hSelector)` called again in a loop) rather than being
+        rebuilt/reopened per click -- keeps the same `hSelector`
+        instance (and so its scroll position) alive between description
+        views. Selected row's case-file index is computed directly from
+        `hSelector`'s own `cursor` pointer via the same 32-byte-stride
+        arithmetic the buffer is built with
+        (`(/ (- (send hSelector:cursor) @buf) 32)`), rather than the
+        stock `SRDialog`'s `indexOf()` string-compare scan (that
+        precedent was read closely first, per the design-questions note
+        above, but every row here is already known-unique/numbered, so
+        the cheaper pointer-math version is equivalent and simpler).
+        Selector kept at `state(1)` (never `state(2)`) -- the exact same
+        distinction that fixed this viewer's real auto-close bug the
+        first time it was built (see item 7 above); still correct here
+        since nothing about adding a View/Close button pair changes why
+        that fix was needed.
+      - **Button value convention**: category-menu and View/Close button
+        values are 1/2/3 and 1/2 respectively, deliberately never 0 --
+        `Dialog:doit()` returns plain `0`/`FALSE` on Escape (confirmed
+        by reading `Dialog:doit`/`handleEvent` in the stock `Controls.sc`
+        closely, not assumed), so 0 stays an unambiguous "cancelled"
+        sentinel distinct from any real button, matching how
+        `PrintChoices` itself already handles this.
+      - Ran the structural sanity check (balanced parens outside string
+        literals, paired quotes) on both touched/new `.sc` files and
+        `game.sh` -- clean.
+      - **Not yet compiled/playtested** -- needs the usual VM pass. Two
+        things to watch for specifically, flagged here since they
+        couldn't be verified without a real compile: (1) the new
+        `ShowCaseFileCategory` dialog's height (header text + 8-row
+        selector + button row) was sized by the same budget math that's
+        gotten this project into trouble twice before (tall-dialog
+        overflow) -- estimated comfortably under the ~190px ceiling but
+        not measured against real font metrics; (2) **`CaseFileDescriptions.sc`
+        is a brand-new script file that needs to be created via SCI
+        Companion's own "New empty script" wizard**, not just written to
+        disk with a matching `game.ini` entry -- `game.ini`'s `n138`
+        entry alone was NOT sufficient the one other time this exact
+        situation came up (`CaseFiles.sc` itself, see item 7's "Problem
+        2" above: the file existed on disk with a correct `game.ini`
+        entry but never appeared in SCI Companion's Scripts panel until
+        created through that wizard). Worth doing that step first, before
+        assuming a normal Compile All will just work.

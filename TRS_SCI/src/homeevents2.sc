@@ -6,7 +6,7 @@
  the original js/events/home.js. Re-run that script after
  editing the source event data.
 
- HOME-zone events 8-15: each is a standalone
+ HOME-zone events 4-7: each is a standalone
  HomeEvent<N> procedure showing the event's PrintChoices dialog, then
  applying the chosen response's stat effects and printing its log line.
  ******************************************************************************/
@@ -20,281 +20,141 @@
 (use "printchoices")
 (use "mechanisms")
 /******************************************************************************/
-(procedure public (HomeEvent8)
+(procedure public (HomeEvent4)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply with a single dramatic movie-trailer voice line."
+		= glitchText "Send one more message: just a single, staring emoji."
 	)
 	= choice PrintChoices(
-		"Four words. No context. Sent an hour ago, and you've only just seen it."
-		"The 'We Need To Talk' Text"
+		"You sent a long message to a parent, explaining how you actually feel. Marked read. Nothing since."
+		"The Left-On-Read Text"
 		290
 		glitchText
-		"Spend the hour composing worst-case scenarios instead of replying." 0
-		"Reply with three apologies before you know what for." 1
-		"Reply: 'Okay. I'm here when you're ready.'" 2
+		"Open your messages to literally anyone else and get absorbed in something safer." 0
+		"Reread your message eleven times, hunting for the sentence that broke it." 1
+		"Send nothing else. Let the silence belong to them, not you." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("'In a world where nobody explains anything...'")
+		ApplyGlitch("The read receipt updates. The silence gets a face now.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(25 0 -15 TAG_FREEZE)
-			Print("You lived through several futures that hadn't happened yet.")
+			ApplyChoiceEffects(15 0 -10 TAG_FLIGHT)
+			Print("You changed the channel on your own heart.")
 		)
 		(case 1
-			ApplyChoiceEffects(5 10 -15 TAG_FAWN)
-			Print("You pled guilty to a charge that hadn't been read yet.")
+			ApplyChoiceEffects(20 0 -15 TAG_FREEZE)
+			Print("You performed an autopsy on a conversation that isn't dead yet.")
 		)
 		(case 2
-			ApplyChoiceEffects(-15 0 10 TAG_SECURE)
-			Print("You left room for the conversation instead of finishing it alone.")
+			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
+			Print("You stopped staring at a doorknob that isn't yours to turn.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (HomeEvent9)
+(procedure public (HomeEvent5)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Cover the entire kitchen in post-its of your own."
+		= glitchText "Answer back in an equally strange, unexplained voice of your own."
 	)
 	= choice PrintChoices(
-		"'Please rinse dishes before leaving in sink :)'\n\n\n The smiley face is doing a lot of unpaid emotional labor."
-		"The Passive-Aggressive Post-it"
+		"Your parent picks up sounding smaller than you remember. You don't know why yet."
+		"The Different Voice on the Phone"
 		290
 		glitchText
-		"Rinse everything in the house preemptively for a week." 0
-		"Leave a post-it back, on a clean dish and slightly too pointed." 1
-		"Just talk to your roommate about it, out loud, later." 2
+		"Immediately go bright and cheerful to lift the mood before you've even asked what's wrong." 0
+		"Ask, flatly, exactly what's going on. No preamble." 1
+		"Say 'oh, okay' and let the conversation drift somewhere safer." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("The kitchen now resembles a ransom note made of passively aggressive politeness.")
+		ApplyGlitch("Neither of you addresses it. Some things stay sacred and weird.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
-			Print("You overcorrected to outrun one sticky note.")
+			ApplyChoiceEffects(5 15 -15 TAG_FAWN)
+			Print("You showed up as sunshine before you knew what kind of day it was.")
 		)
 		(case 1
 			ApplyChoiceEffects(-5 -10 5 TAG_FIGHT)
-			Print("You returned the passive-aggression with interest. That'll show 'em.")
+			Print("You skipped the small talk. It cost you nothing you needed.")
 		)
 		(case 2
-			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("You used your words instead of a sticky note war. You both get pizza later and use paper plates.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (HomeEvent10)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Knock back in a rhythm, just to see if they knock again."
-	)
-	= choice PrintChoices(
-		"You can hear your neighbors arguing again, muffled but unmistakable, through a wall that was not built for privacy."
-		"The Wall Between Apartments"
-		290
-		glitchText
-		"Turn up the TV as loud as you can and hope they can heart it." 0
-		"Consider, seriously, banging on the wall. Do nothing instead." 1
-		"Put on headphones and let it be someone else's problem." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("A wall-based friendship begins, tentatively, in Morse-adjacent taps.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(-5 -5 10 TAG_FIGHT)
-			Print("You drowned out a sound you couldn't control.")
-		)
-		(case 1
-			ApplyChoiceEffects(-5 5 -5 TAG_FREEZE)
-			Print("You almost inserted yourself into a fight that isn't yours.")
-		)
-		(case 2
-			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("Not every wall's noise is yours to carry.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (HomeEvent11)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Launch a full forensic investigation, complete with a labeled evidence board."
-	)
-	= choice PrintChoices(
-		"The thing you were saving for tomorrow is gone. No note, no explanation."
-		"The Empty Fridge Shelf"
-		290
-		glitchText
-		"Ask, directly, who ate it." 0
-		"Say nothing and quietly recalculate your whole week's meals." 1
-		"Decide it's fine, you didn't really need it anyway." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You have connected several pieces of red string to absolutely nothing helpful.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(-5 -5 10 TAG_FIGHT)
-			Print("You asked the small, direct question instead of stewing.")
-		)
-		(case 1
 			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("One missing item rearranged your entire life, silently.")
+			Print("You let a real question evaporate into weather talk.")
 		)
-		(case 2
+		)
+	)
+)
+/******************************************************************************/
+(procedure public (HomeEvent6)
+	(var choice, glitchText)
+	= glitchText NULL
+	(if(< Random(0 99) GLITCH_CHANCE_PCT)
+		= glitchText "Hold a tiny, formal funeral for the leftovers."
+	)
+	= choice PrintChoices(
+		"You made extra on purpose, left a note. It's still in the fridge, exactly where you left it."
+		"The Leftover They Didn't Eat"
+		290
+		glitchText
+		"Eat it yourself and say nothing about the note." 0
+		"Leave it in there for three more days, unable to deal with it." 1
+		"Ask, simply, if they want any leftovers before you eat the rest." 2
+	)
+	(if(== choice GLITCH_CHOICE)
+		ApplyGlitch("Several words were said. None of them were 'I'm sorry.'")
+	)(else
+		(switch(choice)
+		(case 0
 			ApplyChoiceEffects(5 5 -10 TAG_FAWN)
-			Print("You talked yourself out of a want that was real, and into being a doormat.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (HomeEvent12)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Answer your own question instead, at great length, to the room."
-	)
-	= choice PrintChoices(
-		"You asked. They said 'fine' and kept scrolling. That was ten minutes ago."
-		"The Unanswered 'How Was Your Day'"
-		290
-		glitchText
-		"Sit in the same room in total silence, waiting for more." 0
-		"Fill the silence with details about your own day, unprompted." 1
-		"Let 'fine' be enough for now. Try again later." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("The room does not respond either. Hurtful, but fair.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("You waited for a door that wasn't going to open, anyway.")
+			Print("You absorbed the disappointment along with the leftovers.")
 		)
 		(case 1
-			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
-			Print("You performed the conversation for the both of you.")
+			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
+			Print("The food and the feeling both went untouched.")
 		)
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("Not every silence needs to be filled immediately or be analyzed.")
+			Print("A question, asked plainly, is not an accusation. Plus, you get dinner.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (HomeEvent13)
+(procedure public (HomeEvent7)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Install a tiny sign declaring the thermostat a neutral zone."
+		= glitchText "Slide a folded paper airplane of concern underneath it."
 	)
 	= choice PrintChoices(
-		"It's been adjusted three times today. Nobody has said a word about it out loud."
-		"The Thermostat War"
+		"It's usually open. Tonight it's closed, and you don't know why."
+		"The Closed Bedroom Door"
 		290
 		glitchText
-		"Set it where you want it and leave a note explaining why." 0
-		"Just wear a sweater and say nothing, forever. Probably." 1
-		"Leave it wherever they last set it, every time." 2
+		"Stand outside it for a full minute, deciding nothing." 0
+		"Knock and immediately apologize for whatever it is." 1
+		"Knock. Ask if everything is okay." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("Switzerland would be proud. (Nobody honors the treaty).")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(-5 -5 10 TAG_FIGHT)
-			Print("You made your preference visible instead of silent. The note lasted 2 hours before it went missing.")
-		)
-		(case 1
-			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("You sacrificed your physical comfort to avoid a two-minute conversation.")
-		)
-		(case 2
-			ApplyChoiceEffects(5 5 -10 TAG_FAWN)
-			Print("You denied yourself a temperature change just to keep the peace.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (HomeEvent14)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start a dramatic heist-movie-style plan to retrieve it."
-	)
-	= choice PrintChoices(
-		"You lent it three weeks ago. You need it now. Asking for it back feels, somehow, enormously selfish."
-		"The Borrowed Thing, Not Returned"
-		290
-		glitchText
-		"Buy a replacement instead of asking for it back." 0
-		"Ask for it back with four qualifiers and two apologies." 1
-		"Ask for it back plainly. It's yours." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("The plan involves zero actual heisting and a lot of standing outside their door whining.")
+		ApplyGlitch("It does not fly well on carpet. The gesture remains.")
 	)(else
 		(switch(choice)
 		(case 0
 			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("You paid money to avoid a ten-second conversation.")
+			Print("You waited outside a door you could have just knocked on.")
 		)
 		(case 1
-			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
-			Print("You apologized for wanting your own thing back.")
+			ApplyChoiceEffects(5 10 -15 TAG_FAWN)
+			Print("You apologized before you knew the charge.")
 		)
 		(case 2
 			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
-			Print("This did not, in fact, end the friendship. They bought you dinner in appreciation.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (HomeEvent15)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Photobomb the memory. Mentally. With your current face."
-	)
-	= choice PrintChoices(
-		"It's on the hallway wall, everyone smiling, from a year you remember very differently than the picture suggests."
-		"The Photo From An Easier Year"
-		290
-		glitchText
-		"Stop and stare at it longer than you meant to, every time." 0
-		"Consider taking it down. Don't, yet." 1
-		"Let the photo be a photo, not a verdict on the year." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("Past-you and present-you now occupy the same photograph, spiritually. So there.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(15 0 -15 TAG_FREEZE)
-			Print("You keep visiting a version of the year that didn't happen.")
-		)
-		(case 1
-			ApplyChoiceEffects(0 -5 5 TAG_FIGHT)
-			Print("You noticed the mismatch and let yourself notice it.")
-		)
-		(case 2
-			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("One picture doesn't get to outvote your memory.")
+			Print("You offered an opening instead of an assumption.")
 		)
 		)
 	)

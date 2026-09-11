@@ -6,7 +6,7 @@
  the original js/events/work.js. Re-run that script after
  editing the source event data.
 
- WORK-zone events 18-25: each is a standalone
+ WORK-zone events 10-13: each is a standalone
  WorkEvent<N> procedure showing the event's PrintChoices dialog, then
  applying the chosen response's stat effects and printing its log line.
  ******************************************************************************/
@@ -20,281 +20,141 @@
 (use "printchoices")
 (use "mechanisms")
 /******************************************************************************/
-(procedure public (WorkEvent18)
+(procedure public (WorkEvent10)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply with the same screenshot, circled in red, underlined in red, and highlighted in red."
+		= glitchText "Reply-All to the entire company. Let everyone share in this learning experience."
 	)
 	= choice PrintChoices(
-		"Someone replies to your third follow-up with 'per my last email' and a screenshot of an answer that was not, in fact, an answer."
-		"The 'Per My Last Email'"
+		"A coworker loops your manager into a thread about a mistake that was mostly, but not entirely, your fault."
+		"The CC'd Boss"
 		290
 		glitchText
-		"Reply quoting the exact unanswered question, again." 0
-		"Apologize for 'missing' the answer that wasn't there." 1
-		"Close the thread and decide to just figure it out yourself." 2
+		"Immediately reply-all with a full, apologetic breakdown." 0
+		"Reply-all clarifying, calmly, which parts were actually yours." 1
+		"Leave the thread unanswered and refresh your inbox every four minutes." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You have made your point. Several points, actually. All very helpful.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(-5 -15 10 TAG_FIGHT)
-			Print("You made the gap impossible to miss a second time. They answer the question.")
-		)
-		(case 1
-			ApplyChoiceEffects(5 10 -15 TAG_FAWN)
-			Print("You took the blame for someone else's incompetence.")
-		)
-		(case 2
-			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("You absorbed the extra work rather than the friction. Nobody learns anything.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (WorkEvent19)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Bring a tiny gift as tribute, like visiting a shrine."
-	)
-	= choice PrintChoices(
-		"Your manager says 'my door is always open' during a meeting. Their door has, notably, never once been open."
-		"The Open Door Policy"
-		290
-		glitchText
-		"File it away as one more thing you won't actually bring up." 0
-		"Nod like the sentence was true and useful." 1
-		"Test it. Walk over and knock." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("The door, astonishingly, opens. You are unprepared for this outcome.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(15 0 -15 TAG_FREEZE)
-			Print("You added a line to a list nobody's reading but you.")
-		)
-		(case 1
-			ApplyChoiceEffects(0 10 -10 TAG_FAWN)
-			Print("You agreed with a door that stays shut.")
-		)
-		(case 2
-			ApplyChoiceEffects(-5 -5 10 TAG_FIGHT)
-			Print("You checked the claim against the evidence. You get lunch together and have a good time.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (WorkEvent20)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Comment using only a single, deeply ambiguous emoji."
-	)
-	= choice PrintChoices(
-		"A peer from two roles ago just posted 'excited to announce' a title you quietly wanted for yourself."
-		"The LinkedIn Congrats"
-		290
-		glitchText
-		"Like the post and write a warm, specific comment." 0
-		"Close the app. Reopen it four minutes later." 1
-		"Feel the envy, don't perform past it, close the app anyway." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("Seventeen people have now liked your emoji. Nobody knows what it means. Least of all you.")
+		ApplyGlitch("Democracy, but for blame. Nobody wins but nobody loses, either. Except maybe some brain cells.")
 	)(else
 		(switch(choice)
 		(case 0
 			ApplyChoiceEffects(5 15 -15 TAG_FAWN)
-			Print("You performed happiness at a volume you didn't feel.")
+			Print("You built the case against yourself before anyone asked for one.")
 		)
 		(case 1
-			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("You kept checking a wound to see if it still hurt.")
+			ApplyChoiceEffects(-5 -10 10 TAG_FIGHT)
+			Print("You drew a line around the blame instead of absorbing all of it.")
 		)
 		(case 2
-			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("You let a small ugly feeling exist without narrating it to anyone or destroying you.")
+			ApplyChoiceEffects(20 0 -15 TAG_FREEZE)
+			Print("You watched the thread instead of joining it.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (WorkEvent21)
+(procedure public (WorkEvent11)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start a spontaneous printer-line trivia night to pass the time."
+		= glitchText "Stand up and take a long, silent bow."
 	)
 	= choice PrintChoices(
-		"You're fourth in line at the printer, running late, and the person ahead of you is scrolling their phone between pages."
-		"The Printer Line"
+		"In the meeting, your manager describes your idea as something the team 'landed on together.' Nobody looks at you."
+		"The Unclaimed Credit"
 		290
 		glitchText
-		"Stand there, saying nothing, doing the math on how late you'll be." 0
-		"Ask, politely but directly, if you can jump in for one page." 1
-		"Wait it out and tell yourself it's fine, it's fine, it's fine." 2
+		"Say nothing. Add it to the list you're keeping in your head." 0
+		"Laugh it off and agree it really was a group effort." 1
+		"Mention afterward, privately and plainly, that the idea was yours." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("Nobody knew this much about the printer. Nobody wanted to.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("You calculated the cost instead of asking for the copy.")
-		)
-		(case 1
-			ApplyChoiceEffects(-5 -5 10 TAG_FIGHT)
-			Print("You asked for the small thing you actually needed. You got it without any dirty looks.")
-		)
-		(case 2
-			ApplyChoiceEffects(10 5 -10 TAG_FAWN)
-			Print("You narrated a calm you weren't actually experiencing, accomplishing nothing.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (WorkEvent22)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Take a bow for the growing audience behind you."
-	)
-	= choice PrintChoices(
-		"Your badge doesn't scan. Three times in a row. There's a line building behind you now."
-		"The Badge Scan Fail"
-		290
-		glitchText
-		"Apologize to everyone behind you individually." 0
-		"Freeze up completely, badge in hand, brain empty except for the intense panic that you've been fired." 1
-		"Step aside, let people pass, try again without an audience." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("Someone starts filming. This will outlive your employment here.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
-			Print("You issued apologies for a malfunctioning badge reader.")
-		)
-		(case 1
-			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("The door and your nervous system both stopped responding.")
-		)
-		(case 2
-			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("You removed the audience instead of performing through it.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (WorkEvent23)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply fully in character as the other person."
-	)
-	= choice PrintChoices(
-		"You get an email addressed to someone else's name, clearly copy-pasted from a different, more glowing thread."
-		"The Wrong Name in the Email"
-		290
-		glitchText
-		"Assume you're actually being compared unfavorably to that person." 0
-		"Reply, lightly, pointing out the name mismatch." 1
-		"Ignore it and answer as if it were addressed to you correctly." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You are now, professionally speaking, someone else. It's going well.")
+		ApplyGlitch("Three people clap before realizing they don't know why. Doesn't matter; validation is transferable but NOT refundable.")
 	)(else
 		(switch(choice)
 		(case 0
 			ApplyChoiceEffects(15 0 -15 TAG_FREEZE)
-			Print("You built a rivalry with someone who doesn't know you exist.")
+			Print("You filed it under evidence, case still open.")
 		)
 		(case 1
-			ApplyChoiceEffects(-5 -5 10 TAG_FIGHT)
-			Print("You named the small error instead of absorbing a large story about it.")
+			ApplyChoiceEffects(5 10 -15 TAG_FAWN)
+			Print("You co-signed the erasure to keep the room comfortable.")
 		)
 		(case 2
-			ApplyChoiceEffects(5 5 -5 TAG_FAWN)
-			Print("You let the mistake pass to keep things smooth.")
+			ApplyChoiceEffects(-10 -5 15 TAG_SECURE)
+			Print("You said the true thing to one person instead of nobody. Feel better?")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (WorkEvent24)
+(procedure public (WorkEvent12)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply instantly with 'Your wish is my command, Master.'"
+		= glitchText "Start typing back before they've even sent anything."
 	)
 	= choice PrintChoices(
-		"A message lands in your inbox at 5:58 PM, two minutes before you were going to log off. It starts with 'quick question.'"
-		"The End-of-Day Ping"
+		"Your manager's typing indicator appears, disappears, appears again. Three times. Still no message."
+		"The Typing Indicator"
 		290
 		glitchText
-		"Stay online another forty-five minutes to answer it fully." 0
-		"Reply first thing tomorrow, on purpose." 1
-		"Stare at the message, unable to decide, until it's 7 PM anyway." 2
+		"Stare at the little dots like they're a polygraph." 0
+		"Close the tab so you can't watch it happen." 1
+		"Keep working. Whatever it is will say itself eventually." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("This was not the reassurance they were hoping for. You never hear from them again.")
+		ApplyGlitch("Your dots meet their dots. A standoff of pure anticipation. Who will win? ...")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(10 10 -15 TAG_FAWN)
-			Print("You extended the day to protect someone else's evening. How noble.")
+			ApplyChoiceEffects(20 0 -10 TAG_FREEZE)
+			Print("You interrogated punctuation that hadn't arrived yet.")
 		)
 		(case 1
-			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
-			Print("You let 5:58 PM mean what it says.")
-		)
-		(case 2
-			ApplyChoiceEffects(20 0 -15 TAG_FREEZE)
-			Print("Indecision cost you the boundary you meant to keep.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (WorkEvent25)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Reply with an equally cryptic single word of your own."
-	)
-	= choice PrintChoices(
-		"You send a detailed update. The reply is a single word: 'Noted.'"
-		"The Manager's One-Word Reply"
-		290
-		glitchText
-		"Reread the word eleven times, hunting for a tone that isn't there." 0
-		"Send a follow-up asking if everything's okay." 1
-		"Take the word at face value and move on with your day." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("A one-word war has begun. Nobody will walk away alive.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(20 0 -15 TAG_FREEZE)
-			Print("You built an entire mood off four letters. Now your tummy hurts.")
-		)
-		(case 1
-			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
-			Print("You went looking for reassurance and found a boundary.")
+			ApplyChoiceEffects(15 0 -5 TAG_FLIGHT)
+			Print("You removed the evidence, not the feeling.")
 		)
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("Sometimes 'noted' just means noted.")
+			Print("You let an unfinished sentence stay unfinished.")
+		)
+		)
+	)
+)
+/******************************************************************************/
+(procedure public (WorkEvent13)
+	(var choice, glitchText)
+	= glitchText NULL
+	(if(< Random(0 99) GLITCH_CHANCE_PCT)
+		= glitchText "Set your own auto-reply to something ominous and cryptic."
+	)
+	= choice PrintChoices(
+		"You email a colleague something urgent. The auto-reply says they've been out since yesterday. Nobody told you."
+		"The Out-of-Office Reply"
+		290
+		glitchText
+		"Apologize to their inbox for bothering them at all." 0
+		"Send a slightly sharp message to whoever should have flagged this." 1
+		"Sit with the urgent thing, now un-urgent, doing nothing." 2
+	)
+	(if(== choice GLITCH_CHOICE)
+		ApplyGlitch("It now reads: 'I am also out. Of my mind. Please check back later.'")
+	)(else
+		(switch(choice)
+		(case 0
+			ApplyChoiceEffects(0 10 -10 TAG_FAWN)
+			Print("You apologized to an away message.")
+		)
+		(case 1
+			ApplyChoiceEffects(-5 -15 5 TAG_FIGHT)
+			Print("You aimed the frustration at the actual gap, not yourself.")
+		)
+		(case 2
+			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
+			Print("The fire kept burning with nobody assigned to it. Insurance won't cover it.")
 		)
 		)
 	)

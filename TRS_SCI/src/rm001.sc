@@ -161,17 +161,77 @@
 		// bumping ZONE_COUNT in game.sh, and adding its EVENT_COUNT
 		// constant + (use "<zone>events") above.
 		= gTurn 1
+		// TEMPORARY DEBUG INSTRUMENTATION -- remove once the heap-
+		// exhaustion bug is actually found. Prints free-heap AND largest-
+		// contiguous-free-block (MemoryInfo miFREEHEAP / miLARGESTPTR) at
+		// every Load/call/Dispose boundary each turn, using the exact
+		// same kernel calls as the stock alt-M debug dialog already wired
+		// up in Main.sc:handleEvent -- that hotkey itself can't be reached
+		// mid-run since PrintChoices' modal Dialog:doit() loop never lets
+		// events reach the room (see the clickable-office-objects finding
+		// in SESSION_HANDOFF.md), hence printing unconditionally here
+		// instead. miLARGESTPTR matters as much as miFREEHEAP: SCI0's heap
+		// is segmented, so it's possible to have plenty of aggregate free
+		// bytes while no single contiguous block is big enough to fit the
+		// next ~10-14KB chunk -- that would show up as miFREEHEAP looking
+		// fine while miLARGESTPTR craters, which total-free-bytes alone
+		// would hide.
+		FormatPrint("DEBUG boot: heap=%u largest=%u" MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
 		(while((<= gTurn gMaxTurns) and (< gRepression 100) and (> gMask 0) and (> gChild 0))
 			= zone PickZone()
+			FormatPrint("DEBUG T%d Z%d pre-switch: heap=%u largest=%u" gTurn zone MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
 			(switch(zone)
-				(case 0 DoWorkEvent(Random(0 (- WORK_EVENT_COUNT 1))))
-				(case 1 DoHomeEvent(Random(0 (- HOME_EVENT_COUNT 1))))
-				(case 2 DoSocialEvent(Random(0 (- SOCIAL_EVENT_COUNT 1))))
-				(case 3 DoSelfEvent(Random(0 (- SELF_EVENT_COUNT 1))))
-				(case 4 DoBodyEvent(Random(0 (- BODY_EVENT_COUNT 1))))
-				(case 5 DoPublicEvent(Random(0 (- PUBLIC_EVENT_COUNT 1))))
+				(case 0
+					Load(rsSCRIPT WORKEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Load(WORKEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DoWorkEvent(Random(0 (- WORK_EVENT_COUNT 1)))
+					FormatPrint("DEBUG T%d post-DoWorkEvent: heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DisposeScript(WORKEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Dispose(WORKEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+				)
+				(case 1
+					Load(rsSCRIPT HOMEEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Load(HOMEEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DoHomeEvent(Random(0 (- HOME_EVENT_COUNT 1)))
+					FormatPrint("DEBUG T%d post-DoHomeEvent: heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DisposeScript(HOMEEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Dispose(HOMEEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+				)
+				(case 2
+					Load(rsSCRIPT SOCIALEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Load(SOCIALEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DoSocialEvent(Random(0 (- SOCIAL_EVENT_COUNT 1)))
+					FormatPrint("DEBUG T%d post-DoSocialEvent: heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DisposeScript(SOCIALEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Dispose(SOCIALEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+				)
+				(case 3
+					Load(rsSCRIPT SELFEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Load(SELFEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DoSelfEvent(Random(0 (- SELF_EVENT_COUNT 1)))
+					FormatPrint("DEBUG T%d post-DoSelfEvent: heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DisposeScript(SELFEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Dispose(SELFEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+				)
+				(case 4
+					Load(rsSCRIPT BODYEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Load(BODYEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DoBodyEvent(Random(0 (- BODY_EVENT_COUNT 1)))
+					FormatPrint("DEBUG T%d post-DoBodyEvent: heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DisposeScript(BODYEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Dispose(BODYEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+				)
+				(case 5
+					Load(rsSCRIPT PUBLICEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Load(PUBLICEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DoPublicEvent(Random(0 (- PUBLIC_EVENT_COUNT 1)))
+					FormatPrint("DEBUG T%d post-DoPublicEvent: heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+					DisposeScript(PUBLICEVENTS_SCRIPT)
+					FormatPrint("DEBUG T%d post-Dispose(PUBLICEVENTS): heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
+				)
 			)
 			ClampStats()
+			FormatPrint("DEBUG T%d post-ClampStats: heap=%u largest=%u" gTurn MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))
 			++gTurn
 		)
 		// Final stat values are already sitting in gRepression/gMask/gChild;

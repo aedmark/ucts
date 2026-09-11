@@ -1942,6 +1942,396 @@ sub-items under it are the real remaining scope, not bugs.
       whatever the *previous* call left behind, not just whatever
       happened to be on the stack. Ran the structural sanity check again
       — clean. **Not yet compiled/playtested.**
+    - **New bug, this time "at random" rather than deterministic: heap
+      exhaustion again, cause unrelated to any of the fixes above.** Real
+      root cause, confirmed by reading `Main.sc`'s `startRoom()` directly:
+      normal room transitions only ever `DisposeLoad`/`DisposeScript` a
+      fixed, hardcoded list of *stock template* scripts (FileIO, Jump,
+      Door, Avoid, DPath, etc.) — never any of this project's own custom
+      scripts. `rm002.sc` called `PrintSurvivalEndingN()`/
+      `PrintFailureEndingN()` directly via a plain `(use
+      "endingcontent1/2/3")`, with no `Load`/`DisposeScript` wrapping at
+      all — so whichever `endingcontent*.sc` file a given run's ending
+      lives in auto-loads on first call and then **never gets disposed**,
+      exactly the same bug class that originally forced the WORK-zone
+      chunk dispatcher's `Load`/`DisposeScript` pattern into existence.
+      Harmless within a single run (the room ends there anyway) — the
+      real trigger is the *other* new feature from this same session, the
+      clickable computer hotspot: it makes starting a brand new run
+      trivial (no full relaunch, no kernel restart), so a player can
+      easily rack up several runs in one sitting. Different runs landing
+      on endings from *different* `endingcontent*.sc` files means those
+      files pile up permanently resident one after another — "at random"
+      because it depends entirely on which specific endings the player's
+      stats happened to hit across however many consecutive runs, not on
+      anything deterministic about a single run.
+      **Fix**: wrapped all 12 ending call sites in `rm002.sc`
+      (`PrintFailureEnding0-2`, `PrintSurvivalEnding0-8`) with
+      `Load(rsSCRIPT ENDINGCONTENTn_SCRIPT)` immediately before and
+      `DisposeScript(ENDINGCONTENTn_SCRIPT)` immediately after — the
+      exact same idiom `workevents.sc`'s `DoWorkEvent()` already uses,
+      just applied per-condition-branch here instead of via a range-based
+      dispatcher, since each condition maps to exactly one known ending
+      procedure. Ran the structural sanity check on `rm002.sc` again —
+      clean, all 12 call sites confirmed to have matching Load/Dispose
+      pairs.
+      **Worth remembering for next time a new script gets `(use ...)`'d
+      directly from a room or other always-resident script**: `(use
+      "somefile")` alone is only ever a compile-time symbol resolution.
+      It says nothing about *runtime* residency or disposal — that's
+      always something to design deliberately (permanently resident by
+      choice, like `mechanisms.sc`/`casefiles.sc`, or explicitly
+      Load/Dispose-scoped, like the zone-event chunks and now
+      `endingcontent1-3.sc`/`casefiletitles.sc`), never assumed for free.
+    - **New report, more specific this time: heap exhaustion right after
+      the very first turn's event, single run, nothing to do with
+      endings.** This redirected the diagnosis entirely — the previous
+      "at random" report was very likely this same underlying issue
+      (unpredictable because it depends on which zone/chunk a given turn
+      randomly picks), not specifically the `endingcontent*.sc`
+      accumulation fixed just above (that was a real, separate bug, still
+      worth having fixed, just not the whole story). **Actual root
+      cause**: `CaseFileAccess.sc` (`GetCaseFile`/`SetCaseFile`) was still
+      *implicitly* permanently resident — `Main.sc`'s one direct call to
+      `GetCaseFile()` at boot (the NG+ mirror sync) was the only thing
+      pinning it, and nothing ever disposed it afterward, crowding out
+      room needed for the normal per-turn zone-event chunk loading
+      (completely unrelated to Case Files itself).
+      **Fix**: found every remaining call site of `GetCaseFile`/
+      `SetCaseFile` across the whole codebase (all in `CaseFiles.sc`
+      itself, plus the one in `Main.sc`) and wrapped each in
+      `Load(rsSCRIPT CASEFILEACCESS_SCRIPT)`/
+      `DisposeScript(CASEFILEACCESS_SCRIPT)`:
+      - `Main.sc`'s NG+ mirror sync — wrapped directly.
+      - `LoadCaseFiles()` — wrapped around just its loop (placed *after*
+        the existing early-return for a missing save file, so a fresh
+        install with no `TRSCASE.DAT` never touches it at all).
+      - `MarkCaseFile()` — wrapped around its *entire* body, deliberately
+        covering both its own direct calls and the nested `SaveCaseFiles()`
+        call in one pair, rather than also wrapping `SaveCaseFiles()`
+        separately. `SaveCaseFiles()` has exactly one caller
+        (`MarkCaseFile`, confirmed by grep) and now explicitly documents
+        that it relies on its caller for this rather than wrapping
+        itself — deliberate, to avoid an untested nested-dispose risk
+        (unclear whether calling `DisposeScript` on an already-disposed
+        script is safe, and no need to find out empirically when a single
+        outer pair covers the real usage cleanly).
+      - `ShowCaseFiles()` — already had `Load`/`DisposeScript` for
+        `CaseFileTitles.sc`; added a second pair alongside it for
+        `CaseFileAccess.sc`, since its loop calls `GetCaseFile()` too.
+      With this, `CaseFileAccess.sc` is never left resident by any code
+      path — same load-on-demand treatment `CaseFileTitles.sc` and the
+      zone-event chunks already get. Net permanent heap cost of the
+      entire ending-variant port should now be close to just
+      `CaseFiles.sc`'s own modest growth (~7-8KB pre-port single file →
+      ~9.8KB now) rather than the ~17KB two-file total it was before this
+      fix — hopefully enough headroom for normal zone-chunk cycling to
+      work again. Ran the structural sanity check on `CaseFiles.sc` and
+      `Main.sc` again — clean, and re-confirmed every remaining
+      `GetCaseFile`/`SetCaseFile` call site in the codebase is now
+      covered by a Load/Dispose pair (5 in `CaseFiles.sc`, 1 in
+      `Main.sc`, none anywhere else). **Not yet compiled/playtested.**
     - **Not yet compiled/playtested overall** — this is the biggest
       single change of this entire project, worth a genuinely thorough VM
       pass rather than a quick spot-check.
+    - **The CaseFileAccess fix above was compiled and tested — it worked,
+      turn 1 now succeeds — but a new, more specific report followed: heap
+      exhaustion loading the second event, i.e. turn 2 specifically, every
+      time.** Root cause, found by re-checking every zone-event dispatcher
+      the same way `CaseFileAccess.sc`/`endingcontent1-3.sc` were checked:
+      **the 6 zone dispatcher scripts (`workevents.sc`, `homeevents.sc`,
+      `socialevents.sc`, `selfevents.sc`, `bodyevents.sc`,
+      `publicevents.sc` — `WORKEVENTS_SCRIPT`=101/`HOMEEVENTS_SCRIPT`=108/
+      etc. in `game.sh`, NOT their numbered chunk scripts) were never
+      Load/DisposeScript-wrapped themselves.** Each dispatcher already
+      correctly wraps its own per-chunk sub-scripts (`WORKEVENTS1-4_SCRIPT`
+      etc.) in `Load`/`DisposeScript` — that part was fine — but the
+      dispatcher script itself only ever got auto-loaded the first time
+      `rm001.sc` called into it (`DoWorkEvent`/`DoHomeEvent`/etc.) and
+      nothing ever disposed it afterward, so it became permanently
+      resident for the rest of the run the instant that zone was first
+      touched. Exactly the same bug class as every other heap leak this
+      project has hit (auto-load-on-call, never-auto-unload) — this is
+      just the one previously-unchecked residency point in the whole
+      zone-event call chain. With `PickZone()`'s weighted random pick
+      across 6 zones, a second *distinct* zone from turn 1's is very
+      likely to get touched by turn 2, adding a second permanently-
+      resident dispatcher (~2.6-2.8KB each per `wc -c` on the six `.sc`
+      sources) on top of an already razor-thin heap margin — consistent
+      with a consistent, reproducible turn-2 failure rather than something
+      that only shows up "eventually" or "at random."
+      **Fix**: `rm001.sc`'s `runShift` switch (the zone dispatch point)
+      now wraps each `DoWorkEvent`/`DoHomeEvent`/`DoSocialEvent`/
+      `DoSelfEvent`/`DoBodyEvent`/`DoPublicEvent` call in
+      `Load(rsSCRIPT <ZONE>EVENTS_SCRIPT)`/
+      `DisposeScript(<ZONE>EVENTS_SCRIPT)`, the exact same idiom already
+      proven for the per-zone chunks and for `endingcontent1-3.sc` in
+      `rm002.sc` — every zone's dispatcher is now loaded fresh and
+      disposed immediately after every single turn, never left resident,
+      same as everything else in this engine that isn't meant to be
+      permanent. Ran the structural sanity check (balanced parens outside
+      string literals, paired quotes) on `rm001.sc` — clean. **Not yet
+      compiled/playtested** — this needs a VM pass; specifically worth
+      confirming a run now survives past turn 2, and ideally a full
+      multi-turn run touching all 6 zones without exhausting the heap.
+    - **That fix did NOT resolve it — user retested, identical failure,
+      heap exhausted right after the first turn.** This rules out the
+      dispatcher-residency theory as the (or at least the whole) cause:
+      disposing each zone dispatcher every turn didn't move the failure
+      point at all, which means either something else is leaking
+      residually turn-over-turn, or (more likely given how deterministic
+      and immediate this is) a single turn's *peak* usage — dispatcher +
+      its one active chunk + `PrintChoices`' dialog controls, all
+      simultaneously resident during one call — is already right at the
+      64KB ceiling on its own, independent of any cross-turn accumulation,
+      and turn 2 tips over for some turn-specific reason (a bigger chunk,
+      heap fragmentation from turn 1's own alloc/free cycle leaving no
+      single contiguous block big enough, etc.) rather than a leak per se.
+      **Added temporary debug instrumentation instead of guessing
+      further** — `rm001.sc`'s `runShift` now `FormatPrint`s
+      `MemoryInfo(miFREEHEAP)` *and* `MemoryInfo(miLARGESTPTR)` (both
+      real, already-proven-safe SCI0 kernel calls — this exact pair is
+      literally what the stock template's own alt-M debug hotkey in
+      `Main.sc:handleEvent` already prints, confirmed unreachable mid-run
+      only because `PrintChoices`' modal `Dialog:doit()` loop never lets
+      events reach the room, per the clickable-office-objects finding
+      above) at every Load/call/Dispose boundary: once at `runShift`
+      boot, then per turn: pre-switch, post-Load(dispatcher),
+      post-Do&lt;Zone&gt;Event, post-Dispose(dispatcher), post-ClampStats.
+      Deliberately tracks **both** metrics, not just free-heap total —
+      SCI0's heap is segmented, so plenty of aggregate free bytes can
+      coexist with no single contiguous block large enough for the next
+      ~10-14KB chunk load, which would show up as `miFREEHEAP` looking
+      fine while `miLARGESTPTR` craters, easy to miss if only checking
+      one number. Ran the structural sanity check on `rm001.sc` (balanced
+      parens outside strings, paired quotes) — clean. **Purely diagnostic,
+      not a fix** — the plan is to compile, play through until it crashes,
+      and read back whatever sequence of `DEBUG T<n> ...: heap=X
+      largest=Y` dialogs appeared (each one requires a click/Enter to
+      dismiss, same as any other `Print()`) to see exactly which
+      checkpoint the numbers stop looking sane at. **Must be removed once
+      the real bug is found** — this is verbose, multiple dialogs per
+      turn, not something to ship.
+    - **First real readout in, and it's a genuine per-turn leak, not just
+      a tight baseline.** User's run: boot=10682 free -> T1 Z3
+      pre-switch=9410 (the -1272 delta here is expected/one-time --
+      `PickZone()`'s first-ever call to `PickWorstStat()` auto-loads the
+      always-resident `mechanisms.sc` for the first time in the run) ->
+      T1 post-Load(SELFEVENTS)=9410 (dispatcher costs ~0, expected, it's
+      almost pure comments) -> **T1 post-DoSelfEvent=6820, a real
+      -2590** -> T1 post-Dispose(SELFEVENTS)=7396 (only +576 back) -> T1
+      post-ClampStats=7396 (flat) -> T2 Z4 pre-switch=7396 (flat) -> T2
+      post-Load(BODYEVENTS)=7396 (flat, expected). **Net: turn 1
+      "succeeded" but permanently lost ~2014 bytes it never gave back**,
+      and the very next zone's dispatcher load (small, ~0 cost on its
+      own) is what finally has too little room left -- consistent with a
+      second run failing partway into `DoBodyEvent` next. Checked
+      `selfevents.sc`'s generated dispatcher directly -- its per-chunk
+      `Load`/`DisposeScript` wrapping (`SELFEVENTS1-4_SCRIPT`) is
+      structurally correct, identical in shape to `workevents.sc`'s
+      already-proven pattern, so the leak isn't a missing dispose there.
+      Checked `Controls.sc`'s `DText`/`DIcon`/`DButton` classes directly
+      -- none allocate any extra buffer beyond the object clone itself
+      (`text`/`view`/etc. are just pointers to existing data, not
+      copies), so `Collect:dispose()`'s `eachElementDo(#dispose)` should
+      fully release them; this class hierarchy isn't the obvious leak
+      source either. Also checked `window.sc`'s `Window` class -- it has
+      an unrelated `save()`/`restore()`/`underBits` mechanism using
+      `Graph(grSAVE_BOX/grRESTORE_BOX ...)` that looked like a promising
+      leak candidate (a save-behind buffer with no obvious free call) but
+      it's dead code, never actually invoked by `Dialog:open()` or
+      anywhere else in this codebase -- not the cause. Checked
+      `mechanisms.sc`'s `ApplyChoiceEffects` -- no mechanism unlock is
+      possible this early (all 5 counts reset to 0 at the top of every
+      `rm001:init()`, threshold is 3 occurrences), so its
+      `MarkCaseFile`/`Print` branches can't have fired on turn 1 and
+      aren't the source either.
+      **Added finer-grained instrumentation to isolate the exact
+      boundary**, since code-reading alone didn't turn up the culprit:
+      `printchoices.sc`'s `PrintChoices` now brackets itself with 4
+      checkpoints (ENTRY, pre-open, post-open, pre-dispose, EXIT -- cost
+      of building controls vs. cost of `NewWindow()` vs. peak during the
+      modal loop vs. what's left after `dispose()`), and
+      `mechanisms.sc`'s `ApplyChoiceEffects`/`ApplyGlitch` each got
+      ENTRY/EXIT brackets too. All hand-written, shared by every one of
+      the 196 generated events (no generated-file changes needed). Ran
+      the structural sanity check on `printchoices.sc`, `mechanisms.sc`,
+      `rm001.sc` -- clean. **Not yet compiled/playtested** -- waiting on
+      the next readout to see which single checkpoint (inside
+      `PrintChoices`, or between it returning and `ApplyChoiceEffects`
+      finishing) is where the 2590 bytes actually goes missing.
+    - **Full labeled readout in for one complete turn (BODY zone,
+      turn 1). `PrintChoices` and `ApplyChoiceEffects` are both
+      completely clean — the leak is narrowed to exactly one remaining
+      boundary.** Sequence: `T1 post-Load(BODYEVENTS)`=9128 ->
+      `PrintChoices ENTRY`=892 (-8236, the content chunk's own `Load()`,
+      expected/temporary) -> `pre-open`=762 (-130, building controls,
+      expected) -> `post-open`=628 (-134, `NewWindow()`, expected) ->
+      `pre-dispose`=628 (flat during the modal wait, clean) ->
+      **`PrintChoices EXIT`=892 — exactly back to ENTRY.** `Dialog:
+      dispose()` (the `Collect:eachElementDo(#dispose)` chain plus
+      `Window:dispose()`'s `DisposeWindow()`) fully releases everything
+      it built. Not the leak. Then `ApplyChoiceEffects ENTRY`=892,
+      `ApplyChoiceEffects EXIT`=892 — completely flat, exactly matching
+      what its code does (arithmetic + `ClampStats()`, no allocation).
+      Not the leak either. Then **`T1 post-DoBodyEvent`=6658** — only
+      +5766 recovered of the -8236 the chunk load cost, a **-2470 net
+      loss** that has to come from one of the only two things that
+      happen in that gap: the event's own log-line `Print(logMsg)` call,
+      or `DisposeScript()` not fully reclaiming the content chunk.
+      **Added one more checkpoint to isolate exactly which**: rather
+      than hand-editing a generated file, added it to the shared
+      generator, `tools/lib/zone-events.js`'s `genDispatcher()` (a
+      `DEBUG_HEAP = true` toggle gates it, flip to `false` and
+      regenerate all six zones to remove it later) — prints heap/largest
+      right after the chosen event's switch-case call returns (i.e.
+      right after that event's own `Print(logMsg)` has already run) and
+      again right after `DisposeScript(<chunk>)`. If the first of those
+      two new readings already shows the shortfall, `Print(logMsg)` is
+      the leak; if it still looks fine and only the second one drops,
+      `DisposeScript()` itself isn't fully reclaiming the chunk. Added
+      `(use "controls")` to the generated dispatcher's use-list so
+      `FormatPrint` resolves (costs nothing at runtime — `Controls.sc` is
+      already always resident). Regenerated all six zones
+      (`node tools/gen-<zone>-events.js`) — sizes unchanged except the
+      debug lines, sanity-checked all six dispatcher files clean.
+      **Also stripped the now-confirmed-clean instrumentation** out of
+      `printchoices.sc` and `mechanisms.sc` (`ApplyChoiceEffects`/
+      `ApplyGlitch` brackets) to cut down on how many dialogs a test run
+      requires — both files are back to their pre-debug state other than
+      that. Ran the structural sanity check on all nine touched/
+      regenerated files — clean. **Not yet compiled/playtested.**
+    - **Root cause conclusively localized (two full labeled turns' worth
+      of readouts), and a real architectural fix applied.** Turn 1 (BODY
+      zone, `BODYEVENTS3_SCRIPT`): `post-Load(BODYEVENTS)`=9410 ->
+      `BODYEVENTS3_SCRIPT post-switch pre-Dispose`=1606 (chunk still
+      loaded, `PrintChoices`/`ApplyChoiceEffects`/the log-line `Print()`
+      have all already run) -> `BODYEVENTS3_SCRIPT post-Dispose`=5878
+      (+4272 recovered) -> `post-DoBodyEvent`=5878 (flat, confirms
+      nothing else happens after the dispatcher's own `DisposeScript`) ->
+      `post-Dispose(BODYEVENTS)` [outer dispatcher]=7140 (+1262) ->
+      `post-ClampStats`=7140 (flat). Net for the whole turn: 9410 -> 7140,
+      a **-2270 permanent loss**, matching the same few-thousand-byte
+      order of magnitude as every previous readout regardless of which
+      zone/chunk was involved. Turn 2 (BODY again, `Z4`): `pre-switch`=
+      7140, `post-Load(BODYEVENTS)`=7140 (dispatcher negligible, as
+      always) -> **crash: "Out of heap space." immediately trying to
+      `Load()` the turn's actual content chunk** — with only 7140 bytes
+      free against chunks that cost 6300-8300 bytes to load (per every
+      prior measurement), this was essentially guaranteed to fail
+      regardless of which of the 6 zones got picked.
+      **Conclusion**: `DisposeScript()` (or specifically its handling of
+      a script's own string/dialog-text data — the research brief
+      explicitly lists "dynamic string allocations" as a heap category
+      distinct from "bytecode for loaded scripts") does not fully
+      reclaim a content chunk's memory. The exact interpreter-level
+      mechanism remains unconfirmed (kernel docs for both `Load` and
+      `DisposeScript` are one-line stubs with no caveats), but the
+      practical effect is fully pinned down and reproducible: every
+      turn's chunk-load-then-dispose cycle permanently loses roughly
+      2000-3500 bytes, on top of an already-thin ~9000-10000 byte
+      post-boot margin — meaning almost no second turn could ever
+      succeed once a single average-sized (~10-11KB source /
+      6300-8300 byte load cost) chunk had been touched once.
+      **Fix applied, not just another instrumentation pass**: doubled
+      `CHUNK_COUNT` from 4 to 8 in the shared generator,
+      [tools/lib/zone-events.js](tools/lib/zone-events.js:25) — this is
+      the exact "more chunks, cheap, mechanical, no content loss" lever
+      this doc has flagged as the top-preference fix multiple times
+      already. Halves every chunk's compiled size (measured: source
+      sizes dropped from ~10.1-11.7KB down to ~5.5-7KB per chunk across
+      all six zones), which should roughly halve the load cost each turn
+      actually needs (~3000-4000 bytes instead of ~6300-8300), comfortably
+      under the ~7100-7400 byte floor a turn leaves behind. Also flipped
+      the per-chunk `DEBUG_HEAP` toggle back to `false` (its job — finding
+      exactly which boundary lost the memory — is done; flip back to
+      `true` and regenerate if it's ever needed again) — the
+      `rm001.sc`-level per-turn checkpoints (boot/pre-switch/post-Load/
+      post-Do&lt;Zone&gt;Event/post-Dispose/post-ClampStats, still live)
+      remain for confirming the fix actually works across a longer run
+      without needing the much chattier per-chunk dialogs.
+      **New script numbers 138-161** added to `game.sh` (`<ZONE>EVENTS5
+      _SCRIPT`..`<ZONE>EVENTS8_SCRIPT` for all six zones — fresh numbers,
+      not a renumbering of anything that already existed, to minimize
+      risk) and `game.ini`'s `[Script]` section (24 new `n1xx=<Name>`
+      entries). Regenerated all six zones
+      (`node tools/gen-<zone>-events.js`) — each zone now has 8 numbered
+      chunk files instead of 4, same total event count and content, just
+      redistributed into smaller pieces. Verified: all 93 `.sc` files in
+      `TRS_SCI/src` pass the structural sanity check (balanced parens
+      outside strings, paired quotes); no duplicate script numbers
+      anywhere in `game.sh`; no duplicate script numbers in `game.ini`;
+      every one of the 24 new `game.ini` entries has a matching on-disk
+      file (the only filename/case mismatches found — `CaseFiles.sc`,
+      `CaseFileAccess.sc`, `CaseFileTitles.sc` — are pre-existing,
+      already-documented capitalization quirks unrelated to this change,
+      see the casefiles.sc registration saga above). **Not yet
+      compiled/playtested** — this needs a fresh "New empty script"-free
+      compile pass in the VM (all 24 new files already exist on disk with
+      matching `game.ini` entries, so per the earlier casefiles.sc
+      lesson this *should* just work via a plain Compile All, but
+      confirm rather than assume). Worth specifically testing: does a
+      run now survive multiple consecutive turns (not just turn 2) — if
+      it still exhausts within a handful of turns, the next lever per
+      this doc's own established order of preference is the bigger
+      architectural change (one room per event) rather than chunking
+      further, since 8 chunks/zone is already a meaningful jump from 4.
+    - **The CHUNK_COUNT fix worked dramatically — confirmed by the user
+      reaching turn 9-10 (up from turn 2) — but then hit a new,
+      previously-unreachable bug at the run's natural end.** Per-turn
+      heap readouts through turn 10 stayed healthy (post-`ClampStats`
+      readings around 7000-9000 free the whole way, e.g. `T10
+      post-ClampStats`=8748), ruling out simple cumulative decay as the
+      cause of what followed. The user then saw the survival ending card
+      print successfully, then immediately "Out of heap space." **Root
+      cause**: `rm002.sc`'s `printSurvivalEnding()` only ever calls
+      exactly ONE `PrintSurvivalEndingN()`/`PrintFailureEndingN()` per
+      ending (picked by a stat-threshold check), but the ending content
+      was still bundled the OLD way — `endingcontent1.sc`/`2.sc`/`3.sc`
+      each held 4-5 whole pool procedures together (~9.1-11.9KB each,
+      even bigger than the WORK-zone chunks were before *their*
+      bundling got split for the exact same reason, see above) — so
+      loading the one pool actually needed dragged in several dead
+      ones too. Compounding it: `MarkCaseFile()` (called from inside the
+      chosen variant's own `case`, i.e. while that whole ~9-12KB bundle
+      is still resident) does its own **nested** `Load`/`DisposeScript`
+      of `CASEFILEACCESS_SCRIPT` (~7.4KB) on top. This exact code path
+      was flagged as "not yet compiled/playtested" throughout the entire
+      ending-variant-port section above — it never got exercised until a
+      run actually survived long enough to reach it, which only became
+      possible after the `CHUNK_COUNT` fix.
+      **Fix**: restructured [tools/gen-endings.js](tools/gen-endings.js)
+      to emit **one script file per ending pool** (matching the exact
+      granularity `rm002.sc` dispatches at) instead of bundling 4-5
+      pools per file — `endingsurvival0.sc`..`endingsurvival8.sc` (9
+      files) and `endingfailure0.sc`..`endingfailure2.sc` (3 files),
+      replacing the deleted `endingcontent1-3.sc`. Sizes dropped from
+      ~9.1-11.9KB down to ~3-3.7KB each. New script numbers
+      `ENDINGSURVIVAL0_SCRIPT`..`ENDINGSURVIVAL8_SCRIPT` and
+      `ENDINGFAILURE0_SCRIPT`..`ENDINGFAILURE2_SCRIPT` = 162-173 added to
+      `game.sh` (133-135, the old `ENDINGCONTENT1/2/3_SCRIPT`, are now
+      explicitly freed/unused rather than reassigned — same "fresh
+      numbers, not a renumbering" discipline as the `CHUNK_COUNT` fix).
+      `game.ini`'s `[Script]` section: removed the 3 old
+      `EndingContent1/2/3` entries, added the 12 new ones.
+      `rm002.sc`'s `(use ...)` list and all 12 `Load`/`DisposeScript`
+      call sites in `printEnding()`/`printSurvivalEnding()` updated to
+      reference the matching per-pool constant instead of the old
+      shared `ENDINGCONTENT1/2/3_SCRIPT`. Verified: all 102 `.sc` files
+      in `TRS_SCI/src` pass the structural sanity check; no duplicate
+      script numbers in `game.sh` or `game.ini`; every new `game.ini`
+      entry has a matching on-disk file; grepped the whole `TRS_SCI/`
+      tree and confirmed zero remaining references to
+      `ENDINGCONTENT[123]_SCRIPT` outside explanatory comments; each of
+      the 12 new constants has exactly one `#define` and is referenced
+      from exactly 2 places (its own file's `(script ...)` header and
+      `rm002.sc`'s Load/Dispose call) as expected. **Not yet
+      compiled/playtested.** Worth specifically testing a full run
+      through to a SURVIVAL ending (exercises `printSurvivalEnding()`'s
+      `UnlockNgPlus()` + one `ENDINGSURVIVALn` pool) and, separately, a
+      run that fails a stat mid-run (exercises an `ENDINGFAILUREn`
+      pool) — both paths changed. This is a strong candidate for the
+      actual final piece: heap now stays healthy through the entire
+      per-turn loop (turn 1 through 10, confirmed) and the failure mode
+      that remained was isolated to a once-per-run code path that's now
+      using the same small-chunk treatment as everything else.

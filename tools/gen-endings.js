@@ -123,31 +123,58 @@ function fileHeader(filename, scriptConst, description) {
 		`/******************************************************************************/\n`;
 }
 
-// Split: all 72 survival variants alone measured ~20.5KB, well past the
-// ~16KB practical per-script ceiling -- split across two files (pools
-// 0-4, then 5-8), same chunking approach as the per-zone event content.
-// Failure endings (30 variants, ~9KB) fit in one file on their own.
-const survivalPoolsA = CONTENT_ENDINGS.slice(0, 5);
-const survivalPoolsB = CONTENT_ENDINGS.slice(5);
+// One file per POOL, not bundled 4-5-at-a-time like the original
+// endingcontent1/2/3.sc split -- real heap-exhaustion bug, confirmed via
+// debug instrumentation (see SESSION_HANDOFF.md): rm002.sc's
+// printEnding()/printSurvivalEnding() only ever calls exactly ONE
+// PrintSurvivalEndingN()/PrintFailureEndingN() per ending shown, picked by
+// a stat-threshold check, but the old bundling meant Load()ing that one
+// procedure dragged in 4-5 OTHER pools' worth of dead bytecode too (each
+// bundle was ~9.1-11.9KB -- bigger than the WORK-zone chunks were before
+// THEIR bundling got split for the exact same reason). On top of that,
+// MarkCaseFile() (called from inside the variant case, while this chunk
+// is still resident) does its OWN nested Load/DisposeScript of
+// CASEFILEACCESS_SCRIPT -- a real run confirmed reaching turn 10 cleanly
+// (per-turn heap holding steady around 7000-9000 free) and then hitting
+// "Out of heap space" right after the ending card printed, once the run
+// naturally ended and this code path finally got exercised for the first
+// time under the new, smaller per-turn heap budget. One file per pool
+// means loading an ending now costs roughly 1/5th to 1/4th as much.
+function poolFileName(kind, index) {
+	return `ending${kind}${index}`;
+}
+function poolScriptConst(kind, index) {
+	return `ENDING${kind.toUpperCase()}${index}_SCRIPT`;
+}
 
-const survivalSrcA = fileHeader('endingcontent1.sc', 'ENDINGCONTENT1_SCRIPT', 'Survival ending pools 0-4 (5 pools x 8 variants = 40), matching CONTENT_ENDINGS in js/content-endings.js. Flat Case Files indices 0-39 -- see game.sh.') +
-	survivalPoolsA.map((pool, i) => genSurvivalProc(i, pool)).join('\n/******************************************************************************/\n') +
-	'\n/******************************************************************************/\n';
+const survivalFiles = [];
+CONTENT_ENDINGS.forEach((pool, i) => {
+	const filename = poolFileName('survival', i);
+	const scriptConst = poolScriptConst('survival', i);
+	const base = SURVIVAL_BASE + i * SURVIVAL_VARIANTS_PER_POOL;
+	const src = fileHeader(`${filename}.sc`, scriptConst, `Survival ending pool ${i} (8 variants), matching CONTENT_ENDINGS[${i}] in js/content-endings.js. Flat Case Files indices ${base}-${base + SURVIVAL_VARIANTS_PER_POOL - 1} -- see game.sh.`) +
+		genSurvivalProc(i, pool) +
+		'\n/******************************************************************************/\n';
+	fs.writeFileSync(path.join(outDir, `${filename}.sc`), src);
+	console.log(`Wrote survival ending ${i} (${src.length} bytes) to TRS_SCI/src/${filename}.sc`);
+	survivalFiles.push({ filename, scriptConst, index: i });
+});
 
-const survivalSrcB = fileHeader('endingcontent2.sc', 'ENDINGCONTENT2_SCRIPT', 'Survival ending pools 5-8 (4 pools x 8 variants = 32), matching CONTENT_ENDINGS in js/content-endings.js. Flat Case Files indices 40-71 -- see game.sh.') +
-	survivalPoolsB.map((pool, i) => genSurvivalProc(i + 5, pool)).join('\n/******************************************************************************/\n') +
-	'\n/******************************************************************************/\n';
+const failureFiles = [];
+FAILURE_STAT_ORDER.forEach((stat, i) => {
+	const filename = poolFileName('failure', i);
+	const scriptConst = poolScriptConst('failure', i);
+	const base = FAILURE_BASE + i * FAILURE_VARIANTS_PER_POOL;
+	const src = fileHeader(`${filename}.sc`, scriptConst, `Failure ending pool (${stat}, 10 variants), matching CONTENT_FAILURE_ENDINGS.${stat} in js/content-endings.js. Flat Case Files indices ${base}-${base + FAILURE_VARIANTS_PER_POOL - 1} -- see game.sh.`) +
+		genFailureProc(i, stat) +
+		'\n/******************************************************************************/\n';
+	fs.writeFileSync(path.join(outDir, `${filename}.sc`), src);
+	console.log(`Wrote failure ending ${i} (${stat}, ${src.length} bytes) to TRS_SCI/src/${filename}.sc`);
+	failureFiles.push({ filename, scriptConst, index: i, stat });
+});
 
-const failureSrc = fileHeader('endingcontent3.sc', 'ENDINGCONTENT3_SCRIPT', 'Failure ending pools (3 pools x 10 variants = 30), matching CONTENT_FAILURE_ENDINGS in js/content-endings.js. Flat Case Files indices 72-101 -- see game.sh.') +
-	FAILURE_STAT_ORDER.map((stat, i) => genFailureProc(i, stat)).join('\n/******************************************************************************/\n') +
-	'\n/******************************************************************************/\n';
-
-fs.writeFileSync(path.join(outDir, 'endingcontent1.sc'), survivalSrcA);
-console.log(`Wrote survival endings 0-4 (${survivalSrcA.length} bytes) to TRS_SCI/src/endingcontent1.sc`);
-fs.writeFileSync(path.join(outDir, 'endingcontent2.sc'), survivalSrcB);
-console.log(`Wrote survival endings 5-8 (${survivalSrcB.length} bytes) to TRS_SCI/src/endingcontent2.sc`);
-fs.writeFileSync(path.join(outDir, 'endingcontent3.sc'), failureSrc);
-console.log(`Wrote failure endings (${failureSrc.length} bytes) to TRS_SCI/src/endingcontent3.sc`);
+console.log(`\ngame.sh #defines needed:`);
+[...survivalFiles, ...failureFiles].forEach(f => console.log(`  (define ${f.scriptConst}\t<pick a free number>)`));
 
 console.log(`\nFlat index layout:`);
 CONTENT_ENDINGS.forEach((pool, i) => {

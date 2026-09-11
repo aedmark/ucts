@@ -267,8 +267,16 @@
 		LoadCaseFiles()
 		// Mirror gCF17 into the plain gNgPlusUnlocked global every call
 		// site outside this file actually reads -- see its declaration
-		// above for why.
+		// above for why. Load/DisposeScript wrapped -- this single call
+		// was the one thing making the whole of casefileaccess.sc
+		// permanently resident for the entire game session (scripts
+		// auto-load on call but never auto-unload); a real, confirmed
+		// contributor to a heap-exhaustion bug during ordinary per-turn
+		// play, unrelated to anything about Case Files itself -- see
+		// SESSION_HANDOFF.md.
+		Load(rsSCRIPT CASEFILEACCESS_SCRIPT)
 		= gNgPlusUnlocked GetCaseFile(CASEFILE_NGPLUS)
+		DisposeScript(CASEFILEACCESS_SCRIPT)
 
 		// General initialization stuff
 	    = gVolume 15

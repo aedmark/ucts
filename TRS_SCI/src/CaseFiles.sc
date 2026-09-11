@@ -75,14 +75,29 @@
 	(if(not hFile)
 		return
 	)
+	// Load/DisposeScript wrapped around just the loop that actually needs
+	// SetCaseFile -- CaseFileAccess.sc used to be permanently resident
+	// (implicitly, since nothing ever disposed it), a real contributor to
+	// a heap-exhaustion bug during ordinary per-turn play; see
+	// SESSION_HANDOFF.md. Placed after the early-return above so a
+	// missing save file (nothing to load) never touches it at all.
+	Load(rsSCRIPT CASEFILEACCESS_SCRIPT)
 	(for (= i 0) (< i CASEFILE_COUNT) (++i)
 		FGets(@lineBuf 6 hFile)
 		SetCaseFile(i ReadNumber(@lineBuf))
 	)
+	DisposeScript(CASEFILEACCESS_SCRIPT)
 	FClose(hFile)
 )
 /******************************************************************************/
 (procedure public (SaveCaseFiles)
+	// Deliberately does NOT Load/DisposeScript CaseFileAccess.sc itself --
+	// this is only ever called from MarkCaseFile below, which already
+	// wraps its own call to this with one Load/Dispose pair covering
+	// both. A second, nested pair here would be redundant at best; if
+	// this ever gets a second caller, that caller needs to do its own
+	// wrapping (or this procedure should grow one) rather than assuming
+	// it's free.
 	(var hFile, i, lineBuf[6])
 	= hFile FOpen("TRSCASE.DAT" fCREATE)
 	(if(== hFile -1)
@@ -100,11 +115,19 @@
 	// is the first time it's ever been seen. Returns TRUE exactly when
 	// that happened, so callers can decide whether to announce it -- this
 	// procedure itself never prints anything.
+	// Load/DisposeScript wrapped -- covers this procedure's own direct
+	// GetCaseFile/SetCaseFile calls AND the nested SaveCaseFiles() call
+	// (which also uses GetCaseFile internally) with a single pair, rather
+	// than double-wrapping SaveCaseFiles separately -- SaveCaseFiles is
+	// only ever called from here, so this is its one true entry point.
+	Load(rsSCRIPT CASEFILEACCESS_SCRIPT)
 	(if(not GetCaseFile(index))
 		SetCaseFile(index 1)
 		SaveCaseFiles()
+		DisposeScript(CASEFILEACCESS_SCRIPT)
 		return(TRUE)
 	)
+	DisposeScript(CASEFILEACCESS_SCRIPT)
 	return(FALSE)
 )
 /******************************************************************************/
@@ -170,13 +193,15 @@
 	// VIEWABLE_CASEFILE_COUNT (107), not the full CASEFILE_COUNT (108) --
 	// slot 107 is the Extended Therapy unlock flag, not a real case file,
 	// and has no title in CaseFileTitle() below to show anyway.
-	// CaseFileTitle() lives in casefiletitles.sc, explicitly Load()ed
-	// here and DisposeScript()ed right after -- its 107-case switch is
-	// only ever needed for this one screen, and staying permanently
-	// resident the way casefileaccess.sc used to (before this fix)
-	// contributed to a real heap-exhaustion bug -- see
-	// SESSION_HANDOFF.md.
+	// CaseFileTitle() lives in casefiletitles.sc and GetCaseFile() in
+	// casefileaccess.sc, both explicitly Load()ed here and
+	// DisposeScript()ed right after -- neither is permanently resident
+	// (that was a real, confirmed contributor to a heap-exhaustion bug
+	// during ordinary per-turn play -- see SESSION_HANDOFF.md), so both
+	// need loading for this one screen's use and nothing assumes they're
+	// already there.
 	Load(rsSCRIPT CASEFILETITLES_SCRIPT)
+	Load(rsSCRIPT CASEFILEACCESS_SCRIPT)
 	(for (= i 0) (< i VIEWABLE_CASEFILE_COUNT) (++i)
 		(if(GetCaseFile(i))
 			Format((+ @buf (* i 32)) "%d. %s" (+ i 1) CaseFileTitle(i))
@@ -184,6 +209,7 @@
 			Format((+ @buf (* i 32)) "%d. ??? (sealed)" (+ i 1))
 		)
 	)
+	DisposeScript(CASEFILEACCESS_SCRIPT)
 	DisposeScript(CASEFILETITLES_SCRIPT)
 
 	= hDialog (Dialog:new())

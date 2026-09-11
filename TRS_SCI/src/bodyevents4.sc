@@ -6,7 +6,7 @@
  the original js/events/body.js. Re-run that script after
  editing the source event data.
 
- BODY-zone events 24-31: each is a standalone
+ BODY-zone events 12-15: each is a standalone
  BodyEvent<N> procedure showing the event's PrintChoices dialog, then
  applying the chosen response's stat effects and printing its log line.
  ******************************************************************************/
@@ -20,281 +20,141 @@
 (use "printchoices")
 (use "mechanisms")
 /******************************************************************************/
-(procedure public (BodyEvent24)
+(procedure public (BodyEvent12)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start reorganizing your phone's apps by color."
+		= glitchText "Attempt to crack a joint that does not, physiologically, crack."
 	)
 	= choice PrintChoices(
-		"It's 2 AM. Your body is exhausted. Your brain has opened fourteen tabs and refuses to close any of them."
-		"The Insomnia Loop"
+		"You've cracked your knuckles, neck, and back four times each in the last hour. It's becoming a whole thing."
+		"The Cracking Joints"
 		290
 		glitchText
-		"Keep lying there, perfectly still, willing sleep to just happen." 0
-		"Give up and scroll your phone until your eyes finally give out first." 1
-		"Get up, write down whatever's looping, and try again without it in your head." 2
+		"Keep doing it, quieter, so no one notices." 0
+		"Crack something loudly on purpose, right at someone." 1
+		"Get up and actually move for a minute instead." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("Your home screen has never looked better. You are still awake.")
+		ApplyGlitch("It did not crack. You will try again in eleven minutes.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(15 0 -5 TAG_FREEZE)
-			Print("Stillness didn't work. It never really does.")
+			ApplyChoiceEffects(5 5 -5 TAG_FAWN)
+			Print("You hid the fidget instead of asking what it was fidgeting about.")
 		)
 		(case 1
-			ApplyChoiceEffects(-5 -5 0 TAG_FLIGHT)
-			Print("You traded one kind of awake for an eye-straining kind.")
+			ApplyChoiceEffects(-10 -15 0 TAG_FIGHT)
+			Print("You turned a nervous habit into a small act of war.")
 		)
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("You gave the thought somewhere to be that wasn't just your pillow.")
+			Print("You gave the restlessness an actual job to do.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (BodyEvent25)
+(procedure public (BodyEvent13)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Overcorrect by hugging everyone in the room, unprompted."
+		= glitchText "Buy one of every single kind out of sheer decision fatigue."
 	)
 	= choice PrintChoices(
-		"Someone reaches out for a hug, or just to touch your arm, and your whole body stiffens for a second before you can stop it."
-		"The Flinch"
+		"You are standing in front of forty kinds of the same cereal and you cannot make your body pick one."
+		"The Overwhelm in the Cereal Aisle"
 		290
 		glitchText
-		"Force the hug to look natural and hope nobody noticed the flinch." 0
-		"Get through the contact by mentally leaving the room while your body stays in it." 1
-		"Let the flinch happen and just say, lightly, 'sorry, jumpy today.'" 2
+		"Grab the one closest to your hand and leave fast." 0
+		"Stand there until someone else's cart forces you to move." 1
+		"Breathe, pick the familiar one on purpose, keep walking." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("Several people are now confused but more fulfilled. Your arms are tired.")
+		ApplyGlitch("You now own more cereal than a household requires. Problem technically solved.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(5 10 -8 TAG_FAWN)
-			Print("You performed comfortable so well even you almost believed it.")
+			ApplyChoiceEffects(-5 0 -5 TAG_FLIGHT)
+			Print("You escaped the aisle. The cereal was incidental.")
 		)
 		(case 1
-			ApplyChoiceEffects(12 0 -8 TAG_FREEZE)
-			Print("You were there for the hug. Technically.")
+			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
+			Print("Your body vetoed the decision and nobody overruled it.")
 		)
 		(case 2
-			ApplyChoiceEffects(-8 3 8 TAG_SECURE)
-			Print("You named it instead of hiding it, and the moment passed anyway.")
+			ApplyChoiceEffects(-10 0 5 TAG_SECURE)
+			Print("You made a small decision on purpose. It counts.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (BodyEvent26)
+(procedure public (BodyEvent14)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Diagnose yourself with something dramatic via a search engine"
+		= glitchText "Construct an elaborate, confident lie about how you got it."
 	)
 	= choice PrintChoices(
-		"A dull ache starts behind your eyes around hour six of sustained screen time, and it isn't going anywhere."
-		"The Strain Headache"
+		"You notice a bruise on your arm. You have absolutely no memory of how it got there."
+		"The Bruise You Don't Remember"
 		290
 		glitchText
-		"Push through it and keep working like the headache isn't happening." 0
-		"Snap the laptop shut harder than necessary and complain to whoever's nearby." 1
-		"Actually step away for ten whole minutes." 2
+		"Cover it and move on, it's fine, you're fine." 0
+		"Poke it a few times, oddly detached from the pain." 1
+		"Actually stop and wonder what's been going on with you lately." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("The internet has once again ruined your day. You are tired, not sick.")
+		ApplyGlitch("Nobody asked. You told them anyway. The story was *very* good.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(12 0 -5 TAG_FREEZE)
-			Print("The headache did not care that you ignored it. It rarely does.")
+			ApplyChoiceEffects(0 10 -10 TAG_FAWN)
+			Print("You concealed the evidence and skipped the question it was asking.")
 		)
 		(case 1
-			ApplyChoiceEffects(-8 -10 0 TAG_FIGHT)
-			Print("The laptop survived. Your reputation for calmness took the hit.")
+			ApplyChoiceEffects(5 0 -15 TAG_FREEZE)
+			Print("You observed your own body like it belonged to someone else.")
 		)
 		(case 2
-			ApplyChoiceEffects(-10 0 8 TAG_SECURE)
-			Print("Time away did more than the last two hours of pushing through did.")
+			ApplyChoiceEffects(-5 0 15 TAG_SECURE)
+			Print("You treated a small mystery as information instead of noise.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (BodyEvent27)
+(procedure public (BodyEvent15)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Immediately open a second bag out of pure defiance."
+		= glitchText "Strike up a loud, urgent conversation about the weather."
 	)
 	= choice PrintChoices(
-		"You look down and an entire bag of something is gone. You don't remember deciding to eat any of it."
-		"The Bag You Don't Remember Opening"
+		"The elevator doors close and your heart rate spikes for no reason you can name."
+		"The Racing Heart in the Elevator"
 		290
 		glitchText
-		"Laugh it off if anyone mentions it and change the subject fast." 0
-		"Say nothing to anyone, including yourself, and just move on like it didn't happen." 1
-		"Notice, without judgment, that you might be stressed about something specific." 2
+		"Smile at the stranger next to you like everything's normal." 0
+		"Get out at the wrong floor just to escape the box." 1
+		"Count your breaths until the doors open again." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("Neither bag solved anything. Both are now empty.")
+		ApplyGlitch("Nobody wanted this conversation. It happened anyway. Heart rate: unchanged.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(5 8 -8 TAG_FAWN)
-			Print("You made a joke out of it before anyone could ask a real question.")
+			ApplyChoiceEffects(10 10 -5 TAG_FAWN)
+			Print("You performed calm at a stranger who will never know otherwise.")
 		)
 		(case 1
-			ApplyChoiceEffects(10 0 -8 TAG_FREEZE)
-			Print("Not talking about it didn't make it not have happened.")
+			ApplyChoiceEffects(-10 -5 0 TAG_FLIGHT)
+			Print("You solved the feeling by relocating the problem, briefly.")
 		)
 		(case 2
-			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("You looked past the bag to the actual thing underneath it.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (BodyEvent28)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Set a recurring hourly alarm labeled 'BREATHE.'"
-	)
-	= choice PrintChoices(
-		"You catch yourself mid-email, barely breathing, jaw clenched, for who knows how long."
-		"The Shallow Breathing Mid-Task"
-		290
-		glitchText
-		"Notice it, feel briefly alarmed, and keep typing exactly the same way." 0
-		"Apologize to no one in particular for being 'a little tense today.'" 1
-		"Stop, take three actual breaths, and unclench your shoulders on purpose." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("It will go off in the middle of a meeting later. This is fine.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(10 0 -5 TAG_FREEZE)
-			Print("You clocked it and kept going anyway. The body filed a complaint it can't really enforce.")
-		)
-		(case 1
-			ApplyChoiceEffects(5 5 -8 TAG_FAWN)
-			Print("You apologized for your own nervous system to an indifferent room.")
-		)
-		(case 2
-			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("Thirty seconds of actually breathing did more than the last hour of holding it.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (BodyEvent29)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Drink a fourth coffee and decide this will definitely be the one that works."
-	)
-	= choice PrintChoices(
-		"You slept eight hours. You wake up exactly as tired as when you laid down, if not more so."
-		"The Exhaustion Sleep Didn't Fix"
-		290
-		glitchText
-		"Push through the day on caffeine and sheer stubbornness." 0
-		"Tell everyone who asks that you're 'just a little tired, no big deal.'" 1
-		"Actually cancel one non-essential thing today to protect what's left of your energy." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("It was not the one that worked. Your entire body is vibrating and still tired.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(12 0 -8 TAG_FREEZE)
-			Print("You made it through. 'Made it through' is doing a lot of work in that sentence.")
-		)
-		(case 1
-			ApplyChoiceEffects(5 8 -8 TAG_FAWN)
-			Print("You minimized it into something small enough that nobody, including you, has to look at it.")
-		)
-		(case 2
-			ApplyChoiceEffects(-8 0 10 TAG_SECURE)
-			Print("You spent the energy on rest instead of one more obligation you didn't have room for.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (BodyEvent30)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Blow on your hands dramatically like you're in a survival documentary."
-	)
-	= choice PrintChoices(
-		"Your hands have been cold for an hour, in a room that isn't. You notice it right as you're trying to sign something important."
-		"The Cold Hands"
-		290
-		glitchText
-		"Apologize for the shaky signature and joke about the room being cold." 0
-		"Just push through and hope no one notices your hands." 1
-		"Pause, shake it out, and just wait until your hands actually feel steady." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("It didn't warm anything up. It did get a laugh.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(5 8 -5 TAG_FAWN)
-			Print("You blamed the thermostat for something the thermostat had nothing to do with.")
-		)
-		(case 1
-			ApplyChoiceEffects(10 0 -5 TAG_FREEZE)
-			Print("Someone noticed. You'll never know if it mattered.")
-		)
-		(case 2
-			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
-			Print("You waited for your own body instead of overriding it.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (BodyEvent31)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Answer with a completely unrelated fact about your day instead."
-	)
-	= choice PrintChoices(
-		"Someone asks if you're okay, and your throat closes around the answer before you can decide what it actually is."
-		"The Tight Throat"
-		290
-		glitchText
-		"Force out a bright 'I'm fine!' before the tightness can turn into anything else." 0
-		"Say nothing and just nod until the moment passes on its own." 1
-		"Say 'actually, not really' and let the sentence stop there for now." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("Nobody knows what just happened, including you. The moment is over, at least.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(8 10 -10 TAG_FAWN)
-			Print("You got the words out. They weren't the true ones. Nobody believes you.")
-		)
-		(case 1
-			ApplyChoiceEffects(12 0 -5 TAG_FREEZE)
-			Print("The moment passed. The tightness didn't, not really.")
-		)
-		(case 2
-			ApplyChoiceEffects(-10 3 10 TAG_SECURE)
-			Print("Three honest words did more than a paragraph of fine would have.")
+			ApplyChoiceEffects(-15 0 10 TAG_SECURE)
+			Print("You rode it out instead of running from it.")
 		)
 		)
 	)

@@ -6,7 +6,7 @@
  the original js/events/public.js. Re-run that script after
  editing the source event data.
 
- PUBLIC-zone events 16-23: each is a standalone
+ PUBLIC-zone events 8-11: each is a standalone
  PublicEvent<N> procedure showing the event's PrintChoices dialog, then
  applying the chosen response's stat effects and printing its log line.
  ******************************************************************************/
@@ -20,281 +20,141 @@
 (use "printchoices")
 (use "mechanisms")
 /******************************************************************************/
-(procedure public (PublicEvent16)
+(procedure public (PublicEvent8)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Get out of the car and offer to play rock paper scissors."
+		= glitchText "Strike up a conversation with your number ticket like it's a person."
 	)
 	= choice PrintChoices(
-		"You both saw the spot at the same time. Neither of you has backed down, and there is now a small line of cars forming behind you both."
-		"The Parking Lot Standoff"
+		"You've been standing in the same six feet of floor for forty minutes. The number on your ticket has not moved. Neither has anyone's mood."
+		"The DMV Line"
 		290
 		glitchText
-		"Wave them through with a big smile even though you got there first." 0
-		"Rev the engine and hold your ground until they give up." 1
-		"Point them to the spot you can see open two rows down instead." 2
+		"Apologize to the person behind you for existing in their line of sight." 0
+		"Loudly ask if anyone else thinks this is insane." 1
+		"Accept the wait for what it is and let your mind go somewhere else." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You always play rock first. This time, you didn't. And you lost.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(5 5 -8 TAG_FAWN)
-			Print("You gave up a spot you were entitled to so a stranger wouldn't be briefly annoyed at you.")
-		)
-		(case 1
-			ApplyChoiceEffects(-10 -10 0 TAG_FIGHT)
-			Print("You won a parking spot and lost thirty seconds of goodwill from everyone now stuck behind you.")
-		)
-		(case 2
-			ApplyChoiceEffects(-8 3 5 TAG_SECURE)
-			Print("You solved the actual problem instead of winning the argument about it.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (PublicEvent17)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Model the outfit for the entire waiting area whether they asked or not."
-	)
-	= choice PrintChoices(
-		"Three angles of unflattering light and a mirror that doesn't care about your feelings. Someone outside asks how it's going in there."
-		"The Fitting Room Mirror"
-		290
-		glitchText
-		"Call out 'great, thanks!' before you've even looked down." 0
-		"Stand very still and stare until the moment passes on its own." 1
-		"Say 'still deciding' and actually take a second to decide." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You received two genuine compliments and one very confused nod. Worth it.")
+		ApplyGlitch("B-247 did not respond. You feel closer to it anyway.")
 	)(else
 		(switch(choice)
 		(case 0
 			ApplyChoiceEffects(5 8 -8 TAG_FAWN)
-			Print("You reassured a stranger through a door about a feeling you hadn't actually had yet.")
+			Print("You said sorry for taking up floor space that was yours to take up.")
 		)
 		(case 1
-			ApplyChoiceEffects(10 0 -5 TAG_FREEZE)
-			Print("You had a small, private standoff with a mirror and the mirror won by default.")
+			ApplyChoiceEffects(-10 -12 0 TAG_FIGHT)
+			Print("Several strangers agreed with you. Nobody moved any faster because of it.")
 		)
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
-			Print("You let the honest answer be the answer, even through a curtain.")
+			Print("You gave the wait exactly the amount of your life it was going to take anyway.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (PublicEvent18)
+(procedure public (PublicEvent9)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start a betting pool on how long the line will actually take."
+		= glitchText "Tell the bailiff you've actually always wanted to see how this works."
 	)
 	= choice PrintChoices(
-		"There's one working stall, a line of eight, and someone near the front who is very audibly running out of patience with the wait."
-		"The Restroom Line"
+		"You're in a room full of strangers being told that your normal lives are on hold for an unknown number of days."
+		"The Jury Duty Summons"
 		290
 		glitchText
-		"Let three people cut ahead of you so no one thinks you mind." 0
-		"Loudly point out that this line has not moved once in ten minutes." 1
-		"Hold your spot, wait it out, and make small talk with the person next to you." 2
+		"Raise your hand immediately to volunteer for anything that gets you excused." 0
+		"Sit very still and hope your name simply never gets called." 1
+		"Answer the questions honestly and let the process do what it does." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You won four dollars. The line still has not moved. Worth it.")
+		ApplyGlitch("This is, apparently, an unusual thing to say out loud. You are now Juror Number One.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(5 5 -8 TAG_FAWN)
-			Print("You gave away your spot in line three separate times to avoid being thought of as difficult.")
+			ApplyChoiceEffects(-5 -5 0 TAG_FLIGHT)
+			Print("You ran from an obligation using the exact process built to enforce it.")
 		)
 		(case 1
-			ApplyChoiceEffects(-8 -8 0 TAG_FIGHT)
-			Print("You said the true thing everyone was thinking. It did not fix the plumbing.")
+			ApplyChoiceEffects(10 0 -5 TAG_FREEZE)
+			Print("You made yourself as unnoticeable as a person in a numbered chair can be.")
 		)
 		(case 2
-			ApplyChoiceEffects(-8 3 5 TAG_SECURE)
-			Print("You turned a bad wait into a slightly less bad one by just being a person about it.")
+			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
+			Print("You told the truth to a room of strangers deciding your next two weeks. It felt strange, but fine.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (PublicEvent19)
+(procedure public (PublicEvent10)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Introduce yourself as if this were the first time you've ever met."
+		= glitchText "Ask the driver a series of increasingly personal questions right back."
 	)
 	= choice PrintChoices(
-		"Someone waves at you like they know you well. You have absolutely no idea who this is, and they are now three feet away and closing."
-		"The Face You Can't Place"
+		"The driver wants to talk. You have eighteen minutes left and a headache forming right behind your left eye."
+		"The Rideshare Small Talk"
 		290
 		glitchText
-		"Fake total recognition and hope context clues fill in the blanks." 0
-		"Suddenly find your phone extremely urgent and duck the interaction." 1
-		"Admit you're blanking and ask them to remind you how you know each other." 2
+		"Answer every question with enthusiasm you do not currently possess." 0
+		"Put in headphones without actually playing anything." 1
+		"Say, kindly, that you're wiped and would rather ride quiet." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("It was, in fact, the first time. You had actually never met this person.")
+		ApplyGlitch("You now know more about their custody arrangement than the last three passengers combined.")
 	)(else
 		(switch(choice)
 		(case 0
 			ApplyChoiceEffects(5 10 -8 TAG_FAWN)
-			Print("You performed an entire friendship's worth of warmth for someone whose name you can't remember.")
+			Print("You performed 'Friendly Passenger' for eighteen minutes straight through a headache.")
+		)
+		(case 1
+			ApplyChoiceEffects(-5 -5 3 TAG_FLIGHT)
+			Print("You faked a soundtrack to buy yourself a real silence.")
+		)
+		(case 2
+			ApplyChoiceEffects(-8 0 10 TAG_SECURE)
+			Print("You asked for what you needed from a stranger you'll know for eighteen more minutes.")
+		)
+		)
+	)
+)
+/******************************************************************************/
+(procedure public (PublicEvent11)
+	(var choice, glitchText)
+	= glitchText NULL
+	(if(< Random(0 99) GLITCH_CHANCE_PCT)
+		= glitchText "Ask to see the clipboard and start signing up other pedestrians yourself."
+	)
+	= choice PrintChoices(
+		"They've made eye contact from twenty feet away and are already walking toward you with a clipboard and a warm, practiced smile."
+		"The Street Canvasser With A Clipboard"
+		290
+		glitchText
+		"Sign up for something you don't care about just to end the conversation faster." 0
+		"Pretend to be mid-phone-call and speed-walk past." 1
+		"Make eye contact, say 'not today, thanks,' and keep walking." 2
+	)
+	(if(== choice GLITCH_CHOICE)
+		ApplyGlitch("You have somehow become their best volunteer of the day. This was not the plan.")
+	)(else
+		(switch(choice)
+		(case 0
+			ApplyChoiceEffects(5 8 -8 TAG_FAWN)
+			Print("You bought your own escape with a monthly donation you will forget about until it's not forgettable.")
 		)
 		(case 1
 			ApplyChoiceEffects(-5 -5 0 TAG_FLIGHT)
-			Print("You outran a conversation you were fully capable of having.")
+			Print("You held a phone to your ear and spoke to no one to avoid speaking to someone.")
 		)
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
-			Print("You told the truth instead of performing memory you didn't have. They didn't mind at all.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (PublicEvent20)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Ask if you can hand out flyers too. You don't know what they're for."
-	)
-	= choice PrintChoices(
-		"A stranger presses a flyer into your hand on the sidewalk and watches, expectantly, to see what you'll do with it."
-		"The Flyer Someone Hands You"
-		290
-		glitchText
-		"Take it, thank them warmly, and hold onto it for three more blocks before tossing it." 0
-		"Speed up before they can even fully extend their arm." 1
-		"Say 'no thanks' and keep walking at your normal pace." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You now work here, apparently, for the next twenty minutes and zero dollars.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(5 5 -5 TAG_FAWN)
-			Print("You carried a flyer you didn't want for three blocks so a stranger wouldn't watch you not want it.")
-		)
-		(case 1
-			ApplyChoiceEffects(-5 -3 0 TAG_FLIGHT)
-			Print("You dodged a piece of paper like it was an arrow.")
-		)
-		(case 2
-			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
-			Print("You declined a piece of paper without treating it like a moral event.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (PublicEvent21)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start narrating the argument quietly to yourself like a nature documentary."
-	)
-	= choice PrintChoices(
-		"Two strangers are having a very loud, very personal fight three feet from where you're standing, and there's nowhere to look that isn't at them."
-		"The Argument You Overheard"
-		290
-		glitchText
-		"Step in and try to smooth things over between two people you've never met." 0
-		"Stand frozen, unsure whether moving will make it worse." 1
-		"Quietly step away and let it be their business, not yours." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("One of them heard you. You have made an enemy and, somehow, also a fan.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(5 5 -5 TAG_FAWN)
-			Print("You took responsibility for a stranger's conflict resolution. They didn't accept your help.")
-		)
-		(case 1
-			ApplyChoiceEffects(8 0 -5 TAG_FREEZE)
-			Print("You became furniture until the argument found somewhere else to be.")
-		)
-		(case 2
-			ApplyChoiceEffects(-8 0 5 TAG_SECURE)
-			Print("You gave two strangers the privacy of a fight that was never going to include you.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (PublicEvent22)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Walk them there yourself, twelve full blocks out of your way."
-	)
-	= choice PrintChoices(
-		"Someone stops you on the street, clearly lost, and you're maybe seventy percent sure you know the way they need to go."
-		"The Stranger Asking For Directions"
-		290
-		glitchText
-		"Give confident, detailed directions despite the seventy percent confidence." 0
-		"Say you're not sure and hurry off before they can ask a follow-up." 1
-		"Say what you actually know and what you don't, and point them toward someone who might know more." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You are now further from your destination than they were from theirs. You made a friend, sort of.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(5 8 -5 TAG_FAWN)
-			Print("You handed a stranger a confident answer instead of an honest maybe.")
-		)
-		(case 1
-			ApplyChoiceEffects(-5 -5 0 TAG_FLIGHT)
-			Print("You left a lost person slightly more lost, at record speed.")
-		)
-		(case 2
-			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
-			Print("You gave a stranger the size of your knowledge instead of an inflated one.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (PublicEvent23)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Ask if they want to just come get lunch with you instead."
-	)
-	= choice PrintChoices(
-		"Someone asks if you have any spare change, right as you're fumbling for your keys and trying not to make eye contact."
-		"The Person Asking For Change"
-		290
-		glitchText
-		"Hand over more than you meant to and apologize for not having more than that." 0
-		"Say 'sorry, not today' and keep walking without slowing down." 1
-		"Say no if you mean no, or give what you can if you mean yes, and mean it either way." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You had lunch with a total stranger and heard a genuinely wild story. You paid. Worth it.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(5 5 -5 TAG_FAWN)
-			Print("You apologized to a stranger for the size of your own generosity.")
-		)
-		(case 1
-			ApplyChoiceEffects(-5 -3 0 TAG_FLIGHT)
-			Print("You gave a fast, plain no and let it be exactly that, no more.")
-		)
-		(case 2
-			ApplyChoiceEffects(-8 0 5 TAG_SECURE)
-			Print("Whatever you did, you did it without performing guilt about it afterward.")
+			Print("You said no in four words and nothing bad happened.")
 		)
 		)
 	)

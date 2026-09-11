@@ -6,7 +6,7 @@
  the original js/events/self.js. Re-run that script after
  editing the source event data.
 
- SELF-zone events 9-16: each is a standalone
+ SELF-zone events 5-8: each is a standalone
  SelfEvent<N> procedure showing the event's PrintChoices dialog, then
  applying the chosen response's stat effects and printing its log line.
  ******************************************************************************/
@@ -20,281 +20,141 @@
 (use "printchoices")
 (use "mechanisms")
 /******************************************************************************/
-(procedure public (SelfEvent9)
+(procedure public (SelfEvent5)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Lean all the way in and do a full, committed impression of them."
+		= glitchText "Finish it in one unhinged, caffeinated burst, right now."
 	)
 	= choice PrintChoices(
-		"You caught yourself doing the exact thing, the exact way, that used to make you flinch when they did it."
-		"The Habit You Picked Up From A Parent"
+		"A project, a hobby, a draft you were once genuinely excited about sits untouched in a folder you avoid opening."
+		"The Unfinished Thing"
 		290
 		glitchText
-		"Get angry at yourself for the resemblance." 0
-		"Pretend you didn't notice and keep doing it anyway." 1
-		"Notice it. Name it. Try, gently, to do the next one differently." 2
+		"Open the folder, look at it, close it again without touching anything." 0
+		"Start something new and shinier instead." 1
+		"Open it. Change one small thing. Close it again." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("It's uncannily accurate. Everyone is deeply unsettled.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(10 0 -15 TAG_FIGHT)
-			Print("You punished the habit instead of just noticing it.")
-		)
-		(case 1
-			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("You let the pattern run unexamined, again.")
-		)
-		(case 2
-			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
-			Print("You caught a pattern mid-motion, which is most of the work. Keep going.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (SelfEvent10)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Talk back to it out loud, in public, with real conviction."
-	)
-	= choice PrintChoices(
-		"The criticism arrives in a tone you recognize. It's not how you'd talk to anyone else. It's exactly how someone once talked to you."
-		"The Voice In Your Head That Isn't Yours"
-		290
-		glitchText
-		"Agree with it. It's probably right, like it always was." 0
-		"Argue back at it, harshly, in your own head." 1
-		"Notice it's not your voice. You don't have to use it." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("A stranger gives you a wide berth. The voice, notably, has no comeback.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(5 5 -15 TAG_FAWN)
-			Print("You gave an old voice the final word again.")
-		)
-		(case 1
-			ApplyChoiceEffects(-5 0 -5 TAG_FIGHT)
-			Print("You fought a voice with the same volume it uses.")
-		)
-		(case 2
-			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
-			Print("You separated the message from the messenger you inherited it from.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (SelfEvent11)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Blame it, loudly and specifically, on Mercury being in retrograde."
-	)
-	= choice PrintChoices(
-		"Your shoulders have been up by your ears for an hour and you genuinely cannot remember when that started."
-		"The Ache With No Origin"
-		290
-		glitchText
-		"Ignore it. It'll probably go away on its own." 0
-		"Push through it, it's fine, everyone's tired, this is normal." 1
-		"Stop. Relax. Roll your shoulders. Unclench your jaw. Take one real breath." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("This explains nothing. It helps somehow, anyway.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("You outsourced the problem to future-you. Again. (Jerk).")
-		)
-		(case 1
-			ApplyChoiceEffects(10 5 -10 TAG_FAWN)
-			Print("You neglected a body that was actively asking for something.")
-		)
-		(case 2
-			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
-			Print("You gave your body the attention it was asking for. It thanks you by flooding your brain with dopamine.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (SelfEvent12)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Lean all the way into it."
-	)
-	= choice PrintChoices(
-		"You hear the sentence leave your mouth and recognize it a half-second too late. It's not yours. It's theirs."
-		"The Thing You Said You'd Never Become"
-		290
-		glitchText
-		"Spiral into a full self-indictment for the next hour." 0
-		"Laugh it off in the moment and never think about it again... You swear!" 1
-		"Notice it. Decide, calmly, that noticing is the first step, not a failure." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You have never committed to a bit this hard. Everyone is a little worried about you.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(15 0 -20 TAG_FIGHT)
-			Print("You sentenced yourself over one inherited sentence.")
-		)
-		(case 1
-			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
-			Print("You buried it under a laugh instead of a look.")
-		)
-		(case 2
-			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
-			Print("You caught the echo without deciding it was proof of anything permanent.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (SelfEvent13)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Write your own unhinged, deeply specific counter-list right now."
-	)
-	= choice PrintChoices(
-		"You're scrolling through someone else's milestones; house, promotion, wedding, etc.  You keep checking your own life against it."
-		"The List of Things You're Supposed To Want"
-		290
-		glitchText
-		"Keep scrolling, keep comparing, feel worse with each one." 0
-		"Convince yourself you want all of it too, just to feel aligned." 1
-		"Close the app. Ask yourself, honestly, what you actually want." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("Item four is just 'made a really good sandwich.' You stand by it.")
+		ApplyGlitch("It is done. It is also, somehow, about cats now.")
 	)(else
 		(switch(choice)
 		(case 0
 			ApplyChoiceEffects(15 0 -15 TAG_FREEZE)
-			Print("You audited your life against an idealized list you didn't write. Of course you fell short.")
+			Print("You visited the grave without bringing flowers or a shovel. Ingrate.")
 		)
 		(case 1
-			ApplyChoiceEffects(10 5 -15 TAG_FAWN)
-			Print("You borrowed someone else's wants because yours felt too quiet to trust.")
+			ApplyChoiceEffects(10 0 -5 TAG_FLIGHT)
+			Print("You outran the old excitement with a fresh one.")
 		)
 		(case 2
-			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
-			Print("You checked the list against your own name instead of theirs.")
+			ApplyChoiceEffects(-15 -5 15 TAG_SECURE)
+			Print("You proved the thing wasn't actually dead, just resting.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (SelfEvent14)
+(procedure public (SelfEvent6)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Give the day an oddly specific, ceremonial little ritual."
+		= glitchText "Say it out loud again, three more times, increasingly loudly."
 	)
 	= choice PrintChoices(
-		"You've been off all day and couldn't say why. Then you check the date."
-		"The Anniversary Your Body Remembers Before You Do"
+		"You catch yourself thinking something kind about your own work, unprompted, and immediately feel weird about it."
+		"The Accidental Self-Compliment"
 		290
 		glitchText
-		"Push through the day as if you hadn't noticed anything at all." 0
-		"Apologize to everyone around you for being 'off' today." 1
-		"Let today be a harder day. You don't owe anyone your usual output." 2
+		"Correct yourself internally: find the flaw, restore the natural order." 0
+		"Change the subject in your own head immediately." 1
+		"Let the thought stand. Don't correct it. Just let it be true for a second." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You have invented a holiday nobody else knows about. It helps.")
+		ApplyGlitch("The dog looks concerned. The compliment stands.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(20 0 -15 TAG_FREEZE)
-			Print("Your body kept the appointment even after your mind tried to skip it.")
+			ApplyChoiceEffects(5 0 -15 TAG_FIGHT)
+			Print("You disqualified the thought before it could get comfortable.")
 		)
 		(case 1
-			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
-			Print("You apologized for grief that arrived on schedule, uninvited.")
+			ApplyChoiceEffects(10 0 -5 TAG_FLIGHT)
+			Print("You fled a compliment like it was a fire alarm.")
 		)
 		(case 2
-			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
-			Print("You gave a hard day permission to be hard.")
+			ApplyChoiceEffects(-15 -5 20 TAG_SECURE)
+			Print("You let something kind about yourself survive contact with your own scrutiny.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (SelfEvent15)
+(procedure public (SelfEvent7)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Write them a postcard. Mail it to yourself, unironically."
+		= glitchText "Play it on full volume and have a small, unscheduled concert."
 	)
 	= choice PrintChoices(
-		"You try to picture yourself a decade back and feel a strange mix of tenderness and secondhand embarrassment."
-		"The You From Ten Years Ago"
+		"Three seconds of a song you haven't heard in years, and your chest does something you didn't authorize."
+		"The Song That Still Does This To You"
 		290
 		glitchText
-		"Cringe hard and mentally list everything that version got wrong." 0
-		"Change the subject in your own head before it goes anywhere real." 1
-		"Send a little compassion backward. They didn't know what you know now." 2
+		"Skip it immediately and pretend you didn't feel that." 0
+		"Get irritated that a song still has this much power over you." 1
+		"Let it play. Feel whatever it wants you to feel." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("It arrives in three days. Past-you would be delighted it worked.")
+		ApplyGlitch("The neighbors have opinions. You have zero regrets.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(10 0 -15 TAG_FIGHT)
-			Print("You put a decade-old version of yourself on trial.")
-		)
-		(case 1
 			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("You closed the door on a version of you who was just trying, too.")
+			Print("You outran a feeling that was already three seconds ahead of you.")
+		)
+		(case 1
+			ApplyChoiceEffects(5 0 -5 TAG_FIGHT)
+			Print("You picked a fight with your own nervous system. It won.")
 		)
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
-			Print("You forgave a person for not having information they didn't learn yet.")
+			Print("You let three minutes of sound be exactly as small as it actually was.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (SelfEvent16)
+(procedure public (SelfEvent8)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Draft their apology yourself, in full, and read it aloud dramatically."
+		= glitchText "Interview the photo directly, out loud, like a documentary subject."
 	)
 	= choice PrintChoices(
-		"You've rehearsed the conversation where they finally say it. It hasn't happened. It might not."
-		"The Apology You Never Got"
+		"You're smiling in it. You don't remember if you were actually happy or just good at looking like it, even then."
+		"The Childhood Photo You Can't Place A Feeling On"
 		290
 		glitchText
-		"Keep rehearsing the conversation, on a loop, indefinitely." 0
-		"Draft the message you'd send them. Don't send it. Yet." 1
-		"Consider that closure might have to come from you instead." 2
+		"Stare at it longer, trying to force a memory that isn't there." 0
+		"Decide it must have been a happy day. Move on quickly." 1
+		"Let 'I don't know how I felt' be a complete, acceptable answer." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("It's a great apology. Extremely well-written and deeply, deeply fake.")
+		ApplyGlitch("The photo declines to comment... Which is ironic, since they're worth a thousand words each, minimum.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(20 0 -15 TAG_FREEZE)
-			Print("You kept a courtroom open for a trial nobody else is attending.")
+			ApplyChoiceEffects(15 0 -15 TAG_FREEZE)
+			Print("You interrogated a photograph for information it doesn't have.")
 		)
 		(case 1
-			ApplyChoiceEffects(-5 0 5 TAG_FIGHT)
-			Print("You gave the anger somewhere to go besides in circles.")
+			ApplyChoiceEffects(5 5 -10 TAG_FAWN)
+			Print("You assigned the photo a feeling so you wouldn't have to sit with the unknown.")
 		)
 		(case 2
-			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
-			Print("You stopped waiting for a door someone else may never open.")
+			ApplyChoiceEffects(-10 0 15 TAG_SECURE)
+			Print("Not knowing turned out to be allowed. It always is.")
 		)
 		)
 	)

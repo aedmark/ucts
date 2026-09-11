@@ -72,11 +72,71 @@
 (define PUBLICEVENTS2_SCRIPT	130)
 (define PUBLICEVENTS3_SCRIPT	131)
 (define PUBLICEVENTS4_SCRIPT	132)
-(define ENDINGCONTENT1_SCRIPT	133)
-(define ENDINGCONTENT2_SCRIPT	134)
-(define ENDINGCONTENT3_SCRIPT	135)
+// 133-135 (ENDINGCONTENT1/2/3_SCRIPT) freed -- those 3 bundled-4-5-pools-
+// per-file scripts were replaced by the 12 one-pool-per-file
+// ENDINGSURVIVAL0-8_SCRIPT/ENDINGFAILURE0-2_SCRIPT below (real
+// heap-exhaustion fix, see SESSION_HANDOFF.md). Left unused rather than
+// reassigned, matching this project's own "fresh numbers, not a
+// renumbering" discipline used for the WORKEVENTS5-8_SCRIPT-style range
+// just below.
 (define CASEFILEACCESS_SCRIPT	136)
 (define CASEFILETITLES_SCRIPT	137)
+
+// Second half of each zone's chunk split (CHUNK_COUNT 4 -> 8 in
+// tools/lib/zone-events.js -- see SESSION_HANDOFF.md's heap-exhaustion
+// investigation). Fresh script numbers, not a renumbering of anything
+// above -- halves each chunk's compiled size (~6300-8300 bytes down to
+// roughly half that) so a chunk load still fits in the ~7100-7400 bytes
+// that's realistically left after a turn's own permanent heap cost.
+(define WORKEVENTS5_SCRIPT	138)
+(define WORKEVENTS6_SCRIPT	139)
+(define WORKEVENTS7_SCRIPT	140)
+(define WORKEVENTS8_SCRIPT	141)
+(define HOMEEVENTS5_SCRIPT	142)
+(define HOMEEVENTS6_SCRIPT	143)
+(define HOMEEVENTS7_SCRIPT	144)
+(define HOMEEVENTS8_SCRIPT	145)
+(define SOCIALEVENTS5_SCRIPT	146)
+(define SOCIALEVENTS6_SCRIPT	147)
+(define SOCIALEVENTS7_SCRIPT	148)
+(define SOCIALEVENTS8_SCRIPT	149)
+(define SELFEVENTS5_SCRIPT	150)
+(define SELFEVENTS6_SCRIPT	151)
+(define SELFEVENTS7_SCRIPT	152)
+(define SELFEVENTS8_SCRIPT	153)
+(define BODYEVENTS5_SCRIPT	154)
+(define BODYEVENTS6_SCRIPT	155)
+(define BODYEVENTS7_SCRIPT	156)
+(define BODYEVENTS8_SCRIPT	157)
+(define PUBLICEVENTS5_SCRIPT	158)
+(define PUBLICEVENTS6_SCRIPT	159)
+(define PUBLICEVENTS7_SCRIPT	160)
+(define PUBLICEVENTS8_SCRIPT	161)
+
+// One script per ending POOL (real heap-exhaustion fix -- see
+// SESSION_HANDOFF.md): rm002.sc's printEnding()/printSurvivalEnding()
+// only ever calls exactly one PrintSurvivalEndingN()/PrintFailureEndingN()
+// per ending shown, but the old ENDINGCONTENT1/2/3_SCRIPT bundled 4-5
+// pools per file (each ~9.1-11.9KB), so loading the one pool actually
+// needed dragged in several others' worth of dead bytecode too -- on top
+// of MarkCaseFile()'s own nested Load/DisposeScript of
+// CASEFILEACCESS_SCRIPT firing while that whole bundle was still
+// resident. A real run confirmed reaching turn 10 cleanly under the
+// WORKEVENTS5-8_SCRIPT-style per-turn fix above, then hitting "Out of
+// heap space" right after the ending card printed -- this is that fix's
+// counterpart for the once-per-run ending path.
+(define ENDINGSURVIVAL0_SCRIPT	162)
+(define ENDINGSURVIVAL1_SCRIPT	163)
+(define ENDINGSURVIVAL2_SCRIPT	164)
+(define ENDINGSURVIVAL3_SCRIPT	165)
+(define ENDINGSURVIVAL4_SCRIPT	166)
+(define ENDINGSURVIVAL5_SCRIPT	167)
+(define ENDINGSURVIVAL6_SCRIPT	168)
+(define ENDINGSURVIVAL7_SCRIPT	169)
+(define ENDINGSURVIVAL8_SCRIPT	170)
+(define ENDINGFAILURE0_SCRIPT	171)
+(define ENDINGFAILURE1_SCRIPT	172)
+(define ENDINGFAILURE2_SCRIPT	173)
 
 // Case Files indices -- stable, cross-run discovery flags. Backed by 108
 // separate scalar globals (gCF0..gCF107 in Main.sc), not an array -- global

@@ -29,9 +29,18 @@
 (use "inv")
 (use "casefiles")
 (use "mechanisms")
-(use "endingcontent1")
-(use "endingcontent2")
-(use "endingcontent3")
+(use "endingsurvival0")
+(use "endingsurvival1")
+(use "endingsurvival2")
+(use "endingsurvival3")
+(use "endingsurvival4")
+(use "endingsurvival5")
+(use "endingsurvival6")
+(use "endingsurvival7")
+(use "endingsurvival8")
+(use "endingfailure0")
+(use "endingfailure1")
+(use "endingfailure2")
 /******************************************************************************/
 (instance public rm002 of Rm
 	(properties
@@ -71,20 +80,44 @@
 	(method (printEnding)
 		// Full ending-variant port (see SESSION_HANDOFF.md, game.sh,
 		// tools/gen-endings.js): each PrintFailureEndingN()/
-		// PrintSurvivalEndingN() (endingcontent1-3.sc) now picks one of
-		// several real flavor variants at random and marks the matching
-		// flat Case Files slot itself -- this method just decides WHICH
-		// pool applies, exactly the same condition table/order as before.
+		// PrintSurvivalEndingN() (one file per pool -- endingsurvival0-8.sc/
+		// endingfailure0-2.sc) picks one of several real flavor variants at
+		// random and marks the matching flat Case Files slot itself -- this
+		// method just decides WHICH pool applies, exactly the same
+		// condition table/order as before. Each call is wrapped in
+		// Load(rsSCRIPT ...)/DisposeScript(...) -- real bug, confirmed the
+		// hard way: without this, whichever script a given ending lives in
+		// auto-loads on first call and never gets disposed, same as any
+		// script in this engine. Harmless within a single run, but the
+		// clickable "computer -> new run" hotspot (rm002.sc's RoomScript)
+		// makes it trivial to rack up many runs without ever fully
+		// relaunching, so different endings across different runs kept
+		// accumulating several of these scripts permanently resident at
+		// once. One script per POOL (not the original's 4-5-pools-per-file
+		// bundling) is itself a later fix -- see SESSION_HANDOFF.md's
+		// turn-10 heap-exhaustion entry: the bundled files were big enough
+		// (~9.1-11.9KB) that loading the one pool actually needed dragged
+		// in several dead ones too, on top of MarkCaseFile()'s own nested
+		// Load/DisposeScript of CASEFILEACCESS_SCRIPT firing while that
+		// whole bundle was still resident. Same Load/DisposeScript idiom
+		// workevents.sc's DoWorkEvent() already uses for the per-zone
+		// chunks.
 		(if(>= gRepression 100)
+			Load(rsSCRIPT ENDINGFAILURE0_SCRIPT)
 			PrintFailureEnding0()
+			DisposeScript(ENDINGFAILURE0_SCRIPT)
 			return
 		)
 		(if(<= gMask 0)
+			Load(rsSCRIPT ENDINGFAILURE1_SCRIPT)
 			PrintFailureEnding1()
+			DisposeScript(ENDINGFAILURE1_SCRIPT)
 			return
 		)
 		(if(<= gChild 0)
+			Load(rsSCRIPT ENDINGFAILURE2_SCRIPT)
 			PrintFailureEnding2()
+			DisposeScript(ENDINGFAILURE2_SCRIPT)
 			return
 		)
 		(self:printSurvivalEnding())
@@ -103,38 +136,56 @@
 		// sequence of early-return ifs rather than a chained else-if, see
 		// SESSION_HANDOFF.md's if/else gotcha for why.
 		(if(>= gRepression 70)
+			Load(rsSCRIPT ENDINGSURVIVAL0_SCRIPT)
 			PrintSurvivalEnding0()
+			DisposeScript(ENDINGSURVIVAL0_SCRIPT)
 			return
 		)
 		(if((>= gMask 85) and (<= gChild 25))
+			Load(rsSCRIPT ENDINGSURVIVAL1_SCRIPT)
 			PrintSurvivalEnding1()
+			DisposeScript(ENDINGSURVIVAL1_SCRIPT)
 			return
 		)
 		(if((>= gChild 75) and (<= gMask 40))
+			Load(rsSCRIPT ENDINGSURVIVAL2_SCRIPT)
 			PrintSurvivalEnding2()
+			DisposeScript(ENDINGSURVIVAL2_SCRIPT)
 			return
 		)
 		(if((<= gMask 25) and (>= gChild 25))
+			Load(rsSCRIPT ENDINGSURVIVAL3_SCRIPT)
 			PrintSurvivalEnding3()
+			DisposeScript(ENDINGSURVIVAL3_SCRIPT)
 			return
 		)
 		(if((>= gMask 41) and (<= gChild 25))
+			Load(rsSCRIPT ENDINGSURVIVAL4_SCRIPT)
 			PrintSurvivalEnding4()
+			DisposeScript(ENDINGSURVIVAL4_SCRIPT)
 			return
 		)
 		(if((<= gRepression 30) and (>= gMask 40) and (<= gMask 70) and (>= gChild 40) and (<= gChild 70))
+			Load(rsSCRIPT ENDINGSURVIVAL5_SCRIPT)
 			PrintSurvivalEnding5()
+			DisposeScript(ENDINGSURVIVAL5_SCRIPT)
 			return
 		)
 		(if((<= gRepression 30) and (>= gMask 60) and (>= gChild 60))
+			Load(rsSCRIPT ENDINGSURVIVAL6_SCRIPT)
 			PrintSurvivalEnding6()
+			DisposeScript(ENDINGSURVIVAL6_SCRIPT)
 			return
 		)
 		(if((>= gRepression 31) and (<= gRepression 69) and (>= gMask 40) and (>= gChild 40))
+			Load(rsSCRIPT ENDINGSURVIVAL7_SCRIPT)
 			PrintSurvivalEnding7()
+			DisposeScript(ENDINGSURVIVAL7_SCRIPT)
 			return
 		)
+		Load(rsSCRIPT ENDINGSURVIVAL8_SCRIPT)
 		PrintSurvivalEnding8()
+		DisposeScript(ENDINGSURVIVAL8_SCRIPT)
 	)
 )
 /******************************************************************************/

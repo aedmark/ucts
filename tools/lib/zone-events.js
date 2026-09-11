@@ -22,7 +22,17 @@ const path = require('path');
 const { sciString } = require('./sci-string');
 
 const DESC_WIDTH = 290; // DText width (px) passed to PrintChoices; kernel TextSize() wraps within it, so widening is safe as long as it stays under the 320px screen (DText starts at x=4)
-const CHUNK_COUNT = 4;
+// 4 -> 8: real, measured heap-exhaustion fix (see SESSION_HANDOFF.md). A
+// script's own Load()/DisposeScript() cycle was confirmed (via debug
+// instrumentation) to leave ~2270-3532 bytes permanently unrecoverable per
+// turn regardless of chunk size, on top of an already-thin ~9000-10000 byte
+// post-boot margin -- meaning a turn 2 needing another ~6300-8300 byte
+// chunk (the old 8-9-events-per-chunk size) almost never fit in the
+// ~7100-7400 bytes actually left. Halving chunk size halves the load cost
+// each turn needs, without losing any content. New script number range
+// 138-161 in game.sh/game.ini for the added <zone>events5-8 chunks -- not a
+// renumbering of anything that already existed.
+const CHUNK_COUNT = 8;
 // Deliberate scope cut to fix a recurring heap-space exhaustion: cap every
 // event to its first MAX_CHOICES authored responses (glitch is a bonus 4th
 // slot on top, not counted here) instead of the original's 3-5. Shrinks
@@ -102,6 +112,13 @@ function genDispatcher(opts, chunks) {
 	// the 64KB heap segment after a handful of turns. Confirmed as the
 	// cause of a real "heap space error" in the WORK zone before this
 	// Load/DisposeScript cycling was added.
+	// Per-chunk heap debug instrumentation, off by default. Flip to true
+	// and regenerate to re-enable the two FormatPrint checkpoints that
+	// narrowed the heap-exhaustion bug down to "somewhere between a
+	// chunk's log-line Print(logMsg) and its own DisposeScript()" -- see
+	// SESSION_HANDOFF.md for the full investigation and readouts.
+	const DEBUG_HEAP = false;
+
 	let globalIndex = 0;
 	const branches = chunks.map((chunkEvents, c) => {
 		const lo = globalIndex;
@@ -111,13 +128,19 @@ function genDispatcher(opts, chunks) {
 			.map((_, i) => `\t\t\t(case ${lo + i} ${procName}${lo + i}())`)
 			.join('\n');
 		globalIndex += chunkEvents.length;
+		const debugPreDispose = DEBUG_HEAP
+			? `\t\tFormatPrint("DEBUG ${scriptConst} post-switch pre-Dispose: heap=%u largest=%u" MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))\n`
+			: '';
+		const debugPostDispose = DEBUG_HEAP
+			? `\t\tFormatPrint("DEBUG ${scriptConst} post-Dispose: heap=%u largest=%u" MemoryInfo(miFREEHEAP) MemoryInfo(miLARGESTPTR))\n`
+			: '';
 		return `\t(if((>= index ${lo}) and (<= index ${hi}))
 		Load(rsSCRIPT ${scriptConst})
 		(switch(index)
 ${cases}
 		)
-		DisposeScript(${scriptConst})
-		return
+${debugPreDispose}		DisposeScript(${scriptConst})
+${debugPostDispose}		return
 	)`;
 	}).join('\n');
 
@@ -138,7 +161,7 @@ ${cases}
 /******************************************************************************/
 (script ${dispatcherScriptConst})
 /******************************************************************************/
-${chunkUses}
+${DEBUG_HEAP ? '(use "controls")\n' : ''}${chunkUses}
 /******************************************************************************/
 (procedure public (${dispatchProcName} index)
 ${branches}

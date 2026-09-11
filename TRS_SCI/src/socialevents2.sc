@@ -6,7 +6,7 @@
  the original js/events/social.js. Re-run that script after
  editing the source event data.
 
- SOCIAL-zone events 9-16: each is a standalone
+ SOCIAL-zone events 5-8: each is a standalone
  SocialEvent<N> procedure showing the event's PrintChoices dialog, then
  applying the chosen response's stat effects and printing its log line.
  ******************************************************************************/
@@ -20,281 +20,141 @@
 (use "printchoices")
 (use "mechanisms")
 /******************************************************************************/
-(procedure public (SocialEvent9)
+(procedure public (SocialEvent5)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Start your own group chat. Name it something deeply petty."
+		= glitchText "Claim, boldly, that you were actually a time traveler that day."
 	)
 	= choice PrintChoices(
-		"You find out, by accident, that there's a group chat that doesn't include you. It's been active for months."
-		"The Group Chat Without You"
+		"Someone brings up a specific thing you said, off-hand, eight months ago. You have no memory of saying it."
+		"The Friend Who Remembers Everything"
 		290
 		glitchText
-		"Say nothing and quietly recalibrate every friendship in your life." 0
-		"Act completely unbothered, performing it a little too well." 1
-		"Notice it stings. Don't make it a bigger story than it is." 2
+		"Panic-scan your own memory for context you don't have." 0
+		"Agree enthusiastically, like you absolutely remember." 1
+		"Say 'I don't actually remember that, tell me more,' and mean it." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("It has one member. It is thriving.")
+		ApplyGlitch("They seem to accept this explanation more readily than expected. Someone asks if you've ever met Elvis.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(20 0 -20 TAG_FREEZE)
-			Print("One missing chat became a referendum on everyone you know.")
-		)
-		(case 1
-			ApplyChoiceEffects(5 10 -15 TAG_FAWN)
-			Print("You built a very convincing case for a feeling you don't have.")
-		)
-		(case 2
-			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("A feeling, felt and not expanded, passes on its own.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (SocialEvent10)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Throw yourself a tiny, one-person parade around the living room."
-	)
-	= choice PrintChoices(
-		"It's 8 PM. No text, no call, nothing. You know they're busy. You also know that nobody is THAT busy..."
-		"The Birthday They Forgot"
-		290
-		glitchText
-		"Refresh your phone every few minutes without admitting why." 0
-		"Post something upbeat so nobody suspects you noticed." 1
-		"Let yourself be a little sad about it. That's allowed." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("The confetti will be found in strange places for weeks.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(15 0 -15 TAG_FREEZE)
-			Print("You kept checking for something you'd already concluded wasn't coming.")
-		)
-		(case 1
-			ApplyChoiceEffects(5 10 -15 TAG_FAWN)
-			Print("You broadcast 'fine' to cover a very 'not fine' feeling.")
-		)
-		(case 2
-			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("You didn't need to perform that you were okay, you arrived there naturally.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (SocialEvent11)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Walk over and loudly introduce yourself as if you'd never met."
-	)
-	= choice PrintChoices(
-		"You didn't know they'd be here. They just walked in, laughing at something, not looking your way yet."
-		"The Ex at the Party"
-		290
-		glitchText
-		"Find a reason to be near the exit for the rest of the night." 0
-		"Go say 'hi' first, overly warm, before they can find you." 1
-		"Stay where you are. Say 'hi' if it happens naturally." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("This confuses everyone, including, eventually, you.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(15 0 -10 TAG_FLIGHT)
-			Print("You mapped an escape route instead of a plan.")
-		)
-		(case 1
-			ApplyChoiceEffects(5 15 -15 TAG_FAWN)
-			Print("You got there first so you could control the narrative. They still make you feel powerless.")
-		)
-		(case 2
-			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("You didn't need to manage the whole room to survive; they left before they even saw you.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (SocialEvent12)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Demand a formal, itemized list of exactly how much better."
-	)
-	= choice PrintChoices(
-		"'You look so much better than you used to' is technically a compliment, but it somehow lands like backdoor insult."
-		"The Compliment That Felt Like An Audit"
-		290
-		glitchText
-		"Say 'thank you!' brightly and file the sting away for later." 0
-		"Say, lightly, 'I looked good before, too!'" 1
-		"Replay the sentence for the rest of the night." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("They did not prepare a spreadsheet. You are disappointed in their inability to verify their claims.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(5 10 -15 TAG_FAWN)
-			Print("You smiled through the part that actually stung. Now your face hurts.")
-		)
-		(case 1
-			ApplyChoiceEffects(-5 -5 10 TAG_FIGHT)
-			Print("You corrected the record instead of just absorbing it. Mad respect.")
-		)
-		(case 2
-			ApplyChoiceEffects(15 0 -15 TAG_FREEZE)
-			Print("One sentence got more airtime in your head than the whole party. It's all you remember.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (SocialEvent13)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Commit fully: sprint over and hug a near-stranger."
-	)
-	= choice PrintChoices(
-		"Someone you sort of know, from somewhere, makes eye contact across the room. Neither of you commits to a greeting."
-		"The Awkward Wave"
-		290
-		glitchText
-		"You suddenly find your phone extremely interesting." 0
-		"Overcommit to a huge wave and walk over, unsure why." 1
-		"Give a small, real wave and let it be whatever it is." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("This escalated several social contracts beyond what either of you agreed to. It feels right.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(10 0 -5 TAG_FLIGHT)
-			Print("You disappeared into a screen to avoid making a decision.")
+			ApplyChoiceEffects(15 -5 0 TAG_FREEZE)
+			Print("You audited a version of yourself with no paper trail and came up empty handed.")
 		)
 		(case 1
 			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
-			Print("You escalated a maybe into a whole interaction. It's awkward.")
+			Print("You co-signed a memory that isn't yours.")
 		)
 		(case 2
-			ApplyChoiceEffects(-5 0 5 TAG_SECURE)
-			Print("A half-known person got a half-committed, perfectly adequate wave.")
+			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
+			Print("You let not-knowing be an ordinary, survivable thing. Because it is.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (SocialEvent14)
+(procedure public (SocialEvent6)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Produce an actual calculator and do the math out loud, in real time."
+		= glitchText "Show up in full costume, several genres removed from the event's theme."
 	)
 	= choice PrintChoices(
-		"You had a salad and water. Someone else had three cocktails. The bill's being split evenly, and everyone's already agreeing."
-		"The Split-the-Bill Math"
+		"You said yes to something two weeks ago. It's tonight. Every fiber of you wants to cancel."
+		"The RSVP You Regret"
 		290
 		glitchText
-		"Agree to split evenly and say nothing about the math." 0
-		"Suggest, casually, splitting it by what people actually got." 1
-		"Pay your share silently and feel weird about it for days." 2
+		"Draft a vague excuse about not feeling well." 0
+		"Text 'actually can't make it' with zero elaboration and hit send." 1
+		"Go anyway. Perform enthusiasm you do not currently possess." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("The table goes silent. You do not stop calculating.")
+		ApplyGlitch("You are the only knight at what turns out to be a beach party.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(5 10 -15 TAG_FAWN)
-			Print("You paid for cocktails you didn't order to keep the table easy.")
+			ApplyChoiceEffects(10 -5 -5 TAG_FLIGHT)
+			Print("You built an exit out of half a lie. Nobody believes you.")
 		)
 		(case 1
-			ApplyChoiceEffects(-5 -10 10 TAG_FIGHT)
-			Print("You named the math out loud before it became a resentment. Three other people suddenly agree.")
+			ApplyChoiceEffects(-10 -15 10 TAG_FIGHT)
+			Print("You chose a white lie over a padded truth. You spend the night regretting it.")
 		)
 		(case 2
+			ApplyChoiceEffects(10 15 -20 TAG_FAWN)
+			Print("You showed up as the version of you that RSVPs on time. You have fun, anyway.")
+		)
+		)
+	)
+)
+/******************************************************************************/
+(procedure public (SocialEvent7)
+	(var choice, glitchText)
+	= glitchText NULL
+	(if(< Random(0 99) GLITCH_CHANCE_PCT)
+		= glitchText "Order enough food for four and narrate an imaginary dinner party."
+	)
+	= choice PrintChoices(
+		"You get to the restaurant first. You sit alone at a table for four, aware of exactly how alone you look."
+		"The Table for One"
+		290
+		glitchText
+		"Stare at your phone intensely so you look busy, not waiting." 0
+		"Apologize to the host for taking up a table for four." 1
+		"Sit there. Look around. Let it be fine." 2
+	)
+	(if(== choice GLITCH_CHOICE)
+		ApplyGlitch("Your imaginary guests are excellent listeners and terrible tippers.")
+	)(else
+		(switch(choice)
+		(case 0
 			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
-			Print("You let a bill you didn't agree with become a slow-burn grudge.")
-		)
-		)
-	)
-)
-/******************************************************************************/
-(procedure public (SocialEvent15)
-	(var choice, glitchText)
-	= glitchText NULL
-	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Post a single cryptic status implying you know things."
-	)
-	= choice PrintChoices(
-		"You don't know when it happened. You just noticed, scrolling, that a number is one smaller than it used to be."
-		"The Unfollow You Noticed"
-		290
-		glitchText
-		"Spend twenty minutes trying to figure out who it was." 0
-		"Post something extra likable to make up the difference." 1
-		"Close the app. It's one person. It's fine." 2
-	)
-	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("You know anything. The mystery deepens for everyone, including you.")
-	)(else
-		(switch(choice)
-		(case 0
-			ApplyChoiceEffects(20 0 -15 TAG_FREEZE)
-			Print("You ran a full investigation into a single missing follower.")
+			Print("You performed occupation to avoid looking like a 'loser.'")
 		)
 		(case 1
 			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
-			Print("You tried to outperform a number you can't actually see.")
+			Print("You apologized for the size of a table you didn't choose.")
 		)
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
-			Print("A number went down. The sky, notably, did not fall. Their loss.")
+			Print("Being visibly alone turned out fine; you got fresh breadsticks and didn't have to share any.")
 		)
 		)
 	)
 )
 /******************************************************************************/
-(procedure public (SocialEvent16)
+(procedure public (SocialEvent8)
 	(var choice, glitchText)
 	= glitchText NULL
 	(if(< Random(0 99) GLITCH_CHANCE_PCT)
-		= glitchText "Deliver an unhinged, overly dramatic weather forecast, mid-conversation."
+		= glitchText "Stand up anyway and deliver your own speech, uninvited, mid-reception."
 	)
 	= choice PrintChoices(
-		"Third conversation this week that's stayed entirely on the weather. You're both clearly capable of more."
-		"The Small Talk About The Weather (Again)"
+		"You've known the groom for a decade. Someone he met two years ago is giving the speech instead."
+		"The Best Man Speech You Weren't Asked to Give"
 		290
 		glitchText
-		"Keep it light and safe, matching their energy exactly." 0
-		"Ask a real question and see what happens." 1
-		"Let the conversation end there, like it always does." 2
+		"Smile through the whole thing while doing quiet, silent math." 0
+		"Decide to bring it up with him, gently, another day." 1
+		"Clap the loudest and mean absolutely none of it." 2
 	)
 	(if(== choice GLITCH_CHOICE)
-		ApplyGlitch("'Sixty percent chance of feelings, with scattered vulnerability by evening.'")
+		ApplyGlitch("The DJ, unsure what else to do, plays dramatic entrance music.")
 	)(else
 		(switch(choice)
 		(case 0
-			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
-			Print("You stayed in the shallow end because it felt safer there.")
+			ApplyChoiceEffects(15 0 -15 TAG_FREEZE)
+			Print("You ran a decade-long audit during a five-minute toast.")
 		)
 		(case 1
-			ApplyChoiceEffects(-5 -5 10 TAG_FIGHT)
-			Print("You risked it all on a real question. You get a real answer (and a new friend).")
+			ApplyChoiceEffects(-5 -5 5 TAG_FIGHT)
+			Print("You chose to name the hurt instead of just carrying it.")
 		)
 		(case 2
-			ApplyChoiceEffects(10 0 -10 TAG_FREEZE)
-			Print("Another conversation stayed exactly as deep as the last one. This is fine.")
+			ApplyChoiceEffects(5 10 -15 TAG_FAWN)
+			Print("You applauded harder than you felt to hide what you felt.")
 		)
 		)
 	)

@@ -51,6 +51,7 @@
 		"Immediately go bright and cheerful to lift the mood before you've even asked what's wrong." 0
 		"Ask, flatly, exactly what's going on. No preamble." 1
 		"Say 'oh, okay' and let the conversation drift somewhere safer." 2
+		"Stay warm but ask a real, gentle question: 'Are you okay right now?'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Neither of you addresses it. Some things stay sacred and weird.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
 			Print("You let a real question evaporate into weather talk.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
+			Print("You met the smallness with steadiness instead of performance.")
 		)
 			)
 		)

@@ -7,6 +7,13 @@
  screen). Builds a Dialog with a DText prompt and one DButton per choice,
  stacked top-to-bottom by tracking each control's own height. Returns the
  value of whichever button was pressed.
+
+ Paginated at CHOICES_PER_PAGE (game.sh) choices per screen, since events
+ have 3-5 real choices -- showing a "More options..." button
+ (MORE_CHOICES sentinel) instead of the glitch button on every page but
+ the last. Caps every page at the same button count (3 choices + one
+ more/glitch button) already proven to fit within the dialog-height
+ budget, regardless of how many total choices an event has.
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")
@@ -18,97 +25,135 @@
 (use "mechanisms")
 /******************************************************************************/
 (procedure public (PrintChoices message titleText width glitchText params)
-	(var hDialog, hDText, hIcon, hButtons[6], buttonCnt, paramCnt, curY, btnPressed)
+	(var hDialog, hDText, hIcon, hButtons[6], buttonCnt, paramCnt, curY,
+		btnPressed, totalChoices, pageStart, pageCount, isLastPage, i)
 	= paramTotal (- paramTotal 4)
-	= buttonCnt 0
-	= hDialog (Dialog:new())
-	(send hDialog:
-		window(gTheWindow)
-		name("PrintD")
-	)
-	(if(titleText)
-		(send hDialog:text(titleText))
-	)
-	// Portrait -- same DIcon+DText side-by-side layout stock Print()'s
-	// #icon option uses, built by hand since this dialog doesn't go
-	// through Print() itself.
-	= hIcon (DIcon:new())
-	(send hIcon:
-		view(PORTRAIT_VIEW)
-		loop(GetPortraitMood())
-		cel(0)
-		setSize()
-		moveTo(4 4)
-	)
-	(send hDialog:add(hIcon))
-	= hDText (DText:new())
-	(send hDText:
-		text(message)
-		moveTo( (+ 4 (send hIcon:nsRight)) 4 )
-		font(gDefaultFont)
-		setSize( (- width (+ (send hIcon:nsRight) 4)) )
-	)
-	(send hDialog:add(hDText))
-	// Buttons start below whichever of icon/text ends up lower.
-	= curY (send hDText:nsBottom)
-	(if(> (send hIcon:nsBottom) curY)
-		= curY (send hIcon:nsBottom)
-	)
-	= curY (+ curY 6)
-	= paramCnt 0
-	(while(< paramCnt paramTotal)
-		= hButtons[buttonCnt] (DButton:new())
-		(send hButtons[buttonCnt]:
-			text(params[paramCnt])
-			value(params[+ paramCnt 1])
-			font(SMALL_FONT)
+	= totalChoices (/ paramTotal 2)
+	= pageStart 0
+	(while(1)
+		= buttonCnt 0
+		= hDialog (Dialog:new())
+		(send hDialog:
+			window(gTheWindow)
+			name("PrintD")
 		)
-		SizeButtonToWidth(hButtons[buttonCnt] BUTTON_MAX_WIDTH)
-		(send hButtons[buttonCnt]:moveTo(4 curY))
-		= curY (+ (send hButtons[buttonCnt]:nsBottom) 3)
-		(send hDialog:add(hButtons[buttonCnt]))
-		++buttonCnt
-		= paramCnt (+ paramCnt 2)
-	)
-	(if(glitchText)
-		// The glitch wildcard, offered ~15% of the time by the caller.
-		// GLITCH_CHOICE is a sentinel that can't collide with a real
-		// choice index.
-		= hButtons[buttonCnt] (DButton:new())
-		(send hButtons[buttonCnt]:
-			text(glitchText)
-			value(GLITCH_CHOICE)
-			font(SMALL_FONT)
+		(if(titleText)
+			(send hDialog:text(titleText))
 		)
-		SizeButtonToWidth(hButtons[buttonCnt] BUTTON_MAX_WIDTH)
-		(send hButtons[buttonCnt]:moveTo(4 curY))
-		= curY (+ (send hButtons[buttonCnt]:nsBottom) 3)
-		(send hDialog:add(hButtons[buttonCnt]))
-		++buttonCnt
-	)
-	(send hDialog:
-		setSize()
-		center()
-	)
-	(if(< (send hDialog:nsTop) 2)
-		// A tall dialog can center to a negative nsTop, which renders as
-		// garbled screen content rather than clipping cleanly -- pin to
-		// the top margin instead.
-		(send hDialog:moveTo( (send hDialog:nsLeft) 2 ))
-	)
-	(send hDialog:open(nwTITLE -1))
-	= btnPressed (send hDialog:doit(NULL))
-	(if(== btnPressed -1)
-		= btnPressed 0
-	)
-	(for (= paramCnt 0) (< paramCnt buttonCnt) (++paramCnt)
-		(if(== btnPressed hButtons[paramCnt])
-			= btnPressed (send btnPressed:value)
-			break
+		// Portrait -- same DIcon+DText side-by-side layout stock Print()'s
+		// #icon option uses, built by hand since this dialog doesn't go
+		// through Print() itself. Rebuilt every page -- cheap, and keeps
+		// every page's layout identical regardless of which page it is.
+		= hIcon (DIcon:new())
+		(send hIcon:
+			view(PORTRAIT_VIEW)
+			loop(GetPortraitMood())
+			cel(0)
+			setSize()
+			moveTo(4 4)
 		)
+		(send hDialog:add(hIcon))
+		= hDText (DText:new())
+		(send hDText:
+			text(message)
+			moveTo( (+ 4 (send hIcon:nsRight)) 4 )
+			font(gDefaultFont)
+			setSize( (- width (+ (send hIcon:nsRight) 4)) )
+		)
+		(send hDialog:add(hDText))
+		// Buttons start below whichever of icon/text ends up lower.
+		= curY (send hDText:nsBottom)
+		(if(> (send hIcon:nsBottom) curY)
+			= curY (send hIcon:nsBottom)
+		)
+		= curY (+ curY 6)
+
+		// This page's slice of the choice pairs -- at most
+		// CHOICES_PER_PAGE, same button-count ceiling every page already
+		// proven to fit regardless of how many total choices exist.
+		= pageCount (- totalChoices pageStart)
+		(if(> pageCount CHOICES_PER_PAGE)
+			= pageCount CHOICES_PER_PAGE
+		)
+		= isLastPage (== (+ pageStart pageCount) totalChoices)
+
+		(for (= i 0) (< i pageCount) (++i)
+			= paramCnt (* (+ pageStart i) 2)
+			= hButtons[buttonCnt] (DButton:new())
+			(send hButtons[buttonCnt]:
+				text(params[paramCnt])
+				value(params[+ paramCnt 1])
+				font(SMALL_FONT)
+			)
+			SizeButtonToWidth(hButtons[buttonCnt] BUTTON_MAX_WIDTH)
+			(send hButtons[buttonCnt]:moveTo(4 curY))
+			= curY (+ (send hButtons[buttonCnt]:nsBottom) 3)
+			(send hDialog:add(hButtons[buttonCnt]))
+			++buttonCnt
+		)
+
+		// Not the last page: a "More options..." button instead of the
+		// glitch button -- the glitch only ever shows on the final page,
+		// same one-roll-per-turn as before.
+		(if(not isLastPage)
+			= hButtons[buttonCnt] (DButton:new())
+			(send hButtons[buttonCnt]:
+				text("More options...")
+				value(MORE_CHOICES)
+				font(SMALL_FONT)
+			)
+			SizeButtonToWidth(hButtons[buttonCnt] BUTTON_MAX_WIDTH)
+			(send hButtons[buttonCnt]:moveTo(4 curY))
+			= curY (+ (send hButtons[buttonCnt]:nsBottom) 3)
+			(send hDialog:add(hButtons[buttonCnt]))
+			++buttonCnt
+		)(else
+			(if(glitchText)
+				// The glitch wildcard, offered ~15% of the time by the
+				// caller. GLITCH_CHOICE is a sentinel that can't collide
+				// with a real choice index or MORE_CHOICES.
+				= hButtons[buttonCnt] (DButton:new())
+				(send hButtons[buttonCnt]:
+					text(glitchText)
+					value(GLITCH_CHOICE)
+					font(SMALL_FONT)
+				)
+				SizeButtonToWidth(hButtons[buttonCnt] BUTTON_MAX_WIDTH)
+				(send hButtons[buttonCnt]:moveTo(4 curY))
+				= curY (+ (send hButtons[buttonCnt]:nsBottom) 3)
+				(send hDialog:add(hButtons[buttonCnt]))
+				++buttonCnt
+			)
+		)
+
+		(send hDialog:
+			setSize()
+			center()
+		)
+		(if(< (send hDialog:nsTop) 2)
+			// A tall dialog can center to a negative nsTop, which renders as
+			// garbled screen content rather than clipping cleanly -- pin to
+			// the top margin instead.
+			(send hDialog:moveTo( (send hDialog:nsLeft) 2 ))
+		)
+		(send hDialog:open(nwTITLE -1))
+		= btnPressed (send hDialog:doit(NULL))
+		(if(== btnPressed -1)
+			= btnPressed 0
+		)
+		(for (= paramCnt 0) (< paramCnt buttonCnt) (++paramCnt)
+			(if(== btnPressed hButtons[paramCnt])
+				= btnPressed (send btnPressed:value)
+				break
+			)
+		)
+		(send hDialog:dispose())
+
+		(if(<> btnPressed MORE_CHOICES)
+			return(btnPressed)
+		)
+		= pageStart (+ pageStart CHOICES_PER_PAGE)
 	)
-	(send hDialog:dispose())
-	return(btnPressed)
 )
 /******************************************************************************/
 (procedure public (SizeButtonToWidth hButton maxWidth)

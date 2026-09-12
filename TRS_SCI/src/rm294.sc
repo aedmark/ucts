@@ -51,6 +51,7 @@
 		"Reply 'no worries at all!' and mean less than half of it." 0
 		"Send a pointed text about the pattern, right then, while you're still annoyed." 1
 		"Say it's fine tonight, and bring up the pattern later when you're not standing in your coat." 2
+		"Just stop making plans with them for a while, no explanation." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You had a fine time by yourself. This was not the point you were trying to prove.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 3 8 TAG_SECURE)
 			Print("You separated the moment from the pattern instead of dumping both at once.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You solved it by quietly opting out.")
 		)
 			)
 		)

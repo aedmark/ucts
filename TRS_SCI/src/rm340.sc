@@ -51,6 +51,7 @@
 		"Hide your hands and keep going like nothing happened." 0
 		"Sit on your hands for the rest of the meeting." 1
 		"Notice it, put your hands flat on the table, and let it be a fact." 2
+		"Snap at yourself under your breath and jam your hands into your pockets." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You now know exactly how bitter it is. Repeatedly.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You caught yourself mid-habit without turning it into a crisis.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 -5 TAG_FIGHT)
+			Print("You declared war on your own hands.")
 		)
 			)
 		)

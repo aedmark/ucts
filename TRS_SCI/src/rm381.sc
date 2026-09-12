@@ -51,6 +51,7 @@
 		"Call out 'great, thanks!' before you've even looked down." 0
 		"Stand very still and stare until the moment passes on its own." 1
 		"Say 'still deciding' and actually take a second to decide." 2
+		"Change back into your regular clothes fast and skip buying anything at all." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You received two genuine compliments and one very confused nod. Worth it.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("You let the honest answer be the answer, even through a curtain.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -5 -5 TAG_FLIGHT)
+			Print("You left the store instead of the mirror. Same problem, different venue.")
 		)
 			)
 		)

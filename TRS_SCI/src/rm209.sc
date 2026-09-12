@@ -51,6 +51,7 @@
 		"Type 'sorry, just wrapped up, what's up!' like it's true." 0
 		"Let the message sit unread for another eleven minutes." 1
 		"Reply honestly: 'Just saw this, give me a minute.'" 2
+		"Snap back that you were literally just handling something else." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The desk is, notably, yours. This raises more questions than it answers. You're okay with this.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You told a true, small, unremarkable thing.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You turned a ping into a small defense.")
 		)
 			)
 		)

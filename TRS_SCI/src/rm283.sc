@@ -51,6 +51,7 @@
 		"Send an apologetic follow-up text explaining yourself." 0
 		"Lie awake replaying whether anyone noticed you'd gone." 1
 		"Let leaving early just be a thing you did. No debrief required." 2
+		"Tell the group chat directly: 'I left because it was too much. That's allowed.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It reads like a press release nobody asked for.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You left when you needed to and didn't file a report about it. Irish Goodbye FTW.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 5 TAG_FIGHT)
+			Print("You defended a boundary nobody was actually attacking.")
 		)
 			)
 		)

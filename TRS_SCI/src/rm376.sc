@@ -51,6 +51,7 @@
 		"Tip more than you can afford so they don't think badly of you." 0
 		"Hit 'no tip' fast and avoid eye contact for the rest of the transaction." 1
 		"Tip what you can actually afford and let that be enough." 2
+		"Exclaim to the cashier that these screens are a scam, then hit 'no tip' hard." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The screen did not answer. The cashier, after a pause, actually did.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("You made a number decision and didn't turn it into a referendum on your character.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 3 TAG_FIGHT)
+			Print("You picked a fight with a piece of hardware in front of the one person it couldn't help.")
 		)
 			)
 		)

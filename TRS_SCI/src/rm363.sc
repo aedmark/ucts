@@ -51,6 +51,7 @@
 		"Force out a bright 'I'm fine!' before the tightness can turn into anything else." 0
 		"Say nothing and just nod until the moment passes on its own." 1
 		"Say 'actually, not really' and let the sentence stop there for now." 2
+		"Snap 'why do you ask?' before you've decided you meant to sound that sharp." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Nobody knows what just happened, including you. The moment is over, at least.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 3 10 TAG_SECURE)
 			Print("Three honest words did more than a paragraph of fine would have.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -15 0 TAG_FIGHT)
+			Print("The question was gentle. The answer wasn't.")
 		)
 			)
 		)

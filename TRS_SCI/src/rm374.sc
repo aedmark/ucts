@@ -51,6 +51,7 @@
 		"Answer every question with enthusiasm you do not currently possess." 0
 		"Put in headphones without actually playing anything." 1
 		"Say, kindly, that you're wiped and would rather ride quiet." 2
+		"Answer in short, clipped non-answers until they get the hint." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You now know more about their custody arrangement than the last three passengers combined.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 10 TAG_SECURE)
 			Print("You asked for what you needed from a stranger you'll know for eighteen more minutes.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You made the silence adversarial instead of just asking for it.")
 		)
 			)
 		)

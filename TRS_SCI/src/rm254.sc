@@ -51,6 +51,7 @@
 		"Prepare a mental list of neutral topics to redirect toward." 0
 		"Accept your fate and mentally leave the table early." 1
 		"Re-assign yourself to the kids table and enjoy yourself." 2
+		"Develop a sudden, urgent need to help in the kitchen for the entire meal." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The garage now has better conversation than the dining room.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-5 -5 10 TAG_SECURE)
 			Print("You provided your own accommodation and now your nephews think you're cool.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -5 TAG_FLIGHT)
+			Print("You escaped to the stovetop and let the potatoes take the heat instead.")
 		)
 			)
 		)

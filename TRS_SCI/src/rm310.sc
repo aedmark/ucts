@@ -51,6 +51,7 @@
 		"Ignore it. It'll probably go away on its own." 0
 		"Push through it, it's fine, everyone's tired, this is normal." 1
 		"Stop. Relax. Roll your shoulders. Unclench your jaw. Take one real breath." 2
+		"Get up and go for a walk to shake it off instead of figuring out what it is." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("This explains nothing. It helps somehow, anyway.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
 			Print("You gave your body the attention it was asking for. It thanks you by flooding your brain with dopamine.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -5 -5 TAG_FLIGHT)
+			Print("You moved the tension around the block instead of asking where it came from.")
 		)
 			)
 		)

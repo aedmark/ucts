@@ -51,6 +51,7 @@
 		"Apologize again, just to be safe." 0
 		"Notice it happened and feel weird about it for the rest of the day." 1
 		"Notice the reflex. Don't perform an apology for the apology." 2
+		"Catch yourself mid-apology and snap, out loud, 'why am I sorry?'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The doorknob accepts your apology graciously. It has no other choice.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
 			Print("You caught the reflex mid-air and let it just pass through.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -10 5 TAG_FIGHT)
+			Print("You interrupted a lifelong reflex with your own irritation. Progress is loud sometimes.")
 		)
 			)
 		)

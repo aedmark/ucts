@@ -51,6 +51,7 @@
 		"Keep doing it, quieter, so no one notices." 0
 		"Crack something loudly on purpose, right at someone." 1
 		"Get up and actually move for a minute instead." 2
+		"Excuse yourself to the bathroom until the urge passes." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It did not crack. You will try again in eleven minutes.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You gave the restlessness an actual job to do.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 -5 TAG_FLIGHT)
+			Print("You left the room rather than sit with the fidget.")
 		)
 			)
 		)

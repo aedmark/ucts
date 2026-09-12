@@ -51,6 +51,7 @@
 		"Keep refreshing. The number hasn't proven anything yet, but the next one might." 0
 		"Post something calibrated to perform well, just to be sure." 1
 		"Put the phone down. The question doesn't need an answer right now." 2
+		"Throw the phone across the couch and go do something that doesn't have a number attached." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Engagement still goes way down... but you, somehow, feel better.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
 			Print("You let the urge exist without feeding it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -5 -5 TAG_FLIGHT)
+			Print("You removed the scoreboard from the room, at least for now.")
 		)
 			)
 		)

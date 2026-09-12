@@ -51,6 +51,7 @@
 		"Spiral into a full self-indictment for the next hour." 0
 		"Laugh it off in the moment and never think about it again... You swear!" 1
 		"Notice it. Decide, calmly, that noticing is the first step, not a failure." 2
+		"Change the subject out loud before anyone, including you, can dwell on it." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You have never committed to a bit this hard. Everyone is a little worried about you.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
 			Print("You caught the echo without deciding it was proof of anything permanent.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You talked past the sentence instead of sitting with it.")
 		)
 			)
 		)

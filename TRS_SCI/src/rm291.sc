@@ -51,6 +51,7 @@
 		"Reread the whole conversation looking for the exact moment it went wrong." 0
 		"Send one more message, lighter this time, just in case they missed the first." 1
 		"Unmatch and let it be exactly as unremarkable as it actually is." 2
+		"Delete the app. All of them, actually." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You now describe yourself as 'allegedly fun.' It's an improvement, actually.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 8 TAG_SECURE)
 			Print("Three good days doesn't owe you an explanation for a fourth.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 -5 TAG_FLIGHT)
+			Print("You solved the problem by removing the entire category it lived in.")
 		)
 			)
 		)

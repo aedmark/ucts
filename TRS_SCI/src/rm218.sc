@@ -51,6 +51,7 @@
 		"Reply quoting the exact unanswered question, again." 0
 		"Apologize for 'missing' the answer that wasn't there." 1
 		"Close the thread and decide to just figure it out yourself." 2
+		"Reply plainly: 'that didn't actually answer it... Can you take one more look?'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You have made your point. Several points, actually. All very helpful.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
 			Print("You absorbed the extra work rather than the friction. Nobody learns anything.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 10 TAG_SECURE)
+			Print("You named the gap without the passive-aggression.")
 		)
 			)
 		)

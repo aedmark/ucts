@@ -51,6 +51,7 @@
 		"Reread every message you've sent them for the last month." 0
 		"Match their energy exactly, one for one." 1
 		"Text them something low-stakes and let it go." 2
+		"Stop texting first for a while and see if they notice." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You have single-handedly restored the energy. Possibly too much of it.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 5 5 TAG_SECURE)
 			Print("You extended trust without an audit.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You ran a quiet experiment instead of just asking.")
 		)
 			)
 		)

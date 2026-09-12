@@ -51,6 +51,7 @@
 		"Immediately reply-all with a full, apologetic breakdown." 0
 		"Reply-all clarifying, calmly, which parts were actually yours." 1
 		"Leave the thread unanswered and refresh your inbox every four minutes." 2
+		"Message your manager directly, briefly, with the actual context." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Democracy, but for blame. Nobody wins but nobody loses, either. Except maybe some brain cells.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(20 0 -15 TAG_FREEZE)
 			Print("You watched the thread instead of joining it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You handled it directly instead of performing it for an audience.")
 		)
 			)
 		)

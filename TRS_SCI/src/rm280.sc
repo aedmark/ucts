@@ -51,6 +51,7 @@
 		"Agree to split evenly and say nothing about the math." 0
 		"Suggest, casually, splitting it by what people actually got." 1
 		"Pay your share silently and feel weird about it for days." 2
+		"Say, easily, 'I'll just cover my part' and hand over the exact amount." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The table goes silent. You do not stop calculating.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
 			Print("You let a bill you didn't agree with become a slow-burn grudge.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You solved the math without making it a whole thing.")
 		)
 			)
 		)

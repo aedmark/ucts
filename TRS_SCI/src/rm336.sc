@@ -51,6 +51,7 @@
 		"Apologize to it and keep working through the pain." 0
 		"Snap the laptop shut and lie in a dark room out of spite." 1
 		"Drink water, step outside, take a break." 2
+		"Tell everyone you're 'stepping out for air' and just don't come back for a while." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("According to the internet, it's either dehydration or something terminal. No in-between.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 10 TAG_SECURE)
 			Print("You treated the cause instead of white-knuckling the symptom.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 -5 TAG_FLIGHT)
+			Print("You left before the headache did.")
 		)
 			)
 		)

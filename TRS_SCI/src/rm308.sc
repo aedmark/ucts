@@ -51,6 +51,7 @@
 		"Get angry at yourself for the resemblance." 0
 		"Pretend you didn't notice and keep doing it anyway." 1
 		"Notice it. Name it. Try, gently, to do the next one differently." 2
+		"Change the subject in your head immediately and think about literally anything else." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It's uncannily accurate. Everyone is deeply unsettled.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
 			Print("You caught a pattern mid-motion, which is most of the work. Keep going.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You outran the resemblance instead of looking at it.")
 		)
 			)
 		)

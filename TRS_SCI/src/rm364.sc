@@ -51,6 +51,7 @@
 		"Say 'great, thanks!' with way more enthusiasm than you actually have." 0
 		"Give a flat, one-word answer and stare at the card reader." 1
 		"Be honest and let it be a real, if brief, answer." 2
+		"Snap back, sharper than you meant: 'Do you actually want to know?'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("They were not prepared for this. Neither were you.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("You told a stranger a true thing instead of a convenient one. They gave you a sticker. ")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 3 TAG_FIGHT)
+			Print("You handed a stranger's small talk back with interest it didn't ask for.")
 		)
 			)
 		)

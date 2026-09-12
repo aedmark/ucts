@@ -191,6 +191,15 @@
 (define UNLOCK_THRESHOLD	3)		/* same-tag choices before a mechanism unlocks */
 (define GLITCH_CHANCE_PCT	15)		/* out of 100, matching glitchChance: 0.15 */
 (define GLITCH_CHOICE		99)
+// PrintChoices pagination (printchoices.sc): events have 3-5 real
+// choices (matching the original's own 3-5, not capped anymore -- see
+// SESSION_HANDOFF.md). CHOICES_PER_PAGE caps each screen to the same
+// button count already proven safe (3 choices + a glitch/More button =
+// 4 max), showing a "More options..." button (MORE_CHOICES sentinel,
+// distinct from GLITCH_CHOICE) instead of the glitch button on every
+// page but the last.
+(define CHOICES_PER_PAGE	3)
+(define MORE_CHOICES		98)
 
 // PrintChoices' choice-button width ceiling (SizeButtonToWidth) -- kept
 // separate from the description's own width (DESC_WIDTH in

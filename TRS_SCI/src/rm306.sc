@@ -51,6 +51,7 @@
 		"Skip it immediately and pretend you didn't feel that." 0
 		"Get irritated that a song still has this much power over you." 1
 		"Let it play. Feel whatever it wants you to feel." 2
+		"Change the playlist entirely so it can't happen again today." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The neighbors have opinions. You have zero regrets.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
 			Print("You let three minutes of sound be exactly as small as it actually was.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You rerouted around three seconds of feeling.")
 		)
 			)
 		)

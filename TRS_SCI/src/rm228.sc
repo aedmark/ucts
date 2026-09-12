@@ -51,6 +51,7 @@
 		"Draft a furious email to HR and send it before you can think twice." 0
 		"Decide you're probably not remembering your own worth correctly, and let it go." 1
 		"Write down exactly what you'd ask for and schedule the actual conversation." 2
+		"Close the spreadsheet, close the tab, and try hard not to think about the number." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You now know everyone's salary, yet still cannot grasp your own self-worth. Progress?")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 8 TAG_SECURE)
 			Print("You turned a number in a spreadsheet into a plan.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You filed it away instead of looking at it.")
 		)
 			)
 		)

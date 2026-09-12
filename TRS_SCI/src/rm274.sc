@@ -51,6 +51,7 @@
 		"Smile through the whole thing while doing quiet, silent math." 0
 		"Decide to bring it up with him, gently, another day." 1
 		"Clap the loudest and mean absolutely none of it." 2
+		"Feel the sting, let it be small, and enjoy the wedding anyway." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The DJ, unsure what else to do, plays dramatic entrance music.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(5 10 -15 TAG_FAWN)
 			Print("You applauded harder than you felt to hide what you felt.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You let it hurt a little without needing it to mean everything.")
 		)
 			)
 		)

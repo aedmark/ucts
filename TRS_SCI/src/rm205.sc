@@ -51,6 +51,7 @@
 		"Send a second message: 'no worries just following up!'" 0
 		"Close Slack and refuse to open it until tomorrow." 1
 		"Assume you've been quietly deleted from their mind." 2
+		"Let it sit, and trust that no reply yet doesn't mean no reply ever." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The raccoon says what you cannot. Which is nothing of importance.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(20 0 -10 TAG_FREEZE)
 			Print("You Sherlocked your way to a panic attack with zero evidence.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You let the silence be neutral instead of a verdict.")
 		)
 			)
 		)

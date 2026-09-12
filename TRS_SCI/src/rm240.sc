@@ -51,6 +51,7 @@
 		"Eat it yourself and say nothing about the note." 0
 		"Leave it in there for three more days, unable to deal with it." 1
 		"Ask, simply, if they want any leftovers before you eat the rest." 2
+		"Text: 'Did you even see the leftovers? I made them for you.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Several words were said. None of them were 'I'm sorry.'")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("A question, asked plainly, is not an accusation. Plus, you get dinner.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 3 TAG_FIGHT)
+			Print("You put the disappointment into words instead of Tupperware. Now you're disappointed for a different reason.")
 		)
 			)
 		)

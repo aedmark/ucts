@@ -51,6 +51,7 @@
 		"Rush over and apologize on their behalf before they've even said anything." 0
 		"Freeze for a second too long, unsure if helping is your job here." 1
 		"Ask if they're okay and help them up without making it a scene." 2
+		"Keep walking like you didn't quite see it happen." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("They did not take a bow. They did, eventually, laugh.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 3 8 TAG_SECURE)
 			Print("You did the plain, obvious thing. It was enough.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 -5 TAG_FLIGHT)
+			Print("Someone else stopped. You kept your pace and a small, specific discomfort meant only for you.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Cringe hard and mentally list everything that version got wrong." 0
 		"Change the subject in your own head before it goes anywhere real." 1
 		"Send a little compassion backward. They didn't know what you know now." 2
+		"Close the old photo album and don't open that folder again for a while." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It arrives in three days. Past-you would be delighted it worked.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
 			Print("You forgave a person for not having information they didn't learn yet.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You put ten years back in a drawer.")
 		)
 			)
 		)

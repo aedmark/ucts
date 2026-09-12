@@ -51,6 +51,7 @@
 		"Send six frantic follow-ups explaining what you meant." 0
 		"Screenshot it, close the laptop, stare at the wall." 1
 		"Let the typo be funny. It's kind of funny." 2
+		"Set your status to 'in a meeting' and stay dark until the group chat moves on." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You have accidentally invented a new art movement and the accountants are fond of you, now.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
 			Print("You allowed yourself to be a person who makes typos. You survived.")
+		)
+		(case 3
+			ApplyChoiceEffects(15 -8 -5 TAG_FLIGHT)
+			Print("You let the silence do the explaining. It explained nothing, which was the point.")
 		)
 			)
 		)

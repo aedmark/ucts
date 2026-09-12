@@ -51,6 +51,7 @@
 		"Say 'thank you!' brightly and file the sting away for later." 0
 		"Say, lightly, 'I looked good before, too!'" 1
 		"Replay the sentence for the rest of the night." 2
+		"Say 'thanks, I feel good these days' and let that be the whole sentence." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("They did not prepare a spreadsheet. You are disappointed in their inability to verify their claims.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(15 0 -15 TAG_FREEZE)
 			Print("One sentence got more airtime in your head than the whole party. It's all you remember.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You took the compliment at face value and moved on.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Spend the hour composing worst-case scenarios instead of replying." 0
 		"Reply with three apologies before you know what for." 1
 		"Reply: 'Okay. I'm here when you're ready.'" 2
+		"Put the phone in another room and go for a walk instead of replying." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("'In a world where nobody explains anything...'")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 10 TAG_SECURE)
 			Print("You left room for the conversation instead of finishing it alone.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -5 -5 TAG_FLIGHT)
+			Print("The text is still there. You aren't (for now).")
 		)
 			)
 		)

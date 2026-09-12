@@ -51,6 +51,8 @@
 		"Mute the chat and pretend your phone is broken." 0
 		"Draft a measured correction, then delete it three times." 1
 		"Send a single laughing emoji and nothing else." 2
+		"Type a short, honest correction and actually send it." 3
+		"Reply with the actual, unedited version of what happened." 4
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("'The sink remembers what the heart forgets.' Nobody asked. Nobody replies.")
@@ -67,6 +69,14 @@
 		(case 2
 			ApplyChoiceEffects(5 10 -10 TAG_FAWN)
 			Print("You de-escalated with punctuation.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 10 TAG_SECURE)
+			Print("You corrected the record once and stopped carrying it.")
+		)
+		(case 4
+			ApplyChoiceEffects(-10 -15 3 TAG_FIGHT)
+			Print("You picked the fight the group chat had been avoiding for years. Secretly, they are all grateful.")
 		)
 			)
 		)

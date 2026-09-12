@@ -51,6 +51,7 @@
 		"Stand outside it for a full minute, deciding nothing." 0
 		"Knock and immediately apologize for whatever it is." 1
 		"Knock. Ask if everything is okay." 2
+		"Go back downstairs and turn the TV up instead of finding out." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It does not fly well on carpet. The gesture remains.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
 			Print("You offered an opening instead of an assumption.")
+		)
+		(case 3
+			ApplyChoiceEffects(15 -8 -8 TAG_FLIGHT)
+			Print("You let the door stay a mystery a while longer.")
 		)
 			)
 		)

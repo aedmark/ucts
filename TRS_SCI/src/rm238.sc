@@ -51,6 +51,7 @@
 		"Open your messages to literally anyone else and get absorbed in something safer." 0
 		"Reread your message eleven times, hunting for the sentence that broke it." 1
 		"Send nothing else. Let the silence belong to them, not you." 2
+		"Send one more message demanding to know why they haven't answered." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The read receipt updates. The silence gets a face now.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You stopped staring at a doorknob that isn't yours to turn.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You turned the silence into a second, angrier message.")
 		)
 			)
 		)

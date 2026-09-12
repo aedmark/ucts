@@ -51,6 +51,7 @@
 		"Laugh it off, drop them for exactly four seconds." 0
 		"Get defensive about your own posture." 1
 		"Actually roll them out and admit you're tensed up for no reason." 2
+		"Change the subject fast and hope nobody looks at your shoulders again." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It's the thought that counts. Your shoulders disagree.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
 			Print("You told the truth about your own body. Small, but real. Everyone else rolls their shoulders, too.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You redirected the conversation instead of your shoulders.")
 		)
 			)
 		)

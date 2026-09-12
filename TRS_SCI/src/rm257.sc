@@ -51,6 +51,7 @@
 		"Immediately turn on background noise to fill the silence." 0
 		"Start texting people to check if everyone got home okay." 1
 		"Let the silence be silence for a minute before doing anything." 2
+		"Grab your keys and find a reason to be somewhere else immediately." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("'And here, in its natural habitat, the human finally exhales.'")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("An empty room turned out to be just an empty room.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -8 TAG_FLIGHT)
+			Print("You left before the quiet had a chance to say anything.")
 		)
 			)
 		)

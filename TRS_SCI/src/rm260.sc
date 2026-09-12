@@ -51,6 +51,7 @@
 		"Text a family member asking, in a roundabout way, if they're doing okay 'financially, generally.'" 0
 		"Don't check the account again until the fee posts." 1
 		"Move what you can, call the bank, and actually look at the number." 2
+		"Call the bank immediately and argue the fee down out of pure spite." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The balance is more negative. You feel powerful. Briefly.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 8 TAG_SECURE)
 			Print("You looked right at it, which turns out to be the hard part.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 3 TAG_FIGHT)
+			Print("You fought a machine over twelve dollars and, against all odds, won four of them back.")
 		)
 			)
 		)

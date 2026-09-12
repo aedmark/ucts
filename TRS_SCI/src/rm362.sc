@@ -51,6 +51,7 @@
 		"Apologize for the shaky signature and joke about the room being cold." 0
 		"Just push through and hope no one notices your hands." 1
 		"Pause, shake it out, and just wait until your hands actually feel steady." 2
+		"Get irritated at your own body for picking now to do this." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It didn't warm anything up. It did get a laugh.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("You waited for your own body instead of overriding it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 -5 TAG_FIGHT)
+			Print("You argued with your own nervous system. It did not concede the point.")
 		)
 			)
 		)

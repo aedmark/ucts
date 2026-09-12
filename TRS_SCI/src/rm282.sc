@@ -51,6 +51,7 @@
 		"Keep it light and safe, matching their energy exactly." 0
 		"Ask a real question and see what happens." 1
 		"Let the conversation end there, like it always does." 2
+		"Ask one real question, gently, and see if they take it." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("'Sixty percent chance of feelings, with scattered vulnerability by evening.'")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(10 0 -10 TAG_FREEZE)
 			Print("Another conversation stayed exactly as deep as the last one. This is fine.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You offered an exit from small talk, no pressure either way.")
 		)
 			)
 		)

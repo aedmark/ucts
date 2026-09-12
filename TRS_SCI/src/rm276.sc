@@ -51,6 +51,7 @@
 		"Refresh your phone every few minutes without admitting why." 0
 		"Post something upbeat so nobody suspects you noticed." 1
 		"Let yourself be a little sad about it. That's allowed." 2
+		"Text them directly: 'did you forget what today is?'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The confetti will be found in strange places for weeks.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You didn't need to perform that you were okay, you arrived there naturally.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -15 0 TAG_FIGHT)
+			Print("You forced the acknowledgment you were hoping would arrive on its own.")
 		)
 			)
 		)

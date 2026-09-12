@@ -51,6 +51,7 @@
 		"Keep waiting for the readiness to arrive on its own schedule." 0
 		"Tell people you're 'about to start soon' again, to keep the pressure off." 1
 		"Do one small piece of it today, ready or not." 2
+		"Change the subject whenever it comes up and quietly shelve the idea a while longer." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You now own everything you need and have used none of it. A familiar shape.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("Turns out readiness was never actually the requirement.")
+		)
+		(case 3
+			ApplyChoiceEffects(15 -8 -8 TAG_FLIGHT)
+			Print("You didn't decide against it. You just stopped bringing it up.")
 		)
 			)
 		)

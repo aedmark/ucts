@@ -51,6 +51,7 @@
 		"Spend the fifteen minutes drafting a resignation letter." 0
 		"Ask a coworker if they've heard anything. They haven't." 1
 		"Walk in assuming it's fine." 2
+		"Walk in already defensive, ready to argue your case before they've said anything." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It was your annual review you forgot about. You are overdressed and underprepared.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 10 TAG_SECURE)
 			Print("It was never about you. It was about the parking lot construction.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You picked a fight with a meeting that hadn't started yet.")
 		)
 			)
 		)

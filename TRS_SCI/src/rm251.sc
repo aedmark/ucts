@@ -51,6 +51,7 @@
 		"Leave the TV on all night just to fill the quiet." 0
 		"Text constant updates about your evening, needing the thread to stay busy." 1
 		"Let the apartment be quiet. It's temporary." 2
+		"Make plans to be out of the apartment as much as possible until they're back." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The fort has excellent structural integrity and zero strategic purpose. ")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("Quiet turned out to be survivable, if not fun.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -5 TAG_FLIGHT)
+			Print("You outran the quiet instead of sitting in it.")
 		)
 			)
 		)

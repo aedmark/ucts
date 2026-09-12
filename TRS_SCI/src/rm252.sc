@@ -51,6 +51,7 @@
 		"Put it in a drawer. Deal with it 'later.'" 0
 		"Open it and immediately plan an apologetic, generous reply." 1
 		"Open it. Read it. Feel whatever you feel." 2
+		"Rip it open and read it standing up, ready to argue with whatever's inside." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You have guessed 'ferret' three times. You weren't even close.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You let the envelope just be information.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -12 3 TAG_FIGHT)
+			Print("You went in swinging at a letter that hadn't done anything yet.")
 		)
 			)
 		)

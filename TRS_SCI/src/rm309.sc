@@ -51,6 +51,7 @@
 		"Agree with it. It's probably right, like it always was." 0
 		"Argue back at it, harshly, in your own head." 1
 		"Notice it's not your voice. You don't have to use it." 2
+		"Turn on something loud enough to drown the thought out entirely." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("A stranger gives you a wide berth. The voice, notably, has no comeback.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
 			Print("You separated the message from the messenger you inherited it from.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You muted it instead of naming it.")
 		)
 			)
 		)

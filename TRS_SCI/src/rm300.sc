@@ -51,6 +51,7 @@
 		"Immediately look away and think about anything else." 0
 		"Stare longer, looking for evidence of who you used to be." 1
 		"Say something kind to it, out loud, even though it's weird." 2
+		"Glare back at it like the reflection started this." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("'Hi, I'm you.' The reflection does not seem convinced either.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 -5 15 TAG_SECURE)
 			Print("You addressed yourself like a person worth addressing. Because you are.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 0 TAG_FIGHT)
+			Print("You picked a fight with your own face.")
 		)
 			)
 		)

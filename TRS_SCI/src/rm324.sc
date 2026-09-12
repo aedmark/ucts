@@ -51,6 +51,7 @@
 		"Check it six more times without doing anything differently." 0
 		"Tell yourself other people are worse with money, so it's fine." 1
 		"Actually write the number down somewhere and make one small plan around it." 2
+		"Get sharply angry at whatever got you here in the first place." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You now have three different opinions on how broke you are.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You stopped checking and started, in a small way, handling it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -5 -5 TAG_FIGHT)
+			Print("The number didn't move. You definitely did, internally, at volume.")
 		)
 			)
 		)

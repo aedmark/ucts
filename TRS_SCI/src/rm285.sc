@@ -51,6 +51,7 @@
 		"Ask enthusiastic questions about the new friend, overselling interest." 0
 		"Quietly pull back from making plans, without saying why." 1
 		"Name the feeling to yourself: a little jealous, and that's okay." 2
+		"Make a pointed comment about how much they've been hanging out lately." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Your new friend, 'Gary,' may not exist, but this plan works better than expected.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("Jealousy, acknowledged, took up less room than it usually does. You all go out for drinks later.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You let the jealousy out sideways, at them. Now they feel guilty for making a new friend.")
 		)
 			)
 		)

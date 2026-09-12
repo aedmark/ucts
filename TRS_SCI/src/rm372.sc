@@ -51,6 +51,7 @@
 		"Apologize to the person behind you for existing in their line of sight." 0
 		"Loudly ask if anyone else thinks this is insane." 1
 		"Accept the wait for what it is and let your mind go somewhere else." 2
+		"Step out of line and decide to just come back another day." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("B-247 did not respond. You feel closer to it anyway.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("You gave the wait exactly the amount of your life it was going to take anyway.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 -5 TAG_FLIGHT)
+			Print("You spent forty minutes to leave with nothing, on purpose this time.")
 		)
 			)
 		)

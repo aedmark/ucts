@@ -51,6 +51,7 @@
 		"Open it immediately, brace for impact." 0
 		"Let it sit unread while your stomach keeps dropping anyway." 1
 		"Take one breath, then open it at your own pace." 2
+		"Reply before finishing the email, already annoyed at whatever it says." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Outsourcing Dread: an underrated coping strategy.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 5 TAG_SECURE)
 			Print("You let your body catch up before you made a decision.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -10 0 TAG_FIGHT)
+			Print("You answered a feeling, not the actual email.")
 		)
 			)
 		)

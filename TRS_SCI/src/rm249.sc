@@ -51,6 +51,7 @@
 		"Stop and stare at it longer than you meant to, every time." 0
 		"Consider taking it down. Don't, yet." 1
 		"Let the photo be a photo, not a verdict on the year." 2
+		"Take a different route down the hall so you stop passing it." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Past-you and present-you now occupy the same photograph, spiritually. So there.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("One picture doesn't get to outvote your memory.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You rerouted your whole day around one photograph.")
 		)
 			)
 		)

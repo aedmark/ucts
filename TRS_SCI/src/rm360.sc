@@ -51,6 +51,7 @@
 		"Notice it, feel briefly alarmed, and keep typing exactly the same way." 0
 		"Apologize to no one in particular for being 'a little tense today.'" 1
 		"Stop, take three actual breaths, and unclench your shoulders on purpose." 2
+		"Slam the laptop shut and mutter at the screen like it started this." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It will go off in the middle of a meeting later. This is fine.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("Thirty seconds of actually breathing did more than the last hour of holding it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -12 0 TAG_FIGHT)
+			Print("You picked a fight with an inbox. The inbox didn't respond.")
 		)
 			)
 		)

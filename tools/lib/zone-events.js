@@ -28,15 +28,6 @@ const path = require('path');
 const { sciString } = require('./sci-string');
 
 const DESC_WIDTH = 290; // DText width (px) passed to PrintChoices; kernel TextSize() wraps within it, so widening is safe as long as it stays under the 320px screen (DText starts at x=4)
-// Deliberate scope cut to fix a recurring heap-space exhaustion: cap every
-// event to its first MAX_CHOICES authored responses (glitch is a bonus 4th
-// slot on top, not counted here) instead of the original's 3-5. Shrinks
-// generated code, dialog height, and per-turn heap pressure all at once.
-// Changes game balance (fewer options per event) -- accepted tradeoff,
-// content/balance to be revisited once the engine side is solid. Still
-// relevant under one-room-per-event: a smaller dialog is still a smaller
-// dialog even though the old chunk-size motivation for this cap is gone.
-const MAX_CHOICES = 3;
 
 const TAG_CONSTANTS = { fawn: 'TAG_FAWN', flight: 'TAG_FLIGHT', fight: 'TAG_FIGHT', freeze: 'TAG_FREEZE', secure: 'TAG_SECURE' };
 
@@ -50,7 +41,10 @@ function genEventRoom(opts, roomNum, globalIndex, event) {
 	const title = sciString(event.title);
 	const glitchText = sciString(event.glitch.text);
 	const glitchLog = sciString(event.glitch.log);
-	const choices = event.choices.slice(0, MAX_CHOICES);
+	// All of the event's authored choices (3-5, matching the original) --
+	// PrintChoices itself now paginates at CHOICES_PER_PAGE (game.sh)
+	// instead of the generator capping how many exist at all.
+	const choices = event.choices;
 
 	// No pre-wrapping here -- PrintChoices' own SizeButtonToWidth
 	// (printchoices.sc) wraps button text at render time using the actual

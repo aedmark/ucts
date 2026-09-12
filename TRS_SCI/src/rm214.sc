@@ -51,6 +51,7 @@
 		"Smile, say 'nice,' and mentally recalculate your entire worth." 0
 		"Ask them to walk you through it, overpraising every step." 1
 		"Ask them to walk you through it. Just that." 2
+		"Mute the channel and suddenly remember an urgent errand." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You lose. You also nearly take out a filing cabinet. It's a bonding experience.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 15 TAG_SECURE)
 			Print("You let not-knowing be a normal thing.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -5 -5 TAG_FLIGHT)
+			Print("You left the room before the feeling could catch up to you.")
 		)
 			)
 		)

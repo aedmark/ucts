@@ -51,6 +51,8 @@
 		"Comment on the elevator's slowness like it's breaking news." 0
 		"Stare at the floor numbers with religious intensity." 1
 		"Let the silence be silence." 2
+		"Turn and ask, flatly, why neither of you will just say something real." 3
+		"Pull out your phone and disappear into it until the doors open." 4
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The coworker joins in. This is now, somehow, a duet.")
@@ -67,6 +69,14 @@
 		(case 2
 			ApplyChoiceEffects(-5 0 5 TAG_SECURE)
 			Print("Eleven seconds of quiet did not erase you from this earth.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -12 3 TAG_FIGHT)
+			Print("You called out the silence instead of just enduring it. The doors open two floors later. Not soon enough for either of you.")
+		)
+		(case 4
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You left the elevator before you actually left the elevator.")
 		)
 			)
 		)

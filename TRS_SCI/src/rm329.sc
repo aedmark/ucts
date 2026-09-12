@@ -51,6 +51,7 @@
 		"Stare at it a while, then close the folder without really processing anything." 0
 		"Post it with a caption implying everything's still that happy now." 1
 		"Let yourself actually miss that feeling instead of performing that you still have it." 2
+		"Get annoyed at the photo for making the present look worse by comparison." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It does not look the same. It was never really about the photo.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 12 TAG_SECURE)
 			Print("Missing something honestly takes up less room than pretending you don't.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You resented a memory for being better than the moment you're in.")
 		)
 			)
 		)

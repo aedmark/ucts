@@ -51,6 +51,7 @@
 		"Ask, directly, who ate it." 0
 		"Say nothing and quietly recalculate your whole week's meals." 1
 		"Decide it's fine, you didn't really need it anyway." 2
+		"Mention it once, lightly, and let it go either way." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You have connected several pieces of red string to absolutely nothing helpful.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(5 5 -10 TAG_FAWN)
 			Print("You talked yourself out of a want that was real, and into being a doormat.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 10 TAG_SECURE)
+			Print("You said the true thing and didn't need it to land a certain way.")
 		)
 			)
 		)

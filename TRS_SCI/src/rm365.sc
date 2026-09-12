@@ -51,6 +51,7 @@
 		"Apologize for 'bothering them' before you've even explained the problem." 0
 		"Let all forty minutes of frustration out on the person who just picked up." 1
 		"Take a breath, state the problem plainly, and stay civil." 2
+		"Hang up and decide the problem can just stay unsolved." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("There is no such position. You asked anyway. You were put on hold again.\n\n\n Close enough.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 3 5 TAG_SECURE)
 			Print("You separated the wait from the person now trying to fix it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 -5 TAG_FLIGHT)
+			Print("Forty minutes on hold, zero minutes of resolution.")
 		)
 			)
 		)

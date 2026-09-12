@@ -51,6 +51,7 @@
 		"Power through, colds are for people with time off." 0
 		"Blame the office AC loudly to anyone who'll listen." 1
 		"Actually take the day, and actually rest on it." 2
+		"Cancel your plans for the week and just wait it out alone." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You are now buzzing gently and no less congested. A wash.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 -5 15 TAG_SECURE)
 			Print("You let your immune system have the meeting instead of you.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 -5 TAG_FLIGHT)
+			Print("You disappeared into the couch and let the world go on without you.")
 		)
 			)
 		)

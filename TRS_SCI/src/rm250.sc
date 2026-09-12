@@ -51,6 +51,7 @@
 		"Let the voicemail sit unheard for the rest of the day." 0
 		"Call back immediately, bracing for whatever it is." 1
 		"Listen to the voicemail first. Then decide." 2
+		"Call back irritated, leading with 'is everything okay?' in a tone that isn't really a question." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You are now, for reasons unclear, doing a full Irish accent.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("Information turned out to be less scary than the dread. Have fun at Disney World!")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -10 0 TAG_FIGHT)
+			Print("You answered dread with an edge nobody on the other end asked for.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Wave them through with a big smile even though you got there first." 0
 		"Rev the engine and hold your ground until they give up." 1
 		"Point them to the spot you can see open two rows down instead." 2
+		"Just drive off and circle the lot again rather than deal with it." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You always play rock first. This time, you didn't. And you lost.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 3 5 TAG_SECURE)
 			Print("You solved the actual problem instead of winning the argument about it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 -5 TAG_FLIGHT)
+			Print("You left the standoff to whoever wanted it more.")
 		)
 			)
 		)

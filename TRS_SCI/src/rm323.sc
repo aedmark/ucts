@@ -51,6 +51,7 @@
 		"Stop it fast. Fix your face. Go inside like nothing happened." 0
 		"Apologize to no one in an empty car for crying at all." 1
 		"Let it happen. Stay in the car until it passes on its own." 2
+		"Hit the steering wheel, furious at yourself for needing this at all." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You are now simultaneously crying and singing off-key. A rare skill.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-20 0 20 TAG_SECURE)
 			Print("You let the parking lot hold something you'd been carrying all week.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 -5 TAG_FIGHT)
+			Print("You turned the release into another thing to be angry about.")
 		)
 			)
 		)

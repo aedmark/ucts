@@ -51,6 +51,7 @@
 		"Say it back warmly, knowing it means nothing either time." 0
 		"Actually suggest a specific day and time." 1
 		"Let the phrase pass, again, unchallenged." 2
+		"Say, honestly, 'I'd actually like that! When's good for you?' and mean it." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("A date gets picked. Everyone is stunned, including the calendar.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(10 0 -10 TAG_FREEZE)
 			Print("A fifth 'sometime' joined the pile of the first four. Nice collection!")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You turned a script into an actual invitation.")
 		)
 			)
 		)

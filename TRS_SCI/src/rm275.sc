@@ -51,6 +51,7 @@
 		"Say nothing and quietly recalibrate every friendship in your life." 0
 		"Act completely unbothered, performing it a little too well." 1
 		"Notice it stings. Don't make it a bigger story than it is." 2
+		"Mute every group chat you're actually in, preemptively." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It has one member. It is thriving.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("A feeling, felt and not expanded, passes on its own.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 -10 TAG_FLIGHT)
+			Print("You left before anyone could leave you out again.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Leave the wet laundry in it for two days while you decide what to do." 0
 		"Tell whoever asks that it's 'basically fine, just being weird.'" 1
 		"Get a second quote and actually compare the real numbers." 2
+		"Start using the laundromat down the street and avoid thinking about the machine at all." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You now understand washing machine repair on a conceptual level. The machine remains tangibly broken.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("You treated it like a decision instead of a crisis.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 -8 TAG_FLIGHT)
+			Print("You outsourced the laundry and postponed the decision indefinitely.")
 		)
 			)
 		)

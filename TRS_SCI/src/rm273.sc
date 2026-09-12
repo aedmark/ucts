@@ -51,6 +51,7 @@
 		"Stare at your phone intensely so you look busy, not waiting." 0
 		"Apologize to the host for taking up a table for four." 1
 		"Sit there. Look around. Let it be fine." 2
+		"Flag down the host and ask, pointedly, if a smaller table's actually available." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Your imaginary guests are excellent listeners and terrible tippers.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("Being visibly alone turned out fine; you got fresh breadsticks and didn't have to share any.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -12 3 TAG_FIGHT)
+			Print("You made the awkwardness someone else's problem to solve.")
 		)
 			)
 		)

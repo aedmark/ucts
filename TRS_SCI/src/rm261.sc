@@ -51,6 +51,7 @@
 		"Decide it's not worth the hassle of calling to complain." 0
 		"Call and argue for a full refund on principle." 1
 		"Cancel it, note the loss, and set a reminder to check for others." 2
+		"Close the banking app and decide to deal with it 'this weekend.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You found six more. You are now afraid of your own bank statement. And your goldfish-like memory.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("You closed the leak instead of just being mad about the water.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You postponed eight months into a ninth.")
 		)
 			)
 		)

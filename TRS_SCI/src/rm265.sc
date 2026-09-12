@@ -51,6 +51,7 @@
 		"Tell yourself it's probably nothing and keep watching from across the room." 0
 		"Post about it online and let strangers' reassurance stand in for an actual appointment." 1
 		"Call and ask what a visit actually costs, then book it anyway." 2
+		"Close the food delivery tab, close the vet's website, and go do literally anything else." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Nothing worked. You now have six open cans and one unimpressed animal.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You let the real number decide instead of your fear of it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -8 TAG_FLIGHT)
+			Print("You put the worry in a drawer next to the bill you also haven't opened.")
 		)
 			)
 		)

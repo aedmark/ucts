@@ -51,6 +51,7 @@
 		"Apologize to everyone behind you individually." 0
 		"Freeze up completely, badge in hand, brain empty except for the intense panic that you've been fired." 1
 		"Step aside, let people pass, try again without an audience." 2
+		"Give up, turn around, and just go home for the day." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Someone starts filming. This will outlive your employment here.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You removed the audience instead of performing through it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 -5 TAG_FLIGHT)
+			Print("You solved a broken badge reader by removing yourself from its jurisdiction.")
 		)
 			)
 		)

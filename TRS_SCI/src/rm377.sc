@@ -51,6 +51,7 @@
 		"Shoot the parents a series of sympathetic smiles you don't actually feel." 0
 		"Sigh loudly enough that row fourteen is guaranteed to hear it." 1
 		"Put in earplugs and let it be someone else's hard day, not a referendum on yours." 2
+		"Put your hood up, close your eyes, and mentally leave row fourteen entirely." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The baby, astonishingly, stopped crying. You are now afraid to move for the rest of the flight.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("You gave a stranger's rough flight the space to just be theirs.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You checked out rather than sit with it.")
 		)
 			)
 		)

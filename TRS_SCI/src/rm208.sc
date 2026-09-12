@@ -51,6 +51,7 @@
 		"Nod along and add a supportive 'great point' to three different tangents." 0
 		"Mentally exit the call and return only when your name is said." 1
 		"Ask, once, if this could be a two-line message next time." 2
+		"Cut in over the crosstalk: 'Stop-can we back up, this could've been an email.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The meeting ends four seconds later. Nobody claps, but you think they maybe want to.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
 			Print("You said the quiet part. People respect you for it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -15 5 TAG_FIGHT)
+			Print("You named the elephant. The elephant left. The meeting did not, quite.")
 		)
 			)
 		)

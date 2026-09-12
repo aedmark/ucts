@@ -51,6 +51,7 @@
 		"Say nothing. Add it to the list you're keeping in your head." 0
 		"Laugh it off and agree it really was a group effort." 1
 		"Mention afterward, privately and plainly, that the idea was yours." 2
+		"Speak up in the meeting, right then, and correct the record." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Three people clap before realizing they don't know why. Doesn't matter; validation is transferable but NOT refundable.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 15 TAG_SECURE)
 			Print("You said the true thing to one person instead of nobody. Feel better?")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -20 5 TAG_FIGHT)
+			Print("You corrected the record in real time. The room got very interested in their notes.")
 		)
 			)
 		)

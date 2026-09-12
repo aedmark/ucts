@@ -51,6 +51,7 @@
 		"Smile at the person next to you like everything's fine, tears and all." 0
 		"Stare straight ahead and let it happen without acknowledging it at all." 1
 		"Let it happen, wipe your face when it passes, and don't apologize for it." 2
+		"Get off two stops early just to escape the eyes on the bus." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Nobody asked. Several people now have to carry a bit of something from you they didn't want.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 3 10 TAG_SECURE)
 			Print("You cried on a bus and didn't make it mean anything about you as a person.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -5 TAG_FLIGHT)
+			Print("You walked the rest of the way so nobody had to watch you do it.")
 		)
 			)
 		)

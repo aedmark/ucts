@@ -51,6 +51,7 @@
 		"Get up and scroll your phone until the sky turns on again" 0
 		"Lie perfectly still and pretend this isn't happening." 1
 		"Get up, write down the one thing actually bothering you, and go back to bed." 2
+		"Draft the confrontation you'll never actually have, word for word." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Your shirts are now sorted by emotional association. Impressive. And unhelpful.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You gave the thought somewhere else to live besides your brain.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 3 TAG_FIGHT)
+			Print("You refought old arguments with people who aren't even in the room.")
 		)
 			)
 		)

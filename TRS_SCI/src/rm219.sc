@@ -51,6 +51,7 @@
 		"File it away as one more thing you won't actually bring up." 0
 		"Nod like the sentence was true and useful." 1
 		"Test it. Walk over and knock." 2
+		"Knock, go in, and say the thing calmly." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The door, astonishingly, opens. You are unprepared for this outcome.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-5 -5 10 TAG_FIGHT)
 			Print("You checked the claim against the evidence. You get lunch together and have a good time.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You tested the door and used it like it was meant to be used.")
 		)
 			)
 		)

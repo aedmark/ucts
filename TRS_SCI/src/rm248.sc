@@ -51,6 +51,7 @@
 		"Buy a replacement instead of asking for it back." 0
 		"Ask for it back with four qualifiers and two apologies." 1
 		"Ask for it back plainly. It's yours." 2
+		"Text them right now, annoyed, demanding it back today." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The plan involves zero actual heisting and a lot of standing outside their door whining.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
 			Print("This did not, in fact, end the friendship. They bought you dinner in appreciation.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -15 0 TAG_FIGHT)
+			Print("You got your thing back. You also got a slightly different friendship.")
 		)
 			)
 		)

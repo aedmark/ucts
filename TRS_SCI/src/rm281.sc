@@ -51,6 +51,7 @@
 		"Spend twenty minutes trying to figure out who it was." 0
 		"Post something extra likable to make up the difference." 1
 		"Close the app. It's one person. It's fine." 2
+		"Close the app entirely and delete it off your homescreen for the rest of the day." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You know anything. The mystery deepens for everyone, including you.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("A number went down. The sky, notably, did not fall. Their loss.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -5 TAG_FLIGHT)
+			Print("You removed the scoreboard instead of the score.")
 		)
 			)
 		)

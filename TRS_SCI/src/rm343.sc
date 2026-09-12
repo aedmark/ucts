@@ -51,6 +51,7 @@
 		"Rush out the door pretending this is fine and normal." 0
 		"Lie there a while longer, the day's already ruined anyway." 1
 		"Get up slowly, text that you're late, actually wake up first." 2
+		"Skip breakfast, skip the shower, just get out the door as fast as possible." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You were not dreaming. You were extremely, demonstrably late.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
 			Print("You let your body finish waking up before you asked it to perform.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -8 TAG_FLIGHT)
+			Print("You outran the morning instead of catching up to it.")
 		)
 			)
 		)

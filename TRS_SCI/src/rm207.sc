@@ -51,6 +51,8 @@
 		"Mentally practice your groveling technique to beg for your job back." 0
 		"Walk in and ask directly what 'growth areas' means, specifically." 1
 		"Prepare a mental defense file of every accomplishment from the last three years." 2
+		"Ask calmly what specifically they mean, and actually listen to the answer." 3
+		"Nod along and change the subject to a project update instead." 4
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You have synergized so hard the meeting ended early out of confusion. Nobody dares to circle back.")
@@ -67,6 +69,14 @@
 		(case 2
 			ApplyChoiceEffects(10 10 -10 TAG_FAWN)
 			Print("You built a case for a trial nobody scheduled.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You asked instead of pre-defending.")
+		)
+		(case 4
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You steered the meeting away from the actual question.")
 		)
 			)
 		)

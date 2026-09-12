@@ -51,6 +51,7 @@
 		"Say you love it, immediately, before you've decided if you do." 0
 		"Ask why you weren't part of the conversation." 1
 		"Say nothing and just quietly start disliking the room." 2
+		"Say honestly you wish you'd been asked, and that you'll get used to it either way." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The wall is aware of its new title. It does not react.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
 			Print("You let a wall become a symbol instead of just a wall.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You named the actual feeling instead of performing or burying it.")
 		)
 			)
 		)

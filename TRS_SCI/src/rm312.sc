@@ -51,6 +51,7 @@
 		"Keep scrolling, keep comparing, feel worse with each one." 0
 		"Convince yourself you want all of it too, just to feel aligned." 1
 		"Close the app. Ask yourself, honestly, what you actually want." 2
+		"Fire off a defensive comment about how milestones aren't a real measure of anything." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Item four is just 'made a really good sandwich.' You stand by it.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
 			Print("You checked the list against your own name instead of theirs.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 3 TAG_FIGHT)
+			Print("You argued with a stranger's wedding photos and, somehow, still lost.")
 		)
 			)
 		)

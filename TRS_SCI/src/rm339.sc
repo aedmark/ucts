@@ -51,6 +51,7 @@
 		"Have a third cup, see what happens." 0
 		"Ignore it, it'll pass, it always passes." 1
 		"Switch to water and sit somewhere quiet for a minute." 2
+		"Leave your desk and wander the building until it eases, unannounced." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Peak efficiency: causing the exact symptom you were worried about.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 5 TAG_SECURE)
 			Print("You gave your nervous system one thing to not fight.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 -5 TAG_FLIGHT)
+			Print("You disappeared for twenty minutes and called it a walk.")
 		)
 			)
 		)

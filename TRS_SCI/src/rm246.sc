@@ -51,6 +51,7 @@
 		"Sit in the same room in total silence, waiting for more." 0
 		"Fill the silence with details about your own day, unprompted." 1
 		"Let 'fine' be enough for now. Try again later." 2
+		"Put the phone down in front of them: 'I asked you something.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The room does not respond either. Hurtful, but fair.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("Not every silence needs to be filled immediately or be analyzed.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 5 TAG_FIGHT)
+			Print("You demanded the conversation instead of waiting for it to volunteer.")
 		)
 			)
 		)

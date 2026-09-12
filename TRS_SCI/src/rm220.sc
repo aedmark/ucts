@@ -51,6 +51,7 @@
 		"Like the post and write a warm, specific comment." 0
 		"Close the app. Reopen it four minutes later." 1
 		"Feel the envy, don't perform past it, close the app anyway." 2
+		"Mute their name from your feed without telling yourself why." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Seventeen people have now liked your emoji. Nobody knows what it means. Least of all you.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You let a small ugly feeling exist without narrating it to anyone or destroying you.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -8 TAG_FLIGHT)
+			Print("You made the wound invisible. It's still there, just off-screen.")
 		)
 			)
 		)

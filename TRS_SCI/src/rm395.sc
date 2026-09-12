@@ -51,6 +51,7 @@
 		"Apologize three separate times to three separate directions." 0
 		"Freeze completely and hope everyone just forgets it happened." 1
 		"Say a quiet 'excuse me' and let the room move on, because it will." 2
+		"Say, loudly and a little defensively, 'it's just a sneeze, everyone relax.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Someone actually said 'bless you' with real enthusiasm. A win, of sorts, for the sneeze.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 5 TAG_SECURE)
 			Print("You let a small, human noise be exactly that small.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -15 0 TAG_FIGHT)
+			Print("Nobody had actually reacted yet. Now they have something to react to.")
 		)
 			)
 		)

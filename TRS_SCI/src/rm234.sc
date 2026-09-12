@@ -51,6 +51,7 @@
 		"Assume it's your fault and quietly clean the kitchen." 0
 		"Ask aggressively, 'IS SOMETHING WRONG?!'" 1
 		"Put on noise-canceling headphones." 2
+		"Ask, calmly, 'hey, everything okay?' and actually wait for the answer." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Neither of you knows what started this. Both of you are committed now.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(25 -10 0 TAG_FLIGHT)
 			Print("Avoidance achieved. The tension is stored in your jaw.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You asked instead of assuming or hiding.")
 		)
 			)
 		)

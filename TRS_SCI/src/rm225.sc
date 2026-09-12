@@ -51,6 +51,7 @@
 		"Reread the word eleven times, hunting for a tone that isn't there." 0
 		"Send a follow-up asking if everything's okay." 1
 		"Take the word at face value and move on with your day." 2
+		"Reply asking, directly, what exactly 'noted' is supposed to mean." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("A one-word war has begun. Nobody will walk away alive.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("Sometimes 'noted' just means noted.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -15 0 TAG_FIGHT)
+			Print("You asked the question everyone thinks but nobody sends.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Do the math four different ways hoping for a different number." 0
 		"Thank your manager for the raise in the team channel anyway." 1
 		"Note the real number down and start pricing out what a market-rate offer looks like." 2
+		"Close the email and refuse to think about it again today." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Nobody answers. Somehow the silence answers anyway.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 8 TAG_SECURE)
 			Print("You stopped waiting for the number to feel different and used it instead.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 -10 TAG_FLIGHT)
+			Print("You postponed the feeling. It kept the appointment without you.")
 		)
 			)
 		)

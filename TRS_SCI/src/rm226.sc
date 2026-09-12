@@ -51,6 +51,7 @@
 		"Deflect the compliment immediately and list everyone else who helped." 0
 		"Reread your own slides looking for the mistake everyone's too polite to mention." 1
 		"Say 'thank you' and let it be true." 2
+		"Close the laptop and go for a walk so you can't keep re-litigating it." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("She could only think of one. You are unreasonably disappointed. She now thinks you're hiding something.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You accepted a good thing without an asterisk on it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -5 TAG_FLIGHT)
+			Print("You physically removed yourself from the trial. The jury adjourns, for now.")
 		)
 			)
 		)

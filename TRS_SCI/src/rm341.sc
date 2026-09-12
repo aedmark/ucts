@@ -51,6 +51,7 @@
 		"Say you're fine, laugh, keep bouncing." 0
 		"Get up and pace the hallway instead." 1
 		"Name it: 'I think I'm anxious about something.'" 2
+		"Snap 'I'm FINE' at whoever asked, louder than the question needed." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Everyone in the room now knows exactly how you feel. Loudly.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
 			Print("You let the leg tell on you, and believed it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -15 0 TAG_FIGHT)
+			Print("You turned a kind question into a small confrontation.")
 		)
 			)
 		)

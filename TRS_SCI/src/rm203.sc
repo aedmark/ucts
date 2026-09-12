@@ -51,6 +51,7 @@
 		"Immediately close your laptop and compose a new identity." 0
 		"Send a follow-up message that says 'ignore that. lol.'" 1
 		"Own it. Reply-all again with an article about workplace inefficiency.'" 2
+		"Send one short, unbothered follow-up and let it be a normal mistake." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Comic Sans has never been used with such menace.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -15 15 TAG_FIGHT)
 			Print("You chose chaos over shame. Bold move with your charisma levels.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 10 TAG_SECURE)
+			Print("You let a typo of an email be exactly that small.")
 		)
 			)
 		)

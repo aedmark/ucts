@@ -51,6 +51,7 @@
 		"Deflect immediately and credit the team." 0
 		"Assume they are setting you up for a massive failure later and prepare a defense." 1
 		"Say 'Thank you' and let the discomfort burn your throat." 2
+		"Change the subject immediately to something, anything, else." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Someone starts a slow clap. It does not catch on.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -10 15 TAG_SECURE)
 			Print("You accepted love. It hurt less than you feared.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You routed around the compliment instead of receiving it.")
 		)
 			)
 		)

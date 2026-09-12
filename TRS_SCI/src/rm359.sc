@@ -51,6 +51,7 @@
 		"Laugh it off if anyone mentions it and change the subject fast." 0
 		"Say nothing to anyone, including yourself, and just move on like it didn't happen." 1
 		"Notice, without judgment, that you might be stressed about something specific." 2
+		"Throw the empty bag away fast and open the fridge to see what else there is." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Neither bag solved anything. Both are now empty.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You looked past the bag to the actual thing underneath it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -8 TAG_FLIGHT)
+			Print("You moved straight past the question and onto the next snack.")
 		)
 			)
 		)

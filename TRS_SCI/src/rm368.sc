@@ -51,6 +51,7 @@
 		"Give the fake answer everyone knows is fake because it's clearly a humblebrag in jackass clothing." 0
 		"Blank out and give a rambling non-answer that goes nowhere." 1
 		"Give an actual, specific weakness and what you're doing about it." 2
+		"'Honestly, I think that question rewards fake humility.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The interviewer is now taking very different notes than they were a minute ago.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 10 TAG_SECURE)
 			Print("You told a stranger something true, on purpose, in a room built for performance.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 5 TAG_FIGHT)
+			Print("You argued with the format instead of playing along with it.")
 		)
 			)
 		)

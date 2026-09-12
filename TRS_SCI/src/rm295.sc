@@ -51,6 +51,7 @@
 		"Nod, say 'that's a good point,' and absorb advice you didn't ask for." 0
 		"Cut them off and say you weren't actually asking for a solution." 1
 		"Say gently that you just wanted to vent, not fix it right now. But thank you." 2
+		"Change the subject fast before they can add point four." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Neither of you asked for this exchange. It is happening regardless.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 3 8 TAG_SECURE)
 			Print("You named exactly what you needed instead of quietly enduring the wrong thing.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You dodged the advice instead of naming what you needed.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Let it sit. Voicemails are for people who don't need you to reply fast." 0
 		"Call back immediately, bracing yourself for bad news that might not be there." 1
 		"Listen to it first. Then respond to what's actually there." 2
+		"Delete it unheard and text 'sorry, missed your call!' instead." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Two unheard voicemails now orbit each other, unopened, forever.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("The message turned out to be smaller than the dread around it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 -5 TAG_FLIGHT)
+			Print("You skipped the message entirely and called it handled.")
 		)
 			)
 		)

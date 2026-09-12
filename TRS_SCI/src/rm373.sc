@@ -51,6 +51,7 @@
 		"Raise your hand immediately to volunteer for anything that gets you excused." 0
 		"Sit very still and hope your name simply never gets called." 1
 		"Answer the questions honestly and let the process do what it does." 2
+		"Loudly announce, to the whole room, exactly how inconvenient this is." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("This is, apparently, an unusual thing to say out loud. You are now Juror Number One.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("You told the truth to a room of strangers deciding your next two weeks. It felt strange, but fine.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You made your one grievance everyone else's problem too.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Open the folder, look at it, close it again without touching anything." 0
 		"Start something new and shinier instead." 1
 		"Open it. Change one small thing. Close it again." 2
+		"Get angry at the project for not finishing itself." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It is done. It is also, somehow, about cats now.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 -5 15 TAG_SECURE)
 			Print("You proved the thing wasn't actually dead, just resting.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 0 TAG_FIGHT)
+			Print("You picked a fight with a folder.")
 		)
 			)
 		)

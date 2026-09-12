@@ -51,6 +51,7 @@
 		"Push through the day on caffeine and sheer stubbornness." 0
 		"Tell everyone who asks that you're 'just a little tired, no big deal.'" 1
 		"Actually cancel one non-essential thing today to protect what's left of your energy." 2
+		"Cancel everything non-negotiable-sounding too, and disappear for the day." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It was not the one that worked. Your entire body is vibrating and still tired.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 10 TAG_SECURE)
 			Print("You spent the energy on rest instead of one more obligation you didn't have room for.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 -5 TAG_FLIGHT)
+			Print("The day happened without you in it. You'll deal with the fallout tomorrow, just as tired.")
 		)
 			)
 		)

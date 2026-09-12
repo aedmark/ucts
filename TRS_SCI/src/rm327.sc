@@ -51,6 +51,7 @@
 		"Check what they're up to again, even though it never actually helps." 0
 		"Congratulate their latest thing extra warmly to prove to yourself you're not bitter." 1
 		"Notice you're comparing your whole self to their highlight reel, and put the scale down." 2
+		"Mute their profile entirely instead of figuring out why it stings." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("New person to compare yourself to. Same old habit, different target.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You stopped measuring two different things with the same ruler.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -5 -5 TAG_FLIGHT)
+			Print("You removed the mirror instead of asking what it kept showing you.")
 		)
 			)
 		)

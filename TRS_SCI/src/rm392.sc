@@ -51,6 +51,7 @@
 		"Smile blandly at anyone who glances your way, just in case." 0
 		"Stare at your phone so hard you could probably describe none of what's on it later." 1
 		"Just sit there, bored, and let the boredom be boring." 2
+		"Ask, louder than the room expected, if anyone would mind turning the TV down." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("One person, astonishingly, did. You now have opinions about a show you weren't watching an hour ago.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 5 TAG_SECURE)
 			Print("You let a waiting room be exactly as uneventful as it actually was.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -15 0 TAG_FIGHT)
+			Print("Someone turned it down. Everyone also now knows exactly who asked.")
 		)
 			)
 		)

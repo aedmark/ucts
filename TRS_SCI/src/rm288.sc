@@ -51,6 +51,7 @@
 		"Laugh it off and hover near the wall instead." 0
 		"Stand there a beat too long, unsure what to do with your body." 1
 		"Ask, simply, if there's another seat open." 2
+		"Slip out to the hallway for a few minutes until you can casually reappear." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The floor, it turns out, has an excellent view.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You solved a chair problem with a chair question.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -5 TAG_FLIGHT)
+			Print("You gave the room time to forget it saw you standing there.")
 		)
 			)
 		)

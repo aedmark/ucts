@@ -51,6 +51,7 @@
 		"Reply to the announcement thread with an enthusiastic 'Exciting news!!'" 0
 		"Don't say anything. Just stare at the new calendar for a while." 1
 		"Block out the commute time and start planning around the real cost." 2
+		"Reply-all asking leadership to justify the policy with actual data." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You are up eleven dollars and strangely invested in a policy you hate.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("You dealt with the schedule instead of the feeling about the schedule.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -15 5 TAG_FIGHT)
+			Print("You asked the room to show its work. The room did not appreciate it.")
 		)
 			)
 		)

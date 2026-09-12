@@ -51,6 +51,7 @@
 		"Rinse everything in the house preemptively for a week." 0
 		"Leave a post-it back, on a clean dish and slightly too pointed." 1
 		"Just talk to your roommate about it, out loud, later." 2
+		"Take the post-it down and pretend you never saw it." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The kitchen now resembles a ransom note made of passively aggressive politeness.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You used your words instead of a sticky note war. You both get pizza later and use paper plates.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You removed the evidence instead of addressing the message.")
 		)
 			)
 		)

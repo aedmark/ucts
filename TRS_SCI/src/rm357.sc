@@ -51,6 +51,7 @@
 		"Force the hug to look natural and hope nobody noticed the flinch." 0
 		"Get through the contact by mentally leaving the room while your body stays in it." 1
 		"Let the flinch happen and just say, lightly, 'sorry, jumpy today.'" 2
+		"Step back, mumble an excuse, and put distance between you and the contact." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Several people are now confused but more fulfilled. Your arms are tired.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 3 8 TAG_SECURE)
 			Print("You named it instead of hiding it, and the moment passed anyway.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 -5 TAG_FLIGHT)
+			Print("You put space between yourself and a hug that hadn't done anything wrong.")
 		)
 			)
 		)

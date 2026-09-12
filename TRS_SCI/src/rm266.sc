@@ -51,6 +51,7 @@
 		"Pretend to look at regular milk until they leave." 0
 		"Say 'Excuse me' using a voice three octaves higher than normal." 1
 		"Abandon the oat milk. You didn't deserve it anyway." 2
+		"Say 'excuse me' at a normal volume and just wait." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You now know more about oat milk than many food scientists. And have a new tennis partner.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(15 5 -10 TAG_FLIGHT)
 			Print("You punished yourself for a stranger's existence.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You asked for the small thing you truly wanted.")
 		)
 			)
 		)

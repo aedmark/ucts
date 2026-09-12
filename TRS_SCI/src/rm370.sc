@@ -51,6 +51,7 @@
 		"Give the safest, most forgettable answer possible." 0
 		"Go completely blank when it's your turn and stall for time." 1
 		"Say something small but actually true instead of the safe version." 2
+		"Ask to come back to it later and hope the moment gets forgotten." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The circle is now unsettled. You have made an impression. Possibly a good one; it's too early to tell.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("You gave the room slightly more of the real thing than it was expecting.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -5 -5 TAG_FLIGHT)
+			Print("You bought time by passing the turn to someone else's ten seconds.")
 		)
 			)
 		)

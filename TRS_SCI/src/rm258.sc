@@ -51,6 +51,7 @@
 		"Set the letter on the counter and don't look at the actual number again for a week." 0
 		"Draft a furious response citing every unfixed thing in the apartment." 1
 		"Sit down and actually rework the budget around the new number." 2
+		"Pick up an extra shift so you don't have to actually look at the budget." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You've mentally moved to a lake house. Your higher rent is still due next month.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 8 TAG_SECURE)
 			Print("You made the number smaller by making it real instead of avoided.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 -5 TAG_FLIGHT)
+			Print("You outran the number instead of facing it.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Turn the radio up to fill the space." 0
 		"Ask 'you okay?' four separate times." 1
 		"Sit in it. Actually just sit in it." 2
+		"Snap 'okay, what is it then' into the silence." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("'And she signals... she signals early. Remarkable composure. Will she return her hands to ten and two? Stay tuned to find out...'")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 10 TAG_SECURE)
 			Print("Twenty minutes of quiet did not, in fact, kill you.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You forced the silence to become an argument instead. Because it was literally nothing, before.")
 		)
 			)
 		)

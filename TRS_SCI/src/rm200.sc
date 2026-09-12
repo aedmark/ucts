@@ -51,6 +51,8 @@
 		"Send a frantic three-paragraph apology." 0
 		"Stare at the wall and dissociate for 20 minutes." 1
 		"Tell yourself 'it's just a typo' while sweating profusely." 2
+		"Reply-all with a terse non-apology: 'Typo. Not fixing it.'" 3
+		"Close the laptop and go for a walk before you can send a second, worse email." 4
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("HR has several follow-up questions. So does everyone else. Nobody's mad, though.")
@@ -67,6 +69,14 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
 			Print("You attempted self-soothing. It was highly unconvincing and only mildly successful.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 3 TAG_FIGHT)
+			Print("You picked a fight with a comma and, somehow, won.")
+		)
+		(case 4
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You put physical distance between yourself and send.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Eat it anyway and never mention it to anyone." 0
 		"Send it back loudly enough that the whole counter hears the complaint." 1
 		"Quietly flag the mistake and ask for it to be corrected." 2
+		"Leave without saying anything and just order somewhere else next time." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It's fine. Not what you wanted. An acceptable plot twist regardless.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 3 5 TAG_SECURE)
 			Print("You asked for the right thing without turning it into a scene.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 -5 TAG_FLIGHT)
+			Print("You solved it by never coming back.")
 		)
 			)
 		)

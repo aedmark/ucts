@@ -51,6 +51,7 @@
 		"Set up autopay so you never have to actually look at the number again." 0
 		"Reread every line item like it's a puzzle with a solution." 1
 		"Call and actually ask what changed, instead of guessing." 2
+		"Call and immediately demand to speak to a supervisor." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You now sit in the dark, on principle, having solved nothing.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 8 TAG_SECURE)
 			Print("Turns out asking a real question gets you a real answer.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You went in swinging before anyone explained anything.")
 		)
 			)
 		)

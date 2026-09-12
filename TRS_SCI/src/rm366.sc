@@ -51,6 +51,7 @@
 		"Say a fast 'thanks' and physically speed up to end the interaction." 0
 		"Freeze up and say nothing until they look away, confused." 1
 		"Say thank you and let it land." 2
+		"Deflect hard: 'you don't even know me,' more defensive than it needed to be." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You are now holding a receipt that says 'good energy, 2:47 PM.' You will keep this forever.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 10 TAG_SECURE)
 			Print("A stranger's small kindness got all the way in, for once.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You picked a fight with a compliment.")
 		)
 			)
 		)

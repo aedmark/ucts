@@ -51,6 +51,7 @@
 		"Suddenly develop an urgent need to check your phone until they're gone." 0
 		"Keep walking in dead silence and hope the hallway ends soon." 1
 		"Just laugh and say 'well, this is a long hallway.'" 2
+		"Say, too sharply, 'you can walk ahead, you know.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You now know a stranger's opinion on parking garages. Neither of you asked for this, but someone needed it all the same.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 5 5 TAG_SECURE)
 			Print("You named the awkward thing out loud and it immediately stopped being awkward.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You turned an empty hallway into a small skirmish.")
 		)
 			)
 		)

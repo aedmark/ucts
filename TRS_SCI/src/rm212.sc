@@ -51,6 +51,7 @@
 		"Stare at the little dots like they're a polygraph." 0
 		"Close the tab so you can't watch it happen." 1
 		"Keep working. Whatever it is will say itself eventually." 2
+		"Send a message first: 'Are you typing a novel or a reply over there?'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Your dots meet their dots. A standoff of pure anticipation. Who will win? ...")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You let an unfinished sentence stay unfinished.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You forced the dots into an actual sentence. A very snarky sentence. The dots stopped. Now you get no reply at all.")
 		)
 			)
 		)

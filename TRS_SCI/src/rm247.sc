@@ -51,6 +51,7 @@
 		"Set it where you want it and leave a note explaining why." 0
 		"Just wear a sweater and say nothing, forever. Probably." 1
 		"Leave it wherever they last set it, every time." 2
+		"Bring it up out loud and actually agree on a number together." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Switzerland would be proud. (Nobody honors the treaty).")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(5 5 -10 TAG_FAWN)
 			Print("You denied yourself a temperature change just to keep the peace.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You turned a silent war into one two-minute conversation.")
 		)
 			)
 		)

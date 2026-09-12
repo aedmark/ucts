@@ -51,6 +51,7 @@
 		"Scroll through every photo, cataloging who's in how many." 0
 		"Like every photo enthusiastically, extra hearts included." 1
 		"Close the app. Ask yourself later, calmly, if it's worth mentioning." 2
+		"Message the group directly: 'Hey, was this planned somewhere else? Just noticed.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Nobody knows what you meant. You are not entirely sure either. Regardless, it IS interesting.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You gave the feeling time before deciding what to do with it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -12 3 TAG_FIGHT)
+			Print("You asked the question out loud instead of just doing math about it in silence.")
 		)
 			)
 		)

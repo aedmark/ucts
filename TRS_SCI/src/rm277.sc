@@ -51,6 +51,7 @@
 		"Find a reason to be near the exit for the rest of the night." 0
 		"Go say 'hi' first, overly warm, before they can find you." 1
 		"Stay where you are. Say 'hi' if it happens naturally." 2
+		"Make sure they see you having a visibly better time than them." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("This confuses everyone, including, eventually, you.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You didn't need to manage the whole room to survive; they left before they even saw you.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You turned the whole party into a performance for one person.")
 		)
 			)
 		)

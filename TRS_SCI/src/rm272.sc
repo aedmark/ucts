@@ -51,6 +51,7 @@
 		"Draft a vague excuse about not feeling well." 0
 		"Text 'actually can't make it' with zero elaboration and hit send." 1
 		"Go anyway. Perform enthusiasm you do not currently possess." 2
+		"Go, stay an hour, and leave honestly whenever you're done." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You are the only knight at what turns out to be a beach party.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(10 15 -20 TAG_FAWN)
 			Print("You showed up as the version of you that RSVPs on time. You have fun, anyway.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You showed up for part of it and let that be enough.")
 		)
 			)
 		)

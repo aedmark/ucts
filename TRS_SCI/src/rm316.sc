@@ -51,6 +51,7 @@
 		"Say 'I'm fine!' faster than the question finished." 0
 		"Deflect and change the subject immediately." 1
 		"Pause. Tell a small piece of the truth." 2
+		"Snap back: 'Why are you asking me that?' before you've thought about it." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("They were already gone. The honesty remains, unclaimed, in the middle of the sidewalk.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
 			Print("A stranger's question got an honest, small answer. Mutual respect intensifies.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -12 3 TAG_FIGHT)
+			Print("You treated a kind question like an ambush.")
 		)
 			)
 		)

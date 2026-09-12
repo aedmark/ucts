@@ -51,6 +51,7 @@
 		"Do the dishes at 11 PM, narrating your resentment internally while sighing externally, and heavily." 0
 		"Say 'I was GOING to' with more heat than the sentence needed." 1
 		"Leave the room to 'find something' for four minutes. Flee state." 2
+		"Say 'I'll get to it tonight' and actually mean it, no sighing required." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It's actually kind of impressive. It does not count as washing them, though.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(10 -5 -5 TAG_FLIGHT)
 			Print("A tactical retreat from a sink.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You did the small thing without turning it into a referendum.")
 		)
 			)
 		)

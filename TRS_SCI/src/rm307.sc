@@ -51,6 +51,7 @@
 		"Stare at it longer, trying to force a memory that isn't there." 0
 		"Decide it must have been a happy day. Move on quickly." 1
 		"Let 'I don't know how I felt' be a complete, acceptable answer." 2
+		"Get irritated at the photo for not just telling you the truth." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The photo declines to comment... Which is ironic, since they're worth a thousand words each, minimum.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 15 TAG_SECURE)
 			Print("Not knowing turned out to be allowed. It always is.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You picked a fight with a piece of paper. It did not blink first.")
 		)
 			)
 		)

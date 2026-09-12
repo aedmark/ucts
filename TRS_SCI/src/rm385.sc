@@ -51,6 +51,7 @@
 		"Step in and try to smooth things over between two people you've never met." 0
 		"Stand frozen, unsure whether moving will make it worse." 1
 		"Quietly step away and let it be their business, not yours." 2
+		"Tell them both, loudly, to take it somewhere else." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("One of them heard you. You have made an enemy and, somehow, also a fan.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 5 TAG_SECURE)
 			Print("You gave two strangers the privacy of a fight that was never going to include you.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 3 TAG_FIGHT)
+			Print("You inserted yourself into a fight that was never yours to resolve.")
 		)
 			)
 		)

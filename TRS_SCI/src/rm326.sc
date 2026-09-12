@@ -51,6 +51,7 @@
 		"Add it to tomorrow's list again, same as every day this month." 0
 		"Ask five different people what they'd do, hoping one of them decides for you." 1
 		"Give yourself an actual deadline and one criterion to decide by." 2
+		"Plan something else entirely, something big and distracting, instead." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It landed. Your reaction to it told you exactly what you actually wanted.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You made the decision smaller instead of making it disappear.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 -10 TAG_FLIGHT)
+			Print("You built an impressive amount of momentum in every direction except the correct one.")
 		)
 			)
 		)

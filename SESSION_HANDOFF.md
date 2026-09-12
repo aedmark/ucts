@@ -50,13 +50,33 @@ bounded retry loop rather than the original's exact 3-tier fallback —
 see `game.sh` for why that simplification is safe).
 
 **Turn loop**: each event room's `init()` shows a `PrintChoices` dialog
-(up to 3 authored choices + a ~15% chance fourth "glitch" wildcard
-choice with fully randomized, untagged effects), applies the choice's
-effects via `mechanisms.sc`'s `ApplyChoiceEffects` (which also layers in
-any unlocked coping-mechanism modifier), then calls `EndTurn()` —
-increments the turn counter, clamps stats to [0,100], and either ends the
-run (any stat hits its failure bound, or `gTurn` exceeds `gMaxTurns`) or
-picks the next event.
+(all of the event's authored choices, 3-5 matching the original exactly
+— see "Full choice counts restored" below — plus a ~15% chance extra
+"glitch" wildcard choice with fully randomized, untagged effects),
+applies the choice's effects via `mechanisms.sc`'s `ApplyChoiceEffects`
+(which also layers in any unlocked coping-mechanism modifier), then
+calls `EndTurn()` — increments the turn counter, clamps stats to
+[0,100], and either ends the run (any stat hits its failure bound, or
+`gTurn` exceeds `gMaxTurns`) or picks the next event.
+
+**Full choice counts restored, not yet compiled/tested.** `MAX_CHOICES=3`
+(a heap-safety scope cut from before the one-room-per-event rewrite) was
+removed — checked the original source first rather than assuming: 42 of
+196 events have exactly 3 choices, 150 have 4, 4 have 5 (the cap was
+silencing a choice on 154/196 events, 78.6%). Two other cuts flagged in
+the same category — zone-weighting "scaled to integers" and the
+no-repeat pool's simplified fallback — turned out to already be
+faithful once checked against `js/engine.js` directly (the zone-weight
+ratio already exactly matches `weakZoneWeight`'s 2.5:1, and the
+retry-based no-repeat pool is rejection sampling from the same
+distribution the original's explicit filter computes); neither was
+touched. `PrintChoices` (`printchoices.sc`) now paginates at
+`CHOICES_PER_PAGE`(3) choices per screen with a "More options..." button
+(`MORE_CHOICES` sentinel) on every page but the last, so no single
+screen ever shows more buttons than the 3-choices-plus-one ceiling
+already proven safe today — see Architecture below for why (dialog
+height, not heap, was the real constraint) and Open Items for what still
+needs a real playtest pass.
 
 **Coping mechanisms**: 5 tags (fawn/flight/fight/freeze/secure, matching
 `js/content-mechanisms.js`), each unlocking permanently after 3 uses of
@@ -216,7 +236,15 @@ bugs this project has hit:
   and zone/event selection), `GetPortraitMood`.
 - `printchoices.sc`(100, always resident) — `PrintChoices`, the vertical
   stacked-`DButton` dialog every event uses instead of stock `Print()`'s
-  broken-for-long-text horizontal button row.
+  broken-for-long-text horizontal button row. Paginates internally at
+  `CHOICES_PER_PAGE` (3) choices per screen for events with more than
+  that many (a "More options..." button leads to the next page) — this
+  is why events can have 3-5 real choices without a dialog-height risk:
+  every page tops out at the same 4-button (3 choices + one more/glitch)
+  ceiling already proven safe, regardless of an event's total choice
+  count. Callers (the 196 generated event rooms) are unaware of
+  pagination at all — same call shape, same return contract (a real
+  choice index or `GLITCH_CHOICE`) as before.
 - `CaseFiles.sc`(107, persistence + category menu) + `CaseFileCategory.sc`
   (141, the per-category browsing/View screen) + `CaseFileAccess.sc`(136)
   + `CaseFileTitles.sc`(137) + `CaseFileDescriptions{Survival,Failure,
@@ -437,22 +465,29 @@ after editing the relevant `js/content*.js` source.
 
 ## Open items — what's actually left
 
-1. **Background music sounds different in DOSBox than in SCI Companion's
-   own preview — unresolved.** Two real, separate causes found and fixed
-   so far (Linux DOSBox-X's unconfigured MIDI output; `TRS_SCI/
-   dosbox.conf`'s missing `[midi]` section for SCI Companion's "Run Game"
-   button — see Environment above), but the user confirmed the mismatch
-   persists even after those. The remaining, most likely cause: the
-   Sound Editor's Preview button doesn't apply per-device channel
-   filtering at all (see Findings above), so it's not possible to verify
-   by ear whether every track is actually enabled for the General MIDI
-   device specifically. **Concrete next step**: with "General MIDI"
-   selected in the Sound Editor's Toolbox pane, visually check every
-   track's enabled checkbox for that device (not by listening), since a
-   track only enabled for a different device during the original
-   "import + enable all tracks" pass would play in Preview (which
-   ignores the filter) but drop out or sound wrong in the real game.
-2. **Nothing else is currently known-broken.** Everything else in
+1. **Background music timbre mismatch — accepted as-is, not pursuing
+   further.** The Sound Editor Preview vs. real-game mismatch (see
+   Findings above for the actual mechanism) was never fully root-caused
+   down to a specific missing track-enable checkbox, but the user
+   confirmed the music as it plays in-game now is fine. Not an open
+   task; noted here only so a future session doesn't reopen it
+   unprompted.
+2. **Full choice counts (item above, "Full choice counts restored") —
+   not yet compiled or playtested.** All 196 rooms were regenerated with
+   every authored choice (746 total `Print()`/`ApplyChoiceEffects()`
+   cases across all rooms, confirmed matching 42×3+150×4+4×5 exactly)
+   and `PrintChoices` now paginates. Needs a real VM pass before this is
+   done: compile (expect the usual multi-round settling since
+   `printchoices.sc` is `(use)`d by all 196 rooms), then specifically
+   playtest a 3-choice event (should be pixel-identical to before), a
+   4-choice event, and — most important — "The Typo" and "The
+   Performance Review Buzzword" (WORK zone, the two 5-choice events with
+   actual prior dialog-overflow history), including forcing/waiting for
+   the glitch roll on one of them to confirm it lands correctly on the
+   final page. If any event still overflows despite the per-page ceiling
+   design, the fallback is lowering `CHOICES_PER_PAGE` (game.sh) to 2 --
+   no architecture change needed.
+3. **Nothing else is currently known-broken.** Everything else in
    "Current state" above is confirmed working by the user's own
    playtesting. If picking this project back up cold, a good sanity
    check is simply: does a standard run complete, does Extended

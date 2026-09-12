@@ -51,6 +51,7 @@
 		"Push through the day as if you hadn't noticed anything at all." 0
 		"Apologize to everyone around you for being 'off' today." 1
 		"Let today be a harder day. You don't owe anyone your usual output." 2
+		"Cancel the rest of the day's plans and just leave without explanation." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You have invented a holiday nobody else knows about. It helps.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 15 TAG_SECURE)
 			Print("You gave a hard day permission to be hard.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -5 TAG_FLIGHT)
+			Print("You gave the day less of you instead of naming what the day actually was.")
 		)
 			)
 		)

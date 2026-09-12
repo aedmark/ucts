@@ -51,6 +51,7 @@
 		"Put it back exactly where it was and close the drawer." 0
 		"Make the recipe tonight. Let it mean whatever it means." 1
 		"Get frustrated at how much a card can do to you." 2
+		"Put the drawer back exactly as it was and avoid that drawer for months." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Your grocery lists now look faintly, movingly ancestral.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(5 -5 -5 TAG_FIGHT)
 			Print("You argued with your own feelings and lost. Now you're sad, hungry, and the drawer is still dirty.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -10 TAG_FLIGHT)
+			Print("You closed the drawer on more than just the card.")
 		)
 			)
 		)

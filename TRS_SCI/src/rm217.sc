@@ -51,6 +51,7 @@
 		"Whisper 'sorry, sorry' three times while finding your seat." 0
 		"Sit silently, too embarrassed to ask what you missed." 1
 		"Ask, once, what you missed. Move on." 2
+		"Talk over the tangent: 'Stop-back up, what did I miss.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("'Quick! There's no time to explain!'")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
 			Print("You caught up effortlessly. Three people quietly thanked you because they weren't paying attention.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 5 TAG_FIGHT)
+			Print("You didn't wait for a pause. You made one.")
 		)
 			)
 		)

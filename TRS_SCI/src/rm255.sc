@@ -51,6 +51,7 @@
 		"Lie perfectly still, pretending to be asleep, wide awake." 0
 		"Get up and greet them cheerfully, hiding that you were worried." 1
 		"Ask in the morning if everything's okay." 2
+		"Meet them at the door and demand to know where they've been." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("'You've got some explaining to do! At 2 AM! ...In this economy!'")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You waited for daylight and asked a plain question. They just lost track of time.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -15 3 TAG_FIGHT)
+			Print("You turned worry into an interrogation.")
 		)
 			)
 		)

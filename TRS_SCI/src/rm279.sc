@@ -51,6 +51,7 @@
 		"You suddenly find your phone extremely interesting." 0
 		"Overcommit to a huge wave and walk over, unsure why." 1
 		"Give a small, real wave and let it be whatever it is." 2
+		"Wave back too hard on purpose, daring them to make it weirder." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("This escalated several social contracts beyond what either of you agreed to. It feels right.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-5 0 5 TAG_SECURE)
 			Print("A half-known person got a half-committed, perfectly adequate wave.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You escalated an awkward wave into a small standoff.")
 		)
 			)
 		)

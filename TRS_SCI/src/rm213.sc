@@ -51,6 +51,7 @@
 		"Apologize to their inbox for bothering them at all." 0
 		"Send a slightly sharp message to whoever should have flagged this." 1
 		"Sit with the urgent thing, now un-urgent, doing nothing." 2
+		"Note the gap calmly and ask, next time, for a heads-up before someone's out." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It now reads: 'I am also out. Of my mind. Please check back later.'")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(15 0 -10 TAG_FREEZE)
 			Print("The fire kept burning with nobody assigned to it. Insurance won't cover it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 10 TAG_SECURE)
+			Print("You addressed the process, not the person.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Smile and clap while quietly re-ranking your own importance." 0
 		"Compliment the speech extra hard afterward." 1
 		"Let one omission be one omission, not a verdict." 2
+		"Mention to them afterward that you noticed." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It runs nine minutes. The room claps out of confusion, mostly.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You weren't named. You were, notably, still there.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -15 0 TAG_FIGHT)
+			Print("You turned a passing feeling into a conversation neither of you wanted to have at a party.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Say something bright and pointless just to fill the air." 0
 		"Study the floor numbers with the intensity of someone defusing a bomb." 1
 		"Let the silence just be a normal, unremarkable silence." 2
+		"Get off one floor early, for no reason you'd admit to." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You are now stopping on every floor. The other passenger has begun to visibly reconsider their life choices.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-8 0 8 TAG_SECURE)
 			Print("Two people stood quietly near each other for a few seconds. Nothing happened. Nothing needed to.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 -5 TAG_FLIGHT)
+			Print("You added four flights of stairs to your day to skip eleven more seconds of silence.")
 		)
 			)
 		)

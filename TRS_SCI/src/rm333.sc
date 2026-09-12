@@ -51,6 +51,7 @@
 		"Force a smile until the muscles relax on their own." 0
 		"Snap at the next person who asks you a simple question." 1
 		"Actually stretch it out and breathe for ten seconds." 2
+		"Cancel the call you were dreading and deal with the jaw later." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It's in a drawer now. You develop TNJ.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You noticed the tension and let it go. On purpose (for once).")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 -5 TAG_FLIGHT)
+			Print("You removed yourself from the thing clenching your jaw, not the clenching.")
 		)
 			)
 		)

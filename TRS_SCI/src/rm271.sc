@@ -51,6 +51,7 @@
 		"Panic-scan your own memory for context you don't have." 0
 		"Agree enthusiastically, like you absolutely remember." 1
 		"Say 'I don't actually remember that, tell me more,' and mean it." 2
+		"Change the subject fast, before anyone asks a follow-up question." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("They seem to accept this explanation more readily than expected. Someone asks if you've ever met Elvis.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 -5 10 TAG_SECURE)
 			Print("You let not-knowing be an ordinary, survivable thing. Because it is.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -8 -5 TAG_FLIGHT)
+			Print("You steered the conversation somewhere you actually remembered.")
 		)
 			)
 		)

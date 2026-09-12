@@ -51,6 +51,7 @@
 		"Turn up the TV as loud as you can and hope they can heart it." 0
 		"Consider, seriously, banging on the wall. Do nothing instead." 1
 		"Put on headphones and let it be someone else's problem." 2
+		"Grab your stuff and go sit somewhere else in the apartment entirely." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("A wall-based friendship begins, tentatively, in Morse-adjacent taps.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("Not every wall's noise is yours to carry.")
+		)
+		(case 3
+			ApplyChoiceEffects(0 -5 -5 TAG_FLIGHT)
+			Print("You relocated instead of just tuning it out.")
 		)
 			)
 		)

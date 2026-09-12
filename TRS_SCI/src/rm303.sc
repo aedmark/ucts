@@ -51,6 +51,7 @@
 		"Invent an urgent task to feel useful again." 0
 		"Scroll until the day disappears without you in it." 1
 		"Sit with the unscheduled hour and let it be boring." 2
+		"Get irritated at yourself for not being productive on your day off." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Attendance is mandatory. You are the only attendee.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 15 TAG_SECURE)
 			Print("You survived free time without earning it first. You didn't explode.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 0 TAG_FIGHT)
+			Print("You turned rest into something to be mad about.")
 		)
 			)
 		)

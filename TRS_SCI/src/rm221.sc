@@ -51,6 +51,7 @@
 		"Stand there, saying nothing, doing the math on how late you'll be." 0
 		"Ask, politely but directly, if you can jump in for one page." 1
 		"Wait it out and tell yourself it's fine, it's fine, it's fine." 2
+		"Wait it out and use the extra two minutes to actually breathe." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Nobody knew this much about the printer. Nobody wanted to.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(10 5 -10 TAG_FAWN)
 			Print("You narrated a calm you weren't actually experiencing, accomplishing nothing.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 5 TAG_SECURE)
+			Print("You let the delay be a delay, not an emergency.")
 		)
 			)
 		)

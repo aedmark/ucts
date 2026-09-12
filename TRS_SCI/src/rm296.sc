@@ -51,6 +51,7 @@
 		"Keep scrolling well past the point it started feeling bad." 0
 		"Like everything, generously, while feeling worse with every tap." 1
 		"Close the app and name, out loud, that it's a highlight reel, not a life." 2
+		"Put the phone in another room and go do something with your hands instead." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Twelve people liked a photo of your ceiling. Justice, kinda.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You put the comparison down instead of finishing the whole plate of it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -5 -5 TAG_FLIGHT)
+			Print("You physically separated yourself from the plate you kept refilling.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Replay the moment, cataloging exactly why you didn't say it." 0
 		"Decide it's better this way for everyone. Probably." 1
 		"Note that the opening will come again. It's not your only chance." 2
+		"Leave the conversation early, before anything else can slip out." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It's out. The world, remarkably, keeps turning.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("You released the pressure of a single missed moment.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -5 -5 TAG_FLIGHT)
+			Print("You removed yourself from your own opening before it could close on its own.")
 		)
 			)
 		)

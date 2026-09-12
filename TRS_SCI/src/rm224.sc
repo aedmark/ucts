@@ -51,6 +51,7 @@
 		"Stay online another forty-five minutes to answer it fully." 0
 		"Reply first thing tomorrow, on purpose." 1
 		"Stare at the message, unable to decide, until it's 7 PM anyway." 2
+		"Reply immediately: 'This needs to wait until tomorrow. Logging off now.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("This was not the reassurance they were hoping for. You never hear from them again.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(20 0 -15 TAG_FREEZE)
 			Print("Indecision cost you the boundary you meant to keep.")
+		)
+		(case 3
+			ApplyChoiceEffects(-10 -15 5 TAG_FIGHT)
+			Print("You said no in real time, which is somehow rarer than saying yes.")
 		)
 			)
 		)

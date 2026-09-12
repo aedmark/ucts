@@ -51,6 +51,7 @@
 		"Untag yourself and message the poster to take it down." 0
 		"Leave it up and never look at that post again." 1
 		"Zoom in and catalog every flaw for later." 2
+		"Leave it up. Let one bad angle be one bad angle." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The recount is denied. Someone photoshops a powdered wig on your head in said photo. Democracy has failed you again.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(20 0 -20 TAG_FREEZE)
 			Print("You built a case against your own face. You won... but also... lost?")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
+			Print("You let a photo just be a photo.")
 		)
 			)
 		)

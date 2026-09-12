@@ -51,6 +51,7 @@
 		"Replay your last ten minutes of behavior for embarrassing material." 0
 		"Change your position in the room, just in case." 1
 		"Let the laugh be about literally anything else. It probably is." 2
+		"Walk over and ask, pointed, if something's funny." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("It was not about you. Good, because that could have been embarrassing!")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 0 10 TAG_SECURE)
 			Print("Most laughter in a crowded room has nothing to do with you. Unless you're doing something funny.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You turned a guess into a confrontation. You look unhinged and very un-funny.")
 		)
 			)
 		)

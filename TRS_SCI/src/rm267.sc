@@ -51,6 +51,7 @@
 		"Start searching for a completely new friend group." 0
 		"Send 4 memes immediately to lighten the mood." 1
 		"Throw your phone into a soft pile of laundry." 2
+		"Say plainly, 'that landed differently than I think you meant it to.'" 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("They have not responded. The emoji stands alone, weeping into the void.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(10 0 10 TAG_FLIGHT)
 			Print("You successfully removed the object of your pain. Until you get up again.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 10 TAG_SECURE)
+			Print("You said the true thing instead of performing okay-ness.")
 		)
 			)
 		)

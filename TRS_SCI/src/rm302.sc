@@ -51,6 +51,7 @@
 		"Start drafting an apology text you'll delete by morning." 0
 		"Get up and reorganize something small and physical." 1
 		"Name it: this is just cortisol, not prophecy." 2
+		"Argue back at 3 AM brain, out loud, like it's a person you can win against." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("The spices are now alphabetized. You are not more at peace, but the spices are.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-15 0 10 TAG_SECURE)
 			Print("You out-argued your own nervous system and won. You sleep in victory.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 0 3 TAG_FIGHT)
+			Print("You picked a fight with your own nervous system. It doesn't lose.")
 		)
 			)
 		)

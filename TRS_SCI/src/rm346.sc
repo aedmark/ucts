@@ -51,6 +51,7 @@
 		"Cover it and move on, it's fine, you're fine." 0
 		"Poke it a few times, oddly detached from the pain." 1
 		"Actually stop and wonder what's been going on with you lately." 2
+		"Press on it hard, annoyed at your own body for keeping secrets from you." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Nobody asked. You told them anyway. The story was *very* good.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-5 0 15 TAG_SECURE)
 			Print("You treated a small mystery as information instead of noise.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 -5 TAG_FIGHT)
+			Print("You took it out on the bruise. The bruise kept being a bruise, unbothered.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Check anyway and feign shock when you can't find your phone." 0
 		"Laugh it off and immediately forget it happened." 1
 		"Notice it, name it, and let it pass." 2
+		"Announce, annoyed, that your phone is haunted and someone should fix that." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You are not. The universe isn't on speaking terms with you, currently.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-5 0 10 TAG_SECURE)
 			Print("You clocked your nervous system doing a bit and didn't argue with it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 0 TAG_FIGHT)
+			Print("You picked a fight with a phone that wasn't even there.")
 		)
 			)
 		)

@@ -51,6 +51,7 @@
 		"Stare at the message, unsent-but-sent, for a full minute before doing anything." 0
 		"Immediately send eight apology messages in a row." 1
 		"Send one clear apology, own it, and stop typing." 2
+		"Call the coworker directly and say the thing to their face, badly, right now." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Nobody believes this. You did not really expect them to.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 5 8 TAG_SECURE)
 			Print("One honest sentence did more than eight nervous ones would have. The coworker actually admits they deserved it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-8 -18 5 TAG_FIGHT)
+			Print("You turned a screenshot into an actual conversation. Braver, and much worse, in real time.")
 		)
 			)
 		)

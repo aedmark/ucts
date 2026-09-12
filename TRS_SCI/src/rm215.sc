@@ -51,6 +51,7 @@
 		"Reply 'no problem!' before you've checked if it's a problem." 0
 		"Push back, in writing, on what's actually possible by Friday." 1
 		"Open the file. Close the file. Open a different file." 2
+		"Reply with what's actually achievable by Friday, and what isn't." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("Nobody has ever communicated dread this efficiently. You're promoted to CEO.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(25 0 -15 TAG_FREEZE)
 			Print("You orbited the work without landing on it. Nothing gets done.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 10 TAG_SECURE)
+			Print("You answered with the truth instead of a reflex.")
 		)
 			)
 		)

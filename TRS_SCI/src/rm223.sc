@@ -51,6 +51,7 @@
 		"Assume you're actually being compared unfavorably to that person." 0
 		"Reply, lightly, pointing out the name mismatch." 1
 		"Ignore it and answer as if it were addressed to you correctly." 2
+		"Reply lightly noting the mix-up and answer your own actual question." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You are now, professionally speaking, someone else. It's going well.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(5 5 -5 TAG_FAWN)
 			Print("You let the mistake pass to keep things smooth.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -5 10 TAG_SECURE)
+			Print("You corrected the record without making it a whole thing.")
 		)
 			)
 		)

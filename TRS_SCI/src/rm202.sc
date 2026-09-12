@@ -51,6 +51,7 @@
 		"Begin packing up your desk mentally." 0
 		"Work at 300% capacity for the next four hours." 1
 		"Remind yourself you are an adult and this is fine." 2
+		"Knock and ask, directly, if this is about you." 3
 		)
 		(if(== choice GLITCH_CHOICE)
 			ApplyGlitch("You know nothing. The door remains closed. Deeply satisfying anyway.")
@@ -67,6 +68,10 @@
 		(case 2
 			ApplyChoiceEffects(-10 5 5 TAG_SECURE)
 			Print("You chose logic. Your amygdala chose to ignore it.")
+		)
+		(case 3
+			ApplyChoiceEffects(-5 -10 3 TAG_FIGHT)
+			Print("You confronted the closed door instead of guessing at it.")
 		)
 			)
 		)

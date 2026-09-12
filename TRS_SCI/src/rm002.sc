@@ -2,18 +2,13 @@
  T.R.S. → SCI0 port
  ******************************************************************************
  rm002.sc
- The end-of-run room: entered via a scripted (send gRoom:newRoom(ENDING_ROOM))
- from rm001's runShift once a stat hits a fatal threshold or gMaxTurns is
- reached. Re-checks the same thresholds/conditions rm001 already evaluated
- (final stat values are still sitting in gRepression/gMask/gChild -- a room
- transition doesn't touch them) to decide which one-line ending to show.
- Split into its own room specifically so the turn's accumulated state gets
- released via the engine's normal room-transition cleanup rather than
- falling through to ordinary ego/room control inside rm001 -- see
- SESSION_HANDOFF.md.
- No restart flow yet -- once the ending prints, ego is just left walking
- around this (currently blank, reusing rm001's background) room. That's
- still-not-built scope, not new to this change.
+ The end-of-run room -- entered via (send gRoom:newRoom(ENDING_ROOM))
+ from mechanisms.sc's EndTurn() once a stat hits a fatal threshold or
+ gMaxTurns is reached. Re-evaluates the same thresholds (final stat
+ values are still sitting in gRepression/gMask/gChild, untouched by the
+ room transition) to pick which ending to print. Also hosts the two
+ clickable office hotspots: filing cabinet (Case Files) and computer
+ (start a new run).
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")
@@ -28,6 +23,7 @@
 (use "obj")
 (use "inv")
 (use "casefiles")
+(use "casefilecategory")
 (use "mechanisms")
 (use "endingsurvival0")
 (use "endingsurvival1")
@@ -62,51 +58,21 @@
 
 		SetUpEgo()
 		(send gEgo:init())
-		// SetUpEgo() grants player movement control (it calls
-		// PlayerControl() internally) -- there's nothing to walk around
-		// and interact with in this room yet, so take it back immediately
-		// rather than leaving ego free to wander over the ending text.
+		// Nothing to walk around/interact with -- take back the control
+		// SetUpEgo() grants and hide ego outright (same as TitleScreen.sc).
 		ProgramControl()
-		// Frozen-but-visible still reads as "broken" now that there's real
-		// art -- hide ego outright instead, same call TitleScreen.sc
-		// already uses to keep ego off the title screen.
 		(send gEgo:hide())
-		// No portrait here -- user wants it visible only during actual
-		// play (inside PrintChoices' own dialog, printchoices.sc), not on
-		// any room background, including the ending room.
 
 		(self:printEnding())
 	)
 	(method (printEnding)
-		// Full ending-variant port (see SESSION_HANDOFF.md, game.sh,
-		// tools/gen-endings.js): each PrintFailureEndingN()/
-		// PrintSurvivalEndingN() (one file per pool -- endingsurvival0-8.sc/
-		// endingfailure0-2.sc) picks one of several real flavor variants at
-		// random and marks the matching flat Case Files slot itself -- this
-		// method just decides WHICH pool applies, exactly the same
-		// condition table/order as before. Each call is wrapped in
-		// Load(rsSCRIPT ...)/DisposeScript(...) -- real bug, confirmed the
-		// hard way: without this, whichever script a given ending lives in
-		// auto-loads on first call and never gets disposed, same as any
-		// script in this engine. Harmless within a single run, but the
-		// clickable "computer -> new run" hotspot (rm002.sc's RoomScript)
-		// makes it trivial to rack up many runs without ever fully
-		// relaunching, so different endings across different runs kept
-		// accumulating several of these scripts permanently resident at
-		// once. One script per POOL (not the original's 4-5-pools-per-file
-		// bundling) is itself a later fix -- see SESSION_HANDOFF.md's
-		// turn-10 heap-exhaustion entry: the bundled files were big enough
-		// (~9.1-11.9KB) that loading the one pool actually needed dragged
-		// in several dead ones too, on top of MarkCaseFile()'s own nested
-		// Load/DisposeScript of CASEFILEACCESS_SCRIPT firing while that
-		// whole bundle was still resident.
-		// CASEFILES_SCRIPT (MarkCaseFile) now Load/DisposeScript wrapped
-		// around each branch too -- CaseFiles.sc was ~12KB and permanently
-		// resident from the moment anything ever called MarkCaseFile
-		// (mechanisms.sc's unlock branches, or here), a real, sizeable
-		// chunk of permanent baseline heap given how thin margins already
-		// are (see SESSION_HANDOFF.md). Same idiom as CASEFILEACCESS_SCRIPT
-		// and CASEFILETITLES_SCRIPT before it.
+		// Decides which ending POOL applies; each PrintFailureEndingN()/
+		// PrintSurvivalEndingN() (one script per pool) picks a random
+		// variant within it and marks the matching Case Files slot
+		// itself. Every call Load/DisposeScript-wraps both the pool
+		// script and CASEFILES_SCRIPT (MarkCaseFile) -- neither should
+		// stay resident, since the clickable computer hotspot makes it
+		// easy to rack up many runs/endings in one session.
 		(if(>= gRepression 100)
 			Load(rsSCRIPT CASEFILES_SCRIPT)
 			Load(rsSCRIPT ENDINGFAILURE0_SCRIPT)
@@ -134,24 +100,18 @@
 		(self:printSurvivalEnding())
 	)
 	(method (printSurvivalEnding)
-		// Matches js/engine.js's checkGameEnd(): a standard-session survival
-		// permanently unlocks Extended Therapy for all future runs -- an
-		// Extended Therapy run surviving doesn't re-trigger anything (it's
-		// already unlocked, and the original only calls this when
-		// `!state.hardMode` too).
-		// One Load(CASEFILES_SCRIPT) covers UnlockNgPlus() (which itself
-		// calls MarkCaseFile) AND whichever PrintSurvivalEndingN() branch
-		// fires below (each also calls MarkCaseFile for its own variant) --
-		// cheaper than disposing/reloading between the two, since both
-		// always happen together in this method.
+		// A standard-session survival permanently unlocks Extended
+		// Therapy (matches checkGameEnd()); an Extended Therapy run
+		// surviving doesn't re-trigger it. One Load(CASEFILES_SCRIPT)
+		// covers both UnlockNgPlus() and whichever pool fires below,
+		// since they always happen together here.
 		Load(rsSCRIPT CASEFILES_SCRIPT)
 		(if(not gHardMode)
 			UnlockNgPlus()
 		)
-		// Same condition table/order as the original's CONTENT_ENDINGS
-		// (js/content-endings.js, first match wins) -- matched via a flat
-		// sequence of early-return ifs rather than a chained else-if, see
-		// SESSION_HANDOFF.md's if/else gotcha for why.
+		// Same condition table/order as CONTENT_ENDINGS (first match
+		// wins) -- a flat sequence of early-return ifs, not chained
+		// else-if (no precedent in this codebase for 3+-branch chaining).
 		(if(>= gRepression 70)
 			Load(rsSCRIPT ENDINGSURVIVAL0_SCRIPT)
 			PrintSurvivalEnding0()
@@ -218,35 +178,43 @@
 (instance RoomScript of Script
 	(properties)
 	(method (handleEvent pEvent)
+        (var choice)
         (super:handleEvent(pEvent))
-        // Clickable filing cabinet -> Case Files viewer (see game.sh for
-        // why this lives here and not rm001, and for the hotspot rectangle
-        // itself). Nested ifs rather than one long and-chain -- this
-        // codebase has no confirmed precedent for and-chains longer than
-        // 4 terms, and this needs 5 (unclaimed, click type, 2 x-bounds,
-        // 2 y-bounds), so it's split into two 2-term chains instead of
-        // gambling on an unverified length.
+        // Filing cabinet -> Case Files viewer. Nested ifs rather than one
+        // 5-term and-chain -- no precedent in this codebase for and-chains
+        // longer than 4.
         (if(not (send pEvent:claimed))
             (if(== (send pEvent:type) evMOUSEBUTTON)
                 (if((>= (send pEvent:x) CABINET_X1) and (< (send pEvent:x) CABINET_X2))
                     (if((>= (send pEvent:y) CABINET_Y1) and (< (send pEvent:y) CABINET_Y2))
                         (send pEvent:claimed(TRUE))
+                        // Two-stage Load/Dispose -- see CaseFileCategory.sc's
+                        // header for why the menu and viewer scripts must
+                        // never both be resident.
                         Load(rsSCRIPT CASEFILES_SCRIPT)
-                        ShowCaseFiles()
+                        = choice ShowCaseFiles()
                         DisposeScript(CASEFILES_SCRIPT)
+                        (if(choice)
+                            Load(rsSCRIPT CASEFILECATEGORY_SCRIPT)
+                            (if(== choice 1)
+                                ShowCaseFileCategory(CASEFILE_SURVIVAL_BASE CASEFILE_SURVIVAL_COUNT "Survival Endings")
+                            )
+                            (if(== choice 2)
+                                ShowCaseFileCategory(CASEFILE_FAILURE_BASE CASEFILE_FAILURE_COUNT "Failure Endings")
+                            )
+                            (if(== choice 3)
+                                ShowCaseFileCategory(CASEFILE_MECH_BASE CASEFILE_MECH_COUNT "Coping Mechanisms")
+                            )
+                            DisposeScript(CASEFILECATEGORY_SCRIPT)
+                        )
                     )
                 )
             )
         )
-        // Clickable computer -> starts a new run (rm001.sc's init() does
-        // the actual per-run state reset; this just triggers a plain
-        // room transition there, same newRoom() idiom runShift() already
-        // uses to leave rm001, just in reverse and without any VM-level
-        // RestartGame() -- see game.sh and rm001.sc). No confirmation
-        // prompt, unlike the "Restart Game" menu item -- that one
-        // interrupts a run already in progress and has real progress to
-        // lose; this is only ever clickable once a run has already ended,
-        // so there's nothing to accidentally lose by clicking it.
+        // Computer -> starts a new run (a plain newRoom(), not the menu's
+        // kernel-level RestartGame(); rm001.sc's init() does the actual
+        // reset). No confirmation prompt -- only clickable once a run has
+        // already ended, nothing to lose.
         (if(not (send pEvent:claimed))
             (if(== (send pEvent:type) evMOUSEBUTTON)
                 (if((>= (send pEvent:x) COMPUTER_X1) and (< (send pEvent:x) COMPUTER_X2))

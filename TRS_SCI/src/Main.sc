@@ -57,14 +57,13 @@
 	gMask = STARTING_MASK				/* T.R.S. stat: social mask, loses at 0 */
 	gChild = STARTING_CHILD			/* T.R.S. stat: inner child, loses at 0 */
 	gTurn = 1				/* T.R.S.: current turn number, 1-based */
-	gMaxTurns = DEFAULT_MAX_TURNS	/* T.R.S.: survive this many turns to win -- set per-run in rm001.sc's init() (DEFAULT_MAX_TURNS or HARD_MODE_TURNS depending on gHardMode) */
-	gHardMode = FALSE		/* T.R.S. Extended Therapy: TRUE for the rest of this run once chosen at rm001.sc's init() -- never persisted itself, see gNgPlusUnlocked below */
-	gNgPlusUnlocked = FALSE	/* T.R.S.: permanently TRUE once any standard-session run has ever survived. An in-memory mirror of gCF17/CASEFILE_NGPLUS (see gCF0..17 below) -- synced from it right after LoadCaseFiles() in Template:init(), and set directly by UnlockNgPlus() (casefiles.sc, alongside its own MarkCaseFile(CASEFILE_NGPLUS) call) purely so call sites can read a plain global instead of GetCaseFile(CASEFILE_NGPLUS) every time */
+	gMaxTurns = DEFAULT_MAX_TURNS	/* set per-run in rm001.sc's init() */
+	gHardMode = FALSE		/* Extended Therapy, chosen per-run in rm001.sc; not itself persisted, see gNgPlusUnlocked */
+	gNgPlusUnlocked = FALSE	/* permanently TRUE once a standard run has ever survived -- mirrors gCF107/CASEFILE_NGPLUS, synced in Template:init() */
 
-	/* T.R.S. coping-mechanism tracking: count of same-tag choices made so
-	   far this run, and whether that mechanism has permanently unlocked
-	   (count reaching UNLOCK_THRESHOLD flips it once and for all -- see
-	   ApplyChoiceEffects in mechanisms.sc) */
+	/* Coping-mechanism tracking: same-tag choices made this run, and
+	   whether it's permanently unlocked (UNLOCK_THRESHOLD -- see
+	   ApplyChoiceEffects, mechanisms.sc) */
 	gFawnCount = 0
 	gFawnUnlocked = FALSE
 	gFlightCount = 0
@@ -76,18 +75,11 @@
 	gSecureCount = 0
 	gSecureUnlocked = FALSE
 
-	/* T.R.S. Case Files: cross-run "have I ever seen this" record (every
-	   ending VARIANT, mechanisms, plus the unrelated Extended Therapy
-	   unlock flag riding along in slot 107 -- see game.sh's full index
-	   scheme). Persisted to disk -- see casefiles.sc. Each defaults to 0
-	   (never seen); LoadCaseFiles() (called once from Template:init())
-	   overwrites these from disk if a save file already exists.
-	   Individual scalars, not an array -- an earlier gCaseFiles[N] array
-	   global compiled but wasn't visible from other scripts via
-	   (use "main") the way scalar globals are (no working precedent for
-	   that anywhere in this codebase; see SESSION_HANDOFF.md). 108 of them
-	   now (was 18) after the full ending-variant port -- see game.sh for
-	   the index ranges, tools/gen-endings.js for how 0-101 get generated. */
+	/* Case Files: cross-run discovery record, 108 scalars (not an array
+	   -- a global array isn't visible from other scripts via (use "main")
+	   the way scalars are). Defaults to 0 (unseen); LoadCaseFiles()
+	   overwrites from disk if a save exists. See game.sh for the index
+	   scheme. */
 	gCF0 = 0
 	gCF1 = 0
 	gCF2 = 0
@@ -260,27 +252,14 @@
          ******************************/
 		= gVersion "1.0"
 
-		// Cross-run Case Files record (endings/mechanisms ever seen, plus
-		// the Extended Therapy unlock flag in slot CASEFILE_NGPLUS -- see
-		// game.sh) -- load once at boot; defaults to all-zero (gCaseFiles'
-		// declared initial state) if no save file exists yet. Load/
-		// DisposeScript wrapped -- CaseFiles.sc is ~12KB and was
-		// permanently resident from this very first call onward (nothing
-		// ever disposed it), a sizeable chunk of permanent baseline heap
-		// given how thin margins already are -- see SESSION_HANDOFF.md.
-		// Same idiom as CASEFILEACCESS_SCRIPT right below.
+		// Load the Case Files record once at boot (defaults to all-zero
+		// if no save exists). Load/Dispose-scoped, like every CaseFiles*
+		// call site -- these scripts must never sit permanently resident.
 		Load(rsSCRIPT CASEFILES_SCRIPT)
 		LoadCaseFiles()
 		DisposeScript(CASEFILES_SCRIPT)
-		// Mirror gCF17 into the plain gNgPlusUnlocked global every call
-		// site outside this file actually reads -- see its declaration
-		// above for why. Load/DisposeScript wrapped -- this single call
-		// was the one thing making the whole of casefileaccess.sc
-		// permanently resident for the entire game session (scripts
-		// auto-load on call but never auto-unload); a real, confirmed
-		// contributor to a heap-exhaustion bug during ordinary per-turn
-		// play, unrelated to anything about Case Files itself -- see
-		// SESSION_HANDOFF.md.
+		// Mirror the NG+ flag into a plain global so other call sites
+		// don't need CaseFileAccess.sc resident just to read it.
 		Load(rsSCRIPT CASEFILEACCESS_SCRIPT)
 		= gNgPlusUnlocked GetCaseFile(CASEFILE_NGPLUS)
 		DisposeScript(CASEFILEACCESS_SCRIPT)
@@ -522,12 +501,10 @@
 (instance statusCode  of Code
 	(properties)
  	(method (doit param1)
- 		// Numbers-with-percent-signs, pipe-separated -- user's own call
- 		// after seeing the bar-gauge version and preferring the original
- 		// numeric readout, just quantified ("T.R.S. REP:40%|MASK:60%|
- 		// CHILD:60%"). See game.sh's stat-gauges block for the fuller
- 		// history of the bar-gauge attempts this replaces.
- 		//
+ 		// "T.R.S.    REP: 40 % |  MASK: 60 % |  CHILD :60". Appends each
+ 		// '%' via StrAt() after the fact rather than embedding a literal
+ 		// '%' in the Format() string -- '%' is Format()'s own specifier
+ 		// marker, untested territory to place one directly in the output.
  		(var len)
  		Format(param1 "T.R.S.    REP: %d " gRepression)
  		= len StrLen(param1)

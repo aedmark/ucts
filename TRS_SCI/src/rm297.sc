@@ -3,16 +3,11 @@
  ******************************************************************************
  rm297.sc
  GENERATED FILE — do not hand-edit. Produced by tools/gen-social-events.js from
- the original js/events/social.js (SOCIAL event 31). Re-run
- that script after editing the source event data.
+ js/events/social.js (SOCIAL event 31).
 
- One room per event (see game.sh and SESSION_HANDOFF.md) -- this room IS
- the event: shows its PrintChoices dialog, applies the chosen response's
- effects, prints its log line, then hands off via EndTurn() (mechanisms.sc)
- to either the next event's room or the ending room. No custom RoomScript
- -- ego is hidden/program-controlled and there's nothing here to click or
- "look" at, and Rm's own `script` property defaults to 0 (a valid,
- handled no-script state) if never set.
+ One room per event -- this room IS the event: shows its PrintChoices
+ dialog, applies the effects, then hands off via EndTurn() to the next
+ room. No custom RoomScript needed (ego is hidden/program-controlled).
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")

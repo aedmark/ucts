@@ -1,18 +1,11 @@
 /******************************************************************************
  T.R.S. → SCI0 port
  ******************************************************************************
- casefiletitles.sc
- Split out of casefileaccess.sc after a real heap-exhaustion bug (see
- SESSION_HANDOFF.md): Main.sc calls GetCaseFile() directly at boot (for
- the gNgPlusUnlocked mirror sync), which made the whole of
- casefileaccess.sc permanently resident from the start of the game --
- including this 107-case CaseFileTitle() switch, which is ONLY ever
- actually needed by ShowCaseFiles() (casefiles.sc), a screen most turns
- never open. Kept as its own script specifically so ShowCaseFiles() can
- Load(rsSCRIPT CASEFILETITLES_SCRIPT)/DisposeScript(...) it around just
- that one use, instead of paying its ~4.9KB permanently for the entire
- session -- same Load/DisposeScript idiom used throughout this codebase
- for anything that shouldn't stay permanently resident.
+ CaseFileTitles.sc
+ CaseFileTitle(index): the 107 Case Files titles, one per switch case.
+ Split into its own Load/Dispose-scoped script (not part of
+ CaseFileAccess.sc) since it's only needed by the Case Files viewer, a
+ screen most turns never open -- ~4.9KB not worth keeping resident.
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")
@@ -21,14 +14,11 @@
 /******************************************************************************/
 /******************************************************************************/
 (procedure public (CaseFileTitle index)
-	// Indices 0-101: one title per ending variant (see game.sh's full
-	// index scheme and tools/gen-endings.js), same order as
-	// endingcontent1-3.sc's PrintSurvivalEnding0..8/PrintFailureEnding0..2
-	// switches -- duplicated here rather than shared, there's no clean way
-	// to share a string constant across scripts in this language, and
-	// each is short. Indices 102-106: the 5 coping-mechanism titles
-	// (unchanged text from the original 12-16 numbering, also duplicated
-	// against mechanisms.sc's own "COPING MECHANISM ACQUIRED" messages).
+	// 0-101: one title per ending variant (game.sh's index scheme),
+	// same order as the EndingSurvivalN/EndingFailureN scripts.
+	// 102-106: the 5 coping mechanisms, matching mechanisms.sc's own
+	// "COPING MECHANISM ACQUIRED" text. Duplicated rather than shared --
+	// no clean way to share a string constant across scripts here.
 	(switch(index)
 		(case 0 return("The Powder Keg"))
 		(case 1 return("Holding Pattern"))

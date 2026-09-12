@@ -1,22 +1,12 @@
 /******************************************************************************
  T.R.S. → SCI0 port
  ******************************************************************************
- casefileaccess.sc
- Split out of casefiles.sc when the full ending-variant port (see
- SESSION_HANDOFF.md) pushed that file's total size to ~20KB, past the
- ~16KB practical per-script ceiling. Holds the two big index-based
- switch accessors (GetCaseFile/SetCaseFile, 108 cases each) -- pure
- lookups against gCF0..gCF107 (Main.sc), no dependency on anything else
- in casefiles.sc. casefiles.sc's own LoadCaseFiles/SaveCaseFiles/
- MarkCaseFile/ShowCaseFiles call these (one-way (use "casefileaccess")
- -- this file needs nothing back from casefiles.sc, so no circular
- pair). Main.sc also calls GetCaseFile() directly at boot, which makes
- this whole file permanently resident for the entire game session (see
- SESSION_HANDOFF.md's heap-exhaustion entry) -- kept deliberately small
- (just these two procedures) after CaseFileTitle's own 107-case switch,
- needed only by the rarely-opened Case Files viewer, was split out to
- its own load-on-demand script, casefiletitles.sc, for exactly this
- reason.
+ CaseFileAccess.sc
+ GetCaseFile/SetCaseFile: array-like access over the 108 scalar globals
+ gCF0..gCF107 (Main.sc). Split out of CaseFiles.sc so this stays small
+ and permanently resident (Main.sc calls GetCaseFile() at boot) while
+ CaseFiles.sc itself and the larger CaseFileTitle/description lookups
+ stay Load/Dispose-scoped.
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")

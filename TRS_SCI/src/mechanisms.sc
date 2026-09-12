@@ -2,16 +2,18 @@
  T.R.S. → SCI0 port
  ******************************************************************************
  mechanisms.sc
- Coping-mechanism unlock system (matches js/content-mechanisms.js /
- js/engine.js's trackMechanism + applyMechanismModifiers): lean on the same
- tagged response 3 times in a run and it permanently unlocks, after which
- every further choice of that tag also carries a passive stat modifier on
- top of its own written-in effect, for the rest of the run.
+ Coping-mechanism unlock system (js/content-mechanisms.js /
+ js/engine.js's trackMechanism + applyMechanismModifiers): lean on the
+ same tagged response 3 times in a run and it unlocks permanently, after
+ which every further choice of that tag also carries a passive stat
+ modifier on top of its own effect, for the rest of the run.
 
- ApplyChoiceEffects is the single entry point every generated WorkEvent<N>
- choice calls: applies the mechanism modifier (if that tag is already
- unlocked), applies the resulting deltas to the three stats, clamps them,
- and tracks/unlocks the mechanism if this tag isn't unlocked yet.
+ ApplyChoiceEffects is the single entry point every generated event's
+ choice calls: applies the mechanism modifier (if unlocked), applies the
+ resulting deltas, clamps, and tracks/unlocks the mechanism if not yet
+ unlocked. Also holds the turn-loop/zone-picking logic (PickZone,
+ GoToNextEvent, EndTurn) -- moved here from rm001.sc since this script
+ stays resident for the whole session while rooms don't.
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")
@@ -22,27 +24,20 @@
 (use "controls")
 (use "casefiles")
 /******************************************************************************/
-// No-repeat event pool (game.sh has the full rationale) -- one flag per
-// event across all 196, indexed by room number minus 200 (WORK_ROOM_BASE,
-// always the lowest of the six *_ROOM_BASE constants, so every room
-// 200-395 maps to a unique 0-195 slot with no extra lookup needed).
-// Script-level local, not a per-call procedure local -- same idiom
-// CaseFiles.sc's own buf[3424] uses, though at 196 bytes this is nowhere
-// near the size that mattered there. Lives in mechanisms.sc (already
-// always-resident) rather than as a Main.sc global specifically because
-// it's only ever touched from here (GoToNextEvent()/ResetSeenEvents()),
-// and a 196-element array declared in Main.sc's globals block wouldn't
-// even be visible from another script the way scalars are anyway (see
-// SESSION_HANDOFF.md's Case Files array-vs-scalar saga). Persists for
-// the whole session once mechanisms.sc first loads, so ResetSeenEvents()
-// must be called explicitly at the start of every run (rm001.sc's init(),
-// alongside the other per-run resets like gFawnCount) or "seen" state
-// would wrongly carry over from a previous run in the same session.
+// No-repeat event pool: one flag per event across all 196, indexed by
+// room number minus 200 (WORK_ROOM_BASE, the lowest room base, so every
+// room 200-395 maps to a unique 0-195 slot). Script-level local (not
+// per-call) so it's visible to both GoToNextEvent/ResetSeenEvents below.
+// Persists for the session once loaded -- ResetSeenEvents() must run at
+// the start of every run (rm001.sc's init()) or "seen" carries over.
 (local
 	gSeenEvent[TOTAL_EVENT_COUNT]
 )
 /******************************************************************************/
 (procedure public (ApplyChoiceEffects repDelta maskDelta childDelta tag)
+	// One case per tag: apply the passive modifier if already unlocked,
+	// otherwise count toward UNLOCK_THRESHOLD and unlock + announce +
+	// file a Case File entry the moment it's reached.
 	(switch(tag)
 		(case TAG_FAWN
 			(if(gFawnUnlocked)
@@ -137,19 +132,13 @@
 	= gMask (+ gMask maskDelta)
 	= gChild (+ gChild childDelta)
 	ClampStats()
-	// No DrawPortraitMood() call here anymore -- PrintChoices now shows
-	// the portrait live inside its own dialog (printchoices.sc), computed
-	// fresh via GetPortraitMood() on every call, so a background redraw
-	// here would just be a duplicate immediately hidden by that same
-	// dialog on the very next turn.
 )
 /******************************************************************************/
 (procedure public (ApplyGlitch logMsg)
-	// The glitch wildcard (matches js/engine.js's handleGlitchChoice):
-	// fully random effects each in [-25, 25], untagged -- never counts
-	// toward a coping-mechanism unlock. handleGlitchChoice routes through
-	// the same handleChoice() as everything else in the original, so the
-	// Extended Therapy multiplier applies here too.
+	// The glitch wildcard (js/engine.js's handleGlitchChoice): fully
+	// random effects in [-25, 25] per stat, untagged, never counts
+	// toward a mechanism unlock. Still scaled by Extended Therapy, same
+	// as a normal choice.
 	= gRepression (+ gRepression ScaleHardMode(- Random(0 50) 25))
 	= gMask (+ gMask ScaleHardMode(- Random(0 50) 25))
 	= gChild (+ gChild ScaleHardMode(- Random(0 50) 25))
@@ -158,16 +147,12 @@
 )
 /******************************************************************************/
 (procedure public (ScaleHardMode delta)
-	// Extended Therapy's stat-swing multiplier (matches js/content.js's
-	// hardModeMultiplier: 1.25, applied in js/engine.js's handleChoice).
-	// SCI0 has no floats -- 1.25 = 5/4, applied as an integer
-	// multiply-then-divide with the +2 numerator nudge rounding to the
-	// nearest whole number instead of truncating (so e.g. a delta of 4
-	// scales to 5, not silently staying 4 via floor division). Deliberately
-	// works on the absolute value and reapplies the sign afterward rather
-	// than dividing a negative numerator directly -- this codebase has no
-	// confirmed precedent either way for how SCI0's "/" rounds negative
-	// operands, and this sidesteps needing one.
+	// Extended Therapy's 1.25x stat-swing multiplier. SCI0 has no floats
+	// -- 1.25 = 5/4, integer multiply-then-divide with a +2 numerator
+	// nudge to round to nearest instead of truncating. Works on the
+	// absolute value and reapplies the sign afterward, since there's no
+	// confirmed precedent for how this dialect's "/" rounds negative
+	// operands.
 	(var absDelta, scaled)
 	(if(not gHardMode)
 		return(delta)
@@ -181,19 +166,11 @@
 )
 /******************************************************************************/
 (procedure public (PickWorstStat)
-	// 0 = repression, 1 = mask, 2 = child. Matches the original's danger
-	// comparison (repression/100, (100-mask)/100, (100-child)/100) --
-	// mask/child inverted here into "danger" terms too so all three
-	// compare the same way (higher = worse), then compared as plain
-	// integers since SCI0 has no floats. Ties favor the earlier stat in
-	// the list (repression over mask, mask over child), matching the
-	// original's Array.reduce order exactly. Shared by rm001.sc's
-	// PickZone() (zone-weighting) and DrawPortraitMood() below -- lives
-	// here rather than in rm001.sc so both a room and this always-
-	// resident utility script can call it without a room depending on
-	// another room, or a new circular use-pair between scripts that have
-	// never bootstrapped each other before (see the casefiles.sc saga in
-	// SESSION_HANDOFF.md for why that's worth avoiding).
+	// 0=repression, 1=mask, 2=child. Mask/child inverted into "danger"
+	// terms (100-stat) so all three compare the same way (higher =
+	// worse); ties favor the earlier stat, matching the original's
+	// Array.reduce order. Shared by PickZone (zone weighting) and
+	// GetPortraitMood below.
 	(var worst, worstDanger, dangerMask, dangerChild)
 	= worst 0
 	= worstDanger gRepression
@@ -211,11 +188,10 @@
 )
 /******************************************************************************/
 (procedure public (GetPortraitMood)
-	// Loop numbers double as mood: 0 neutral, 1 repression, 2 mask,
-	// 3 child. Split out of DrawPortraitMood() below so PrintChoices
-	// (printchoices.sc) can also ask for the current mood directly, to
-	// show the portrait inside the event dialog itself rather than only
-	// on the room background (see SESSION_HANDOFF.md).
+	// Same worst-stat comparison as PickWorstStat, plus a neutral
+	// threshold -- loop number doubles as mood (0 neutral, 1-3 =
+	// repression/mask/child). Split out so PrintChoices can ask for the
+	// current mood directly.
 	(var worst, worstDanger, dangerMask, dangerChild)
 	= worst 0
 	= worstDanger gRepression
@@ -235,18 +211,9 @@
 	return(+ worst 1)
 )
 /******************************************************************************/
-// ZoneStatBias/PickZone/GoToNextEvent/EndTurn moved here from rm001.sc as
-// part of the one-room-per-event rewrite (see game.sh and
-// SESSION_HANDOFF.md) -- rm001 is no longer resident once a run leaves it
-// (a normal SCI room, disposed like any other on transition), but every
-// one of the 196 event rooms needs to pick+transition to the NEXT event
-// after its own turn resolves, so this logic has to live in an
-// always-resident script. Same reasoning PickWorstStat() above already
-// documents for why it isn't in rm001.sc either.
 (procedure public (ZoneStatBias zoneIndex)
-	// Same zone -> stat-bias mapping as the original's content.js `zones`
-	// array. Return value encoding matches PickWorstStat: 0=repression,
-	// 1=mask, 2=child.
+	// Zone -> stat-bias mapping, matching the original's `zones` array.
+	// Encoding matches PickWorstStat: 0=repression, 1=mask, 2=child.
 	(switch(zoneIndex)
 		(case 0 return(0))		/* WORK -> repression */
 		(case 1 return(2))		/* HOME -> child */
@@ -259,17 +226,13 @@
 )
 /******************************************************************************/
 (procedure public (PickZone)
-	// Weighted zone selection matching the original's pickWeightedEvent():
-	// zones whose stat bias matches the current worst stat get extra
-	// weight (the original's weakZoneWeight is 2.5x; scaled here to
-	// integer weights 5 vs 2, same ratio, since SCI0 arithmetic is
-	// integer-only). With exactly 2 of the current 6 zones matching any
-	// given worst stat, total weight is always 4*2 + 2*5 = 18 -- if the
-	// zone/stat-bias mix ever changes this hardcoded 18 (and the Random
-	// bound below) would need recomputing.
-	// NOT replicated: the original's "don't repeat an event already seen
-	// this run" pool -- a separate, bigger feature (needs per-event seen-
-	// tracking across all 196 events), not attempted here.
+	// Weighted zone selection (matches pickWeightedEvent()): zones whose
+	// stat bias matches the current worst stat get weight 5, others get
+	// 2 (same 2.5x ratio as the original's weakZoneWeight, scaled to
+	// integers). Total weight is a hardcoded 18 (4*2 + 2*5, always true
+	// while exactly 2 of 6 zones match any given worst stat) -- would
+	// need recomputing if that ratio changes. No-repeat awareness lives
+	// in GoToNextEvent below, not here.
 	(var worstStat, i, r, w)
 	= worstStat PickWorstStat()
 	= r Random(0 17)
@@ -288,10 +251,8 @@
 )
 /******************************************************************************/
 (procedure public (ResetSeenEvents)
-	// Clears the no-repeat pool -- called once per run (rm001.sc's
-	// init(), alongside the other per-run resets like gFawnCount) since
-	// gSeenEvent otherwise persists for the whole session once
-	// mechanisms.sc first loads.
+	// Clears the no-repeat pool -- must run once per run (rm001.sc's
+	// init()) since gSeenEvent otherwise persists for the whole session.
 	(var i)
 	(for (= i 0) (< i TOTAL_EVENT_COUNT) (++i)
 		= gSeenEvent[i] FALSE
@@ -299,23 +260,13 @@
 )
 /******************************************************************************/
 (procedure public (GoToNextEvent)
-	// Picks a zone-weighted random event (PickZone() + a uniform index
-	// within that zone) and transitions straight to its room --
-	// <ZONE>_ROOM_BASE + localIndex (game.sh). No dispatcher script to
-	// Load anymore; the room IS the event, and the engine's own
-	// newRoom()/room-transition cleanup replaces the old manual
-	// Load/DisposeScript chunk-cycling entirely (see game.sh's freed-
-	// script-numbers comment for why that was necessary). Called once
-	// from rm001.sc's init() (the very first event of a run) and again
-	// from EndTurn() below every time a turn continues.
-	//
-	// No-repeat pool (matches js/engine.js's pickWeightedEvent() -- see
-	// game.sh for the simplification from its exact 3-tier fallback to
-	// one bounded retry loop): re-picks a fresh zone+index each attempt
-	// (not just a fresh index within the same zone) so the zone weighting
-	// itself is never skewed by which zone happened to collide first,
-	// and gives up after MAX_EVENT_PICK_RETRIES attempts and accepts
-	// whatever was last picked rather than looping forever.
+	// Picks a zone-weighted random event and transitions straight to its
+	// room (<ZONE>_ROOM_BASE + local index) -- no dispatcher script, the
+	// room IS the event. Re-picks a fresh zone+index each retry (not just
+	// a new index in the same zone) so zone weighting isn't skewed by
+	// whichever zone happened to collide first; gives up after
+	// MAX_EVENT_PICK_RETRIES and accepts a repeat rather than looping
+	// forever.
 	(var zone, index, roomNum, tries)
 	= tries 0
 	(while(1)
@@ -359,18 +310,11 @@
 )
 /******************************************************************************/
 (procedure public (EndTurn)
-	// The one place every event room ends its own turn -- called at the
-	// very end of each of the 196 event rooms' init(), after their own
-	// PrintChoices/ApplyChoiceEffects/log-line logic has already run.
-	// Increments the turn counter, clamps stats (same as the old
-	// runShift() loop body did after every DoXEvent call), then checks
-	// the exact same end conditions the old while-loop guarded on
-	// (De Morgan's negation of "<= gTurn gMaxTurns and all three stats
-	// still alive"): if the run is over, hand off to the ending room
-	// exactly like the old runShift() did; otherwise pick and go to the
-	// next event. rm001.sc's init() also calls this once, with gTurn
-	// pre-set to 0, to uniformly bootstrap the very first turn through
-	// the same increment-check-branch logic rather than duplicating it.
+	// Called at the end of every event room's init(): increments the
+	// turn counter, clamps stats, then ends the run (any stat out of
+	// bounds, or gTurn past gMaxTurns) or picks the next event.
+	// rm001.sc also calls this once with gTurn pre-set to 0 to bootstrap
+	// the first turn through the same logic.
 	++gTurn
 	ClampStats()
 	(if((> gTurn gMaxTurns) or (>= gRepression 100) or (<= gMask 0) or (<= gChild 0))

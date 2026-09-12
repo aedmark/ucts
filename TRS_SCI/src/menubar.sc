@@ -17,6 +17,7 @@
 (use "sound")
 (use "user")
 (use "casefiles")
+(use "casefilecategory")
 /******************************************************************************/
 (class TheMenuBar of MenuBar
 	(properties
@@ -79,7 +80,7 @@
 		SetMenu(MENU_INVENTORY	smMENU_SAID 'all')
 	)
 	(method (handleEvent pEvent)
-		(var menuItem, hGauge, newSpeed, newVolume, wndCol, wndBack, hPause)
+		(var menuItem, hGauge, newSpeed, newVolume, wndCol, wndBack, hPause, choice)
 		= menuItem (super:handleEvent(pEvent))
 		(switch(menuItem)
 			(case MENU_ABOUT
@@ -209,9 +210,25 @@
 				ToggleSound()
 			)
 			(case MENU_CASEFILES
+				// Two-stage Load/Dispose -- CaseFiles.sc (the menu) and
+				// CaseFileCategory.sc (the viewer) must never both be
+				// resident, see CaseFileCategory.sc's own header.
 				Load(rsSCRIPT CASEFILES_SCRIPT)
-				ShowCaseFiles()
+				= choice ShowCaseFiles()
 				DisposeScript(CASEFILES_SCRIPT)
+				(if(choice)
+					Load(rsSCRIPT CASEFILECATEGORY_SCRIPT)
+					(if(== choice 1)
+						ShowCaseFileCategory(CASEFILE_SURVIVAL_BASE CASEFILE_SURVIVAL_COUNT "Survival Endings")
+					)
+					(if(== choice 2)
+						ShowCaseFileCategory(CASEFILE_FAILURE_BASE CASEFILE_FAILURE_COUNT "Failure Endings")
+					)
+					(if(== choice 3)
+						ShowCaseFileCategory(CASEFILE_MECH_BASE CASEFILE_MECH_COUNT "Coping Mechanisms")
+					)
+					DisposeScript(CASEFILECATEGORY_SCRIPT)
+				)
 			)
 		)
 	)

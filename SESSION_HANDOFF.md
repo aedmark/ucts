@@ -83,9 +83,10 @@ list; selecting a discovered entry and clicking "View" shows its full
 title+description, a sealed entry shows "Sealed. Not yet discovered."
 Persists cross-session to `TRS_SCI/TRSCASE.DAT`. Reachable via the
 "Case Files" menu item (`` `^f ``) or by clicking the filing cabinet in
-the ending room. **Confirmed fully working end to end**, including the
-real heap-exhaustion bug found and fixed on its "View" feature (see
-Architecture → Load/Dispose discipline below).
+the ending room. **Confirmed fully working end to end**, including a
+real "Out of heap space" bug on its "View" feature that took two rounds
+to actually fix (see Architecture → Load/Dispose discipline below for
+the current, confirmed-working shape of it).
 
 **Extended Therapy (New Game+)**: matches the original's real, existing
 feature under that name (not invented for this port) — survive one
@@ -165,6 +166,19 @@ bugs this project has hit:
   needed in brief, infrequent moments
   (opening Case Files, printing one ending) and would otherwise sit as
   dead weight in the 64KB heap for the whole session.
+  **Confirmed working, including the lesson that mattered most**: even
+  with everything above split correctly, a "View" click still hit "Out
+  of heap space" until the number of Load/Dispose cycles per click (not
+  just their size) was cut down -- this dialect's Load/DisposeScript
+  cycling doesn't reliably reclaim memory (same root cause as the
+  original one-room-per-event rewrite). `ShowCaseFileCategory()`
+  (`CaseFileCategory.sc`) now does exactly ONE cycle per "View" click
+  (whichever description script matches the open category) instead of
+  three, by caching the discovered-flag and title text from its own
+  list-building loop instead of re-fetching them via
+  `CaseFileAccess`/`CaseFileTitles` reloads. **Confirmed fixed by the
+  user.** Worth remembering for any future Load/Dispose-heavy feature:
+  minimize the *count* of cycles, not just their size.
 
   **`(use "x")` only resolves symbols at compile time — it has zero
   runtime effect.** A script gets auto-loaded into the heap the first
@@ -438,62 +452,7 @@ after editing the relevant `js/content*.js` source.
    track only enabled for a different device during the original
    "import + enable all tracks" pass would play in Preview (which
    ignores the filter) but drop out or sound wrong in the real game.
-2. **Case Files "View" hit "Out of heap space" again, this time on real
-   hardware/86Box, after the earlier per-category-script fix -- fixed
-   again, not yet recompiled/tested.** The earlier fix (load one
-   description script at a time, split per category) reduced the
-   *peak* load during a View click but didn't address the *baseline*:
-   `ShowCaseFileCategory()` still lived inside `CaseFiles.sc` itself,
-   so `LoadCaseFiles`/`SaveCaseFiles`/`MarkCaseFile`/`UnlockNgPlus`/the
-   category menu all stayed resident (~9-10KB) for the entire time a
-   category was open, on top of whatever else a real run had already
-   used. **Fix**: split `ShowCaseFileCategory()` out into its own new
-   script, `CaseFileCategory.sc` (`CASEFILECATEGORY_SCRIPT` = 141) --
-   `CaseFiles.sc`'s `ShowCaseFiles()` now just returns which category
-   was picked (1/2/3/0) instead of dispatching internally; both call
-   sites (`menubar.sc`'s menu item, `rm002.sc`'s filing cabinet) now do
-   a two-stage `Load`/call/`Dispose` -- `CaseFiles.sc` first for the
-   menu, then `Dispose` it before `Load`ing `CaseFileCategory.sc` for
-   the actual browsing/View screen. The two scripts are never resident
-   together. Ran the structural sanity check on all touched/new files
-   (`game.sh`, `game.ini`, `CaseFiles.sc`, `CaseFileCategory.sc`,
-   `menubar.sc`, `rm002.sc`) -- clean; confirmed no duplicate script
-   numbers and the new `game.ini` entry matches the new file.
-   **`CaseFileCategory.sc` is a brand-new script file** -- per this
-   project's own established gotcha, it may need SCI Companion's "New
-   empty script" wizard treatment before it shows up in the Scripts
-   panel, even with a correct `game.ini` entry already in place (see
-   the `CaseFiles.sc` registration saga this project hit early on).
-   - **Confirmed by the user: this split alone was NOT enough.**
-     Recompiled with the split in place (ruled out a stale build) and
-     "Out of heap space" still happened on a "View" click. Real
-     remaining cause: the split reduced the *size* of what's Load/
-     Dispose-cycled during a View click, but a click still did THREE
-     separate cycles back to back (`CaseFileAccess` to check discovered,
-     a description script, `CaseFileTitles`) -- and this dialect's
-     Load/DisposeScript cycling has never reliably reclaimed memory
-     (the exact lesson the original one-room-per-event rewrite was
-     built around: "the identical cycle sometimes fully reclaimed its
-     memory and sometimes didn't"). Reducing cycle *size* helps
-     probabilistically; it doesn't remove the underlying nondeterminism,
-     which is consistent with this working on DOSBox-X once and then
-     failing on 86Box/real hardware with the same code.
-   - **Fix, same file**: cut two of the three cycles entirely by reusing
-     data the list-building loop (top of `ShowCaseFileCategory()`)
-     already computes, instead of re-fetching it. (1) `discoveredFlags
-     [72]` (a small per-call local, safely under the ~1KB known-safe
-     per-call-local size) caches each entry's `GetCaseFile()` result
-     from that same loop, so the View handler no longer needs a second
-     `CaseFileAccess` Load/Dispose. (2) The title text is scanned
-     directly out of `buf`'s own row text ("N. Title", already built by
-     that same loop) -- find the literal `.` byte, skip it and the
-     following space -- instead of a second `CaseFileTitles` Load/
-     Dispose to re-fetch a string that was already in memory. A "View"
-     click now does exactly ONE Load/Dispose cycle (whichever
-     description script matches the open category), down from three.
-     Ran the structural sanity check again -- clean. **Not yet
-     recompiled/retested.**
-3. **Nothing else is currently known-broken.** Everything else in
+2. **Nothing else is currently known-broken.** Everything else in
    "Current state" above is confirmed working by the user's own
    playtesting. If picking this project back up cold, a good sanity
    check is simply: does a standard run complete, does Extended

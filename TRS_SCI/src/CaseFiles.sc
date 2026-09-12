@@ -24,6 +24,11 @@
  whichever category was chosen, so browsing a category (which repeatedly
  loads description scripts on top) never has this file's own
  Load/Save/Mark/UnlockNgPlus/menu code resident at the same time.
+
+ The menu's own text (title/prompt/button labels) is read from the
+ TEXT_UI resource via GetFarText() rather than embedded as string
+ literals -- see game.sh for why this is scoped to fixed, hand-authored
+ UI chrome only, not the generated Case File content.
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")
@@ -108,16 +113,36 @@
 	// this script before loading CaseFileCategory.sc -- see file header.
 	// Button values are 1/2/3, never 0 -- Dialog:doit() returns plain
 	// 0/FALSE on Escape, so 0 stays an unambiguous "cancelled" sentinel.
-	(var hDialog, hDText, hButtons[3], i, curY, hResult, choice)
+	(var hDialog, hDText, hButtons[3], i, curY, hResult, choice,
+		titleBuf[16], promptBuf[120], survivalBuf[24], failureBuf[24],
+		mechBuf[24])
+	// All five strings read from the TEXT_UI resource, copied into their
+	// own local buffers. Deliberately NOT DisposeScript(TEXT_UI)'d after --
+	// real bug, found the hard way: DisposeScript() is script-specific
+	// (its own kernel doc: "Unloads a script... :param scriptNum: The
+	// script resource number"), and TEXT_UI's resource number (0) happens
+	// to collide with MAIN_SCRIPT's script number (also 0) -- calling it
+	// here was actually disposing Main.sc itself mid-run. Non-script
+	// resources loaded via Load(rsType ...) are never explicitly disposed
+	// anywhere in this codebase (see Main.sc's own Load(rsVIEW
+	// PORTRAIT_VIEW), never paired with a dispose call) -- left resident
+	// once touched, same as this.
+	Load(rsTEXT TEXT_UI)
+	GetFarText(TEXT_UI TEXT_UI_CASEFILES_TITLE @titleBuf)
+	GetFarText(TEXT_UI TEXT_UI_CASEFILES_PROMPT @promptBuf)
+	GetFarText(TEXT_UI TEXT_UI_CASEFILES_SURVIVAL_BTN @survivalBuf)
+	GetFarText(TEXT_UI TEXT_UI_CASEFILES_FAILURE_BTN @failureBuf)
+	GetFarText(TEXT_UI TEXT_UI_CASEFILES_MECH_BTN @mechBuf)
+
 	= hDialog (Dialog:new())
 	(send hDialog:
 		window(gTheWindow)
 		name("CaseFilesD")
-		text("Case Files")
+		text(@titleBuf)
 	)
 	= hDText (DText:new())
 	(send hDText:
-		text("Every ending and coping mechanism you've ever discovered, across every run. Choose a category to browse:")
+		text(@promptBuf)
 		font(gDefaultFont)
 		moveTo(4 4)
 		setSize(290)
@@ -127,7 +152,7 @@
 
 	= hButtons[0] (DButton:new())
 	(send hButtons[0]:
-		text("Survival Endings")
+		text(@survivalBuf)
 		value(1)
 		font(SMALL_FONT)
 		setSize()
@@ -138,7 +163,7 @@
 
 	= hButtons[1] (DButton:new())
 	(send hButtons[1]:
-		text("Failure Endings")
+		text(@failureBuf)
 		value(2)
 		font(SMALL_FONT)
 		setSize()
@@ -149,7 +174,7 @@
 
 	= hButtons[2] (DButton:new())
 	(send hButtons[2]:
-		text("Coping Mechanisms")
+		text(@mechBuf)
 		value(3)
 		font(SMALL_FONT)
 		setSize()

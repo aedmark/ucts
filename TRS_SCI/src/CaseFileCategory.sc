@@ -18,6 +18,11 @@
  instead of separate CaseFileAccess/CaseFileTitles reloads -- a "View"
  click now does exactly ONE Load/Dispose cycle (whichever description
  script matches this category), not three.
+
+ The fixed UI chrome (prompt, View/Close buttons, the sealed placeholder
+ message) is read from the TEXT_UI resource via GetFarText() rather than
+ embedded as literals -- see game.sh for why this is scoped to
+ hand-authored text only, not the generated Case File data.
  ******************************************************************************/
 (include "sci.sh")
 (include "game.sh")
@@ -45,7 +50,8 @@
 	// a sealed placeholder.
 	(var hDialog, hSelector, hDText, hViewBtn, hCloseBtn, i, curY, hResult,
 		localIndex, flatIndex, discovered, descBuf[180], titleBuf[48],
-		discoveredFlags[72])
+		discoveredFlags[72], promptBuf[48], viewBuf[8], closeBuf[8],
+		sealedTitleBuf[8])
 	// buf only needs the largest category's worth (Survival, 72*32=2304
 	// of its declared 3424 bytes). discoveredFlags[72] is a per-call local
 	// (well under the ~1KB known-safe size) -- caches each entry's
@@ -70,6 +76,17 @@
 	DisposeScript(CASEFILEACCESS_SCRIPT)
 	DisposeScript(CASEFILETITLES_SCRIPT)
 
+	// Fixed UI chrome (prompt + button labels), read once from TEXT_UI --
+	// see game.sh for why this is scoped to hand-authored text only, not
+	// the generated Case File data above. Deliberately no
+	// DisposeScript(TEXT_UI) -- see CaseFiles.sc for the real bug that
+	// found: DisposeScript() is script-specific, and TEXT_UI's resource
+	// number collides with MAIN_SCRIPT's script number.
+	Load(rsTEXT TEXT_UI)
+	GetFarText(TEXT_UI TEXT_UI_CATEGORY_PROMPT @promptBuf)
+	GetFarText(TEXT_UI TEXT_UI_VIEW_BTN @viewBuf)
+	GetFarText(TEXT_UI TEXT_UI_CLOSE_BTN @closeBuf)
+
 	= hDialog (Dialog:new())
 	(send hDialog:
 		window(gTheWindow)
@@ -78,7 +95,7 @@
 	)
 	= hDText (DText:new())
 	(send hDText:
-		text("Select an entry, then View to read it.")
+		text(@promptBuf)
 		font(gDefaultFont)
 		moveTo(4 4)
 		setSize(290)
@@ -105,7 +122,7 @@
 
 	= hViewBtn (DButton:new())
 	(send hViewBtn:
-		text("View")
+		text(@viewBuf)
 		value(1)
 		font(SMALL_FONT)
 		setSize()
@@ -115,7 +132,7 @@
 
 	= hCloseBtn (DButton:new())
 	(send hCloseBtn:
-		text("Close")
+		text(@closeBuf)
 		value(2)
 		font(SMALL_FONT)
 		setSize()
@@ -180,7 +197,15 @@
 			StrCpy(@titleBuf (+ (+ @buf (* localIndex 32)) (+ i 2)))
 			Print(@descBuf #title @titleBuf)
 		)(else
-			Print("Sealed. Not yet discovered." #title "???")
+			// The message itself comes straight from TEXT_UI via Print()'s
+			// own native support for it (params[0] < 1000 -- see
+			// Controls.sc -- routes through GetFarText internally); the
+			// #title value doesn't get that treatment, so it needs its own
+			// GetFarText call into a buffer first. No DisposeScript(TEXT_UI)
+			// -- see the note above this method's other Load(rsTEXT ...).
+			Load(rsTEXT TEXT_UI)
+			GetFarText(TEXT_UI TEXT_UI_SEALED_TITLE @sealedTitleBuf)
+			Print(TEXT_UI TEXT_UI_SEALED_MSG #title @sealedTitleBuf)
 		)
 	)
 	(send hDialog:dispose())

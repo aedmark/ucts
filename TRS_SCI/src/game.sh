@@ -194,12 +194,13 @@
 // PrintChoices pagination (printchoices.sc): events have 3-5 real
 // choices (matching the original's own 3-5, not capped anymore -- see
 // SESSION_HANDOFF.md). CHOICES_PER_PAGE caps each screen to the same
-// button count already proven safe (3 choices + a glitch/More button =
-// 4 max), showing a "More options..." button (MORE_CHOICES sentinel,
-// distinct from GLITCH_CHOICE) instead of the glitch button on every
-// page but the last.
+// button count already proven safe (3 choices + one nav/glitch button =
+// 4 max): "More options..." (MORE_CHOICES) on every page but the last,
+// "Back" (BACK_CHOICES) on every page but the first, glitch
+// (GLITCH_CHOICE) only on the last.
 (define CHOICES_PER_PAGE	3)
 (define MORE_CHOICES		98)
+(define BACK_CHOICES		97)
 
 // PrintChoices' choice-button width ceiling (SizeButtonToWidth) -- kept
 // separate from the description's own width (DESC_WIDTH in
@@ -229,6 +230,37 @@
 (define DUMMY_SOUND           1)
 (define SCORE_SOUND         900)
 (define DEATH_SOUND           2)
+
+// Fixed UI chrome text (Case Files menu/viewer, the Extended Therapy
+// mode-choice dialog), read from a TEXT resource via GetFarText() instead
+// of embedded as string literals -- real SCI0 games kept exactly this
+// kind of hand-authored, never-regenerated text as data, not baked into
+// script bytecode (SCI Companion's own docs: "using them will reduce the
+// size of your compiled scripts. Heap space... is at a premium in
+// SCI0."). Deliberately NOT applied to the 196 generated events' worth
+// of content or the Case Files descriptions -- TEXT resources have no
+// external source file, only SCI Companion's own GUI text editor
+// (one string at a time, no batch import), so moving programmatically
+// generated content there would permanently break the tools/gen-*.js
+// regeneration pipeline for a few thousand strings. This is scoped to
+// the small, fixed, hand-typed-once set instead.
+(define TEXT_UI		0)
+(define TEXT_UI_CASEFILES_TITLE			0)
+(define TEXT_UI_CASEFILES_PROMPT			1)
+(define TEXT_UI_CASEFILES_SURVIVAL_BTN		2)
+(define TEXT_UI_CASEFILES_FAILURE_BTN		3)
+(define TEXT_UI_CASEFILES_MECH_BTN			4)
+(define TEXT_UI_CATEGORY_PROMPT			5)
+(define TEXT_UI_VIEW_BTN					6)
+(define TEXT_UI_CLOSE_BTN					7)
+(define TEXT_UI_SEALED_MSG					8)
+(define TEXT_UI_SEALED_TITLE				9)
+(define TEXT_UI_NEWSESSION_PROMPT			10)
+(define TEXT_UI_NEWSESSION_TITLE			11)
+(define TEXT_UI_STANDARD_BTN				12)
+(define TEXT_UI_EXTENDED_BTN				13)
+(define TEXT_UI_EXTENDED_STARTED_MSG		14)
+(define TEXT_UI_EXTENDED_STARTED_TITLE		15)
 
 // Inventory Items
 (define INV_NOTHING           0)

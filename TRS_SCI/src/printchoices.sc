@@ -9,10 +9,11 @@
  value of whichever button was pressed.
 
  Paginated at CHOICES_PER_PAGE (game.sh) choices per screen, since events
- have 3-5 real choices -- showing a "More options..." button
- (MORE_CHOICES sentinel) instead of the glitch button on every page but
- the last. Caps every page at the same button count (3 choices + one
- more/glitch button) already proven to fit within the dialog-height
+ have 3-5 real choices: "More options..." (MORE_CHOICES) leads forward
+ on every page but the last, "Back" (BACK_CHOICES) leads back on every
+ page but the first, and the glitch button only ever shows on the last
+ page. Caps every page at the same button count (3 choices + one
+ nav/glitch button) already proven to fit within the dialog-height
  budget, regardless of how many total choices an event has.
  ******************************************************************************/
 (include "sci.sh")
@@ -26,7 +27,8 @@
 /******************************************************************************/
 (procedure public (PrintChoices message titleText width glitchText params)
 	(var hDialog, hDText, hIcon, hButtons[6], buttonCnt, paramCnt, curY,
-		btnPressed, totalChoices, pageStart, pageCount, isLastPage, i)
+		btnPressed, totalChoices, pageStart, pageCount, isLastPage, i,
+		isFirstPage)
 	= paramTotal (- paramTotal 4)
 	= totalChoices (/ paramTotal 2)
 	= pageStart 0
@@ -67,6 +69,24 @@
 			= curY (send hIcon:nsBottom)
 		)
 		= curY (+ curY 6)
+
+		// Not the first page: a "Back" button, ahead of this page's real
+		// choices so their position stays consistent whether or not Back
+		// is present.
+		= isFirstPage (== pageStart 0)
+		(if(not isFirstPage)
+			= hButtons[buttonCnt] (DButton:new())
+			(send hButtons[buttonCnt]:
+				text("Back")
+				value(BACK_CHOICES)
+				font(SMALL_FONT)
+			)
+			SizeButtonToWidth(hButtons[buttonCnt] BUTTON_MAX_WIDTH)
+			(send hButtons[buttonCnt]:moveTo(4 curY))
+			= curY (+ (send hButtons[buttonCnt]:nsBottom) 3)
+			(send hDialog:add(hButtons[buttonCnt]))
+			++buttonCnt
+		)
 
 		// This page's slice of the choice pairs -- at most
 		// CHOICES_PER_PAGE, same button-count ceiling every page already
@@ -149,10 +169,19 @@
 		)
 		(send hDialog:dispose())
 
-		(if(<> btnPressed MORE_CHOICES)
+		// Flat sequence, not chained if/else (no precedent in this
+		// codebase for 3+-branch chaining) -- MORE_CHOICES and
+		// BACK_CHOICES each adjust pageStart and loop again; anything
+		// else (a real choice or GLITCH_CHOICE) returns immediately.
+		(if(== btnPressed MORE_CHOICES)
+			= pageStart (+ pageStart CHOICES_PER_PAGE)
+		)
+		(if(== btnPressed BACK_CHOICES)
+			= pageStart (- pageStart CHOICES_PER_PAGE)
+		)
+		(if((<> btnPressed MORE_CHOICES) and (<> btnPressed BACK_CHOICES))
 			return(btnPressed)
 		)
-		= pageStart (+ pageStart CHOICES_PER_PAGE)
 	)
 )
 /******************************************************************************/

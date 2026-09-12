@@ -71,12 +71,17 @@ ratio already exactly matches `weakZoneWeight`'s 2.5:1, and the
 retry-based no-repeat pool is rejection sampling from the same
 distribution the original's explicit filter computes); neither was
 touched. `PrintChoices` (`printchoices.sc`) now paginates at
-`CHOICES_PER_PAGE`(3) choices per screen with a "More options..." button
-(`MORE_CHOICES` sentinel) on every page but the last, so no single
-screen ever shows more buttons than the 3-choices-plus-one ceiling
-already proven safe today — see Architecture below for why (dialog
-height, not heap, was the real constraint) and Open Items for what still
-needs a real playtest pass.
+`CHOICES_PER_PAGE`(3) choices per screen: a "More options..."
+(`MORE_CHOICES` sentinel) button on every page but the last, and a
+"Back" (`BACK_CHOICES` sentinel) button on every page but the first --
+the user specifically asked for the ability to return to an earlier
+page rather than being locked into forward-only paging. No single
+screen ever shows more than 4 buttons (3 choices + one nav/glitch
+button) across any real event's actual data (verified: max is 5 choices
+→ 2 pages, and page 2's worst case is Back + 2 remaining choices +
+glitch = 4) — see Architecture below for why (dialog height, not heap,
+was the real constraint) and Open Items for what still needs a real
+playtest pass.
 
 **Coping mechanisms**: 5 tags (fawn/flight/fight/freeze/secure, matching
 `js/content-mechanisms.js`), each unlocking permanently after 3 uses of
@@ -121,7 +126,9 @@ mechanism modifiers and the glitch wildcard) choice at `rm001.sc`'s
 always covered by the dialog anyway) via `mechanisms.sc`'s
 `GetPortraitMood()`, 4 loops (neutral + one per stat), switching away
 from neutral once the worst stat's "danger" value crosses
-`PORTRAIT_NEUTRAL_THRESHOLD` (60).
+`PORTRAIT_NEUTRAL_THRESHOLD` (60). Currently one fixed character (view
+801) with all 4 moods drawn — see "Future ideas" below for a selectable-
+portrait idea the user wants to revisit later.
 
 **Stat display**: the status line (always visible, including over an
 open dialog) shows live percentages — `T.R.S.    REP: 40 % | MASK: 60 % |
@@ -238,13 +245,39 @@ bugs this project has hit:
   stacked-`DButton` dialog every event uses instead of stock `Print()`'s
   broken-for-long-text horizontal button row. Paginates internally at
   `CHOICES_PER_PAGE` (3) choices per screen for events with more than
-  that many (a "More options..." button leads to the next page) — this
-  is why events can have 3-5 real choices without a dialog-height risk:
-  every page tops out at the same 4-button (3 choices + one more/glitch)
-  ceiling already proven safe, regardless of an event's total choice
-  count. Callers (the 196 generated event rooms) are unaware of
+  that many ("More options..." leads forward, "Back" leads back, neither
+  shown on the page where it wouldn't apply) — this is why events can
+  have 3-5 real choices without a dialog-height risk: every page tops
+  out at 4 buttons (3 choices + one nav/glitch button) regardless of an
+  event's total choice count, the same ceiling already proven safe.
+  Callers (the 196 generated event rooms) are unaware of
   pagination at all — same call shape, same return contract (a real
   choice index or `GLITCH_CHOICE`) as before.
+
+**Fixed UI text lives in a TEXT resource, not string literals — confirmed
+working.** `TEXT_UI` (resource 0, `game.sh`), read via the kernel
+`GetFarText(resNum textId buffer)` call. This is real, period-accurate
+SCI0 practice (SCI Companion's own docs: text resources "reduce the size
+of your compiled scripts... heap space is at a premium in SCI0"), applied
+narrowly: only `CaseFiles.sc`'s category menu, `CaseFileCategory.sc`'s
+prompt/View/Close/sealed-message text, and `rm001.sc`'s Extended Therapy
+mode-choice dialog — the small, fixed, hand-typed-once set of UI chrome.
+Deliberately **not** applied to the 196 generated events or the 107 Case
+File descriptions/titles: TEXT resources have no external source file,
+only SCI Companion's own GUI text editor (one string at a time, no batch
+import) — moving programmatically generated content there would
+permanently break the `tools/gen-*.js` regeneration pipeline for a few
+thousand strings. `Print()`'s stock implementation (`Controls.sc`)
+already natively supports `Print(resNum textId ...)` in place of
+`Print("literal" ...)` when the first param is `<u 1000` — used directly
+where `Print()` was already the call; everywhere else (custom `Dialog`/
+`DText`/`DButton` building, `PrintChoices`) calls `GetFarText()` into a
+small local buffer first, then uses that buffer. `Load(rsTEXT TEXT_UI)`
+is never paired with a dispose (see Findings below for why
+`DisposeScript()` specifically must not be used here) — left resident
+once touched, same as `Main.sc`'s own `Load(rsVIEW PORTRAIT_VIEW)`. The
+16 entries are populated in SCI Companion's Text Editor and this is
+confirmed compiling and working end to end.
 - `CaseFiles.sc`(107, persistence + category menu) + `CaseFileCategory.sc`
   (141, the per-category browsing/View screen) + `CaseFileAccess.sc`(136)
   + `CaseFileTitles.sc`(137) + `CaseFileDescriptions{Survival,Failure,
@@ -352,6 +385,31 @@ after editing the relevant `js/content*.js` source.
 
 ## Findings / gotchas worth not re-discovering
 
+- **`DisposeScript()` is script-specific, despite `Load()` being generic
+  across resource types — and different resource types have independent
+  numbering namespaces that CAN collide.** Real, live-tested bug: adding
+  `TEXT_UI` (a new `TEXT` resource, number 0) and calling
+  `Load(rsTEXT TEXT_UI)` / `DisposeScript(TEXT_UI)` around each use
+  crashed the compiled game with SCI0's generic "Oops!" runtime-fault
+  trap the moment any of those call sites ran. Root cause: `DisposeScript`'s
+  own kernel doc is explicit -- "Unloads a **script** from memory,
+  including all its classes, instances, variables, etc.," parameter
+  `scriptNum` -- it only ever means a script number, with no resource-type
+  parameter to disambiguate. `TEXT_UI`'s resource number (0) happened to
+  collide with `MAIN_SCRIPT`'s script number (also 0, since View/Pic/
+  Sound/Script/Text resources each have their own independent numbering
+  starting from 0) -- so `DisposeScript(TEXT_UI)` was actually disposing
+  **Main.sc itself** mid-run, taking every global variable and `gEgo`/
+  `gRoom` down with it. **Fix**: never call `DisposeScript()` on anything
+  but an actual script number. Non-script resources loaded via
+  `Load(rsType num)` are apparently just never explicitly unloaded in
+  this codebase's own established practice -- confirmed by checking:
+  `Main.sc`'s own `Load(rsVIEW PORTRAIT_VIEW)` (called at boot and every
+  `newRoom()`) has never been paired with any dispose call anywhere in
+  this project, and evidently doesn't need one for a resource this small.
+  If a future resource type genuinely needs to be released, don't assume
+  `DisposeScript()` is the generic mechanism -- verify a resource-type-
+  aware kernel call actually exists first.
 - **An SCI0 sound resource isn't just an imported MIDI file — it's MIDI
   data plus a per-channel, per-device map.** Each of the 16 MIDI
   channels stores its own driver-device index, required voice count, and
@@ -476,17 +534,20 @@ after editing the relevant `js/content*.js` source.
    not yet compiled or playtested.** All 196 rooms were regenerated with
    every authored choice (746 total `Print()`/`ApplyChoiceEffects()`
    cases across all rooms, confirmed matching 42×3+150×4+4×5 exactly)
-   and `PrintChoices` now paginates. Needs a real VM pass before this is
-   done: compile (expect the usual multi-round settling since
-   `printchoices.sc` is `(use)`d by all 196 rooms), then specifically
-   playtest a 3-choice event (should be pixel-identical to before), a
-   4-choice event, and — most important — "The Typo" and "The
+   and `PrintChoices` now paginates both forward ("More options...") and
+   backward ("Back"). Needs a real VM pass before this is done: compile
+   (expect the usual multi-round settling since `printchoices.sc` is
+   `(use)`d by all 196 rooms), then specifically playtest a 3-choice
+   event (should be pixel-identical to before, no Back/More buttons at
+   all), a 4-choice event, and — most important — "The Typo" and "The
    Performance Review Buzzword" (WORK zone, the two 5-choice events with
-   actual prior dialog-overflow history), including forcing/waiting for
-   the glitch roll on one of them to confirm it lands correctly on the
-   final page. If any event still overflows despite the per-page ceiling
-   design, the fallback is lowering `CHOICES_PER_PAGE` (game.sh) to 2 --
-   no architecture change needed.
+   actual prior dialog-overflow history) including: forcing/waiting for
+   the glitch roll to confirm it lands correctly on the final page, and
+   clicking "Back" from page 2 to confirm page 1 rebuilds correctly and
+   a choice picked after going back still applies the right effects. If
+   any event still overflows despite the per-page ceiling design, the
+   fallback is lowering `CHOICES_PER_PAGE` (game.sh) to 2 -- no
+   architecture change needed.
 3. **Nothing else is currently known-broken.** Everything else in
    "Current state" above is confirmed working by the user's own
    playtesting. If picking this project back up cold, a good sanity
@@ -495,3 +556,34 @@ after editing the relevant `js/content*.js` source.
    correctly and let you view a description, do both office hotspots
    work — all confirmed at least once, but a regression from an
    unrelated future change is always possible.
+
+## Future ideas (not started, no urgency)
+
+- **Selectable player portraits, representing a broad spectrum of
+  humans** — the user's own explicit ask, to revisit later, not
+  scoped or started. Right now there's exactly one character (view
+  801, 4 mood loops: neutral/repression/mask/child -- see "Player
+  portrait" above and `portrait_*.bmp` in `TRS_SCI/art/`). The idea is
+  letting the player pick which portrait represents them from a
+  diverse roster before a run starts, rather than always seeing the
+  same one character.
+  - **Real open design questions, not decided**: (1) *Where the art
+    lives* -- either one View resource per character (802, 803, ...),
+    each with its own 4 mood loops, selected by swapping which
+    `PORTRAIT_VIEW`-equivalent constant is active for the session; or
+    one bigger View with more loops (character N's moods at loops
+    `N*4`..`N*4+3`), selected via a base-loop-offset global. Neither is
+    started or chosen. (2) *Where the picker lives* -- most natural
+    fits given this project's existing flow are `TitleScreen.sc` (once,
+    at boot) or folded into `rm001.sc`'s existing Extended Therapy
+    mode-choice dialog (once per run). (3) *Does it persist* -- pick
+    once per session, once ever (saved alongside `gCF0..gCF107`-style
+    persistence), or fresh every run. (4) *Art volume* -- each
+    additional character multiplies the mood-art requirement by 4 (one
+    set per character, matching today's `portrait_normal/repression/
+    mask/child.bmp` pattern), so this scales art effort directly with
+    how many options are offered.
+  - Whoever picks this up next should treat these as open questions to
+    resolve with the user, not assumptions to make -- matching how the
+    Case Files category-menu and choice-pagination work earlier in this
+    project were both scoped by asking first, not guessing.

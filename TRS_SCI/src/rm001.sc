@@ -40,6 +40,8 @@
 		west 0
 	)
 	(method (init)
+		(var newSessionPromptBuf[72], newSessionTitleBuf[16],
+			standardBtnBuf[32], extendedBtnBuf[48], extendedTitleBuf[24])
 		// same in every script, starts things up
   		(super:init())
   		(self:setScript(RoomScript))
@@ -107,22 +109,39 @@
 
 		// Extended Therapy mode choice -- asked here (top of every run)
 		// rather than TitleScreen.sc, since "Restart Game" skips the
-		// title screen and jumps straight here.
+		// title screen and jumps straight here. Fixed, hand-authored text
+		// (not part of the content pipeline) -- read from TEXT_UI (see
+		// game.sh) rather than embedded as literals.
 		(if(gNgPlusUnlocked)
+			Load(rsTEXT TEXT_UI)
+			GetFarText(TEXT_UI TEXT_UI_NEWSESSION_PROMPT @newSessionPromptBuf)
+			GetFarText(TEXT_UI TEXT_UI_NEWSESSION_TITLE @newSessionTitleBuf)
+			GetFarText(TEXT_UI TEXT_UI_STANDARD_BTN @standardBtnBuf)
+			GetFarText(TEXT_UI TEXT_UI_EXTENDED_BTN @extendedBtnBuf)
+			// No DisposeScript(TEXT_UI) -- see CaseFiles.sc for the real
+			// bug this avoids: DisposeScript() is script-specific, and
+			// TEXT_UI's resource number collides with MAIN_SCRIPT's
+			// script number.
 			= gHardMode PrintChoices(
-				"You've survived a session before. Choose how this one goes."
-				"New Session"
+				@newSessionPromptBuf
+				@newSessionTitleBuf
 				290
 				NULL
-				"Standard Session (10 turns)" FALSE
-				"Extended Therapy (20 turns, harder swings)" TRUE
+				@standardBtnBuf FALSE
+				@extendedBtnBuf TRUE
 			)
 		)(else
 			= gHardMode FALSE
 		)
 		(if(gHardMode)
 			= gMaxTurns HARD_MODE_TURNS
-			Print("Extended session initiated. Your nervous system has been here before." #title "Extended Therapy")
+			// Message comes straight from TEXT_UI via Print()'s own native
+			// support (params[0] < 1000 routes through GetFarText
+			// internally, see Controls.sc); #title needs its own GetFarText
+			// call first since that path doesn't get the same treatment.
+			Load(rsTEXT TEXT_UI)
+			GetFarText(TEXT_UI TEXT_UI_EXTENDED_STARTED_TITLE @extendedTitleBuf)
+			Print(TEXT_UI TEXT_UI_EXTENDED_STARTED_MSG #title @extendedTitleBuf)
 		)(else
 			= gMaxTurns DEFAULT_MAX_TURNS
 		)
